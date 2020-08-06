@@ -3,6 +3,8 @@
 
 HRESULT tile::init()
 {
+	imageLoad();
+	
 	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
 	_button = new button;
 	_button->init();
@@ -19,14 +21,23 @@ void tile::render()
 	{
 		D2DRenderer::GetInstance()->DrawRectangle(_sampleTile[i].rc, D2D1::ColorF::Black, 1.0f);
 		Vector2 vec((_sampleTile[i].rc.left + _sampleTile[i].rc.right) * 0.5f, (_sampleTile[i].rc.top + _sampleTile[i].rc.bottom) * 0.5f);
-		ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _sampleTile[i].terrainFrameX, _sampleTile[i].terrainFrameY);
+
+		if (_button->getType() == BUTTON_TERRAIN)
+		{
+			ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _sampleTile[i].terrainFrameX, _sampleTile[i].terrainFrameY);
+		}
+		else if (_button->getType() == BUTTON_OBJECT)
+		{
+			//ImageManager::GetInstance()->FindImage("의자")->Render(vec);
+		}
+
 	}
+
 
 	// 그리는곳
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		//D2DRenderer::GetInstance()->DrawRectangle(_tiles[i].rc, D2D1::ColorF::Black, 1.0f);
-
 		Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
 		ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 
@@ -34,7 +45,6 @@ void tile::render()
 		{
 			D2DRenderer::GetInstance()->DrawRectangle(_tiles[i].rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 		}
-
 	}
 
 	// 선택중인 렉트
@@ -56,11 +66,10 @@ void tile::render()
 	// ------------------ 마지막 렌더 ------------------------------------ 
 	if (_drag.isDraw)
 	{
-		D2DRenderer::GetInstance()->DrawRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1,1);
+		D2DRenderer::GetInstance()->DrawRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
 		D2DRenderer::GetInstance()->FillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
-		
 	}
-		
+
 }
 
 void tile::update()
@@ -137,7 +146,6 @@ void tile::drag()
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			
 			if (isCollision(_drag.rc, _tiles[i].rc))
 			{
 				if (_button->getType() == BUTTON_TERRAIN)
@@ -150,7 +158,7 @@ void tile::drag()
 				{
 					_tiles[i].objFrameX = _currentTile.x;
 					_tiles[i].objFrameY = _currentTile.y;
-				
+
 					_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
 				}
 				else if (_button->getType() == BUTTON_CLEAR)
@@ -188,8 +196,8 @@ void tile::setup()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		_tiles[i].terrainFrameX = 18;
-		_tiles[i].terrainFrameY = 2;
+		_tiles[i].terrainFrameX = 8;
+		_tiles[i].terrainFrameY = 0;
 		_tiles[i].objFrameX = 0;
 		_tiles[i].objFrameY = 0;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
@@ -310,6 +318,13 @@ void tile::load()
 		CloseHandle(file);
 		_button->setType(BUTTON_TERRAIN);
 	}
+
+}
+
+void tile::imageLoad()
+{
+	ImageManager::GetInstance()->AddImage("의자", L"Object/bench.png");
+	ImageManager::GetInstance()->AddImage("표지판", L"Object/potionBoard.png");
 
 }
 

@@ -14,7 +14,6 @@ private:
 	POINT         _currentTile; //¿Œµ¶Ω∫
 	RECT          _currentRect;
 	RECT          _dragTile;
-
 	int           _saveTime;
 public:
 	tile() {}
@@ -30,7 +29,9 @@ public:
 	void setMap();
 	void save();
 	void load();
+	void imageLoad();
 
+	
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT  objectSelect(int frameX, int frameY);
 
