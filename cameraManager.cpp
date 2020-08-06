@@ -71,8 +71,8 @@ void cameraManager::render(Image * img, float destX, float destY)
 
 void cameraManager::frameRender(Image * img, float destX, float destY, int frameX, int frameY)
 {
-	float relativeLeft = getRelativeLeft(static_cast<float>(0));
-	float relativeTop = getRelativeTop(static_cast<float>(0));
+	float relativeLeft = getRelativeLeft(destX);
+	float relativeTop = getRelativeTop(destY);
 
 	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop),frameX,frameY);
 }

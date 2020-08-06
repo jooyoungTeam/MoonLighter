@@ -2,8 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 50
-#define TILEY 50
+#define TILEX 40
+#define TILEY 20
 
 
 #define TILESIZEX (TILESIZE * TILEX)

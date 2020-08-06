@@ -13,7 +13,7 @@ private:
 	tagDragRect   _drag;
 	POINT         _currentTile; //인덱스
 	RECT          _currentRect;           
-	RECT          _dragTile;
+	RECT          _dragTile;    // 마우스 포인터 마우스 안에있을 때
 	RECT          _sampleTileUI;
 
 	// --------- 맵 이동 변수

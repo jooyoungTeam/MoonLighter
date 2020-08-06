@@ -3,9 +3,9 @@
 
 HRESULT tile::init()
 {
-	imageLoad();
-	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, TILESIZEX - WINSIZEX, TILESIZEY - WINSIZEY);
 	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
+	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, TILESIZEX - WINSIZEX, TILESIZEY - WINSIZEY);
+	imageLoad();
 
 	{
 		_sampleTileUI.right = WINSIZEX;
@@ -46,15 +46,13 @@ HRESULT tile::init()
 
 void tile::render()
 {
-
 	// 그리는곳
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		//D2DRenderer::GetInstance()->DrawRectangle(_tiles[i].rc, D2D1::ColorF::Black, 1.0f);
 		CAMERAMANAGER->rectangle(_tiles[i].rc, D2D1::ColorF::Black, 1.0f);
 		Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
 
-		//CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].objFrameX, _tiles[i].objFrameY);
+		CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 	
 		if (_tiles[i].isDrag)
@@ -77,7 +75,7 @@ void tile::render()
 		if (_tiles[i].object == OBJ_NONE) continue;
 
 		Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
-		ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].objFrameX, _tiles[i].objFrameY);
+		//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 
 	D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
@@ -105,7 +103,7 @@ void tile::render()
 
 	// ------------------ 마지막 렌더 ------------------------------------ 
 
-	CAMERAMANAGER->rectangle(_currentRect, D2D1::ColorF::LimeGreen, 1.0f, 5);
+	D2DRenderer::GetInstance()->DrawRectangle(_currentRect, D2D1::ColorF::LimeGreen, 1.0f, 5);
 
 	if (_drag.isDraw)
 	{
@@ -126,6 +124,7 @@ void tile::render()
 
 void tile::update()
 {
+
 	mapMove();
 	setMap();
 	drag();
@@ -203,9 +202,16 @@ void tile::drag()
 	{
 		_drag.isDraw = false;
 
+		RECT drag = _drag.rc;
+		drag.left += CAMERAMANAGER->getLeft();
+		drag.right += CAMERAMANAGER->getLeft();
+		drag.top += CAMERAMANAGER->getTop();
+		drag.bottom += CAMERAMANAGER->getTop();
+
+
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (isCollision(_drag.rc, _tiles[i].rc))
+			if (isCollision(drag, _tiles[i].rc))
 			{
 				if (_button->getType() == BUTTON_TERRAIN)
 				{
@@ -266,6 +272,9 @@ void tile::setup()
 
 void tile::setMap()
 {
+	POINT pt = _ptMouse;
+	pt.x += CAMERAMANAGER->getLeft();
+	pt.y += CAMERAMANAGER->getTop();
 
 	// 선택할 때 범위
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -300,7 +309,7 @@ void tile::setMap()
 	{
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (PtInRect(&_tiles[i].rc, _ptMouse))
+			if (PtInRect(&_tiles[i].rc, pt) && _ptMouse.x <= WINSIZEX - 618)
 			{
 				if (_button->getType() == BUTTON_TERRAIN)
 				{
@@ -331,10 +340,7 @@ void tile::setMap()
 
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		//POINT pt = _ptMouse;
-		//pt.x = CAMERAMANAGER->getLeft();
-		//pt.y = CAMERAMANAGER->getTop();
-		if (PtInRect(&_tiles[i].rc, _ptMouse))
+		if (PtInRect(&_tiles[i].rc, pt))
 		{
 			_dragTile = RectMake(_tiles[i].rc.left, _tiles[i].rc.top, TILESIZE, TILESIZE);
 			break;
