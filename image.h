@@ -42,6 +42,7 @@ private:
 	Image operator = (const Image& image) {}
 public:
 	void Render(const Vector2& position);
+	void aniRender(const Vector2& position, animation* ani);
 	void FrameRender(const Vector2& position, const int frameX, const int frameY);
 
 	void ResetRenderOption();
@@ -50,7 +51,6 @@ public:
 	void SetAlpha(const float alpha) { this->mAlpha = alpha; }
 	void SetScale(const float scale) { this->mScale = scale; }
 	void SetAngle(const float angle) { this->mAngle = angle; }
-	const 
 	const int GetMaxFrameX()const{ return mMaxFrameX; }
 	const int GetMaxFrameY()const{ return mMaxFrameY; }
 	const string GetKey() const { return this->mLoadInfo.key; }
