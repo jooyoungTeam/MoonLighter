@@ -70,6 +70,8 @@ void Image::Render(const Vector2& position)
 {
 	Vector2 size = mSize * mScale;
 
+	cout << size.x << endl;
+
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale, mScale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
@@ -80,6 +82,29 @@ void Image::Render(const Vector2& position)
 	D2DRenderer::GetInstance()->GetRenderTarget()->DrawBitmap(mBitmap, dxArea, mAlpha);
 	ResetRenderOption();
 }
+
+void Image::aniRender(const Vector2& position, animation* ani)
+{
+	Vector2 tempFrameSize;
+	tempFrameSize.x = ani->getFrameWidth();
+	tempFrameSize.y = ani->getFrameHeight();
+
+	Vector2 size = tempFrameSize * mScale;
+
+	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale, mScale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
+	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+
+	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, size.x, size.y);
+	D2D1_RECT_F dxSrc = D2D1::RectF((float)ani->getFramePos().x, (float)ani->getFramePos().y,
+		(float)(ani->getFramePos().x + tempFrameSize.x),
+		(float)(ani->getFramePos().y + tempFrameSize.y));
+
+	D2DRenderer::GetInstance()->GetRenderTarget()->SetTransform(scaleMatrix * rotateMatrix * translateMatrix);
+	D2DRenderer::GetInstance()->GetRenderTarget()->DrawBitmap(mBitmap, dxArea, mAlpha, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &dxSrc);
+	ResetRenderOption();
+}
+
 
 /********************************************************************************
 ## PerfeactFrameRender ##
