@@ -168,6 +168,12 @@
     <ClInclude Include="enemyManager.h">
       <Filter>playGround\강해라</Filter>
     </ClInclude>
+    <ClInclude Include="effectManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -256,6 +262,12 @@
     </ClCompile>
     <ClCompile Include="enemyManager.cpp">
       <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="effectManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>2DGameFramework\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

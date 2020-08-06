@@ -82,17 +82,18 @@ void effectManager::render()
 
 void effectManager::addEffect(string effectName, const char * imageName, int imageWidth, int imageHeight, int effectWidth, int effectHeight, int fps, float elapsedTime, int buffer)
 {
-	image* img;
+	Image* img;
 	arrEffects vEffectBuffer;
 	arrEffect mArrEffect;
 
-	if (IMAGEMANAGER->findImage(imageName))
+	if (ImageManager::GetInstance()->FindImage(imageName))
 	{
-		img = IMAGEMANAGER->findImage(imageName);
+		img = ImageManager::GetInstance()->FindImage(imageName);
 	}
 	else
 	{
-		img = IMAGEMANAGER->addImage(imageName, imageName, imageWidth, imageHeight, true, RGB(255, 0, 255));
+		//img = ImageManager::GetInstance()->AddImage(imageName, imageName, imageWidth, imageHeight, true, RGB(255, 0, 255));
+		img = NULL;
 	}
 
 	for (int i = 0; i < buffer; ++i)
