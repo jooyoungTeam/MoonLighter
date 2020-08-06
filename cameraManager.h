@@ -11,7 +11,7 @@ private:
 	float _minTop, _maxTop;    // 카메라 최소, 최대 top
 	float _minX, _maxX; 	   // 카메라 최소, 최대 x
 	float _minY, _maxY; 	   // 카메라 최소, 최대 y
-
+	POINT _mousePos;
 public:
 	cameraManager() {}
 	~cameraManager() {}
@@ -23,6 +23,7 @@ public:
 public:
 
 	void rectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth = 1.f);
+	void fillRectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha);
 	void ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
 	void render(Image* img, float destX, float destY);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);

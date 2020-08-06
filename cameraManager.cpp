@@ -41,6 +41,17 @@ void cameraManager::rectangle(const RECT rect,const D2D1::ColorF::Enum& color, f
 	D2DRenderer::GetInstance()->DrawRectangle(rc, color, alpha, strokeWidth);
 }
 
+void cameraManager::fillRectangle(const RECT rect, const D2D1::ColorF::Enum & color, float alpha)
+{
+	RECT rc;
+	rc.left = getRelativeLeft(rect.left);
+	rc.top = getRelativeTop(rect.top);
+	rc.right = getRelativeLeft(rect.right);
+	rc.bottom = getRelativeTop(rect.bottom);
+
+	D2DRenderer::GetInstance()->FillRectangle(rc, color, alpha);
+}
+
 void cameraManager::ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth)
 {
 	float relativeX = getRelativeLeft(x);

@@ -17,7 +17,7 @@ struct tagButton
 	RECT	      rc;
 	POINT         pos;
 	BUTTONTYPE    type;
-    string name;
+    string        name;
 };
 
 

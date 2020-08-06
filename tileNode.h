@@ -1,9 +1,9 @@
 #pragma once
 
-#define TILESIZE 32
+#define TILESIZE 50
 
-#define TILEX 20
-#define TILEY 20
+#define TILEX 50
+#define TILEY 50
 
 
 #define TILESIZEX (TILESIZE * TILEX)
@@ -14,7 +14,7 @@
 
 enum TERRAIN
 {
-	TR_CEMENT, TR_DESERT, TR_GRASS, TR_WATER, TR_END
+	TR_WALL, TR_DESERT, TR_GRASS, TR_WATER, TR_END
 };
 
 enum OBJECT
@@ -42,6 +42,22 @@ struct tagTile
 	int     objFrameY;
 	bool    isDrag;
 };
+
+enum MAPMOVE
+{
+	MOVE_LEFT,
+	MOVE_RIGHT,
+	MOVE_UP,
+	MOVE_DOWN,
+	MOVE_NULL
+};
+
+struct tagMapMove
+{
+	int x, y;
+	RECT rc;
+};
+
 
 struct tagSampleTile
 {
