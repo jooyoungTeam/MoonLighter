@@ -4,7 +4,7 @@
 HRESULT button::init()
 {
 	setButton();
-
+	_currentType = BUTTON_TERRAIN;
 	return S_OK;
 }
 
