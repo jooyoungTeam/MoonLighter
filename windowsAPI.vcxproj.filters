@@ -46,8 +46,20 @@
     <Filter Include="2DGameFramework\D2DRenderer">
       <UniqueIdentifier>{2d1dd8ac-e312-47f8-ad2e-1e37730b725b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2DGameFramework\tile">
-      <UniqueIdentifier>{fc9a438b-fd22-4c25-9cec-cf210f84b68b}</UniqueIdentifier>
+    <Filter Include="playGround\차주영">
+      <UniqueIdentifier>{1d66a468-e6a2-43ce-8b54-d90e7d48440f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\정기성">
+      <UniqueIdentifier>{0fbd757c-a76b-4fc6-a6fd-cff13d84daf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\김지아">
+      <UniqueIdentifier>{e09d9d45-55f5-40e3-9b5d-76e469849f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\강해라">
+      <UniqueIdentifier>{a40dee95-f80e-47f2-aa69-2706a012fa15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\송용은">
+      <UniqueIdentifier>{df840e29-cfea-4ab6-ac55-e6d5d1b399c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,14 +141,32 @@
     <ClInclude Include="keyAniManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>playGround\정기성</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>playGround\김지아</Filter>
+    </ClInclude>
+    <ClInclude Include="itemManager.h">
+      <Filter>playGround\김지아</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarManager.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
     <ClInclude Include="button.h">
-      <Filter>2DGameFramework\tile</Filter>
+      <Filter>playGround\차주영</Filter>
     </ClInclude>
     <ClInclude Include="tile.h">
-      <Filter>2DGameFramework\tile</Filter>
+      <Filter>playGround\차주영</Filter>
     </ClInclude>
     <ClInclude Include="tileNode.h">
-      <Filter>2DGameFramework\tile</Filter>
+      <Filter>playGround\차주영</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyManager.h">
+      <Filter>playGround\강해라</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,11 +233,29 @@
     <ClCompile Include="keyAniManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>playGround\정기성</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>playGround\김지아</Filter>
+    </ClCompile>
+    <ClCompile Include="itemManager.cpp">
+      <Filter>playGround\김지아</Filter>
+    </ClCompile>
+    <ClCompile Include="aStarManager.cpp">
+      <Filter>playGround\송용은</Filter>
+    </ClCompile>
     <ClCompile Include="button.cpp">
-      <Filter>2DGameFramework\tile</Filter>
+      <Filter>playGround\차주영</Filter>
     </ClCompile>
     <ClCompile Include="tile.cpp">
-      <Filter>2DGameFramework\tile</Filter>
+      <Filter>playGround\차주영</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyManager.cpp">
+      <Filter>playGround\강해라</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

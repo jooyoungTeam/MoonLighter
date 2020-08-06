@@ -40,7 +40,7 @@ enum class Pivot : int
 #include "sceneManager.h"
 #include "keyAniManager.h"
 #include "txtData.h"
-
+#include "aStarManager.h"
 using namespace TTYONE_UTIL;
 
 //MS VS버전이 올라가면서 기존의 문자열 함수의 안정성을 올리기위해
@@ -63,7 +63,8 @@ using namespace TTYONE_UTIL;
 #define EFFECTMANAGER effectManager::getSingleton()
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
-#define CAMERA_M     cameraManager::getSingleton()
+#define CAMERAMANAGER cameraManager::getSingleton()
+#define ASTARMANAGER aStarManager::getSingleton()
 //#define KEYANIMANAGER keyAniManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
 

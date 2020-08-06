@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-class enemyManager :
+class enemy :
 	public gameNode
 {
 };
