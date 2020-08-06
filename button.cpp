@@ -48,9 +48,18 @@ void button::setButton()
 {
 	for (int i = 0; i < BUTTON_END; i++)
 	{
+		
+		if (i == BUTTON_END - 1)
+		{
+			_button[i].pos.x = WINSIZEX / 2 + 550;
+			_button[i].pos.y = WINSIZEY / 2 + 400;
+		}
+		else
+		{
+			_button[i].pos.x = WINSIZEX / 2 + 350 + i * 100;
+			_button[i].pos.y = WINSIZEY / 2 + 300;
+		}
 		_button[i].type = (BUTTONTYPE)i;
-		_button[i].pos.x = WINSIZEX / 2 + 100 + i * 100;
-		_button[i].pos.y = WINSIZEY / 2 + 300;
 		_button[i].rc = RectMakeCenter(_button[i].pos.x, _button[i].pos.y, 80, 30);
 	}
 	_button[0].name = "  TERRAIN";

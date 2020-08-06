@@ -12,8 +12,15 @@ private:
 	tagSampleTile _sampleTile[SAMPLETILEX * SAMPLETILEY];
 	tagDragRect   _drag;
 	POINT         _currentTile; //ÀÎµ¦½º
-	RECT          _currentRect;
+	RECT          _currentRect;           
 	RECT          _dragTile;
+	RECT          _sampleTileUI;
+
+	// --------- ¸Ê ÀÌµ¿ º¯¼ö
+	tagMapMove    _mapMove[4];
+	MAPMOVE       _currentMove;
+	// --------- ¸Ê ÀÌµ¿ º¯¼ö
+
 	int           _saveTime;
 public:
 	tile() {}
@@ -30,7 +37,7 @@ public:
 	void save();
 	void load();
 	void imageLoad();
-
+	void mapMove();
 	
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT  objectSelect(int frameX, int frameY);
