@@ -8,16 +8,6 @@ HRESULT title::init()
 
 void title::update()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_F1))
-	{
-		SCENEMANAGER->changeScene("Å¸ÀÏ¾À");
-	}
-	
-	if (KEYMANAGER->isOnceKeyDown(VK_F2))
-	{
-		SCENEMANAGER->changeScene("¼¥¾À");
-	}
-
 
 }
 
