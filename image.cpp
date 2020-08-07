@@ -83,15 +83,15 @@ void Image::Render(const Vector2& position)
 	ResetRenderOption();
 }
 
-void Image::aniRender(const Vector2& position, animation* ani)
+void Image::aniRender(const Vector2& position, animation* ani, float scale)
 {
 	Vector2 tempFrameSize;
 	tempFrameSize.x = ani->getFrameWidth();
 	tempFrameSize.y = ani->getFrameHeight();
 
-	Vector2 size = tempFrameSize * mScale;
+	Vector2 size = tempFrameSize * scale;
 
-	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale, mScale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
+	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // ÁßÁ¡ ??
 
