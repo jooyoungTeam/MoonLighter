@@ -23,7 +23,9 @@ public:
 public:
 
 	void rectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth = 1.f);
+	void rectangle(const FloatRect rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth = 1.f);
 	void fillRectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha);
+	void fillRectangle(const FloatRect rect, const D2D1::ColorF::Enum& color, float alpha);
 	void ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
 	void render(Image* img, float destX, float destY);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);

@@ -189,6 +189,27 @@
     <ClInclude Include="dungeonStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
+    <ClInclude Include="redSlime.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="golem.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="pot.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyState.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="anotherSlime.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>playGround\차주영</Filter>
     </ClInclude>
@@ -298,6 +319,27 @@
     </ClCompile>
     <ClCompile Include="dungeonStage.cpp">
       <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="redSlime.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="pot.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="golem.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyState.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="anotherSlime.cpp">
+      <Filter>playGround\강해라</Filter>
+    </ClCompile>
+    <ClCompile Include="playerState.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="objectManager.cpp">
       <Filter>playGround\차주영</Filter>
