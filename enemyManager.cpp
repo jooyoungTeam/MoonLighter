@@ -46,29 +46,42 @@ void enemyManager::render()
 
 void enemyManager::setEnemy()
 {
+	int i = 0;
+
 	enemy* redS;
 	redS = new redSlime;
-	redS->init(0, 200, 200, 50, 50, ENEMY_RED_SLIME, "test");
+	redS->init(i, 200 + i* 2, 200, 50, 50, ENEMY_RED_SLIME, "test");
 	_vEnemy.push_back(redS);
+
+	i++;
 
 	enemy* yelS;
 	yelS = new anotherSlime;
-	yelS->init(1, 500, 500, 50, 50, ENEMY_YELLOW_SLIME, "test");
+	yelS->init(i, 200 + i* 2, 500, 50, 50, ENEMY_YELLOW_SLIME, "test");
 	_vEnemy.push_back(yelS);
+
+	i++;
 
 	enemy* yelS2;
 	yelS2 = new anotherSlime;
-	yelS2->init(2, 500, 00, 50, 50, ENEMY_YELLOW_SLIME, "test");
+	yelS2->init(i , 200 + i * 2, 00, 50, 50, ENEMY_YELLOW_SLIME, "test");
 	_vEnemy.push_back(yelS2);
+
+	i++;
 
 
 	enemy* yelS3;
 	yelS3 = new anotherSlime;
-	yelS3->init(3, 500, 300, 50, 50, ENEMY_BLUE_SLIME, "test");
+	yelS3->init(i, 200 + i * 2, 300, 50, 50, ENEMY_BLUE_SLIME, "test");
 	_vEnemy.push_back(yelS3);
+
+	i++;
 
 	enemy* yelS4;
 	yelS4 = new anotherSlime;
-	yelS4->init(4, 500, 100, 50, 50, ENEMY_YELLOW_SLIME, "test");
+	yelS4->init(i , 200 + i * 2, 100, 50, 50, ENEMY_YELLOW_SLIME, "test");
 	_vEnemy.push_back(yelS4);
+
+
+
 }

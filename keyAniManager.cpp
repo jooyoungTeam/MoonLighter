@@ -32,12 +32,10 @@ void keyAniManager::update()
 		for (iter; iter != _mTotalAnimation[i].end(); ++iter)
 		{
 			if (!iter->second->isPlay()) continue;
-
+			
 			iter->second->frameUpdate(TIMEMANAGER->getElapsedTime() * 1.0f / _mTotalAnimation.size());
 		}
-
 	}
-
 
 }
 
