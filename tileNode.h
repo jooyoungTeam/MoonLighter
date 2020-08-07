@@ -2,9 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 40
-#define TILEY 40
-
+#define TILEX 50
+#define TILEY 50
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
@@ -14,7 +13,7 @@
 
 enum TERRAIN
 {
-	TR_WALL, TR_FLOOR, TR_DESERT, TR_GRASS, TR_WATER, TR_NONE, TR_END
+	TR_WALL, TR_FLOOR, TR_GRASS, TR_WATER, TR_NONE, TR_END
 };
 
 enum OBJECT
@@ -52,6 +51,7 @@ enum MAPMOVE
 struct tagObject
 {
 	OBJECT  object;
+	Image*  img;
 	RECT    rc;
 	int     objFrameX;
 	int     objFrameY;

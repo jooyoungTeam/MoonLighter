@@ -479,6 +479,15 @@ void tile::imageLoad()
 {
 	ImageManager::GetInstance()->AddImage("의자", L"Object/bench.png");
 	ImageManager::GetInstance()->AddImage("표지판", L"Object/potionBoard.png");
+	//ImageManager::GetInstance()
+
+}
+
+void tile::addObject()
+{
+	tagObject* tempObject;
+	tempObject->img = ImageManager::GetInstance()->FindImage("의자");
+	//tempObject->
 
 }
 
