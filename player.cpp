@@ -15,8 +15,8 @@ HRESULT player::init()
 	_CurrentState = _idle;
 	
 	_playerimg = ImageManager::GetInstance()->FindImage("playerRighrIdle");
-	//_aniState = IMAGEMANAGER->findAnimation("playerRighrIdle");
-	_aniState->start();
+	_aniMotion = KEYANIMANAGER->findAnimation(0,"playerRighrIdle");
+	_aniMotion->start();
 
 	return S_OK;
 }
@@ -24,11 +24,14 @@ HRESULT player::init()
 void player::render()
 {
 	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Black, 1.f);
+	CAMERAMANAGER->aniRender(_playerimg, _x, _y, _aniMotion, 1.5f);
+	//_playerimg->aniRender(Vector2(_x, _y), _aniMotion, 1.0f);
 }
 
 void player::update()
 {
 	_CurrentState->update(*this);
+	KEYANIMANAGER->update();
 
 	if (KEYMANAGER->isStayKeyDown('W'))
 	{
@@ -59,8 +62,7 @@ void player::release()
 void player::animationLoad()
 {
 	_playerimg = ImageManager::GetInstance()->AddFrameImage("playerRighrIdle", L"image/player/moveState.png", 10, 13);
-	_aniState = new animation;
-
-
+	int rightIdle[] = { 80, 81, 82, 83, 84, 85, 86, 87, 88, 89 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRighrIdle", "playerRighrIdle", rightIdle, 10, 13, true);
 }
  
