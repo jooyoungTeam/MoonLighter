@@ -61,6 +61,9 @@
     <Filter Include="playGround\송용은">
       <UniqueIdentifier>{df840e29-cfea-4ab6-ac55-e6d5d1b399c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\stage">
+      <UniqueIdentifier>{790afaf2-380e-4e2d-ab9a-69ad2f21963b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -174,6 +177,15 @@
     <ClInclude Include="effect.h">
       <Filter>2DGameFramework\effect</Filter>
     </ClInclude>
+    <ClInclude Include="stageManager.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="shopStage.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -268,6 +280,15 @@
     </ClCompile>
     <ClCompile Include="effect.cpp">
       <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="stageManager.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="shopStage.cpp">
+      <Filter>playGround\stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

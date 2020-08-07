@@ -1,11 +1,10 @@
 #pragma once
 #include "gameNode.h"
-#include "tile.h"
-
+#include "stageManager.h"
 class playGround : public gameNode
 {
 private:
-	tile* _tile;
+	stageManager* _stageManager;
 public:
 	playGround();
 	~playGround();
