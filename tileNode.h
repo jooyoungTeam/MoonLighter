@@ -10,7 +10,7 @@
 #define TILESIZEY (TILESIZE * TILEY)
 
 #define SAMPLETILEX 9
-#define SAMPLETILEY 1
+#define SAMPLETILEY 3
 
 enum TERRAIN
 {
