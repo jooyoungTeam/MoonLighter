@@ -8,16 +8,25 @@ HRESULT shopStage::init()
 
 	CAMERAMANAGER->setX(1300);
 	CAMERAMANAGER->setY(700);
+
+	_player = new player;
+	_player->init();
 	return S_OK;
 }
 
 void shopStage::render()
 {
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shopBackground"),0,0);
+
+	_player->render();
 }
 
 void shopStage::update()
 {
+	_player->update();
+
+	CAMERAMANAGER->setX(_player->getX());
+	CAMERAMANAGER->setY(_player->getY());
 }
 
 void shopStage::release()

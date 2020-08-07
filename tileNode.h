@@ -3,7 +3,7 @@
 #define TILESIZE 50
 
 #define TILEX 40
-#define TILEY 30
+#define TILEY 40
 
 
 #define TILESIZEX (TILESIZE * TILEX)
@@ -14,7 +14,7 @@
 
 enum TERRAIN
 {
-	TR_WALL, TR_DESERT, TR_GRASS, TR_WATER, TR_END
+	TR_WALL, TR_FLOOR, TR_DESERT, TR_GRASS, TR_WATER, TR_NONE, TR_END
 };
 
 enum OBJECT
@@ -27,19 +27,16 @@ enum OBJECT
 
 enum POS
 {
-	POS_FLAG1,POS_FLAG2,
-	POS_TANK1,POS_TANK2,
+	POS_FLAG1, POS_FLAG2,
+	POS_TANK1, POS_TANK2,
 };
 
 struct tagTile
 {
 	TERRAIN terrain;
-	OBJECT  object;
 	RECT    rc;
 	int     terrainFrameX;
 	int     terrainFrameY;
-	int     objFrameX;
-	int     objFrameY;
 	bool    isDrag;
 };
 
@@ -51,6 +48,15 @@ enum MAPMOVE
 	MOVE_DOWN,
 	MOVE_NULL
 };
+
+struct tagObject
+{
+	OBJECT  object;
+	RECT    rc;
+	int     objFrameX;
+	int     objFrameY;
+};
+
 
 struct tagMapMove
 {

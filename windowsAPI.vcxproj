@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStarManager.h" />
+    <ClInclude Include="boss.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="collision.h" />
@@ -159,8 +160,10 @@
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
+    <ClInclude Include="enemyState.h" />
     <ClInclude Include="FloatRect.h" />
     <ClInclude Include="gameNode.h" />
+    <ClInclude Include="golem.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="item.h" />
@@ -168,9 +171,13 @@
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="LibraryHeader.h" />
+    <ClInclude Include="objectManager.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerState.h" />
     <ClInclude Include="playGround.h" />
+    <ClInclude Include="pot.h" />
     <ClInclude Include="randomFunction.h" />
+    <ClInclude Include="redSlime.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="shopStage.h" />
@@ -188,10 +195,12 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="windowsAPI.h" />
+    <ClInclude Include="anotherSlime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStarManager.cpp" />
+    <ClCompile Include="boss.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -202,16 +211,22 @@
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
+    <ClCompile Include="enemyState.cpp" />
     <ClCompile Include="FloatRect.cpp" />
     <ClCompile Include="gameNode.cpp" />
+    <ClCompile Include="golem.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemManager.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerState.cpp" />
     <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="pot.cpp" />
+    <ClCompile Include="redSlime.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="shopStage.cpp" />
     <ClCompile Include="soundManager.cpp" />
@@ -230,6 +245,7 @@
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
+    <ClCompile Include="anotherSlime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc" />

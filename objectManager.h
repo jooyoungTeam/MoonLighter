@@ -1,14 +1,17 @@
 #pragma once
 #include "gameNode.h"
-#include "enemyManager.h"
-class dungeonStage : public gameNode
+class objectManager : public gameNode
 {
 private:
-	enemyManager* _enemy;
+
+public:
+	objectManager() {}
+	~objectManager() {}
 public:
 	HRESULT init();
 	void render();
 	void update();
 	void release();
+
 };
 
