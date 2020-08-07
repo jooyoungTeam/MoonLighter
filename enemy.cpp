@@ -222,5 +222,5 @@ void enemy::render()
 		_rc, D2DRenderer::DefaultBrush::Black, 1.f
 	);
 	//_img->SetScale(0.5f);
-	_img->aniRender(Vector2(_x, _y), _motion);
+	_img->aniRender(Vector2(_x, _y), _motion,1.0f);
 }

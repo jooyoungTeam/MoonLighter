@@ -3,7 +3,9 @@
 
 HRESULT aStarManager::init()
 {
-	return E_NOTIMPL;
+
+
+	return S_OK;
 }
 
 void aStarManager::render()

@@ -55,7 +55,7 @@ void effect::render()
 {
 	if (!_isRunning) return;
 
-	_effectImage->aniRender(Vector2(_x, _y), _effectAnimation);
+	_effectImage->aniRender(Vector2(_x, _y), _effectAnimation,1.f);
 }
 
 void effect::startEffect(int x, int y)

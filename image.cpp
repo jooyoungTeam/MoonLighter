@@ -70,10 +70,23 @@ void Image::Render(const Vector2& position)
 {
 	Vector2 size = mSize * mScale;
 
-	cout << size.x << endl;
-
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale, mScale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+
+	D2D1_RECT_F dxArea = D2D1::RectF(0.f, 0.f, size.x, size.y);
+
+	D2DRenderer::GetInstance()->GetRenderTarget()->SetTransform(scaleMatrix * rotateMatrix * translateMatrix);
+	D2DRenderer::GetInstance()->GetRenderTarget()->DrawBitmap(mBitmap, dxArea, mAlpha);
+	ResetRenderOption();
+}
+
+void Image::TopRender(const Vector2 & position)
+{
+	Vector2 size = mSize * mScale;
+
+	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(mScale, mScale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
+	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, 0.f));
 	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.f, 0.f, size.x, size.y);
