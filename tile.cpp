@@ -7,12 +7,17 @@ HRESULT tile::init()
 	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, TILESIZEX - WINSIZEX, TILESIZEY - WINSIZEY);
 	imageLoad();
-
 	{
 		_sampleTileUI.right = WINSIZEX;
 		_sampleTileUI.bottom = WINSIZEY;
 		_sampleTileUI.top = 0;
 		_sampleTileUI.left = WINSIZEX - 510;
+
+		_sampleTileOnOff.right = _sampleTileUI.left;
+		_sampleTileOnOff.left = _sampleTileOnOff.right - 30;
+		_sampleTileOnOff.top = (_sampleTileUI.top + _sampleTileUI.bottom) * 0.5f - 50;
+		_sampleTileOnOff.bottom = (_sampleTileUI.top + _sampleTileUI.bottom) * 0.5f + 50;
+		_isOnOff = true;
 	}
 	{
 		_mapMove[MOVE_LEFT].rc.left = 0;
@@ -51,9 +56,12 @@ void tile::render()
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		CAMERAMANAGER->rectangle(_tiles[i].rc, D2D1::ColorF::Black, 1.0f);
-		Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
+		if (_tiles[i].terrain != TR_NONE)
+		{
+			Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
 
-		CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		}
 		//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 	
 		if (_tiles[i].isDrag)
@@ -67,20 +75,20 @@ void tile::render()
 	{
 		CAMERAMANAGER->rectangle(_dragTile, D2D1::ColorF::LimeGreen, 1.0f, 5);
 	}
-
-	
-
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-
-		if (_tiles[i].object == OBJ_NONE) continue;
-
-		Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
-		//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].objFrameX, _tiles[i].objFrameY);
-	}
+	// ---------------- 오브젝트
+	//for (int i = 0; i < TILEX * TILEY; ++i)
+	//{
+	//
+	//	if (_tiles[i].object == OBJ_NONE) continue;
+	//
+	//	Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
+	//	//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].objFrameX, _tiles[i].objFrameY);
+	//}
 
 	D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
-
+	D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
+	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::White, 1);
+	D2DRenderer::GetInstance()->DrawRectangle(_sampleTileOnOff, D2D1::ColorF::Black, 1);
 
 	// 팔레트
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
@@ -108,8 +116,8 @@ void tile::render()
 
 	if (_drag.isDraw)
 	{
-		D2DRenderer::GetInstance()->DrawRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
-		D2DRenderer::GetInstance()->FillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
+		//D2DRenderer::GetInstance()->DrawRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
+		//D2DRenderer::GetInstance()->FillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
 
 	// 맵 이동
@@ -139,56 +147,55 @@ void tile::release()
 
 void tile::drag()
 {
+	// ---------------- 시작점 --------------------- //
 	if (KEYMANAGER->isOnceKeyDown(VK_LSHIFT))
 	{
 		_drag.isDraw = true;
 		_drag.startPos = _ptMouse;
+		_drag.startPos.x += CAMERAMANAGER->getLeft();
+		_drag.startPos.y += CAMERAMANAGER->getTop();
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_LSHIFT))
 	{
 		_drag.isDraw = true;
 		_drag.endPos = _ptMouse;
+		_drag.endPos.x += CAMERAMANAGER->getLeft();
+		_drag.endPos.y += CAMERAMANAGER->getTop();
 
 		if (_drag.startPos.x < _drag.endPos.x && _drag.startPos.y < _drag.endPos.y)
 		{
 			_drag.rc.left = _drag.startPos.x;
 			_drag.rc.top = _drag.startPos.y;
-			_drag.rc.right = _ptMouse.x;
-			_drag.rc.bottom = _ptMouse.y;
+			_drag.rc.right = _ptMouse.x + CAMERAMANAGER->getLeft();
+			_drag.rc.bottom = _ptMouse.y + CAMERAMANAGER->getTop();
 		}
 		else if (_drag.startPos.x > _drag.endPos.x && _drag.startPos.y < _drag.endPos.y)
 		{
-			_drag.rc.left = _ptMouse.x;
+			_drag.rc.left = _ptMouse.x + CAMERAMANAGER->getLeft();
 			_drag.rc.top = _drag.startPos.y;
 			_drag.rc.right = _drag.startPos.x;
-			_drag.rc.bottom = _ptMouse.y;
+			_drag.rc.bottom = _ptMouse.y + CAMERAMANAGER->getTop();
 		}
 		else if (_drag.startPos.x < _drag.endPos.x && _drag.startPos.y > _drag.endPos.y)
 		{
 			_drag.rc.left = _drag.startPos.x;
-			_drag.rc.top = _ptMouse.y;
-			_drag.rc.right = _ptMouse.x;
+			_drag.rc.top = _ptMouse.y + CAMERAMANAGER->getTop();
+			_drag.rc.right = _ptMouse.x + CAMERAMANAGER->getLeft();
 			_drag.rc.bottom = _drag.startPos.y;
 		}
 		else
 		{
-			_drag.rc.left = _ptMouse.x;
-			_drag.rc.top = _ptMouse.y;
+			_drag.rc.left = _ptMouse.x + CAMERAMANAGER->getLeft();
+			_drag.rc.top = _ptMouse.y + CAMERAMANAGER->getTop();
 			_drag.rc.right = _drag.startPos.x;
 			_drag.rc.bottom = _drag.startPos.y;
 		}
 
-		RECT drag = _drag.rc;
-		drag.left += CAMERAMANAGER->getLeft();
-		drag.right += CAMERAMANAGER->getLeft();
-		drag.top += CAMERAMANAGER->getTop();
-		drag.bottom += CAMERAMANAGER->getTop();
-
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (isCollision(drag, _tiles[i].rc))
+			if (isCollision(_drag.rc, _tiles[i].rc))
 			{
 				_tiles[i].isDrag = true;
 			}
@@ -203,15 +210,10 @@ void tile::drag()
 	{
 		_drag.isDraw = false;
 
-		RECT drag = _drag.rc;
-		drag.left += CAMERAMANAGER->getLeft();
-		drag.right += CAMERAMANAGER->getLeft();
-		drag.top += CAMERAMANAGER->getTop();
-		drag.bottom += CAMERAMANAGER->getTop();
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (isCollision(drag, _tiles[i].rc))
+			if (isCollision(_drag.rc, _tiles[i].rc))
 			{
 				if (_button->getType() == BUTTON_TERRAIN)
 				{
@@ -219,19 +221,20 @@ void tile::drag()
 					_tiles[i].terrainFrameY = _currentTile.y;
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
-				else if (_button->getType() == BUTTON_OBJECT)
-				{
-					_tiles[i].objFrameX = _currentTile.x;
-					_tiles[i].objFrameY = _currentTile.y;
-
-					_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
-				}
-				else if (_button->getType() == BUTTON_CLEAR)
-				{
-					_tiles[i].objFrameX = NULL;
-					_tiles[i].objFrameY = NULL;
-					_tiles[i].object = OBJ_NONE;
-				}
+				
+				//else if (_button->getType() == BUTTON_OBJECT)
+				//{
+				//	_tiles[i].objFrameX = _currentTile.x;
+				//	_tiles[i].objFrameY = _currentTile.y;
+				//
+				//	_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
+				//}
+				//else if (_button->getType() == BUTTON_CLEAR)
+				//{
+				//	_tiles[i].objFrameX = NULL;
+				//	_tiles[i].objFrameY = NULL;
+				//	_tiles[i].object = OBJ_NONE;
+				//}
 
 
 				if(_currentTile.x == 6 && _currentTile.y == 2)
@@ -244,7 +247,7 @@ void tile::drag()
 		{
 			float tempWidth = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.right - _tiles[_vDragTile[0]].rc.left;
 			float tempHeight = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.bottom - _tiles[_vDragTile[0]].rc.top;
-
+			
 			_dragNumX = tempWidth / TILESIZE;
 			_dragNumY = tempHeight / TILESIZE;
 
@@ -323,19 +326,7 @@ void tile::drag()
 					_tiles[_vDragTile[i]].terrainFrameY = 0;
 					_tiles[_vDragTile[i]].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
-				else if (_button->getType() == BUTTON_OBJECT)
-				{
-					_tiles[_vDragTile[i]].objFrameX = _currentTile.x;
-					_tiles[_vDragTile[i]].objFrameY = _currentTile.y;
 
-					_tiles[_vDragTile[i]].object = objectSelect(_currentTile.x, _currentTile.y);
-				}
-				else if (_button->getType() == BUTTON_CLEAR)
-				{
-					_tiles[_vDragTile[i]].objFrameX = NULL;
-					_tiles[_vDragTile[i]].objFrameY = NULL;
-					_tiles[_vDragTile[i]].object = OBJ_NONE;
-				}
 			}
 			_vDragTile.clear();
 		}
@@ -366,11 +357,8 @@ void tile::setup()
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		_tiles[i].terrainFrameX = 8;
-		_tiles[i].terrainFrameY = 0;
-		_tiles[i].objFrameX = 0;
-		_tiles[i].objFrameY = 0;
+		_tiles[i].terrainFrameY = 2;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		_tiles[i].object = OBJ_NONE;
 	}
 }
 
@@ -397,6 +385,7 @@ void tile::setMap()
 		}
 
 		_button->update();
+		openSampleTile();
 	}
 	// 그냥 지나갈 때 범위 선택
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
@@ -421,19 +410,19 @@ void tile::setMap()
 					_tiles[i].terrainFrameY = _currentTile.y;
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
-				else if (_button->getType() == BUTTON_OBJECT)
-				{
-					_tiles[i].objFrameX = _currentTile.x;
-					_tiles[i].objFrameY = _currentTile.y;
-
-					_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
-				}
-				else if (_button->getType() == BUTTON_CLEAR)
-				{
-					_tiles[i].objFrameX = NULL;
-					_tiles[i].objFrameY = NULL;
-					_tiles[i].object = OBJ_NONE;
-				}
+				//else if (_button->getType() == BUTTON_OBJECT)
+				//{
+				//	_tiles[i].objFrameX = _currentTile.x;
+				//	_tiles[i].objFrameY = _currentTile.y;
+				//
+				//	_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
+				//}
+				//else if (_button->getType() == BUTTON_CLEAR)
+				//{
+				//	_tiles[i].objFrameX = NULL;
+				//	_tiles[i].objFrameY = NULL;
+				//	_tiles[i].object = OBJ_NONE;
+				//}
 				break;
 			}
 		}
@@ -535,15 +524,37 @@ void tile::mapMove()
 	}
 }
 
+void tile::openSampleTile()
+{
+	if (PtInRect(&_sampleTileOnOff, _ptMouse))
+	{
+		if (_isOnOff)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+}
+
 
 TERRAIN tile::terrainSelect(int frameX, int frameY)
 {
-	if (frameX == 1 && frameY == 0) return TR_WALL;
-	if (frameX == 2 && frameY == 0) return TR_DESERT;
-	if (frameX == 3 && frameY == 0) return TR_GRASS;
-	if (frameX == 4 && frameY == 0) return TR_WATER;
+	for (int i = 0; i < 9; i++)
+	{
+		// 첫번 째 줄
+		if(frameX == 8 && frameY == 0) return TR_FLOOR;
+		else if(frameX == i && frameY == 0) return TR_WALL;	
 
-	return TR_GRASS;
+		// 두번째 줄
+		if (frameX == i && frameY == 1) return TR_GRASS;
+
+		if (frameX == 6 && frameY == 2) return TR_WALL;
+	}
+
+	return TR_NONE;
 }
 
 OBJECT tile::objectSelect(int frameX, int frameY)

@@ -189,9 +189,6 @@
     <ClInclude Include="dungeonStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>playGround\차주영</Filter>
-    </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>playGround\차주영</Filter>
     </ClInclude>
@@ -301,9 +298,6 @@
     </ClCompile>
     <ClCompile Include="dungeonStage.cpp">
       <Filter>playGround\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>playGround\차주영</Filter>
     </ClCompile>
     <ClCompile Include="objectManager.cpp">
       <Filter>playGround\차주영</Filter>
