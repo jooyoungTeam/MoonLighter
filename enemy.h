@@ -11,7 +11,7 @@ class enemy :
 private:
 
 protected:
-	keyAniManager* _keyAni;
+	int _index;
 	enemyState* _state;
 	ENEMYTYPE _type;
 
@@ -26,15 +26,19 @@ protected:
 	int _maxHP;
 	animation* _motion;
 
+	bool change;
+
 public:
 
-	virtual HRESULT init(float x, float y, float width, float height, ENEMYTYPE type, string map);
+	virtual HRESULT init(int index, float x, float y, float width, float height, ENEMYTYPE type, string map);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
 	void ani();
 	void test();
+
+	void setChange(bool ch) { change = ch; }
 
 
 };
