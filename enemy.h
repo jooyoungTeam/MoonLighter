@@ -5,8 +5,7 @@
 
 
 
-class enemy :
-	public gameNode
+class enemy : public gameNode
 {
 private:
 
@@ -26,6 +25,8 @@ protected:
 	int _maxHP;
 	animation* _motion;
 
+	float _pX, _pY;
+
 	bool change;
 
 public:
@@ -37,8 +38,10 @@ public:
 
 	void ani();
 	void test();
+	virtual void attack();
 
 	void setChange(bool ch) { change = ch; }
+	void playerCheck(float x, float y) { _pX = x; _pY = y; }
 
 
 };

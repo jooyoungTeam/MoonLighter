@@ -194,3 +194,7 @@ void enemy::test()
 		change = false;
 	}
 }
+
+void enemy::attack()
+{
+}
