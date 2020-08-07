@@ -8,10 +8,9 @@ HRESULT dungeonStage::init()
 
 	_enemy = new enemyManager;
 	_enemy->init();
-	_player = new player;
-	_player->init();
 
-	_enemy->setPlayerLink(_player);
+	
+
 
 	return S_OK;
 }
@@ -21,14 +20,14 @@ void dungeonStage::render()
 
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("dungeonBackground"), 0, 0);
 	_enemy->render();
-	_player->render();
 
+	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 }
 
 void dungeonStage::update()
 {
 	_enemy->update();
-	_player->update();
+	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 
 }
 
