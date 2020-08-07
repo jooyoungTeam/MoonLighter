@@ -4,6 +4,7 @@
 HRESULT tile::init()
 {
 	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
+	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, TILESIZEX - WINSIZEX, TILESIZEY - WINSIZEY);
 	imageLoad();
 
@@ -208,7 +209,6 @@ void tile::drag()
 		drag.top += CAMERAMANAGER->getTop();
 		drag.bottom += CAMERAMANAGER->getTop();
 
-
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
 			if (isCollision(drag, _tiles[i].rc))
@@ -232,8 +232,112 @@ void tile::drag()
 					_tiles[i].objFrameY = NULL;
 					_tiles[i].object = OBJ_NONE;
 				}
+
+
+				if(_currentTile.x == 6 && _currentTile.y == 2)
+					_vDragTile.push_back(i);
 			}
 			_tiles[i].isDrag = false;
+		}
+
+		if (_vDragTile.size() > 0)
+		{
+			float tempWidth = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.right - _tiles[_vDragTile[0]].rc.left;
+			float tempHeight = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.bottom - _tiles[_vDragTile[0]].rc.top;
+
+			_dragNumX = tempWidth / TILESIZE;
+			_dragNumY = tempHeight / TILESIZE;
+
+			for (int i = 0; i < _vDragTile.size(); i++)
+			{
+				if (_button->getType() == BUTTON_TERRAIN)
+				{
+					// Ã¹¹øÂ°
+					if (i == 0)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 0;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// À­ÁÙ
+					if (i > 0 && i < _dragNumX - 1)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 7;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// ¿À¸¥ÂÊ À§
+					if (i == _dragNumX - 1)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 6;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// ¿ÞÂÊ ¹Ø
+					if (i == _vDragTile.size() - _dragNumX)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 2;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// ¹ØÁÙ
+					if (i > _vDragTile.size() - _dragNumX && i < _vDragTile.size() - 1)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 3;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// ¸¶Áö¸·
+					if (i == _vDragTile.size() - 1)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 4;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+
+					// ¿ÞÂÊ ÁÙ
+					if (i % _dragNumX == 0)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 1;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+					// ¿À¸¥ÂÊ ÁÙ
+					if (i % _dragNumX == _dragNumX - 1)
+					{
+						_tiles[_vDragTile[i]].terrainFrameX = 5;
+						_tiles[_vDragTile[i]].terrainFrameY = 0;
+						_tiles[i].terrain = terrainSelect(4, 0);
+						continue;
+					}
+
+
+					_tiles[_vDragTile[i]].terrainFrameX = 8;
+					_tiles[_vDragTile[i]].terrainFrameY = 0;
+					_tiles[_vDragTile[i]].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+				}
+				else if (_button->getType() == BUTTON_OBJECT)
+				{
+					_tiles[_vDragTile[i]].objFrameX = _currentTile.x;
+					_tiles[_vDragTile[i]].objFrameY = _currentTile.y;
+
+					_tiles[_vDragTile[i]].object = objectSelect(_currentTile.x, _currentTile.y);
+				}
+				else if (_button->getType() == BUTTON_CLEAR)
+				{
+					_tiles[_vDragTile[i]].objFrameX = NULL;
+					_tiles[_vDragTile[i]].objFrameY = NULL;
+					_tiles[_vDragTile[i]].object = OBJ_NONE;
+				}
+			}
+			_vDragTile.clear();
 		}
 	}
 
