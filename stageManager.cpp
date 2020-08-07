@@ -3,6 +3,7 @@
 #include "tile.h"
 #include "title.h"
 #include "shopStage.h"
+#include "dungeonStage.h"
 
 HRESULT stageManager::init()
 {
@@ -10,7 +11,7 @@ HRESULT stageManager::init()
 
 	SCENEMANAGER->addScene("Å¸ÀÏ¾À", new tile);
 	SCENEMANAGER->addScene("¼¥¾À", new shopStage);
-
+	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
 
 	SCENEMANAGER->changeScene("Å¸ÀÌÆ²¾À");
 	return S_OK;
@@ -35,6 +36,10 @@ void stageManager::update()
 		SCENEMANAGER->changeScene("¼¥¾À");
 	}
 
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		SCENEMANAGER->changeScene("´øÀü¾À");
+	}
 
 }
 
