@@ -485,8 +485,8 @@ void tile::imageLoad()
 
 void tile::addObject()
 {
-	tagObject* tempObject;
-	tempObject->img = ImageManager::GetInstance()->FindImage("의자");
+	//tagObject* tempObject;
+	//tempObject->img = ImageManager::GetInstance()->FindImage("의자");
 	//tempObject->
 
 }
