@@ -186,6 +186,9 @@
     <ClInclude Include="shopStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
+    <ClInclude Include="dungeonStage.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -288,6 +291,9 @@
       <Filter>playGround\stage</Filter>
     </ClCompile>
     <ClCompile Include="shopStage.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="dungeonStage.cpp">
       <Filter>playGround\stage</Filter>
     </ClCompile>
   </ItemGroup>
