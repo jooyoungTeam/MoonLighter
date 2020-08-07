@@ -12,12 +12,6 @@ HRESULT tile::init()
 		_sampleTileUI.bottom = WINSIZEY;
 		_sampleTileUI.top = 0;
 		_sampleTileUI.left = WINSIZEX - 510;
-
-		_sampleTileOnOff.right = _sampleTileUI.left;
-		_sampleTileOnOff.left = _sampleTileOnOff.right - 30;
-		_sampleTileOnOff.top = (_sampleTileUI.top + _sampleTileUI.bottom) * 0.5f - 50;
-		_sampleTileOnOff.bottom = (_sampleTileUI.top + _sampleTileUI.bottom) * 0.5f + 50;
-		_isOnOff = true;
 	}
 	{
 		_mapMove[MOVE_LEFT].rc.left = 0;
@@ -87,8 +81,6 @@ void tile::render()
 
 	D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
 	D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
-	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::White, 1);
-	D2DRenderer::GetInstance()->DrawRectangle(_sampleTileOnOff, D2D1::ColorF::Black, 1);
 
 	// 팔레트
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
@@ -139,6 +131,7 @@ void tile::update()
 	drag();
 	save();
 	load();
+
 }
 
 void tile::release()
@@ -385,7 +378,6 @@ void tile::setMap()
 		}
 
 		_button->update();
-		openSampleTile();
 	}
 	// 그냥 지나갈 때 범위 선택
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
@@ -521,21 +513,6 @@ void tile::mapMove()
 			}
 		}
 
-	}
-}
-
-void tile::openSampleTile()
-{
-	if (PtInRect(&_sampleTileOnOff, _ptMouse))
-	{
-		if (_isOnOff)
-		{
-
-		}
-		else
-		{
-
-		}
 	}
 }
 

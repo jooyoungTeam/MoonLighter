@@ -18,8 +18,6 @@ private:
 
 	// --------- 팔레트 변수
 	RECT            _sampleTileUI; // 팔레트 그림 있는곳
-	RECT            _sampleTileOnOff;
-	bool            _isOnOff;
 	tagSampleTile   _sampleTile[SAMPLETILEX * SAMPLETILEY];
 	// --------- 팔레트 변수
 
@@ -48,7 +46,6 @@ public:
 	void load();
 	void imageLoad();
 	void mapMove();
-	void openSampleTile();
 
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT  objectSelect(int frameX, int frameY);
