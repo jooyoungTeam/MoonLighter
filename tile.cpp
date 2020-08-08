@@ -43,8 +43,8 @@ HRESULT tile::init()
 	}
 
 	{
-		_miniMap = RectMakePivot(Vector2(10, 10), Vector2(200, 200), Pivot::LeftTop);
-		_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(64, 36), Pivot::LeftTop);
+		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(200, 200), Pivot::LeftTop);
+		_miniMapMove = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(64, 36), Pivot::LeftTop);
 	}
 
 
@@ -132,13 +132,16 @@ void tile::render()
 
 
 
-
+	// 드래그 할때 생기는 렉트
 	if (_drag.isDraw)
 	{
 		CAMERAMANAGER->rectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
 		CAMERAMANAGER->fillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
-
+	wstring str;
+	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
+	
+	D2DRenderer::GetInstance()->RenderText(_ptMouse.x + 10, _ptMouse.y + 10, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 맵 이동
 	//for (int i = 0; i < 4; i++)
@@ -149,10 +152,12 @@ void tile::render()
 	//	}
 	//}
 
-	// 팔레트 껐다켰다하는 렉트
-	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.8f);
-	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1);
+	// 미니맵
+	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
+	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1,2);
 
+
+	// 팔레트 껐다켰다하는 렉트
 	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::CadetBlue, 1);
 }
 
@@ -376,7 +381,7 @@ void tile::setup()
 			_tiles[i * TILEX + j].rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
 			_tiles[i * TILEX + j].isDrag = false;
 			char str[10];
-			sprintf_s(str, "{%d,%d}", i, j);
+			sprintf_s(str, "(%d,%d)", i, j);
 			_tiles[i * TILEX + j].str = str;
 		}
 	}
@@ -470,6 +475,7 @@ void tile::setMap()
 
 
 
+	// 지금 렉트 검사
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)
@@ -481,6 +487,7 @@ void tile::setMap()
 			if (PtInRect(&_tiles[index].rc, pt))
 			{
 				_dragTile = RectMake(_tiles[index].rc.left, _tiles[index].rc.top, TILESIZE, TILESIZE);
+				_nowIndex = index;
 				break;
 			}
 		}
@@ -610,7 +617,7 @@ void tile::mapMove()
 		
 			float x = CAMERAMANAGER->getLeft() * 0.04f;
 			float y = CAMERAMANAGER->getTop() * 0.04f;
-			_miniMapMove = RectMakePivot(Vector2(10 + x, 10 + y), Vector2(64, 36), Pivot::LeftTop);
+			_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
 		}
 
 	}

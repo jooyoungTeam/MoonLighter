@@ -40,6 +40,8 @@ private:
 	int           _saveTime;
 	int			  _dragNumX;
 	int			  _dragNumY;
+
+	int           _nowIndex;
 public:
 	tile() {}
 	~tile() {}
