@@ -2,14 +2,18 @@
 
 #define TILESIZE 50
 
-#define TILEX 50
-#define TILEY 50
+#define TILEX 32
+#define TILEY 18
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
 #define SAMPLETILEX 9
 #define SAMPLETILEY 3
+
+#define ATTR_UNMOVE		0x00000001
+#define ATTR_SWAMP		0x00000002
+
 
 enum TERRAIN
 {
@@ -37,6 +41,7 @@ struct tagTile
 	int     terrainFrameX;
 	int     terrainFrameY;
 	bool    isDrag;
+	wstring str;
 };
 
 enum MAPMOVE
