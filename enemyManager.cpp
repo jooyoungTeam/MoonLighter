@@ -29,7 +29,7 @@ void enemyManager::update()
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		_vEnemy[i]->update();
-		_vEnemy[i]->playerCheck(_x, _y);
+		_vEnemy[i]->playerCheck(_x, _y);	//나중에 여기에 플레이어 위치 넣어주셈
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('Q'))
@@ -72,21 +72,21 @@ void enemyManager::render()
 
 void enemyManager::setEnemy()
 {
-	int i = 1;
+	int i = 0;
 
 	enemy* redS;
 	redS = new redSlime;
-	redS->init(0, 200, 200, 70, 70, ENEMY_RED_SLIME, "test");
+	redS->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME, "test");
 	_vEnemy.push_back(redS);
 
 	//i++;
 
-	/*enemy* yelS;
-	yelS = new anotherSlime;
-	yelS->init(i, 200, 500, 50, 50, ENEMY_YELLOW_SLIME, "test");
+	enemy* yelS;
+	yelS = new golem;
+	yelS->init(i, 500, 500, 50, 50, ENEMY_GOLEM, "test");
 	_vEnemy.push_back(yelS);
 
-	i++;
+	/*i++;
 
 	enemy* yelS2;
 	yelS2 = new anotherSlime;
@@ -106,8 +106,8 @@ void enemyManager::setEnemy()
 	enemy* yelS4;
 	yelS4 = new anotherSlime;
 	yelS4->init(i , 200, 100, 50, 50, ENEMY_YELLOW_SLIME, "test");
-	_vEnemy.push_back(yelS4);
-*/
+	_vEnemy.push_back(yelS4);*/
+
 
 
 }

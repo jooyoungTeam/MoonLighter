@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 #include "enemyState.h"
-#include "keyAniManager.h"
 
 
 
@@ -47,6 +46,8 @@ public:
 	void ani();
 	void test();
 	virtual void attack();
+	virtual void enemyMove();
+	virtual void set();
 
 	//---------------------------------set-----------------------------------
 	void setChange(bool ch) { change = ch; }
