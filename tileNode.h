@@ -2,8 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 32
-#define TILEY 18
+#define TILEX 100
+#define TILEY 100
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
@@ -41,7 +41,7 @@ struct tagTile
 	int     terrainFrameX;
 	int     terrainFrameY;
 	bool    isDrag;
-	wstring str;
+	string  str;
 };
 
 enum MAPMOVE

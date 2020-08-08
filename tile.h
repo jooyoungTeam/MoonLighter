@@ -32,6 +32,11 @@ private:
 	MAPMOVE       _currentMove;
 	// --------- ¸Ê ÀÌµ¿ º¯¼ö
 
+	// --------- ¹Ì´Ï¸Ê º¯¼ö
+	
+	FloatRect     _miniMap;
+	FloatRect     _miniMapMove;
+
 	int           _saveTime;
 	int			  _dragNumX;
 	int			  _dragNumY;
@@ -56,7 +61,7 @@ public:
 	void addObject();
 	void mapMove();
 	void sampleOnOff();
-
+	void miniMap();
 
 	tagTile* getTile() { return _tiles; }
 	DWORD* getAttribute() { return _attribute; }
