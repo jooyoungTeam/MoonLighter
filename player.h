@@ -24,6 +24,7 @@ private:
 	playerState*	    _roll;
 	playerState*	    _die;
 	playerState*	    _shield;
+	playerState*		_idleSwim;
 	playerState*	    _swim;
 	playerState*	    _bow;
 	playerState*	    _sword;
@@ -46,8 +47,9 @@ public:
 	bool getDirectionX() { return _directionX; }
 	bool getDirectionY() { return _directionY; }
 
+	FloatRect getPlayerRc() { return _playerRc; }
 	Image* getImage() { return _playerImg; }
-	animation* getAniMotion() { return _playerMotion; }
+	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
 
 	void setX(float playerX) { _playerX = playerX; }
@@ -65,6 +67,7 @@ public:
 	playerState* getRollState()		{ return _roll; }
 	playerState* getDieState()		{ return _die; }
 	playerState* getShieldState()	{ return _shield; }
+	playerState* getIdleSwimState() { return _idleSwim; }
 	playerState* getSwimState()		{ return _swim; }
 	playerState* getBowState()		{ return _bow; }
 	playerState* getSwordState()	{ return _sword; }

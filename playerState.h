@@ -9,6 +9,7 @@ class playerWalkState;
 class playerRollState;
 class playerDieState;
 class playerShieldState;
+class playerIdleSwimState;
 class playerSwimState;
 class playerbowState;
 class playerSwordState;
@@ -25,6 +26,7 @@ public:
 	static playerRollState* roll;
 	static playerDieState* die;
 	static playerShieldState* shield;
+	static playerIdleSwimState* idleSwim;
 	static playerSwimState* swim;
 	static playerbowState* bow;
 	static playerSwordState* sword;
@@ -32,7 +34,10 @@ public:
 
 class playerIdleState : public playerState
 {
+private:
+	bool _transForm;
 public:
+	HRESULT init();
 	virtual void update(player& player) override;
 };
 
@@ -44,12 +49,13 @@ public:
 
 class playerRollState : public playerState
 {
+private:
+
 public:
 	virtual void update(player& player) override;
 };
 
 class playerDieState : public playerState
-
 {
 public:
 	virtual void update(player& player) override;
@@ -61,6 +67,11 @@ public:
 	virtual void update(player& player) override;
 };
 
+class playerIdleSwimState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
 
 class playerSwimState : public playerState
 {
