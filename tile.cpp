@@ -51,6 +51,7 @@ HRESULT tile::init()
 	_button = new button;
 	_button->init();
 	setup();
+	addObject();
 	return S_OK;
 }
 
@@ -64,7 +65,7 @@ void tile::render()
 			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
 			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
 
-		
+
 			int index = (i + cullY) * TILEX + (j + cullX);
 
 			CAMERAMANAGER->rectangle(_tiles[index].rc, D2D1::ColorF::Black, 1.0f);
@@ -105,22 +106,19 @@ void tile::render()
 		D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
 
 		// 팔레트
-		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+		if (_button->getType() == BUTTON_TERRAIN)
 		{
-			D2DRenderer::GetInstance()->DrawRectangle(_sampleTile[i].rc, D2D1::ColorF::Black, 1.0f);
-			Vector2 vec((_sampleTile[i].rc.left + _sampleTile[i].rc.right) * 0.5f, (_sampleTile[i].rc.top + _sampleTile[i].rc.bottom) * 0.5f);
-
-			if (_button->getType() == BUTTON_TERRAIN)
+			for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 			{
+				D2DRenderer::GetInstance()->DrawRectangle(_sampleTile[i].rc, D2D1::ColorF::Black, 1.0f);
+				Vector2 vec((_sampleTile[i].rc.left + _sampleTile[i].rc.right) * 0.5f, (_sampleTile[i].rc.top + _sampleTile[i].rc.bottom) * 0.5f);
 				ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _sampleTile[i].terrainFrameX, _sampleTile[i].terrainFrameY);
 			}
-			else if (_button->getType() == BUTTON_OBJECT)
-			{
-				//ImageManager::GetInstance()->FindImage("의자")->Render(vec);
-			}
-
 		}
-
+		else if (_button->getType() == BUTTON_OBJECT)
+		{
+		
+		}
 
 
 		_button->render();
@@ -140,7 +138,7 @@ void tile::render()
 	}
 	wstring str;
 	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
-	
+
 	D2DRenderer::GetInstance()->RenderText(_ptMouse.x + 10, _ptMouse.y + 10, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 맵 이동
@@ -154,7 +152,7 @@ void tile::render()
 
 	// 미니맵
 	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
-	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1,2);
+	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1, 2);
 
 
 	// 팔레트 껐다켰다하는 렉트
@@ -374,6 +372,8 @@ void tile::setup()
 		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 300 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, 30 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
 	}
 
+
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -406,18 +406,25 @@ void tile::setMap()
 	{
 		if (_isActive)
 		{
-			for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+			if (_button->getType() == BUTTON_TERRAIN)
 			{
-				if (PtInRect(&_sampleTile[i].rc, _ptMouse))
+				for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 				{
-					_currentTile.x = _sampleTile[i].terrainFrameX;
+					if (PtInRect(&_sampleTile[i].rc, _ptMouse))
+					{
+						_currentTile.x = _sampleTile[i].terrainFrameX;
 
-					cout << _sampleTile[i].terrainFrameX << endl;
-					_currentTile.y = _sampleTile[i].terrainFrameY;
-					_currentRect = RectMake(_sampleTile[i].rc.left, _sampleTile[i].rc.top, TILESIZE, TILESIZE);
-					break;
+						_currentTile.y = _sampleTile[i].terrainFrameY;
+						_currentRect = RectMake(_sampleTile[i].rc.left, _sampleTile[i].rc.top, TILESIZE, TILESIZE);
+						break;
+					}
 				}
 			}
+			else if (_button->getType() == BUTTON_OBJECT)
+			{
+				
+			}
+
 			_button->update();
 		}
 		sampleOnOff();
@@ -539,8 +546,10 @@ void tile::load()
 
 void tile::imageLoad()
 {
-	ImageManager::GetInstance()->AddImage("의자", L"Object/bench.png");
-	ImageManager::GetInstance()->AddImage("표지판", L"Object/potionBoard.png");
+	ImageManager::GetInstance()->AddImage("집1", L"Object/build_Bottom1.png");
+	ImageManager::GetInstance()->AddImage("집2", L"Object/build_Bottom2.png");
+	ImageManager::GetInstance()->AddImage("샵", L"Object/build_Shop.png");
+	ImageManager::GetInstance()->AddFrameImage("나무", L"Object/tree.png",4,1);
 	//ImageManager::GetInstance()
 
 }
@@ -553,12 +562,12 @@ void tile::loadDungeonMap()
 	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _tiles, sizeof(tagTile) * 32 * 18, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, _dungeonTiles, sizeof(tagTile) * 32 * 18, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
 
-	memset(_attribute, 0, sizeof(DWORD) * 32 * 18);
+	memset(_dungeonAttribute, 0, sizeof(DWORD) * 32 * 18);
 	for (int i = 0; i < 32 * 18; ++i)
 	{
-		if (_tiles[i].terrain == TR_WALL) _attribute[i] |= ATTR_UNMOVE;
+		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
 	}
 
 	CloseHandle(file);
@@ -568,22 +577,20 @@ void tile::renderDungeonMap()
 {
 	for (int i = 0; i < 32 * 18; i++)
 	{
-		if (_tiles[i].terrain != TR_NONE)
+		if (_dungeonTiles[i].terrain != TR_NONE)
 		{
-			Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
+			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
 
-			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
 		}
 	}
 }
 
 void tile::addObject()
 {
-	//tagObject* tempObject;
-	//tempObject->img = ImageManager::GetInstance()->FindImage("의자");
-	//tempObject->
 
 }
+
 
 void tile::mapMove()
 {
@@ -614,7 +621,7 @@ void tile::mapMove()
 				CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 5);
 				_currentMove = MOVE_DOWN;
 			}
-		
+
 			float x = CAMERAMANAGER->getLeft() * 0.04f;
 			float y = CAMERAMANAGER->getTop() * 0.04f;
 			_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
@@ -655,22 +662,20 @@ void tile::sampleOnOff()
 	}
 }
 
-void tile::miniMap()
-{
-}
 
 
 TERRAIN tile::terrainSelect(int frameX, int frameY)
 {
 	for (int i = 0; i < 9; i++)
 	{
-		// 첫번 째 줄
+		// 첫번째 줄
 		if (frameX == 8 && frameY == 0) return TR_FLOOR;
 		else if (frameX == i && frameY == 0) return TR_WALL;
 
 		// 두번째 줄
 		if (frameX == i && frameY == 1) return TR_GRASS;
 
+		// 세번째 줄
 		if (frameX == 6 && frameY == 2) return TR_WALL;
 	}
 

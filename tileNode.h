@@ -11,6 +11,7 @@
 #define SAMPLETILEX 9
 #define SAMPLETILEY 3
 
+
 #define ATTR_UNMOVE		0x00000001
 #define ATTR_SWAMP		0x00000002
 
@@ -56,7 +57,6 @@ enum MAPMOVE
 struct tagObject
 {
 	OBJECT  object;
-	Image*  img;
 	RECT    rc;
 	int     objFrameX;
 	int     objFrameY;

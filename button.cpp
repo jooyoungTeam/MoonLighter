@@ -10,26 +10,44 @@ HRESULT button::init()
 
 void button::render()
 {
-	for (int i = 0; i < BUTTON_END; i++)
+	if (_currentType == BUTTON_OBJECT)
 	{
-		if (_button[i].type == _currentType)
+		for (int i = 0; i < BUTTON_END; i++)
 		{
-			D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
+			if (_button[i].type == _currentType)
+			{
+				D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
+			}
+			else
+			{
+				D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
+			}
+			D2DRenderer::GetInstance()->RenderText(_button[i].pos.x - 35, _button[i].pos.y - 10, _button[i].name, 15);
 		}
-		else
-		{
-			D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
-		}
-
-		wstring str;
-		str.assign(_button[i].name.begin(), _button[i].name.end());
-		D2DRenderer::GetInstance()->RenderText(_button[i].pos.x - 35, _button[i].pos.y - 10, str, 15);
 	}
+	else
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (_button[i].type == _currentType)
+			{
+				D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
+			}
+			else
+			{
+				D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
+			}
+			D2DRenderer::GetInstance()->RenderText(_button[i].pos.x - 35, _button[i].pos.y - 10, _button[i].name, 15);
+		}
+	}
+
+
 }
 
 
 void button::update()
 {
+
 	for (int i = 0; i < BUTTON_END; i++)
 	{
 		if (PtInRect(&_button[i].rc, _ptMouse))
@@ -37,6 +55,8 @@ void button::update()
 			_currentType = _button[i].type;
 		}
 	}
+
+	
 
 }
 
@@ -48,11 +68,20 @@ void button::setButton()
 {
 	for (int i = 0; i < BUTTON_END; i++)
 	{
-		
-		if (i == BUTTON_END - 1)
+		if (i == 5)
 		{
 			_button[i].pos.x = WINSIZEX / 2 + 550;
 			_button[i].pos.y = WINSIZEY / 2 + 400;
+		}
+		else if (i == 6)
+		{
+			_button[i].pos.x = WINSIZEX / 2 + 450;
+			_button[i].pos.y = WINSIZEY / 2 + 200;
+		}
+		else if (i == 7)
+		{
+			_button[i].pos.x = WINSIZEX / 2 + 650;
+			_button[i].pos.y = WINSIZEY / 2 + 200;
 		}
 		else
 		{
@@ -62,10 +91,15 @@ void button::setButton()
 		_button[i].type = (BUTTONTYPE)i;
 		_button[i].rc = RectMakeCenter(_button[i].pos.x, _button[i].pos.y, 80, 30);
 	}
-	_button[0].name = "  TERRAIN";
-	_button[1].name = "   OBJECT";
-	_button[2].name = "    SAVE";
-	_button[3].name = "    LOAD";
-	_button[4].name = "   ERASE";
-	_button[5].name = "COMPLETE";
+
+
+
+	_button[0].name = L"  TERRAIN";
+	_button[1].name = L"   OBJECT";
+	_button[2].name = L"    SAVE";
+	_button[3].name = L"    LOAD";
+	_button[4].name = L"   ERASE";
+	_button[5].name = L"COMPLETE";
+	_button[6].name = L"       <";
+	_button[7].name = L"       >";
 }

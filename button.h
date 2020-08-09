@@ -9,6 +9,8 @@ enum BUTTONTYPE
 	BUTTON_LOAD,
 	BUTTON_CLEAR,
 	BUTTON_COMPLETE,
+	BUTTON_LEFT,
+	BUTTON_RIGHT,
 	BUTTON_END
 };
 
@@ -17,7 +19,7 @@ struct tagButton
 	RECT	      rc;
 	POINT         pos;
 	BUTTONTYPE    type;
-    string        name;
+    wstring       name;
 };
 
 

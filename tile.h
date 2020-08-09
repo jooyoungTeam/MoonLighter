@@ -17,12 +17,14 @@ private:
 
 	DWORD             _attribute[TILEX * TILEY];
 
-	// --------- 팔레트 변수
-	RECT              _sampleTileUI; // 팔레트 그림 있는곳
-	tagSampleTile     _sampleTile[SAMPLETILEX * SAMPLETILEY];
-	RECT              _sampleTileOnOff;
-	bool              _isActive;
-	// --------- 팔레트 변수
+
+
+	// --------- 팔레트 변수 --------- //
+	RECT                _sampleTileUI; // 팔레트 그림 있는곳
+	tagSampleTile       _sampleTile[SAMPLETILEX * SAMPLETILEY];
+	RECT                _sampleTileOnOff;
+	bool                _isActive;
+	// --------- 팔레트 변수 --------- //
 
 	vector<tagObject*> _vObject;
 
@@ -36,6 +38,14 @@ private:
 	
 	FloatRect     _miniMap;
 	FloatRect     _miniMapMove;
+
+
+
+	// ----------- 던전맵 변수
+	tagTile           _dungeonTiles[32 * 18];
+	DWORD             _dungeonAttribute[32 * 18];
+	// ----------- 던전맵 변수
+
 
 	int           _saveTime;
 	int			  _dragNumX;
@@ -59,14 +69,14 @@ public:
 	void imageLoad();
 	void loadDungeonMap();
 	void renderDungeonMap();
-	
 	void addObject();
+
+
 	void mapMove();
 	void sampleOnOff();
-	void miniMap();
 
-	tagTile* getTile() { return _tiles; }
-	DWORD* getAttribute() { return _attribute; }
+	tagTile* getDungeonTile() { return _dungeonTiles; }
+	DWORD* getDungeonAttribute() { return _dungeonAttribute; }
 
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT  objectSelect(int frameX, int frameY);
