@@ -216,11 +216,8 @@
     <ClInclude Include="aStar.h">
       <Filter>playGround\송용은</Filter>
     </ClInclude>
-    <ClInclude Include="playerState.h">
-      <Filter>playGround\정기성</Filter>
-    </ClInclude>
-    <ClInclude Include="arrow.h">
-      <Filter>playGround\정기성</Filter>
+    <ClInclude Include="bullet.h">
+      <Filter>playGround\강해라</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -356,11 +353,8 @@
     <ClCompile Include="aStar.cpp">
       <Filter>playGround\송용은</Filter>
     </ClCompile>
-    <ClCompile Include="playerState.cpp">
-      <Filter>playGround\정기성</Filter>
-    </ClCompile>
-    <ClCompile Include="arrow.cpp">
-      <Filter>playGround\정기성</Filter>
+    <ClCompile Include="bullet.cpp">
+      <Filter>playGround\강해라</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

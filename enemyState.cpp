@@ -7,7 +7,7 @@ void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 	enemy.setAttackDelay(enemy.getAttackDelay() + 1);
 	enemy.enemyMove();
 	//cout << " µé¿È" << endl;
-	if (enemy.getAttackDelay() > 200)
+	if (enemy.getAttackDelay() > 80)
 	{
 	if (enemyType == ENEMY_GOLEM)
 	{

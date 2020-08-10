@@ -50,7 +50,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -152,6 +152,7 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="boss.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="collision.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="collision.cpp" />

@@ -16,9 +16,9 @@ protected:
 
 	ENEMYTYPE _type;
 	GOLEMDIR _golemDir;
+	POTDIR _potDir;
 
-	string _mapName; //굳이 필요 없을듯
-
+	
 	animation* _motion;
 	
 	Image* _img;
@@ -33,7 +33,6 @@ protected:
 	float _pX, _pY;
 	float _angle;
 
-	bool change;	//test용 나중에 지우기4
 	bool _isAttack;
 
 
@@ -42,13 +41,12 @@ protected:
 
 public:
 
-	virtual HRESULT init(int index, float x, float y, float width, float height, ENEMYTYPE type, string map);
+	virtual HRESULT init(int index, float x, float y, float width, float height, ENEMYTYPE type);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 	void playerCheck(float x, float y); //나중에 여기에 렉트 추가해
 	void ani();
-	void test();
 	virtual void attack();
 	virtual void enemyMove();
 	virtual void set();
@@ -57,7 +55,7 @@ public:
 	//---------------------------------set-----------------------------------
 	void setState(enemyState* state) { this->_state = state; }
 	void setMotion(Image* img, animation* ani) { _img = img; _motion = ani; _motion->start(); }
-	void setChange(bool ch) { change = ch; }
+	void setPotDirection(POTDIR dir) { _potDir = dir; }
 
 	void setIsAttack(bool attack) { _isAttack = attack; }
 	void setAttackDelay(int delay) { _attackDelay = delay; }
@@ -78,7 +76,8 @@ public:
 	animation* getAni() { return _motion; }
 
 	GOLEMDIR getGolDriection() { return _golemDir; }
-
+	POTDIR getPotDirection() { return _potDir; }
+	ENEMYTYPE getEnemyType() { return _type; }
 
 	enemyState* getIdle() { return _idle; }			
 	enemyState* getMove() { return _move; }
