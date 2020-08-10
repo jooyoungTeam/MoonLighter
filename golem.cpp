@@ -10,6 +10,12 @@ golem::~golem()
 }
 
 
+void golem::render()
+{
+	_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
+	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Yellow, 1.f);
+}
+
 void golem::set()
 {
 	_golemDir = GOLEM_TOP;
@@ -26,7 +32,7 @@ void golem::attack()
 void golem::enemyMove()
 {
 	_count++;
-	cout << _golemDir << endl;
+	//cout << _golemDir << endl;
 
 	if (_golemDir == GOLEM_TOP || _golemDir == GOLEM_BOTTOM)
 	{

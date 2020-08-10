@@ -10,10 +10,12 @@ HRESULT aStarManager::init()
 
 void aStarManager::render()
 {
+
 }
 
 void aStarManager::update()
 {
+
 }
 
 void aStarManager::release()

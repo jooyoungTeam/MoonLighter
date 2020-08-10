@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "enemy.h"
 
-HRESULT enemy::init(int index, float x, float y, float width, float height, ENEMYTYPE type, string map)
+HRESULT enemy::init(int index, float x, float y, float width, float height, ENEMYTYPE type)
 {
 	_idle = new enemyIdleState;
 	_move = new enemyMoveState;
@@ -14,14 +14,11 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 
 	ani();
 
-	//_motion = KEYANIMANAGER->findAnimation("slimeIlde");
-
 	_x = x;
 	_y = y;
 	_width = width;
 	_height = height;
 	_type = type;
-	_mapName = map;
 	_maxHP = 100;
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
@@ -50,8 +47,8 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 		_motion->start();
 		break;
 	case ENEMY_POT:
-		_motion = KEYANIMANAGER->findAnimation(_index, "boss");
-		_img = ImageManager::GetInstance()->FindImage("boss");
+		_motion = KEYANIMANAGER->findAnimation(_index, "potLeft");
+		_img = ImageManager::GetInstance()->FindImage("pot");
 		_motion->start();
 		break;
 	case ENEMY_BOSS:
@@ -76,7 +73,6 @@ void enemy::release()
 void enemy::update()
 {
 	_state->update(*this,  _type);
-	test();
 	enemyWay();
 	KEYANIMANAGER->update();
 	attack();
@@ -179,8 +175,15 @@ void enemy::ani()
 	int bullet[] = { 0,1,2,3,4,5 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bullet", "bullet", bullet, 6, 13, true);
 
-	int pot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; //4방향 다 넣어야함..
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "pot", "pot", pot, 11, 13, true);
+	int leftPot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; 
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potLeft", "pot", leftPot, 11, 7, true);
+	int rightPot[] = { 11,12,13,14,15,16,17,18,19,20,21 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potRight", "pot", rightPot, 11, 7, true);
+	int upPot[] = { 22,23,24,25,26,27,28,29,30,31,32 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potUp", "pot", upPot, 11, 7, true);
+	int downPot[] = { 33,34,35,36,37,38,39,40,41,42,43 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potDown", "pot", downPot, 11, 7, true);
+
 
 
 
@@ -247,47 +250,6 @@ void enemy::ani()
 
 }
 
-void enemy::test()
-{
-	if (change)
-	{
-		switch (_type)
-		{
-		case ENEMY_RED_SLIME:
-			_motion = KEYANIMANAGER->findAnimation(_index, "slimeIlde");
-			_img = ImageManager::GetInstance()->FindImage("slimeIlde");
-			_motion->start();
-			break;
-		case ENEMY_BLUE_SLIME:
-			_img = ImageManager::GetInstance()->FindImage("slimeJump");
-			_motion = KEYANIMANAGER->findAnimation(_index, "slimeJump");
-			_motion->start();
-			break;
-		case ENEMY_YELLOW_SLIME:
-			_img = ImageManager::GetInstance()->FindImage("blueSlime");
-			_motion = KEYANIMANAGER->findAnimation(_index, "blueSlime");
-			_motion->start();
-			break;
-		case ENEMY_GOLEM:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		case ENEMY_POT:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		case ENEMY_BOSS:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		}
-
-		change = false;
-	}
-}
 
 void enemy::attack()
 {

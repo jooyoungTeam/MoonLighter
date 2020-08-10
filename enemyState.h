@@ -20,6 +20,14 @@ enum GOLEMDIR
 	GOLEM_BOTTOM
 };
 
+enum POTDIR
+{
+	POT_LEFT,
+	POT_RIGHT,
+	POT_TOP,
+	POT_BOTTOM
+};
+
 class enemyIdleState;
 class enemyMoveState;
 class enemyAttackState;
