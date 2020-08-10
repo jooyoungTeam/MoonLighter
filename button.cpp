@@ -27,7 +27,7 @@ void button::render()
 	}
 	else
 	{
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < BUTTON_END; i++)
 		{
 			if (_button[i].type == _currentType)
 			{
@@ -53,6 +53,7 @@ void button::update()
 		if (PtInRect(&_button[i].rc, _ptMouse))
 		{
 			_currentType = _button[i].type;
+			break;
 		}
 	}
 
@@ -70,28 +71,17 @@ void button::setButton()
 	{
 		if (i == 5)
 		{
-			_button[i].pos.x = WINSIZEX / 2 + 550;
-			_button[i].pos.y = WINSIZEY / 2 + 380;
-		}
-		else if (i == 6)
-		{
-			_button[i].pos.x = WINSIZEX / 2 + 450;
-			_button[i].pos.y = WINSIZEY / 2 + 200;
-		}
-		else if (i == 7)
-		{
-			_button[i].pos.x = WINSIZEX / 2 + 650;
-			_button[i].pos.y = WINSIZEY / 2 + 200;
+			_button[i].pos.x = WINSIZEX / 2 + 530;
+			_button[i].pos.y = 150;
 		}
 		else
 		{
-			_button[i].pos.x = WINSIZEX / 2 + 350 + i * 100;
-			_button[i].pos.y = WINSIZEY / 2 + 340;
+			_button[i].pos.x = WINSIZEX / 2 + 330 + i * 100;
+			_button[i].pos.y = 100;
 		}
 		_button[i].type = (BUTTONTYPE)i;
 		_button[i].rc = RectMakeCenter(_button[i].pos.x, _button[i].pos.y, 80, 30);
 	}
-
 
 
 	_button[0].name = L"  TERRAIN";
@@ -100,6 +90,4 @@ void button::setButton()
 	_button[3].name = L"    LOAD";
 	_button[4].name = L"   ERASE";
 	_button[5].name = L"COMPLETE";
-	_button[6].name = L"       <";
-	_button[7].name = L"       >";
 }

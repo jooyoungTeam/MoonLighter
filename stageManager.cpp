@@ -54,11 +54,13 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F2))
 	{
+		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("¼¥¾À");
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F3))
 	{
+		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("´øÀü¾À");
 	}
 

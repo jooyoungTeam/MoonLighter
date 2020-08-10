@@ -2,6 +2,14 @@
 #include "gameNode.h"
 #include "playerState.h"
 
+enum class DIRECTION
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+};
+
 class player : public gameNode
 {
 private:
@@ -9,6 +17,7 @@ private:
 	Image*				_playerImg;							//플레이어 이미지
 	playerState*		_CurrentState;						//현재 클래스 상태
 	animation*			_playerMotion;						//플레이어 애니메이션
+	DIRECTION			_direction;							//ENUM 
 
 	int					_index;								//플레이어 인덱스 0
 	float			    _playerX, _playerY;					//플레이어 중점
@@ -18,6 +27,7 @@ private:
 	bool				_directionY;						//플레이어 Y방향 true 아래 flase 위
 	bool				_swordAttack;						//플레이어 검 공격하는중
 	bool				_swordAttackCombo;					//플레이어 검 콤보공격
+	bool				_weaponChange;						//플레이어 무기 변경
 
 	//플레이어 상태 정의
 	playerState*	    _idle;
@@ -38,6 +48,7 @@ public:
 
 public:
 	void animationLoad();
+	void tileCollision();
 
 public:
 	int getIndex() { return _index; }
@@ -49,11 +60,13 @@ public:
 	bool getDirectionY() { return _directionY; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
+	bool getWeaponChange() { return _weaponChange; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
 	Image* getImage() { return _playerImg; }
 	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
+	DIRECTION getDirection() { return _direction; }
 
 	void setX(float playerX) { _playerX = playerX; }
 	void setY(float playerY) { _playerY = playerY; }
@@ -63,8 +76,10 @@ public:
 	void setDirectionY(bool directionY) { _directionY = directionY; }
 	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
 	void setSwrodAttackCombo(bool swordAttackCombo) { _swordAttackCombo = swordAttackCombo; }
+	void setWeaponChange(bool weaponChange) { _weaponChange = weaponChange; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion = playerMotion, _playerImg = img; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
+	void setDirection(DIRECTION direction) { _direction = direction; }
 
 public:
 	playerState* getIdleState()		{ return _idle; }

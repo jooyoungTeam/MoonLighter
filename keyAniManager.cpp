@@ -254,7 +254,7 @@ animation * keyAniManager::findAnimation(int index, string animationKeyName)
 
 void keyAniManager::deleteAll()
 {
-	for (int i = 0; i < _mTotalAnimation.size(); ++i)
+	for (int i = 1; i < _mTotalAnimation.size(); ++i)
 	{
 		for (iterAnimation iter = _mTotalAnimation[i].begin(); iter != _mTotalAnimation[i].end();)
 		{

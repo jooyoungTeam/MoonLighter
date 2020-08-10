@@ -7,12 +7,11 @@ enum BUTTONTYPE
 	BUTTON_OBJECT,
 	BUTTON_SAVE,
 	BUTTON_LOAD,
-	BUTTON_CLEAR,
+	BUTTON_ERASE,
 	BUTTON_COMPLETE,
-	BUTTON_LEFT,
-	BUTTON_RIGHT,
 	BUTTON_END
 };
+
 
 struct tagButton
 {
@@ -26,8 +25,8 @@ struct tagButton
 class button :	public gameNode
 {
 private:
-	tagButton  _button[BUTTON_END];
-	BUTTONTYPE _currentType;
+	tagButton       _button[BUTTON_END];
+	BUTTONTYPE      _currentType;
 public:
 	button() {}
 	~button() {}

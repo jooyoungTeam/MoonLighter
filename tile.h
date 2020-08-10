@@ -24,8 +24,16 @@ private:
 	bool                _isActive;
 	// --------- 팔레트 변수 --------- //
 
-	vector<tagObject*> _vObject;
 
+	// --------- object ---------- //
+	RECT               _leftRightButton[2];
+	tagSampleObject    _sampleObject[4];
+	OBJECT 	           _currentSampleObject;    //현재 보고있는 오브젝트 넘버
+	vector<tagObject*> _object;
+	tagObject*         _currentObject;          //선택한 오브젝트
+	bool               _isSelectObject;
+	bool               _canBuild;
+	// --------- object ---------- //
 
 	// --------- 맵 이동 변수
 	tagMapMove    _mapMove[4];
@@ -64,8 +72,8 @@ public:
 	void imageLoad();
 	void loadDungeonMap();
 	void renderDungeonMap();
-	void addObject();
-
+	void selectObject();
+	void eraseObject(int arrNum);
 
 	void mapMove();
 	void sampleOnOff();
@@ -74,7 +82,6 @@ public:
 	DWORD* getDungeonAttribute() { return _dungeonAttribute; }
 
 	TERRAIN terrainSelect(int frameX, int frameY);
-	OBJECT  objectSelect(int frameX, int frameY);
 
 };
 

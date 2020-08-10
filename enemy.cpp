@@ -1,27 +1,25 @@
 #include "stdafx.h"
 #include "enemy.h"
 
-HRESULT enemy::init(int index, float x, float y, float width, float height, ENEMYTYPE type, string map)
+HRESULT enemy::init(int index, float x, float y, float width, float height, ENEMYTYPE type)
 {
 	_idle = new enemyIdleState;
 	_move = new enemyMoveState;
 	_attack = new enemyAttackState;
 	_hit = new enemyHitState;
 	_dead = new enemyDeadState;
-	
-	set();
+
+	_aStar = new aStar;
+
 	_index = index;
 
 	ani();
-
-	//_motion = KEYANIMANAGER->findAnimation("slimeIlde");
 
 	_x = x;
 	_y = y;
 	_width = width;
 	_height = height;
 	_type = type;
-	_mapName = map;
 	_maxHP = 100;
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
@@ -48,10 +46,11 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 		_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
+		set();
 		break;
 	case ENEMY_POT:
-		_motion = KEYANIMANAGER->findAnimation(_index, "boss");
-		_img = ImageManager::GetInstance()->FindImage("boss");
+		_motion = KEYANIMANAGER->findAnimation(_index, "potLeft");
+		_img = ImageManager::GetInstance()->FindImage("pot");
 		_motion->start();
 		break;
 	case ENEMY_BOSS:
@@ -65,6 +64,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_isAttack = false;
 	_attackDelay = 0;
 
+	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50);
 
 	return S_OK;
 }
@@ -75,18 +75,22 @@ void enemy::release()
 
 void enemy::update()
 {
+	_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
 	_state->update(*this,  _type);
-	test();
+	if (_type != ENEMY_POT)
+	{
+		move();
+	}
 	enemyWay();
 	KEYANIMANAGER->update();
-	attack();
-	//cout << _golemDir << endl;
+	//attack();
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 }
 
 void enemy::render()
 {
 	//_img->SetScale(0.5f);
+	_aStar->render();
 	_img->aniRender(Vector2(_x, _y), _motion,1.0f);
 	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Yellow, 1.f);
 }
@@ -179,8 +183,15 @@ void enemy::ani()
 	int bullet[] = { 0,1,2,3,4,5 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bullet", "bullet", bullet, 6, 13, true);
 
-	int pot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; //4방향 다 넣어야함..
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "pot", "pot", pot, 11, 13, true);
+	int leftPot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; 
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potLeft", "pot", leftPot, 11, 7, true);
+	int rightPot[] = { 11,12,13,14,15,16,17,18,19,20,21 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potRight", "pot", rightPot, 11, 7, true);
+	int upPot[] = { 22,23,24,25,26,27,28,29,30,31,32 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potUp", "pot", upPot, 11, 7, true);
+	int downPot[] = { 33,34,35,36,37,38,39,40,41,42,43 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "potDown", "pot", downPot, 11, 7, true);
+
 
 
 
@@ -247,47 +258,6 @@ void enemy::ani()
 
 }
 
-void enemy::test()
-{
-	if (change)
-	{
-		switch (_type)
-		{
-		case ENEMY_RED_SLIME:
-			_motion = KEYANIMANAGER->findAnimation(_index, "slimeIlde");
-			_img = ImageManager::GetInstance()->FindImage("slimeIlde");
-			_motion->start();
-			break;
-		case ENEMY_BLUE_SLIME:
-			_img = ImageManager::GetInstance()->FindImage("slimeJump");
-			_motion = KEYANIMANAGER->findAnimation(_index, "slimeJump");
-			_motion->start();
-			break;
-		case ENEMY_YELLOW_SLIME:
-			_img = ImageManager::GetInstance()->FindImage("blueSlime");
-			_motion = KEYANIMANAGER->findAnimation(_index, "blueSlime");
-			_motion->start();
-			break;
-		case ENEMY_GOLEM:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		case ENEMY_POT:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		case ENEMY_BOSS:
-			_motion = KEYANIMANAGER->findAnimation(_index, "idleBoss");
-			_img = ImageManager::GetInstance()->FindImage("idleBoss");
-			_motion->start();
-			break;
-		}
-
-		change = false;
-	}
-}
 
 void enemy::attack()
 {
@@ -323,4 +293,43 @@ void enemy::enemyWay()
 	{
 		_golemDir = GOLEM_TOP;
 	}
+}
+
+void enemy::move()
+{
+
+	if (_aStar->getVClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVClose().size())
+	{
+		if (getDistance(_x, _y, _aStar->getVClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVClose()[_aStar->getMoveIndex()]->center.y) < 1)
+		{
+			if(_aStar->getMoveIndex() < _aStar->getVClose().size() -1 )
+				_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
+		}
+
+
+		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x < _x)
+		{
+			_x -= 1;
+		}
+		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x >= _x)
+		{
+			_x += 1;
+		}
+		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y < _y)
+		{
+			_y -= 1;
+		}
+		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y >= _y)
+		{
+			_y += 1;
+		}
+
+	}
+
+
+}
+
+void enemy::directionCheck()
+{
+
 }
