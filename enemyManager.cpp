@@ -79,11 +79,11 @@ void enemyManager::setEnemy()
 	redS->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME, "test");
 	_vEnemy.push_back(redS);
 
-	//i++;
+	i++;
 
 	enemy* yelS;
 	yelS = new golem;
-	yelS->init(i, 500, 500, 50, 50, ENEMY_GOLEM, "test");
+	yelS->init(i, 700, 500, 80 , 100, ENEMY_GOLEM, "test");
 	_vEnemy.push_back(yelS);
 
 	/*i++;

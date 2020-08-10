@@ -12,6 +12,14 @@ enum ENEMYTYPE
 	ENEMY_BOSS
 };
 
+enum GOLEMDIR
+{
+	GOLEM_LEFT,
+	GOLEM_RIGHT,
+	GOLEM_TOP,
+	GOLEM_BOTTOM
+};
+
 class enemyIdleState;
 class enemyMoveState;
 class enemyAttackState;
@@ -20,6 +28,8 @@ class enemyDeadState;
 
 class enemyState
 {
+	GOLEMDIR _golemDir;
+
 public:
 	virtual ~enemyState() {}
 	virtual void update(enemy& enemy, ENEMYTYPE enemyType) = 0;
@@ -33,6 +43,8 @@ public:
 
 class enemyIdleState : public enemyState
 {
+private:
+	//GOLEMDIR _golemDir;
 public:
 	virtual void update(enemy& enemy, ENEMYTYPE enemyType) override;
 };
