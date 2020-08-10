@@ -17,8 +17,6 @@ private:
 
 	DWORD             _attribute[TILEX * TILEY];
 
-
-
 	// --------- 팔레트 변수 --------- //
 	RECT                _sampleTileUI; // 팔레트 그림 있는곳
 	tagSampleTile       _sampleTile[SAMPLETILEX * SAMPLETILEY];
