@@ -582,6 +582,8 @@ void tile::renderDungeonMap()
 			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
 
 			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
+
+			CAMERAMANAGER->rectangle(_dungeonTiles[i].rc, D2D1::ColorF::Black, 1.0f);
 		}
 	}
 }
