@@ -1,16 +1,22 @@
 #pragma once
 #include "singletonBase.h"
-#include "tile.h"
+#include "aStar.h"
 #include <vector>
 #include <string>
 
-#define TILENUMX (WINSIZEX / TILESIZE)
-#define TILENUMY (WINSIZEY / TILESIZE)
+struct tagTotalAstar
+{
+	int enemyX;
+	int enemyY;
+	aStar* astar;
+};
 
 class aStarManager : public singletonBase<aStarManager>
 {
 private:
-	
+	vector<tagTotalAstar*> _aStar;
+	int _playerX;
+	int _playerY;
 
 public:
 	aStarManager() {}
@@ -21,8 +27,5 @@ public:
 	void render();
 	void update();
 	void release();
-
-	void setPlayerPos();
-	void setEnemyPos();
 };
 
