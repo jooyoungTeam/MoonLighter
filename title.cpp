@@ -97,9 +97,8 @@ void title::render()
 	D2DRenderer::GetInstance()->RenderText(_menu[1].rc.GetCenter().x - _menu[1].name.length() * 10, _menu[1].rc.GetCenter().y - 20, _menu[1].name, 30, D2DRenderer::DefaultBrush::White);
 	D2DRenderer::GetInstance()->RenderText(_menu[2].rc.GetCenter().x - _menu[2].name.length() * 10 + 10, _menu[2].rc.GetCenter().y - 20, _menu[2].name, 30, D2DRenderer::DefaultBrush::White);
 
-	_selectImg->SetSize(Vector2(250, 250));
 	if (_menuSelect == SELECT::MOVE || _menuSelect == SELECT::STOP) _selectImg->Render(Vector2(_menu[_select].rc.GetCenter().x - 150, _menu[_select].rc.GetCenter().y - 100));
-	if (_menuSelect == SELECT::STAY && _count > 20) _selectImg->FrameRender(Vector2(_menu[_select].rc.GetCenter().x - 25, _menu[_select].rc.GetCenter().y + 25), _selectX, 0);
+	if (_menuSelect == SELECT::STAY && _count > 20) _selectImg->FrameRender(Vector2(_menu[_select].rc.GetCenter().x - 25, _menu[_select].rc.GetCenter().y + 35), _selectX, 0);
 
 	_titleFront->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2), _frameX, 0);
 }

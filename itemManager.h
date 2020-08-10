@@ -13,8 +13,8 @@ public:
 	void update();
 	void render();
 
-	void setItem();
-	void erase();
+	void setItem(ITEMTYPE type, float x, float y);
+	void erase(int arrNum);
 
 	vector<item*> getVItem() { return _vItem; }
 };
