@@ -578,17 +578,31 @@ void tile::loadDungeonMap()
 
 void tile::renderDungeonMap()
 {
-	for (int i = 0; i < TILEX* TILEY; i++)
+
+	for (int i = 0; i < 19; i++)
 	{
-		if (_dungeonTiles[i].terrain != TR_NONE)
+		for (int j = 0; j < 33; j++)
 		{
-			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
 
-			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
+			int index = (i + cullY) * TILEX + (j + cullX);
 
-			CAMERAMANAGER->rectangle(_dungeonTiles[i].rc, D2D1::ColorF::Black, 1.0f);
+			if (_dungeonTiles[index].terrain != TR_NONE)
+			{
+				Vector2 vec((_dungeonTiles[index].rc.left + _dungeonTiles[index].rc.right) * 0.5f, (_dungeonTiles[index].rc.top + _dungeonTiles[index].rc.bottom) * 0.5f);
+
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[index].terrainFrameX, _dungeonTiles[index].terrainFrameY);
+
+				CAMERAMANAGER->rectangle(_dungeonTiles[index].rc, D2D1::ColorF::Black, 1.0f);
+			}
+
+
 		}
 	}
+
+
+
 }
 
 void tile::addObject()
