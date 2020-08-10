@@ -106,7 +106,7 @@ void Image::aniRender(const Vector2& position, animation* ani, float scale)
 
 	D2D1::Matrix3x2F scaleMatrix = D2D1::Matrix3x2F::Scale(scale, scale, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
 	D2D1::Matrix3x2F rotateMatrix = D2D1::Matrix3x2F::Rotation(mAngle, D2D1::Point2F(size.x / 2.f, size.y / 2.f));
-	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x, position.y);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
+	D2D1::Matrix3x2F translateMatrix = D2D1::Matrix3x2F::Translation(position.x - size.x / 2.f, position.y - size.y / 2.f);//(position.x - size.x / 2.f, position.y - size.y / 2.f ); // 중점 ??
 
 	D2D1_RECT_F dxArea = D2D1::RectF(0.0f, 0.0f, size.x, size.y);
 	D2D1_RECT_F dxSrc = D2D1::RectF((float)ani->getFramePos().x, (float)ani->getFramePos().y,
