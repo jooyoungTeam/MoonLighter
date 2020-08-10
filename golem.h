@@ -6,6 +6,7 @@ class golem : public enemy
 {
 private:
 	GOLEMDIR _golemDir;
+	GOLEMDIR _oldDir;
 	int _count;
 
 public:
@@ -16,6 +17,7 @@ public:
 	virtual void set();
 	virtual void attack();
 	virtual void enemyMove();
-
+	virtual void directionCheck();
+	void direcitonChange();
 };
 

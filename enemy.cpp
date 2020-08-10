@@ -83,7 +83,7 @@ void enemy::update()
 	}
 	enemyWay();
 	KEYANIMANAGER->update();
-	attack();
+	//attack();
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 }
 
@@ -298,11 +298,12 @@ void enemy::enemyWay()
 void enemy::move()
 {
 
-	if (_aStar->getVClose().size() > 1 && _aStar->getMoveIndex() < _aStar->getVClose().size() - 1)
+	if (_aStar->getVClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVClose().size())
 	{
-		if (getDistance(_x, _y, _aStar->getVClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVClose()[_aStar->getMoveIndex()]->center.y) < 3)
+		if (getDistance(_x, _y, _aStar->getVClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVClose()[_aStar->getMoveIndex()]->center.y) < 1)
 		{
-			_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
+			if(_aStar->getMoveIndex() < _aStar->getVClose().size() -1 )
+				_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
 		}
 
 
@@ -325,5 +326,10 @@ void enemy::move()
 
 	}
 
+
+}
+
+void enemy::directionCheck()
+{
 
 }

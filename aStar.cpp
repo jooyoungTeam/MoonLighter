@@ -232,15 +232,15 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 		release();
 		setTiles();
 		pathFinder(_currentTile);
-		_moveIndex = 1;
+		_moveIndex = 0;
 		_aStarTimer = 0;
 	}
 }
 
 void aStar::render()
 {
-	/*for (int i = 0; i < _vCloseList.size(); ++i)
+	for (int i = 0; i < _vCloseList.size(); ++i)
 	{
 		D2DRenderer::GetInstance()->DrawRectangle(_vCloseList[i]->rc, D2D1::ColorF::Blue, 5.f);
-	}*/
+	}
 }

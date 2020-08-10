@@ -20,6 +20,7 @@ void golem::render()
 void golem::set()
 {
 	_golemDir = GOLEM_BOTTOM;
+	_oldDir = GOLEM_BOTTOM;
 	_angle = 0;
 	_count = 0;
 }
@@ -35,27 +36,30 @@ void golem::attack()
 		switch (_golemDir)
 		{
 		case GOLEM_LEFT:
+			_attackDelay = 0;
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemLeftAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			break;
 		case GOLEM_RIGHT:
+			_attackDelay = 0;
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemRightAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			break;
 		case GOLEM_TOP:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemTopAttack");
+			_attackDelay = 0;
+			_motion = KEYANIMANAGER->findAnimation(_index, "golemUpAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			break;
 		case GOLEM_BOTTOM:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemBottomAttack");
+			_attackDelay = 0;
+			_motion = KEYANIMANAGER->findAnimation(_index, "golemDownAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			break;
 		}
-		_attackDelay = 0;
 		_isAttack = true;
 		_state = _attack;
 
@@ -65,39 +69,90 @@ void golem::attack()
 
 void golem::enemyMove()
 {
-	_count++;
-	//cout << _golemDir << endl;
 
-	if (_golemDir == GOLEM_TOP || _golemDir == GOLEM_BOTTOM)
+	if ((_angle >= 315 && _angle < 360) || (_angle >= 0 && _angle < 45))
 	{
-		if ((_angle >= 315 && _angle < 360) || (_angle >= 0 && _angle < 45))
+		_golemDir = GOLEM_LEFT;
+		_motion = KEYANIMANAGER->findAnimation(_index, "golemLeft");
+		_img = ImageManager::GetInstance()->FindImage("golem");
+		_motion->start();
+	}
+	else if (_angle >= 135 && _angle < 225)
+	{
+		_golemDir = GOLEM_RIGHT;
+		_motion = KEYANIMANAGER->findAnimation(_index, "golemRight");
+		_img = ImageManager::GetInstance()->FindImage("golem");
+		_motion->start();
+	}
+
+	if (_angle >= 45 && _angle < 135)
+	{
+		_golemDir = GOLEM_BOTTOM;
+		_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
+		_img = ImageManager::GetInstance()->FindImage("golem");
+		_motion->start();
+	}
+	else if (_angle >= 225 && _angle < 315)
+	{
+		_golemDir = GOLEM_TOP;
+		_motion = KEYANIMANAGER->findAnimation(_index, "golemUp");
+		_img = ImageManager::GetInstance()->FindImage("golem");
+		_motion->start();
+	}
+
+
+
+}
+
+void golem::direcitonChange()
+{
+	if (_oldDir != _golemDir)
+	{
+		_oldDir = _golemDir;
+
+		switch (_golemDir)
 		{
-			_golemDir = GOLEM_LEFT;
+		case GOLEM_LEFT:
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemLeft");
+			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
-		}
-		else if (_angle >= 135 && _angle < 225)
-		{
-			_golemDir = GOLEM_RIGHT;
+			break;
+		case GOLEM_RIGHT:
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemRight");
+			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
-		}
-	}
-	else if (_golemDir == GOLEM_RIGHT || _golemDir == GOLEM_LEFT)
-	{
-		if (_angle >= 45 && _angle < 135)
-		{
-			_golemDir = GOLEM_BOTTOM;
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
-			_motion->start();
-		}
-		else if (_angle >= 225 && _angle < 315)
-		{
-			_golemDir = GOLEM_TOP;
+			break;
+		case GOLEM_TOP:
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemUp");
+			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
+			break;
+		case GOLEM_BOTTOM:
+			_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
+			_img = ImageManager::GetInstance()->FindImage("golem");
+			_motion->start();
+			break;
 		}
 	}
-		
+}
 
+void golem::directionCheck()
+{
+	if ((_angle >= 315 && _angle < 360) || (_angle >= 0 && _angle < 45))
+	{
+		_golemDir = GOLEM_LEFT;
+	}
+	else if (_angle >= 135 && _angle < 225)
+	{
+		_golemDir = GOLEM_RIGHT;
+	}
+	if (_angle >= 45 && _angle < 135)
+	{
+		_golemDir = GOLEM_BOTTOM;
+	}
+	else if (_angle >= 225 && _angle < 315)
+	{
+		_golemDir = GOLEM_TOP;
+	}
+	direcitonChange();
 }

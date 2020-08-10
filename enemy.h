@@ -54,6 +54,7 @@ public:
 	virtual void set();
 	virtual void enemyWay();
 	virtual void move();
+	virtual void directionCheck();
 
 	//---------------------------------set-----------------------------------
 	void setState(enemyState* state) { this->_state = state; }
