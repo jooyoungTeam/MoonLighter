@@ -12,6 +12,12 @@ HRESULT tile::init()
 		_sampleTileUI.bottom = WINSIZEY;
 		_sampleTileUI.top = 0;
 		_sampleTileUI.left = WINSIZEX - 510;
+
+
+		_sampleTileOnOff.right = WINSIZEX;
+		_sampleTileOnOff.left = _sampleTileOnOff.right - 20;
+		_sampleTileOnOff.top = WINSIZEY / 2 - 50;
+		_sampleTileOnOff.bottom = WINSIZEY / 2 + 50;
 	}
 	{
 		_mapMove[MOVE_LEFT].rc.left = 0;
@@ -19,51 +25,65 @@ HRESULT tile::init()
 		_mapMove[MOVE_LEFT].rc.top = 0;
 		_mapMove[MOVE_LEFT].rc.bottom = WINSIZEY;
 
-		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 610;
-		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX - 510;
+		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 100;
+		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX;
 		_mapMove[MOVE_RIGHT].rc.top = 0;
 		_mapMove[MOVE_RIGHT].rc.bottom = WINSIZEY;
 
 		_mapMove[MOVE_UP].rc.left = 0;
-		_mapMove[MOVE_UP].rc.right = WINSIZEX - 510;
+		_mapMove[MOVE_UP].rc.right = WINSIZEX;
 		_mapMove[MOVE_UP].rc.top = 0;
 		_mapMove[MOVE_UP].rc.bottom = 100;
 
 		_mapMove[MOVE_DOWN].rc.left = 0;
-		_mapMove[MOVE_DOWN].rc.right = WINSIZEX - 510;
+		_mapMove[MOVE_DOWN].rc.right = WINSIZEX;
 		_mapMove[MOVE_DOWN].rc.top = WINSIZEY - 100;
 		_mapMove[MOVE_DOWN].rc.bottom = WINSIZEY;
 		_currentMove = MOVE_NULL;
 	}
 
+	{
+		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(200, 200), Pivot::LeftTop);
+		_miniMapMove = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(64, 36), Pivot::LeftTop);
+	}
 
 
 	_button = new button;
 	_button->init();
 	setup();
+	addObject();
 	return S_OK;
 }
 
 void tile::render()
 {
-	// 그리는곳
-	for (int i = 0; i < TILEX * TILEY; i++)
-	{
-		CAMERAMANAGER->rectangle(_tiles[i].rc, D2D1::ColorF::Black, 1.0f);
-		if (_tiles[i].terrain != TR_NONE)
-		{
-			Vector2 vec((_tiles[i].rc.left + _tiles[i].rc.right) * 0.5f, (_tiles[i].rc.top + _tiles[i].rc.bottom) * 0.5f);
 
-			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		}
-		//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-	
-		if (_tiles[i].isDrag)
+	for (int i = 0; i < 19; i++)
+	{
+		for (int j = 0; j < 33; j++)
 		{
-			CAMERAMANAGER->rectangle(_tiles[i].rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+
+
+			int index = (i + cullY) * TILEX + (j + cullX);
+
+			CAMERAMANAGER->rectangle(_tiles[index].rc, D2D1::ColorF::Black, 1.0f);
+			if (_tiles[index].terrain != TR_NONE)
+			{
+				Vector2 vec((_tiles[index].rc.left + _tiles[index].rc.right) * 0.5f, (_tiles[index].rc.top + _tiles[index].rc.bottom) * 0.5f);
+
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[index].terrainFrameX, _tiles[index].terrainFrameY);
+			}
+			//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+
+			if (_tiles[index].isDrag)
+			{
+				CAMERAMANAGER->rectangle(_tiles[index].rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
+			}
+			//D2DRenderer::GetInstance()->RenderText(_tiles[index].rc.left, _tiles[index].rc.top, _tiles[index].str, 10);
 		}
 	}
-
 
 	// 선택중인 렉트
 	{
@@ -79,48 +99,64 @@ void tile::render()
 	//	//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _tiles[i].objFrameX, _tiles[i].objFrameY);
 	//}
 
-	D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
-	D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
 
-	// 팔레트
-	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+	if (_isActive) //팔레트가 있을 때 
 	{
-		D2DRenderer::GetInstance()->DrawRectangle(_sampleTile[i].rc, D2D1::ColorF::Black, 1.0f);
-		Vector2 vec((_sampleTile[i].rc.left + _sampleTile[i].rc.right) * 0.5f, (_sampleTile[i].rc.top + _sampleTile[i].rc.bottom) * 0.5f);
+		D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
+		D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
 
+		// 팔레트
 		if (_button->getType() == BUTTON_TERRAIN)
 		{
-			ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _sampleTile[i].terrainFrameX, _sampleTile[i].terrainFrameY);
+			for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+			{
+				D2DRenderer::GetInstance()->DrawRectangle(_sampleTile[i].rc, D2D1::ColorF::Black, 1.0f);
+				Vector2 vec((_sampleTile[i].rc.left + _sampleTile[i].rc.right) * 0.5f, (_sampleTile[i].rc.top + _sampleTile[i].rc.bottom) * 0.5f);
+				ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(vec, _sampleTile[i].terrainFrameX, _sampleTile[i].terrainFrameY);
+			}
 		}
 		else if (_button->getType() == BUTTON_OBJECT)
 		{
-			//ImageManager::GetInstance()->FindImage("의자")->Render(vec);
+		
 		}
+
+
+		_button->render();
+
+		D2DRenderer::GetInstance()->DrawRectangle(_currentRect, D2D1::ColorF::LimeGreen, 1.0f, 5);
+		// ------------------ 마지막 렌더 ------------------------------------ 
 
 	}
 
 
-	_button->render();
 
-	// ------------------ 마지막 렌더 ------------------------------------ 
-
-	D2DRenderer::GetInstance()->DrawRectangle(_currentRect, D2D1::ColorF::LimeGreen, 1.0f, 5);
-
+	// 드래그 할때 생기는 렉트
 	if (_drag.isDraw)
 	{
-		//D2DRenderer::GetInstance()->DrawRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
-		//D2DRenderer::GetInstance()->FillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
+		CAMERAMANAGER->rectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
+		CAMERAMANAGER->fillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
+	wstring str;
+	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
+
+	D2DRenderer::GetInstance()->RenderText(_ptMouse.x + 10, _ptMouse.y + 10, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 맵 이동
-	for (int i = 0; i < 4; i++)
-	{
-		if (i == (int)_currentMove)
-		{
-			D2DRenderer::GetInstance()->FillRectangle(_mapMove[i].rc, D2D1::ColorF::Silver, 0.3f);
-		}
-	}
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	if (i == (int)_currentMove)
+	//	{
+	//		D2DRenderer::GetInstance()->FillRectangle(_mapMove[i].rc, D2D1::ColorF::Silver, 0.3f);
+	//	}
+	//}
 
+	// 미니맵
+	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
+	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1, 2);
+
+
+	// 팔레트 껐다켰다하는 렉트
+	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::CadetBlue, 1);
 }
 
 void tile::update()
@@ -185,7 +221,6 @@ void tile::drag()
 			_drag.rc.bottom = _drag.startPos.y;
 		}
 
-
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
 			if (isCollision(_drag.rc, _tiles[i].rc))
@@ -214,7 +249,7 @@ void tile::drag()
 					_tiles[i].terrainFrameY = _currentTile.y;
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
-				
+
 				//else if (_button->getType() == BUTTON_OBJECT)
 				//{
 				//	_tiles[i].objFrameX = _currentTile.x;
@@ -230,7 +265,7 @@ void tile::drag()
 				//}
 
 
-				if(_currentTile.x == 6 && _currentTile.y == 2)
+				if (_currentTile.x == 6 && _currentTile.y == 2)
 					_vDragTile.push_back(i);
 			}
 			_tiles[i].isDrag = false;
@@ -240,7 +275,7 @@ void tile::drag()
 		{
 			float tempWidth = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.right - _tiles[_vDragTile[0]].rc.left;
 			float tempHeight = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.bottom - _tiles[_vDragTile[0]].rc.top;
-			
+
 			_dragNumX = tempWidth / TILESIZE;
 			_dragNumY = tempHeight / TILESIZE;
 
@@ -337,12 +372,17 @@ void tile::setup()
 		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 300 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, 30 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
 	}
 
+
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			_tiles[i * TILEX + j].rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
 			_tiles[i * TILEX + j].isDrag = false;
+			char str[10];
+			sprintf_s(str, "(%d,%d)", i, j);
+			_tiles[i * TILEX + j].str = str;
 		}
 	}
 
@@ -350,7 +390,7 @@ void tile::setup()
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		_tiles[i].terrainFrameX = 8;
-		_tiles[i].terrainFrameY = 2;
+		_tiles[i].terrainFrameY = 0;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 	}
 }
@@ -364,71 +404,99 @@ void tile::setMap()
 	// 선택할 때 범위
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+		if (_isActive)
 		{
-			if (PtInRect(&_sampleTile[i].rc, _ptMouse))
+			if (_button->getType() == BUTTON_TERRAIN)
 			{
-				_currentTile.x = _sampleTile[i].terrainFrameX;
+				for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+				{
+					if (PtInRect(&_sampleTile[i].rc, _ptMouse))
+					{
+						_currentTile.x = _sampleTile[i].terrainFrameX;
 
-				cout << _sampleTile[i].terrainFrameX << endl;
-				_currentTile.y = _sampleTile[i].terrainFrameY;
-				_currentRect = RectMake(_sampleTile[i].rc.left, _sampleTile[i].rc.top, TILESIZE, TILESIZE);
-				break;
+						_currentTile.y = _sampleTile[i].terrainFrameY;
+						_currentRect = RectMake(_sampleTile[i].rc.left, _sampleTile[i].rc.top, TILESIZE, TILESIZE);
+						break;
+					}
+				}
 			}
-		}
+			else if (_button->getType() == BUTTON_OBJECT)
+			{
+				
+			}
 
-		_button->update();
-	}
-	// 그냥 지나갈 때 범위 선택
-	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
-	{
-		if (PtInRect(&_sampleTile[i].rc, _ptMouse))
-		{
-			_dragTile = RectMake(_sampleTile[i].rc.left, _sampleTile[i].rc.top, TILESIZE, TILESIZE);
-			break;
+			_button->update();
 		}
+		sampleOnOff();
 	}
 
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
-		for (int i = 0; i < TILEX * TILEY; i++)
+
+		for (int i = 0; i < 19; i++)
 		{
-			if (PtInRect(&_tiles[i].rc, pt) && _ptMouse.x <= WINSIZEX - 618)
+			for (int j = 0; j < 33; j++)
 			{
-				if (_button->getType() == BUTTON_TERRAIN)
+				int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+				int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+
+				int index = (i + cullY) * TILEX + (j + cullX);
+
+
+				if (PtInRect(&_tiles[index].rc, pt))
 				{
-					_tiles[i].terrainFrameX = _currentTile.x;
-					_tiles[i].terrainFrameY = _currentTile.y;
-					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+					if (_isActive)
+					{
+						if (_ptMouse.x >= WINSIZEX - 618) break;
+					}
+
+					if (_button->getType() == BUTTON_TERRAIN)
+					{
+						_tiles[index].terrainFrameX = _currentTile.x;
+						_tiles[index].terrainFrameY = _currentTile.y;
+						_tiles[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+					}
+					//else if (_button->getType() == BUTTON_OBJECT)
+					//{
+					//	_tiles[i].objFrameX = _currentTile.x;
+					//	_tiles[i].objFrameY = _currentTile.y;
+					//
+					//	_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
+					//}
+					//else if (_button->getType() == BUTTON_CLEAR)
+					//{
+					//	_tiles[i].objFrameX = NULL;
+					//	_tiles[i].objFrameY = NULL;
+					//	_tiles[i].object = OBJ_NONE;
+					//}
+
+
+					break;
 				}
-				//else if (_button->getType() == BUTTON_OBJECT)
-				//{
-				//	_tiles[i].objFrameX = _currentTile.x;
-				//	_tiles[i].objFrameY = _currentTile.y;
-				//
-				//	_tiles[i].object = objectSelect(_currentTile.x, _currentTile.y);
-				//}
-				//else if (_button->getType() == BUTTON_CLEAR)
-				//{
-				//	_tiles[i].objFrameX = NULL;
-				//	_tiles[i].objFrameY = NULL;
-				//	_tiles[i].object = OBJ_NONE;
-				//}
-				break;
+
 			}
 		}
+
 	}
 
 
-	
 
-	for (int i = 0; i < TILEX * TILEY; i++)
+	// 지금 렉트 검사
+	for (int i = 0; i < 19; i++)
 	{
-		if (PtInRect(&_tiles[i].rc, pt))
+		for (int j = 0; j < 33; j++)
 		{
-			_dragTile = RectMake(_tiles[i].rc.left, _tiles[i].rc.top, TILESIZE, TILESIZE);
-			break;
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+
+			int index = (i + cullY) * TILEX + (j + cullX);
+			if (PtInRect(&_tiles[index].rc, pt))
+			{
+				_dragTile = RectMake(_tiles[index].rc.left, _tiles[index].rc.top, TILESIZE, TILESIZE);
+				_nowIndex = index;
+				break;
+			}
 		}
 	}
 }
@@ -437,8 +505,9 @@ void tile::save()
 {
 	if (_button->getType() == BUTTON_SAVE)
 	{
+
 		_saveTime++;
-		if (_saveTime % 100 == 0)
+		if (_saveTime % 50 == 0)
 		{
 			// ----------------- 중복 실행 안되도록 여기에 입력
 			HANDLE file;
@@ -477,10 +546,51 @@ void tile::load()
 
 void tile::imageLoad()
 {
-	ImageManager::GetInstance()->AddImage("의자", L"Object/bench.png");
-	ImageManager::GetInstance()->AddImage("표지판", L"Object/potionBoard.png");
+	ImageManager::GetInstance()->AddImage("집1", L"Object/build_Bottom1.png");
+	ImageManager::GetInstance()->AddImage("집2", L"Object/build_Bottom2.png");
+	ImageManager::GetInstance()->AddImage("샵", L"Object/build_Shop.png");
+	ImageManager::GetInstance()->AddFrameImage("나무", L"Object/tree.png",4,1);
+	//ImageManager::GetInstance()
 
 }
+
+void tile::loadDungeonMap()
+{
+	HANDLE file;
+	DWORD read;
+
+	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, _dungeonTiles, sizeof(tagTile) * 32 * 18, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+
+	memset(_dungeonAttribute, 0, sizeof(DWORD) * 32 * 18);
+	for (int i = 0; i < 32 * 18; ++i)
+	{
+		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
+	}
+
+	CloseHandle(file);
+}
+
+void tile::renderDungeonMap()
+{
+	for (int i = 0; i < 32 * 18; i++)
+	{
+		if (_dungeonTiles[i].terrain != TR_NONE)
+		{
+			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
+
+			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
+		}
+	}
+}
+
+void tile::addObject()
+{
+
+}
+
 
 void tile::mapMove()
 {
@@ -496,7 +606,7 @@ void tile::mapMove()
 				CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 5);
 				_currentMove = MOVE_LEFT;
 			}
-		    if (i == MOVE_RIGHT)
+			if (i == MOVE_RIGHT)
 			{
 				CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 5);
 				_currentMove = MOVE_RIGHT;
@@ -511,23 +621,61 @@ void tile::mapMove()
 				CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 5);
 				_currentMove = MOVE_DOWN;
 			}
+
+			float x = CAMERAMANAGER->getLeft() * 0.04f;
+			float y = CAMERAMANAGER->getTop() * 0.04f;
+			_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
 		}
 
 	}
 }
+
+void tile::sampleOnOff()
+{
+	if (PtInRect(&_sampleTileOnOff, _ptMouse))
+	{
+		_isActive = !_isActive;
+	}
+
+
+	if (_isActive)
+	{
+		_sampleTileOnOff.right = _sampleTileUI.left;
+		_sampleTileOnOff.left = _sampleTileOnOff.right - 20;
+
+
+		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 610;
+		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX - 510;
+
+
+	}
+	else
+	{
+		_sampleTileOnOff.right = WINSIZEX;
+		_sampleTileOnOff.left = WINSIZEX - 20;
+
+
+
+		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 100;
+		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX;
+
+	}
+}
+
 
 
 TERRAIN tile::terrainSelect(int frameX, int frameY)
 {
 	for (int i = 0; i < 9; i++)
 	{
-		// 첫번 째 줄
-		if(frameX == 8 && frameY == 0) return TR_FLOOR;
-		else if(frameX == i && frameY == 0) return TR_WALL;	
+		// 첫번째 줄
+		if (frameX == 8 && frameY == 0) return TR_FLOOR;
+		else if (frameX == i && frameY == 0) return TR_WALL;
 
 		// 두번째 줄
 		if (frameX == i && frameY == 1) return TR_GRASS;
 
+		// 세번째 줄
 		if (frameX == 6 && frameY == 2) return TR_WALL;
 	}
 

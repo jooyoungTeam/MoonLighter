@@ -29,6 +29,7 @@ public:
 	void ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
 	void render(Image* img, float destX, float destY);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);
+	void aniRender(Image * img, int destX, int destY, animation * ani, float scale);
 public:
 	float getLeft() { return _left; }
 	float getTop() { return _top; }

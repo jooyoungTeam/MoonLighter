@@ -43,6 +43,8 @@ void playGround::render()
 	{
 		_stageManager->render();
 
+
+		TIMEMANAGER->render();
 	}
 	// 백버퍼에 그린 내용들을 화면에 뿌려라.
 	D2DRenderer::GetInstance()->EndRender();

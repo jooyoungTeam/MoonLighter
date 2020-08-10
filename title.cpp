@@ -11,14 +11,15 @@ HRESULT title::init()
 	_selectImg = ImageManager::GetInstance()->AddImage("bagMirror", L"image/UI/bagMirror.png");
 	ImageManager::GetInstance()->AddFrameImage("mirror_stay", L"image/UI/mirror_stay.png", 11, 1);
 
+	_menu[0].name = L"START";
+	_menu[1].name = L"MAPTOOL";
+	_menu[2].name = L"EXIT";
+
 	for (int i = 0; i < MENUNUM; i++)
 	{
-		_menu[i].rc = RectMakePivot(Vector2(WINSIZEX / 2, (WINSIZEY / 2 + 50)+ i * 100), Vector2(100, 50), Pivot::Center);
+		int n = _menu[i].name.length();
+		_menu[i].rc = RectMakePivot(Vector2(WINSIZEX / 2, (WINSIZEY / 2 + 50)+ i * 100), Vector2(n * 20, 50), Pivot::Center);
 	}
-
-	_menu[0].name = L"    START";
-	_menu[1].name = L"MAPTOOL";
-	_menu[2].name = L"     EXIT";
 
 	_select = _count = _frameCount = 0;
 	_selectX = _frameX = 0;
@@ -73,26 +74,7 @@ void title::update()
 		if (_select == 0) SCENEMANAGER->changeScene("¼¥¾À");
 		if (_select == 1) SCENEMANAGER->changeScene("Å¸ÀÏ¾À");
 		if (_select == 2) SCENEMANAGER->changeScene("´øÀü¾À");
-	}
-
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_F1))
-		{
-			SCENEMANAGER->changeScene("Å¸ÀÏ¾À");
-		}
-
-		if (KEYMANAGER->isOnceKeyDown(VK_F2))
-		{
-			SCENEMANAGER->changeScene("¼¥¾À");
-		}
-
-		if (KEYMANAGER->isOnceKeyDown(VK_F3))
-		{
-			SCENEMANAGER->changeScene("´øÀü¾À");
-		}
-	}
-
-	
+	}	
 }
 
 void title::render()
@@ -109,8 +91,11 @@ void title::render()
 	for (int i = 0; i < MENUNUM; i++)
 	{
 		//D2DRenderer::GetInstance()->DrawRectangle(_menu[i].rc, D2DRenderer::DefaultBrush::White, 1.f);
-		D2DRenderer::GetInstance()->RenderText(_menu[i].rc.GetCenter().x - 70, _menu[i].rc.GetCenter().y - 20, _menu[i].name, 30, D2DRenderer::DefaultBrush::White);
 	}	
+
+	D2DRenderer::GetInstance()->RenderText(_menu[0].rc.GetCenter().x - _menu[0].name.length() * 10 + 10, _menu[0].rc.GetCenter().y - 20, _menu[0].name, 30, D2DRenderer::DefaultBrush::White);
+	D2DRenderer::GetInstance()->RenderText(_menu[1].rc.GetCenter().x - _menu[1].name.length() * 10, _menu[1].rc.GetCenter().y - 20, _menu[1].name, 30, D2DRenderer::DefaultBrush::White);
+	D2DRenderer::GetInstance()->RenderText(_menu[2].rc.GetCenter().x - _menu[2].name.length() * 10 + 10, _menu[2].rc.GetCenter().y - 20, _menu[2].name, 30, D2DRenderer::DefaultBrush::White);
 
 	_selectImg->SetSize(Vector2(250, 250));
 	if (_menuSelect == SELECT::MOVE || _menuSelect == SELECT::STOP) _selectImg->Render(Vector2(_menu[_select].rc.GetCenter().x - 150, _menu[_select].rc.GetCenter().y - 100));

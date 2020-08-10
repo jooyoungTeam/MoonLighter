@@ -2,9 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 40
-#define TILEY 40
-
+#define TILEX 100
+#define TILEY 100
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
@@ -12,9 +11,14 @@
 #define SAMPLETILEX 9
 #define SAMPLETILEY 3
 
+
+#define ATTR_UNMOVE		0x00000001
+#define ATTR_SWAMP		0x00000002
+
+
 enum TERRAIN
 {
-	TR_WALL, TR_FLOOR, TR_DESERT, TR_GRASS, TR_WATER, TR_NONE, TR_END
+	TR_WALL, TR_FLOOR, TR_GRASS, TR_WATER, TR_NONE, TR_END
 };
 
 enum OBJECT
@@ -38,6 +42,7 @@ struct tagTile
 	int     terrainFrameX;
 	int     terrainFrameY;
 	bool    isDrag;
+	string  str;
 };
 
 enum MAPMOVE

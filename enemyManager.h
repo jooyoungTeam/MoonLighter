@@ -6,12 +6,17 @@
 #include "pot.h"
 #include "boss.h"
 
-class enemyManager :
-	public gameNode
+class enemyManager : public gameNode
 {
 private:
 	vector<enemy*> _vEnemy;
 	vector<enemy*>::iterator _viEnemy;
+
+
+
+	FloatRect _rc;
+	float _x, _y;
+
 
 
 public:
@@ -24,5 +29,6 @@ public:
 	virtual void render();
 
 	void setEnemy();
+	//void setPlayerLink(player* player) { _player = player; }
 };
 

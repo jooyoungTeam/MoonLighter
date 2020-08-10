@@ -34,25 +34,32 @@ void timeManager::update(float lockFPS)
 
 }
 
-void timeManager::render(HDC hdc)
+void timeManager::render()
 {
 	char str[256];
 	string frameRate;
-
-	SetTextColor(hdc, RGB(255, 255, 255));
-	SetBkMode(hdc, TRANSPARENT);
+	//
+	//SetTextColor(hdc, RGB(255, 255, 255));
+	//SetBkMode(hdc, TRANSPARENT);
 
 
 #ifdef _DEBUG
 	{
-		sprintf_s(str, "framePerSecond(FPS) : %d", _timer->getFrameRate());
-		TextOut(hdc, 0, 0, str, strlen(str));
+		//sprintf_s(str, "framePerSecond(FPS) : %d", _timer->getFrameRate());
+		//TextOut(hdc, 0, 0, str, strlen(str));
+		//
+		//sprintf_s(str, "worldTime : %f", _timer->getWorldTime());
+		//TextOut(hdc, 0, 20, str, strlen(str));
+		//
+		//sprintf_s(str, "elapsedTime : %f", _timer->getElapsedTime());
+		//TextOut(hdc, 0, 40, str, strlen(str));
+		sprintf_s(str, "  %d FPS", _timer->getFrameRate());
+		frameRate = str;
+		wstring sstr;
+		sstr.assign(frameRate.begin(), frameRate.end());
 
-		sprintf_s(str, "worldTime : %f", _timer->getWorldTime());
-		TextOut(hdc, 0, 20, str, strlen(str));
+		D2DRenderer::GetInstance()->RenderText(0, 20, sstr, 20);
 
-		sprintf_s(str, "elapsedTime : %f", _timer->getElapsedTime());
-		TextOut(hdc, 0, 40, str, strlen(str));
 
 	}
 #else
