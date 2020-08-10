@@ -47,9 +47,30 @@ HRESULT inventory::init()
 		}*/
 	}
 	
+	for (int i = 0; i < GEARSPACE; i++)
+	{
+		if (i == 0)
+		{
+			_gear[i].rc = RectMakePivot(Vector2(920, 205), Vector2(60, 60), Pivot::LeftTop);
+		}
+
+		if (i >= 1)
+		{
+			_gear[i].rc = RectMakePivot(Vector2(820, 335 + i * 80 - 115), Vector2(60, 60), Pivot::LeftTop);
+		}
+
+		if (i > 4)
+		{
+			_gear[i].rc = RectMakePivot(Vector2(1120, 205), Vector2(60, 60), Pivot::LeftTop);
+		}
+	}
+
+	_state = INVEN_STATE::NOTE;
+
 	_select = 0;
 	_isOpen = false;
 	_isActive = false;
+	_isSwap = false;
 
 	return S_OK;
 }
@@ -66,42 +87,121 @@ void inventory::update()
 		draw();
 
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-		{
-			_select++;
-			if (_select > INVENSPACE - 1)
+		{			
+			if (!_isSwap)
 			{
-				_select -= 4;
+				_select++;
+
+				if (_select % 5 == 0 || _select > INVENSPACE - 1)
+				{
+					_isSwap = true;
+					if (_state == INVEN_STATE::NOTE)
+					{				
+						if (_select > INVENSPACE - 1) _select = 4;
+						else _select = _select / 5 - 1;				
+					}					
+				}
+			}
+			else
+			{
+				if (_state == INVEN_STATE::NOTE)
+				{
+					if (_select == 0) _select = 5;
+					else
+					{
+						_isSwap = false;
+						if (_select >= 5) _select = 0;
+						else _select *= 5;
+					}								
+				}			
 			}
 		}
 
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-		{
-			_select--;
-			if (_select < 0)
+		{			
+			if (!_isSwap)
 			{
-				_select += 4;
+				_select--;
+
+				if (_select % 5 == 4 || _select < 0)
+				{
+					_isSwap = true;
+					if (_select < 0) _select = 5;
+					else _select = _select / 5 + 1;
+				}
 			}
+			
+			else
+			{
+				if (_state == INVEN_STATE::NOTE)
+				{
+					if (_select == 5) _select = 0;
+					else if (_select <= 4)
+					{
+						_isSwap = false;
+						if (_select == 4) _select = 21;
+						else _select = _select * 5 + 4;
+					}
+				}				
+			}			
 		}
 
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
-		{
-			if (_select < 5) _select = _select;
-			else
+		{						
+			if (!_isSwap)
 			{
-				_select -= 5;
-				if (_select < 0) _select = 0;
+				if (_select < 5)
+				{
+					_select += 15;
+					if (_select == 15) _select = 20;
+					if (_select == 17) _select = 21;
+				}
+
+				else
+				{
+					_select -= 5;
+					if (_select == 16) _select = 17;
+				}
 			}
 
+			else
+			{
+				if (_state == INVEN_STATE::NOTE)
+				{
+					_select -= 1;
+					if (_select < 0) _select = 4;
+				}				
+			}			
 		}
 
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
-		{
-			if (_select > 19) _select = _select;
+		{			
+			if (!_isSwap)
+			{				
+				if (_select < 20)
+				{
+					_select += 5;
+
+					if (_select == 21) _select = 20;
+					if (_select == 22) _select = 21;
+					if (_select > 22) _select -= 20;
+				}			
+
+				else
+				{
+					if (_select == 21) _select -= 19;
+					else _select -= 20;
+				}
+			}
+
 			else
 			{
-				_select += 5;
-				if (_select > INVENSPACE - 1) _select = INVENSPACE - 1;
-			}
+				if (_state == INVEN_STATE::NOTE)
+				{
+					_select += 1;
+					if (_select > 4) _select = 0;
+				}				
+			}				
 		}
 
 		if (_select == 20)
@@ -122,8 +222,10 @@ void inventory::update()
 		else
 		{
 			_mirrorFrameX = 0;
-			_mirror = ImageManager::GetInstance()->FindImage("mirror");
+			_mirror = ImageManager::GetInstance()->FindImage("bagMirror");
 		}
+
+		cout << _select << endl;
 	}	
 }
 
@@ -131,27 +233,40 @@ void inventory::render()
 {
 	if (_isOpen)
 	{
-		ImageManager::GetInstance()->FindImage("inven")->SetSize(Vector2(1200, 650));
 		ImageManager::GetInstance()->FindImage("inven")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 
 		for (int i = 0; i < INVENSPACE; i++)
 		{
 			//D2DRenderer::GetInstance()->DrawRectangle(_inven[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 			ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
-			ImageManager::GetInstance()->FindImage("pendant")->SetSize(Vector2(110, 100));
 
-			if(i <= 20) ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_inven[i].rc.left- 5, _inven[i].rc.top - 5));
-			if (i == 21) ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(_inven[i].rc.left - 25, _inven[i].rc.top - 20));
-			if (i == _select) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[i].rc.left - 7, _inven[i].rc.top - 7));
+			if (i <= 20) ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_inven[i].rc.left - 5, _inven[i].rc.top - 5));
+			if (i == _select && !_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[i].rc.left - 7, _inven[i].rc.top - 7));
 		}
 
-		_mirror->SetSize(Vector2(250, 270));
-		if (_select == 20) _mirror->FrameRender(Vector2(_inven[20].rc.left, _inven[20].rc.top + 50), _mirrorFrameX, 0);
+		if (_state == INVEN_STATE::NOTE)
+		{
+			for (int i = 0; i < GEARSPACE; i++)
+			{
+				//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+				ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
+				ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_gear[i].rc.left - 5, _gear[i].rc.top - 5));
+				if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
+			}
+		}		
+
+		ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
+
+		if(_select == 20) _mirror->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
 		else _mirror->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
 	}
 }
 
 void inventory::putItem()
+{
+}
+
+void inventory::equipGear()
 {
 }
 
@@ -169,7 +284,7 @@ void inventory::draw()
 				_mirrorFrameX = 0;
 			}
 
-			if (_select == 0 && !_isActive)
+			if (_select == 20 && !_isActive)
 			{
 				_mirrorFrameX = 3;
 			}
