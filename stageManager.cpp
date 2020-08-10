@@ -45,7 +45,7 @@ void stageManager::update()
 		_inven->setOpen(false);
 	}
 
-	_inven->update();
+	if (_inven->getOpen()) _inven->update();
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
