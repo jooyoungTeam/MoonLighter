@@ -18,7 +18,6 @@ HRESULT player::init()
 	_index = 0;
 	_playerX = 500;
 	_playerY = 500;
-	_directionX = true;
 
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
 
@@ -129,6 +128,22 @@ void player::animationLoad()
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftBow", L"image/player/bowState.png", 9, 4);
 	int playerLeftBow[] = { 27, 28, 29, 30, 31, 32, 33, 34, 35 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpArrow", L"image/player/arrow.png", 4, 1);
+	int playerUpArrow[] = { 0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpArrow", "playerUpArrow", playerUpArrow, 1, 13, true);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightArrow", L"image/player/arrow.png", 4, 1);
+	int playerRightArrow[] = { 1 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightArrow", "playerRightArrow", playerRightArrow, 1, 13, true);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftArrow", L"image/player/arrow.png", 4, 1);
+	int playerLeftArrow[] = { 2 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftArrow", "playerLeftArrow", playerLeftArrow, 1, 13, true);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownArrow", L"image/player/arrow.png", 4, 1);
+	int playerDownArrow[] = { 3 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownArrow", "playerDownArrow", playerDownArrow, 1, 13, true);
 
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);

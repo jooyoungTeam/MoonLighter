@@ -1,4 +1,5 @@
 #pragma once
+#include "arrow.h"
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
@@ -16,6 +17,7 @@ class playerSwordState;
 
 class playerState
 {
+
 public:
 	virtual ~playerState() {}
 	virtual void update(player& player) {}
@@ -43,6 +45,9 @@ public:
 
 class playerWalkState : public playerState
 {
+private:
+	bool _rollCount;
+	int _rollCount2;
 public:
 	virtual void update(player& player) override;
 };
@@ -81,7 +86,12 @@ public:
 
 class playerbowState : public playerState
 {
+private:
+	arrow* _arrow;
 public:
+	virtual HRESULT init();
+	virtual void render();
+	virtual void release();
 	virtual void update(player& player) override;
 };
 
