@@ -77,7 +77,7 @@ void player::animationLoad()
 	//플레이어 죽음
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDie", L"image/player/moveState.png", 10, 13);
 	int playerDie[] = { 120, 121, 122, 123, 124, 125, 126, 127, 128, 129 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDie", "playerDie", playerDie, 10, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDie", "playerDie", playerDie, 10, 13, false);
 
 	//플레이어 이동
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpWalk", L"image/player/moveState.png", 10, 13);
@@ -99,36 +99,36 @@ void player::animationLoad()
 	//플레이어 구르기
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightRoll", L"image/player/moveState.png", 10, 13);
 	int playerRightRoll[] = { 40, 41, 42, 43, 44, 45, 46, 47 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightRoll", "playerRightRoll", playerRightRoll, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightRoll", "playerRightRoll", playerRightRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftRoll", L"image/player/moveState.png", 10, 13);
 	int playerLeftRoll[] = { 50, 51, 52, 53, 54, 55, 56, 57 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftRoll", "playerLeftRoll", playerLeftRoll, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftRoll", "playerLeftRoll", playerLeftRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpRoll", L"image/player/moveState.png", 10, 13);
 	int playerUpRoll[] = { 60, 61, 62, 63, 64, 65, 66, 67 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpRoll", "playerUpRoll", playerUpRoll, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpRoll", "playerUpRoll", playerUpRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownRoll", L"image/player/moveState.png", 10, 13);
 	int playerDownRoll[] = { 70, 71, 72, 73, 74, 75, 76, 77 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownRoll", "playerDownRoll", playerDownRoll, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownRoll", "playerDownRoll", playerDownRoll, 8, 13, false);
 
 	//플레이어 활
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpBow", L"image/player/bowState.png", 9, 4);
 	int playerUpBow[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpBow", "playerUpBow", playerUpBow, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpBow", "playerUpBow", playerUpBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownBow", L"image/player/bowState.png", 9, 4);
 	int playerDownBow[] = { 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownBow", "playerDownBow", playerDownBow, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownBow", "playerDownBow", playerDownBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightBow", L"image/player/bowState.png", 9, 4);
 	int playerRightBow[] = { 18, 19, 20, 21, 22, 23, 24, 25, 26 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightBow", "playerRightBow", playerRightBow, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightBow", "playerRightBow", playerRightBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftBow", L"image/player/bowState.png", 9, 4);
 	int playerLeftBow[] = { 27, 28, 29, 30, 31, 32, 33, 34, 35 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, false);
 
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
@@ -166,19 +166,19 @@ void player::animationLoad()
 	//플레이어 막기
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightShield", L"image/player/shieldState.png", 4, 1);
 	int playerRightShield[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightShield", "playerRightShield", playerRightShield, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightShield", "playerRightShield", playerRightShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftShield", L"image/player/shieldState.png", 4, 1);
 	int playerLeftShield[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftShield", "playerLeftShield", playerLeftShield, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftShield", "playerLeftShield", playerLeftShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpShield", L"image/player/shieldState.png", 4, 1);
 	int playerUpShield[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpShield", "playerUpShield", playerUpShield, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpShield", "playerUpShield", playerUpShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownShield", L"image/player/shieldState.png", 4, 1);
 	int playerDownShield[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownShield", "playerDownShield", playerDownShield, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownShield", "playerDownShield", playerDownShield, 1, 13, false);
 
 	//플레이어 수영
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownIdleSwim", L"image/player/swimState.png", 10, 4);
@@ -212,4 +212,15 @@ void player::animationLoad()
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSwim", L"image/player/swimState.png", 10, 4);
 	int playerUpSwim[] = { 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSwim", "playerUpSwim", playerUpSwim, 9, 13, true);
+}
+
+//타일 충돌용
+void player::tileCollision()
+{
+	//FloatRect rcCollision;	//임의의 충돌판정용 렉트
+	//int tileIndex[2];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
+	//int tileX, tileY;	//실제 탱크가 어디 타일에 있는지 좌표 계산용 (left, top)
+
+	////임의 충돌판정용 렉트에 대입 먼저
+	//rcCollision = _playerRc;
 }

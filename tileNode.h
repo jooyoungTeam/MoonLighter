@@ -23,9 +23,7 @@ enum TERRAIN
 
 enum OBJECT
 {
-	OBJ_BLOCK1, OBJ_BLOCK3, OBJ_BLOCKS,
-	OBJ_FLAG1, OBJ_FLAG2,
-	OBJ_TANK1, OBJ_TANK2,
+	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR,
 	OBJ_NONE,
 };
 
@@ -56,12 +54,17 @@ enum MAPMOVE
 	MOVE_NULL
 };
 
-struct tagObject
+struct tagSampleObject
 {
-	OBJECT  object;
 	RECT    rc;
 	int     objFrameX;
 	int     objFrameY;
+};
+
+struct tagObject
+{
+	RECT     rc;
+	Image*   img;
 };
 
 
