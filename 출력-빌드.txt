@@ -1,0 +1,4 @@
+﻿1>------ 빌드 시작: 프로젝트: windowsAPI, 구성: Debug x64 ------
+1>inventory.cpp
+1>windowsAPI.vcxproj -> C:\Users\KGA_9\Desktop\문라이터\x64\Debug\windowsAPI.exe
+========== 빌드: 성공 1, 실패 0, 최신 0, 생략 0 ==========

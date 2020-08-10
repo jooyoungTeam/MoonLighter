@@ -71,7 +71,7 @@ void button::setButton()
 		if (i == 5)
 		{
 			_button[i].pos.x = WINSIZEX / 2 + 550;
-			_button[i].pos.y = WINSIZEY / 2 + 400;
+			_button[i].pos.y = WINSIZEY / 2 + 380;
 		}
 		else if (i == 6)
 		{
@@ -86,7 +86,7 @@ void button::setButton()
 		else
 		{
 			_button[i].pos.x = WINSIZEX / 2 + 350 + i * 100;
-			_button[i].pos.y = WINSIZEY / 2 + 300;
+			_button[i].pos.y = WINSIZEY / 2 + 340;
 		}
 		_button[i].type = (BUTTONTYPE)i;
 		_button[i].rc = RectMakeCenter(_button[i].pos.x, _button[i].pos.y, 80, 30);

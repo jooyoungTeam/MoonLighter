@@ -27,26 +27,25 @@ void stageManager::render()
 {	
 	SCENEMANAGER->render();
 
-	if (_inven->getOpen())
-	{
-		_inven->render();
-	}
-
+	if (_inven->getOpen()) _inven->render();	
 }
 
 void stageManager::update()
 {
 	if(!_inven->getOpen()) SCENEMANAGER->update();
 
-	if (!_inven->getOpen() && KEYMANAGER->isOnceKeyDown('Z'))
+	if (!_inven->getOpen() && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		_inven->setOpen(true);
+		_inven->setState(INVEN_STATE::NOTE);
 	}
 
-	if (_inven->getOpen() && KEYMANAGER->isOnceKeyDown('Z'))
+	if (_inven->getOpen() && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		_inven->setOpen(false);
 	}
+
+	_inven->update();
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
