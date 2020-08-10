@@ -378,6 +378,9 @@ void tile::setup()
 		{
 			_tiles[i * TILEX + j].rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
 			_tiles[i * TILEX + j].isDrag = false;
+			_tiles[i * TILEX + j].idX = j;
+			_tiles[i * TILEX + j].idY = i;
+
 			char str[10];
 			sprintf_s(str, "(%d,%d)", i, j);
 			_tiles[i * TILEX + j].str = str;
