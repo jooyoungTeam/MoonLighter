@@ -100,8 +100,11 @@ void tile::render()
 
 	if (_isActive) //ÆÈ·¹Æ®°¡ ÀÖÀ» ¶§ 
 	{
+		/*
 		D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
 		D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
+		*/
+		ImageManager::GetInstance()->FindImage("sampleUI")->Render(Vector2(_sampleTileUI.left, _sampleTileUI.top));
 
 		// ÆÈ·¹Æ®
 		if (_button->getType() == BUTTON_TERRAIN)
@@ -154,7 +157,7 @@ void tile::render()
 
 
 	// ÆÈ·¹Æ® ²°´ÙÄ×´ÙÇÏ´Â ·ºÆ®
-	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::CadetBlue, 1);
+	ImageManager::GetInstance()->FindImage("sampleUIOnOff")->Render(Vector2(_sampleTileOnOff.left, _sampleTileOnOff.top));
 }
 
 void tile::update()
@@ -177,6 +180,8 @@ void tile::drag()
 	// ---------------- ½ÃÀÛÁ¡ --------------------- //
 	if (KEYMANAGER->isOnceKeyDown(VK_LSHIFT))
 	{
+		int size = _sampleTileUI.right - _sampleTileUI.left;
+		cout << size << endl;
 		_drag.isDraw = true;
 		_drag.startPos = _ptMouse;
 		_drag.startPos.x += CAMERAMANAGER->getLeft();
@@ -367,7 +372,7 @@ void tile::setup()
 		_sampleTile[i].terrainFrameX = i % SAMPLETILEX;
 		_sampleTile[i].terrainFrameY = i / SAMPLETILEX;
 
-		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 300 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, 30 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
+		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 305 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, WINSIZEY/2 - 80 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
 	}
 
 
@@ -556,6 +561,8 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
 	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
 	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
+	ImageManager::GetInstance()->AddImage("sampleUI", L"Object/sampleUI.png");
+	ImageManager::GetInstance()->AddImage("sampleUIOnOff", L"Object/sampleUIOnOff.png");
 	//ImageManager::GetInstance()
 
 }
