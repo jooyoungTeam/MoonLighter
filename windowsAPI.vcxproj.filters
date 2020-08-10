@@ -207,9 +207,6 @@
     <ClInclude Include="anotherSlime.h">
       <Filter>playGround\강해라</Filter>
     </ClInclude>
-    <ClInclude Include="playerState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>playGround\차주영</Filter>
     </ClInclude>
@@ -218,6 +215,12 @@
     </ClInclude>
     <ClInclude Include="aStar.h">
       <Filter>playGround\송용은</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>playGround\정기성</Filter>
+    </ClInclude>
+    <ClInclude Include="arrow.h">
+      <Filter>playGround\정기성</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +347,6 @@
     <ClCompile Include="anotherSlime.cpp">
       <Filter>playGround\강해라</Filter>
     </ClCompile>
-    <ClCompile Include="playerState.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="objectManager.cpp">
       <Filter>playGround\차주영</Filter>
     </ClCompile>
@@ -355,6 +355,12 @@
     </ClCompile>
     <ClCompile Include="aStar.cpp">
       <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="playerState.cpp">
+      <Filter>playGround\정기성</Filter>
+    </ClCompile>
+    <ClCompile Include="arrow.cpp">
+      <Filter>playGround\정기성</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
