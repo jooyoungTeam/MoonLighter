@@ -42,6 +42,8 @@ struct tagTile
 	int     terrainFrameX;
 	int     terrainFrameY;
 	bool    isDrag;
+	int     idX;
+	int     idY;
 	string  str;
 };
 
