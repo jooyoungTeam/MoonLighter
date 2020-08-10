@@ -118,12 +118,8 @@ void cameraManager::setY(float relativeY)
 
 void cameraManager::aniRender(Image * img, int destX, int destY, animation * ani, float scale)
 {
-	float relativeLeft;
-	float relativeTop;
-	relativeLeft = getRelativeLeft(destX);
-	relativeTop = getRelativeTop(destY);
-	Vector2 size = img->GetFrameSize();
-	size.x = relativeLeft - size.x / 2;
-	size.y = relativeTop - size.y / 2;
-	if (img) img->aniRender(size, ani, scale);
+	Vector2 pos;
+	pos.x = getRelativeLeft(destX);
+	pos.y = getRelativeTop(destY);
+	if (img) img->aniRender(pos, ani, scale);
 }

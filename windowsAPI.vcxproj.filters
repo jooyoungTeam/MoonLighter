@@ -213,6 +213,9 @@
     <ClInclude Include="playerState.h">
       <Filter>playGround\정기성</Filter>
     </ClInclude>
+    <ClInclude Include="aStar.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="playerState.cpp">
       <Filter>playGround\정기성</Filter>
+    </ClCompile>
+    <ClCompile Include="aStar.cpp">
+      <Filter>playGround\송용은</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

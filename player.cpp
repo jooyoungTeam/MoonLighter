@@ -10,6 +10,7 @@ HRESULT player::init()
 	_roll = new playerRollState();
 	_die = new playerDieState();
 	_shield = new playerShieldState();
+	_idleSwim = new playerIdleSwimState();
 	_swim = new playerSwimState();
 	_bow = new playerbowState();
 	_sword = new playerSwordState();
@@ -19,14 +20,11 @@ HRESULT player::init()
 	_playerY = 500;
 	_directionX = true;
 
-	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::LeftTop);
+	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
 
 	_CurrentState = _idle;
 
-	//???
-	//_playerImg = ImageManager::GetInstance()->FindImage("playerRighrIdle");
-	//???
-
+	_playerImg = ImageManager::GetInstance()->FindImage("playerRightIdle");
 	_playerMotion = KEYANIMANAGER->findAnimation(_index, "playerRightIdle");
 	_playerMotion->start();
 
@@ -51,7 +49,7 @@ void player::update()
 	KEYANIMANAGER->update();
 	_CurrentState->update(*this);
 
-	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::LeftTop);
+	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
 }
 
 void player::release()
