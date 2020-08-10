@@ -34,18 +34,15 @@ private:
 	MAPMOVE       _currentMove;
 	// --------- 맵 이동 변수
 
-	// --------- 미니맵 변수
-	
+	// --------- 미니맵 변수	
 	FloatRect     _miniMap;
 	FloatRect     _miniMapMove;
-
-
+	// --------- 미니맵 변수	
 
 	// ----------- 던전맵 변수
 	tagTile           _dungeonTiles[32 * 18];
 	DWORD             _dungeonAttribute[32 * 18];
 	// ----------- 던전맵 변수
-
 
 	int           _saveTime;
 	int			  _dragNumX;
