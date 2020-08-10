@@ -16,7 +16,8 @@ private:
 
 	bool				_directionX;						//플레이어 X방향 true 오른쪽 false 왼쪽
 	bool				_directionY;						//플레이어 Y방향 true 아래 flase 위
-
+	bool				_swordAttack;						//플레이어 검 공격하는중
+	bool				_swordAttackCombo;					//플레이어 검 콤보공격
 
 	//플레이어 상태 정의
 	playerState*	    _idle;
@@ -46,6 +47,8 @@ public:
 	float getShadowY() { return _playerShadowY; }
 	bool getDirectionX() { return _directionX; }
 	bool getDirectionY() { return _directionY; }
+	bool getSwordAttack() { return _swordAttack; }
+	bool getSwordAttackCombo() { return _swordAttackCombo; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
 	Image* getImage() { return _playerImg; }
@@ -58,6 +61,8 @@ public:
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
 	void setDirectionX(bool directionX) { _directionX = directionX; }
 	void setDirectionY(bool directionY) { _directionY = directionY; }
+	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
+	void setSwrodAttackCombo(bool swordAttackCombo) { _swordAttackCombo = swordAttackCombo; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion = playerMotion, _playerImg = img; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 
