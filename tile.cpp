@@ -3,8 +3,6 @@
 
 HRESULT tile::init()
 {
-	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
-	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, TILESIZEX - WINSIZEX, TILESIZEY - WINSIZEY);
 	imageLoad();
 	{
@@ -550,6 +548,11 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("Áý2", L"Object/build_Bottom2.png");
 	ImageManager::GetInstance()->AddImage("¼¥", L"Object/build_Shop.png");
 	ImageManager::GetInstance()->AddFrameImage("³ª¹«", L"Object/tree.png",4,1);
+	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
+	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
+	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
+	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
+	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
 	//ImageManager::GetInstance()
 
 }
@@ -582,6 +585,8 @@ void tile::renderDungeonMap()
 			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
 
 			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
+
+			CAMERAMANAGER->rectangle(_dungeonTiles[i].rc, D2D1::ColorF::Black, 1.0f);
 		}
 	}
 }

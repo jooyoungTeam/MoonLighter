@@ -17,8 +17,6 @@ private:
 
 	DWORD             _attribute[TILEX * TILEY];
 
-
-
 	// --------- 팔레트 변수 --------- //
 	RECT                _sampleTileUI; // 팔레트 그림 있는곳
 	tagSampleTile       _sampleTile[SAMPLETILEX * SAMPLETILEY];
@@ -34,18 +32,15 @@ private:
 	MAPMOVE       _currentMove;
 	// --------- 맵 이동 변수
 
-	// --------- 미니맵 변수
-	
+	// --------- 미니맵 변수	
 	FloatRect     _miniMap;
 	FloatRect     _miniMapMove;
-
-
+	// --------- 미니맵 변수	
 
 	// ----------- 던전맵 변수
 	tagTile           _dungeonTiles[32 * 18];
 	DWORD             _dungeonAttribute[32 * 18];
 	// ----------- 던전맵 변수
-
 
 	int           _saveTime;
 	int			  _dragNumX;

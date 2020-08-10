@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="aStar.h" />
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="button.h" />
@@ -200,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="aStar.cpp" />
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="button.cpp" />

@@ -15,7 +15,9 @@ void playerIdleState::update(player & player)
 	cout << _transForm << endl;
 	if (!_transForm)
 	{
-		//위 걷기
+		//걷기
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		//위
 		if (KEYMANAGER->isOnceKeyDown('W'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
@@ -23,7 +25,7 @@ void playerIdleState::update(player & player)
 			player.setDirectionY(false);
 		}
 
-		//아래 걷기
+		//아래 
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
@@ -31,7 +33,7 @@ void playerIdleState::update(player & player)
 			player.setDirectionY(true);
 		}
 
-		//왼쪽 걷기
+		//왼쪽 
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftWalk"), ImageManager::GetInstance()->FindImage("playerLeftWalk"));
@@ -39,16 +41,18 @@ void playerIdleState::update(player & player)
 			player.setDirectionX(false);
 		}
 
-		//오른쪽 걷기
+		//오른쪽 
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightWalk"), ImageManager::GetInstance()->FindImage("playerRightWalk"));
 			player.setCurrentState(player.getWalkState());
 			player.setDirectionX(true);
 		}
+		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	}
 	
 	//플레이어 구르기
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		if (player.getDirectionX())
@@ -72,15 +76,20 @@ void playerIdleState::update(player & player)
 			player.setCurrentState(player.getRollState());
 		}
 	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 
 	//플레이어 사망 <-- 임시
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown('I'))
 	{
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
 		player.setCurrentState(player.getDieState());
 	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 	//플레이어 쉴드
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown('K'))
 	{
 		if (player.getDirectionX())
@@ -104,7 +113,8 @@ void playerIdleState::update(player & player)
 			player.setCurrentState(player.getShieldState());
 		}
 	}
-	
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 	//플레이어 수영 <-- 임시
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown('O'))
@@ -120,7 +130,6 @@ void playerIdleState::update(player & player)
 			player.setCurrentState(player.getSwimState());
 			player.setDirectionY(false);
 		}
-
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSwim"), ImageManager::GetInstance()->FindImage("playerDownSwim"));
@@ -143,6 +152,25 @@ void playerIdleState::update(player & player)
 		}
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+	//활
+
+
+	//검
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	if (KEYMANAGER->isOnceKeyDown('J'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpSword1"), ImageManager::GetInstance()->FindImage("playerUpSword1"));
+		player.setCurrentState(player.getSwordState());
+		player.setDirectionY(false);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('J'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSword1"), ImageManager::GetInstance()->FindImage("playerDownSword1"));
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 }
 
 //walk 상태
@@ -583,7 +611,37 @@ void playerShieldState::update(player & player)
 //idleSwim 상태
 void playerIdleSwimState::update(player & player)
 {
+	//위
+	if (KEYMANAGER->isOnceKeyDown('W'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpIdleSwim"), ImageManager::GetInstance()->FindImage("playerUpIdleSwim"));
+		player.setCurrentState(player.getSwimState());
+		player.setDirectionY(false);
+	}
 
+	//아래
+	if (KEYMANAGER->isOnceKeyDown('S'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownIdleSwim"), ImageManager::GetInstance()->FindImage("playerDownIdleSwim"));
+		player.setCurrentState(player.getSwimState());
+		player.setDirectionY(true);
+	}
+
+	//왼쪽
+	if (KEYMANAGER->isOnceKeyDown('A'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftIdleSwim"), ImageManager::GetInstance()->FindImage("playerLeftIdleSwim"));
+		player.setCurrentState(player.getSwimState());
+		player.setDirectionX(false);
+	}
+
+	//오른쪽
+	if (KEYMANAGER->isOnceKeyDown('D'))
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightIdleSwim"), ImageManager::GetInstance()->FindImage("playerRightIdleSwim"));
+		player.setCurrentState(player.getSwimState());
+		player.setDirectionX(true);
+	}
 }
 
 
@@ -623,7 +681,7 @@ void playerSwimState::update(player & player)
 		if (KEYMANAGER->getKeyUp() == NULL)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpIdleSwim"), ImageManager::GetInstance()->FindImage("playerUpIdleSwim"));
-			//player.setCurrentState(player.getIdleSwimState());
+			player.setCurrentState(player.getIdleSwimState());
 		}
 		//아래키를 누르면 다시 이동
 		else if (GetAsyncKeyState('S') & 0x8000)
@@ -667,7 +725,7 @@ void playerSwimState::update(player & player)
 		if (KEYMANAGER->getKeyUp() == NULL)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownIdleSwim"), ImageManager::GetInstance()->FindImage("playerDownIdleSwim"));
-			//player.setCurrentState(player.getIdleSwimState());
+			player.setCurrentState(player.getIdleSwimState());
 		}
 		//위쪽키를 누르면 다시 이동
 		else if (GetAsyncKeyState('W') & 0x8000)
@@ -704,16 +762,16 @@ void playerSwimState::update(player & player)
 		}
 	}
 
-	//아래쪽키 떼면
+	//왼쪽키 떼면
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
 		//아무키도 안누르면 Idle 상태로 전환
 		if (KEYMANAGER->getKeyUp() == NULL)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftIdleSwim"), ImageManager::GetInstance()->FindImage("playerLeftIdleSwim"));
-			//player.setCurrentState(player.getIdleSwimState());
+			player.setCurrentState(player.getIdleSwimState());
 		}
-		//위쪽키를 누르면 다시 이동
+		//오른쪽키를 누르면 다시 이동
 		else if (GetAsyncKeyState('D') & 0x8000)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSwim"), ImageManager::GetInstance()->FindImage("playerRightSwim"));
@@ -755,7 +813,7 @@ void playerSwimState::update(player & player)
 		if (KEYMANAGER->getKeyUp() == NULL)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightIdleSwim"), ImageManager::GetInstance()->FindImage("playerRightIdleSwim"));
-			//player.setCurrentState(player.getIdleSwimState());
+			player.setCurrentState(player.getIdleSwimState());
 		}
 		//위쪽키를 누르면 다시 이동
 		else if (GetAsyncKeyState('A') & 0x8000)
