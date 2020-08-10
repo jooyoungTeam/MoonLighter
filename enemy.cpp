@@ -8,8 +8,9 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_attack = new enemyAttackState;
 	_hit = new enemyHitState;
 	_dead = new enemyDeadState;
-	
-	set();
+
+	_aStar = new aStar;
+
 	_index = index;
 
 	ani();
@@ -45,6 +46,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 		_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
+		set();
 		break;
 	case ENEMY_POT:
 		_motion = KEYANIMANAGER->findAnimation(_index, "potLeft");
@@ -62,6 +64,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_isAttack = false;
 	_attackDelay = 0;
 
+	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50);
 
 	return S_OK;
 }
@@ -72,17 +75,22 @@ void enemy::release()
 
 void enemy::update()
 {
+	_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
 	_state->update(*this,  _type);
+	if (_type != ENEMY_POT)
+	{
+		move();
+	}
 	enemyWay();
 	KEYANIMANAGER->update();
 	attack();
-	//cout << _golemDir << endl;
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 }
 
 void enemy::render()
 {
 	//_img->SetScale(0.5f);
+	_aStar->render();
 	_img->aniRender(Vector2(_x, _y), _motion,1.0f);
 	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Yellow, 1.f);
 }
@@ -285,4 +293,37 @@ void enemy::enemyWay()
 	{
 		_golemDir = GOLEM_TOP;
 	}
+}
+
+void enemy::move()
+{
+
+	if (_aStar->getVClose().size() > 1 && _aStar->getMoveIndex() < _aStar->getVClose().size() - 1)
+	{
+		if (getDistance(_x, _y, _aStar->getVClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVClose()[_aStar->getMoveIndex()]->center.y) < 3)
+		{
+			_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
+		}
+
+
+		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x < _x)
+		{
+			_x -= 1;
+		}
+		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x >= _x)
+		{
+			_x += 1;
+		}
+		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y < _y)
+		{
+			_y -= 1;
+		}
+		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y >= _y)
+		{
+			_y += 1;
+		}
+
+	}
+
+
 }

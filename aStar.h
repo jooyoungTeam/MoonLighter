@@ -83,7 +83,7 @@ public:
 	~aStar();
 
 	// 다 아는 그거
-	HRESULT init(int totalTileX, int totalTileY);
+	HRESULT init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY);
 
 	//타일 셋팅 함수
 	void setTiles();

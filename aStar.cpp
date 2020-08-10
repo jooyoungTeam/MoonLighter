@@ -9,7 +9,7 @@ aStar::~aStar()
 {
 }
 
-HRESULT aStar::init(int totalTileX, int totalTileY)
+HRESULT aStar::init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY)
 {
 	_index = 0;
 	_count = _start = 0;
@@ -17,11 +17,11 @@ HRESULT aStar::init(int totalTileX, int totalTileY)
 	_totalTileX = totalTileX;
 	_totalTileY = totalTileY;
 
-	_playerTileX = 5;
-	_playerTileY = 5;
+	_playerTileX = playerX;
+	_playerTileY = playerY;
 	
-	_enemyTileX = 15;
-	_enemyTileY = 10;
+	_enemyTileX = enemyX;
+	_enemyTileY = enemyY;
 
 	setTiles();
 
@@ -205,7 +205,7 @@ void aStar::pathFinder(astarTile * currentTile)
 
 	//그치만 이 스택메모리 사이즈는 명령어로 조절 가능함.
 
-	//pathFinder(_currentTile);
+	pathFinder(_currentTile);
 }
 
 void aStar::release()
@@ -231,17 +231,16 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 	{
 		release();
 		setTiles();
+		pathFinder(_currentTile);
 		_moveIndex = 1;
 		_aStarTimer = 0;
 	}
-
-	pathFinder(_currentTile);
 }
 
 void aStar::render()
 {
-	for (int i = 0; i < _vCloseList.size(); ++i)
+	/*for (int i = 0; i < _vCloseList.size(); ++i)
 	{
 		D2DRenderer::GetInstance()->DrawRectangle(_vCloseList[i]->rc, D2D1::ColorF::Blue, 5.f);
-	}
+	}*/
 }

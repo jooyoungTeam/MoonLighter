@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "enemyState.h"
+#include "aStar.h"
 
 class enemy : public gameNode
 {
@@ -13,6 +14,7 @@ protected:
 	enemyState* _attack;
 	enemyState* _hit;
 	enemyState* _dead;
+	aStar* _aStar;
 
 	ENEMYTYPE _type;
 	GOLEMDIR _golemDir;
@@ -51,6 +53,7 @@ public:
 	virtual void enemyMove();
 	virtual void set();
 	virtual void enemyWay();
+	virtual void move();
 
 	//---------------------------------set-----------------------------------
 	void setState(enemyState* state) { this->_state = state; }

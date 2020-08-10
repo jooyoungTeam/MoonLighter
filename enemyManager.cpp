@@ -11,11 +11,11 @@ enemyManager::~enemyManager()
 
 HRESULT enemyManager::init()
 {
-	setEnemy();
 	_x = 600;
 	_y = 300;
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 	_bulletDelay = 0;
+	setEnemy();
 
 	_bullet = new bullet;
 	_bullet->init();
@@ -83,6 +83,7 @@ void enemyManager::setEnemy()
 
 	enemy* redS1;
 	redS1 = new redSlime;
+	redS1->playerCheck(_x, _y);
 	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS1);
 
@@ -90,6 +91,7 @@ void enemyManager::setEnemy()
 
 	enemy* gol1;
 	gol1 = new golem;
+	gol1->playerCheck(_x, _y);
 	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
@@ -97,6 +99,7 @@ void enemyManager::setEnemy()
 
 	enemy* pot1;
 	pot1 = new pot;
+	pot1->playerCheck(_x, _y);
 	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot1);
 
@@ -106,6 +109,7 @@ void enemyManager::setEnemy()
 
 	enemy* pot2;
 	pot2 = new pot;
+	pot2->playerCheck(_x, _y);
 	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
@@ -115,6 +119,7 @@ void enemyManager::setEnemy()
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
+	yelS1->playerCheck(_x, _y);
 	yelS1->init(i , 200, 100, 50, 50, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
@@ -122,6 +127,7 @@ void enemyManager::setEnemy()
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
+	bleS1->playerCheck(_x, _y);
 	bleS1->init(i, 400, 100, 50, 50, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
