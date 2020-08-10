@@ -137,7 +137,7 @@ void tile::render()
 	wstring str;
 	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
 
-	D2DRenderer::GetInstance()->RenderText(_ptMouse.x + 10, _ptMouse.y + 10, str, 15, D2DRenderer::DefaultBrush::White);
+	D2DRenderer::GetInstance()->RenderText(_ptMouse.x, _ptMouse.y - 15, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 맵 이동
 	//for (int i = 0; i < 4; i++)
@@ -565,10 +565,10 @@ void tile::loadDungeonMap()
 	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _dungeonTiles, sizeof(tagTile) * 32 * 18, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
 
-	memset(_dungeonAttribute, 0, sizeof(DWORD) * 32 * 18);
-	for (int i = 0; i < 32 * 18; ++i)
+	memset(_dungeonAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
+	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
 	}
@@ -578,7 +578,7 @@ void tile::loadDungeonMap()
 
 void tile::renderDungeonMap()
 {
-	for (int i = 0; i < 32 * 18; i++)
+	for (int i = 0; i < TILEX* TILEY; i++)
 	{
 		if (_dungeonTiles[i].terrain != TR_NONE)
 		{
