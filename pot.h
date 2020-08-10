@@ -2,8 +2,8 @@
 #include"enemy.h"
 class pot : public enemy
 {
+private:
 public:
-	virtual void attack();
-	virtual void enemyMove();
+	virtual void render();
 };
 

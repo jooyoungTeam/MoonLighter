@@ -12,6 +12,7 @@ public:
 	golem();
 	~golem();
 
+	virtual void render();
 	virtual void set();
 	virtual void attack();
 	virtual void enemyMove();

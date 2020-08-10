@@ -219,6 +219,9 @@
     <ClInclude Include="aStar.h">
       <Filter>playGround\송용은</Filter>
     </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>playGround\강해라</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="aStar.cpp">
       <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>playGround\강해라</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

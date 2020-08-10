@@ -5,17 +5,20 @@
 #include "golem.h"
 #include "pot.h"
 #include "boss.h"
+#include "bullet.h"
 
 class enemyManager : public gameNode
 {
 private:
 	vector<enemy*> _vEnemy;
 	vector<enemy*>::iterator _viEnemy;
+	enemy* _enemy;
 
-
+	bullet* _bullet;
 
 	FloatRect _rc;
 	float _x, _y;
+	int _bulletDelay;
 
 
 
@@ -29,6 +32,7 @@ public:
 	virtual void render();
 
 	void setEnemy();
+	void potBullet();
 	//void setPlayerLink(player* player) { _player = player; }
 };
 
