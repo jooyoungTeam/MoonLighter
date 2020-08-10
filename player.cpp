@@ -34,8 +34,7 @@ HRESULT player::init()
 void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
-	CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.5f);
-	//_playerImg->aniRender(Vector2(_x, _y), _aniMotion, 1.0f);
+	CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.2f);
 
 	if (KEYMANAGER->isToggleKey('V'))
 	{
@@ -134,35 +133,35 @@ void player::animationLoad()
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
 	int playerUpSword1[] = { 0, 1, 2, 3, 4, 5 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword1", "playerUpSword1", playerUpSword1, 6, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword1", "playerUpSword1", playerUpSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword2", L"image/player/swordState.png", 11, 4);
 	int playerUpSword2[] = { 6, 7, 8, 9, 10 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword2", "playerUpSword2", playerUpSword2, 5, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword2", "playerUpSword2", playerUpSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSword1", L"image/player/swordState.png", 11, 4);
 	int playerDownSword1[] = { 11, 12, 13, 14, 15, 16 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword1", "playerDownSword1", playerDownSword1, 6, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword1", "playerDownSword1", playerDownSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSword2", L"image/player/swordState.png", 11, 4);
 	int playerDownSword2[] = { 17, 18, 19, 20, 21 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword2", "playerDownSword2", playerDownSword2, 5, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword2", "playerDownSword2", playerDownSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightSword1", L"image/player/swordState.png", 11, 4);
 	int playerRightSword1[] = { 22, 23, 24, 25, 26, 27 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword1", "playerRightSword1", playerRightSword1, 6, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword1", "playerRightSword1", playerRightSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightSword2", L"image/player/swordState.png", 11, 4);
 	int playerRightSword2[] = { 28, 29, 30, 31, 32 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword2", "playerRightSword2", playerRightSword2, 5, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword2", "playerRightSword2", playerRightSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSword1", L"image/player/swordState.png", 11, 4);
 	int playerLeftSword1[] = { 33, 34, 35, 36, 37, 38 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword1", "playerLeftSword1", playerLeftSword1, 6, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword1", "playerLeftSword1", playerLeftSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSword2", L"image/player/swordState.png", 11, 4);
 	int playerLeftSword2[] = { 39, 40, 41, 42, 43 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword2", "playerLeftSword2", playerLeftSword2, 5, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword2", "playerLeftSword2", playerLeftSword2, 5, 13, false);
 
 	//플레이어 막기
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightShield", L"image/player/shieldState.png", 4, 1);

@@ -2,8 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 100
-#define TILEY 100
+#define TILEX 40
+#define TILEY 30
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
@@ -42,6 +42,8 @@ struct tagTile
 	int     terrainFrameX;
 	int     terrainFrameY;
 	bool    isDrag;
+	int     idX;
+	int     idY;
 	string  str;
 };
 

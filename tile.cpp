@@ -100,8 +100,11 @@ void tile::render()
 
 	if (_isActive) //팔레트가 있을 때 
 	{
+		/*
 		D2DRenderer::GetInstance()->FillRectangle(_sampleTileUI, D2D1::ColorF::White, 1);
 		D2DRenderer::GetInstance()->DrawRectangle(_sampleTileUI, D2D1::ColorF::Black, 1);
+		*/
+		ImageManager::GetInstance()->FindImage("sampleUI")->Render(Vector2(_sampleTileUI.left, _sampleTileUI.top));
 
 		// 팔레트
 		if (_button->getType() == BUTTON_TERRAIN)
@@ -137,7 +140,7 @@ void tile::render()
 	wstring str;
 	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
 
-	D2DRenderer::GetInstance()->RenderText(_ptMouse.x + 10, _ptMouse.y + 10, str, 15, D2DRenderer::DefaultBrush::White);
+	D2DRenderer::GetInstance()->RenderText(_ptMouse.x, _ptMouse.y - 15, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 맵 이동
 	//for (int i = 0; i < 4; i++)
@@ -154,7 +157,7 @@ void tile::render()
 
 
 	// 팔레트 껐다켰다하는 렉트
-	D2DRenderer::GetInstance()->FillRectangle(_sampleTileOnOff, D2D1::ColorF::CadetBlue, 1);
+	ImageManager::GetInstance()->FindImage("sampleUIOnOff")->Render(Vector2(_sampleTileOnOff.left, _sampleTileOnOff.top));
 }
 
 void tile::update()
@@ -177,6 +180,8 @@ void tile::drag()
 	// ---------------- 시작점 --------------------- //
 	if (KEYMANAGER->isOnceKeyDown(VK_LSHIFT))
 	{
+		int size = _sampleTileUI.right - _sampleTileUI.left;
+		cout << size << endl;
 		_drag.isDraw = true;
 		_drag.startPos = _ptMouse;
 		_drag.startPos.x += CAMERAMANAGER->getLeft();
@@ -367,7 +372,7 @@ void tile::setup()
 		_sampleTile[i].terrainFrameX = i % SAMPLETILEX;
 		_sampleTile[i].terrainFrameY = i / SAMPLETILEX;
 
-		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 300 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, 30 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
+		_sampleTile[i].rc = RectMake(WINSIZEX / 2 + 305 + _sampleTile[i].terrainFrameX * TILESIZE * 1.1f, WINSIZEY/2 - 80 + _sampleTile[i].terrainFrameY * TILESIZE * 1.1f, TILESIZE, TILESIZE);
 	}
 
 
@@ -378,6 +383,9 @@ void tile::setup()
 		{
 			_tiles[i * TILEX + j].rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
 			_tiles[i * TILEX + j].isDrag = false;
+			_tiles[i * TILEX + j].idX = j;
+			_tiles[i * TILEX + j].idY = i;
+
 			char str[10];
 			sprintf_s(str, "(%d,%d)", i, j);
 			_tiles[i * TILEX + j].str = str;
@@ -553,6 +561,8 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
 	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
 	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
+	ImageManager::GetInstance()->AddImage("sampleUI", L"Object/sampleUI.png");
+	ImageManager::GetInstance()->AddImage("sampleUIOnOff", L"Object/sampleUIOnOff.png");
 	//ImageManager::GetInstance()
 
 }
@@ -565,10 +575,10 @@ void tile::loadDungeonMap()
 	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _dungeonTiles, sizeof(tagTile) * 32 * 18, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
 
-	memset(_dungeonAttribute, 0, sizeof(DWORD) * 32 * 18);
-	for (int i = 0; i < 32 * 18; ++i)
+	memset(_dungeonAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
+	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
 	}
@@ -578,17 +588,31 @@ void tile::loadDungeonMap()
 
 void tile::renderDungeonMap()
 {
-	for (int i = 0; i < 32 * 18; i++)
+
+	for (int i = 0; i < 19; i++)
 	{
-		if (_dungeonTiles[i].terrain != TR_NONE)
+		for (int j = 0; j < 33; j++)
 		{
-			Vector2 vec((_dungeonTiles[i].rc.left + _dungeonTiles[i].rc.right) * 0.5f, (_dungeonTiles[i].rc.top + _dungeonTiles[i].rc.bottom) * 0.5f);
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
 
-			CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[i].terrainFrameX, _dungeonTiles[i].terrainFrameY);
+			int index = (i + cullY) * TILEX + (j + cullX);
 
-			CAMERAMANAGER->rectangle(_dungeonTiles[i].rc, D2D1::ColorF::Black, 1.0f);
+			if (_dungeonTiles[index].terrain != TR_NONE)
+			{
+				Vector2 vec((_dungeonTiles[index].rc.left + _dungeonTiles[index].rc.right) * 0.5f, (_dungeonTiles[index].rc.top + _dungeonTiles[index].rc.bottom) * 0.5f);
+
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[index].terrainFrameX, _dungeonTiles[index].terrainFrameY);
+
+				CAMERAMANAGER->rectangle(_dungeonTiles[index].rc, D2D1::ColorF::Black, 1.0f);
+			}
+
+
 		}
 	}
+
+
+
 }
 
 void tile::addObject()
