@@ -45,6 +45,7 @@ private:
 	tagInven _selectItem;				//선택한 아이템
 	Image* _mirrorImg;					//거울이미지
 	int _select;						//현재 인벤 번호
+	int _selectNumber;					//선택했을 때의 인벤 번호
 	int _count;							//미러 딜레이
 	bool _isOpen;						//인벤 열었나?
 	bool _isSelect;						//아이템 선택하는 불 값

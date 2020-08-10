@@ -327,12 +327,12 @@ void inventory::moveItem()
 	{
 		_isSelect = true;
 		_selectItem.count++;
+		_selectNumber = _select;
 
 		if (_inven[_select].item != nullptr && !_isSwap)
 		{
 			_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 60), Vector2(60, 60), Pivot::LeftTop);
 			_selectItem.item = _inven[_select].item;
-			_selectItem.count++;
 			_inven[_select].count--;
 
 			//인벤 카운트가 0 이하가 되면 비워버린다
@@ -348,7 +348,6 @@ void inventory::moveItem()
 			//장비창 카운트가 0 이하가 되면 비워버린다
 			if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
 		}
-
 	}
 
 	if (_isSelect && KEYMANAGER->isOnceKeyDown('J'))
@@ -369,40 +368,77 @@ void inventory::moveItem()
 			//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
 			if (_inven[_select].item->getIndex() != _selectItem.item->getIndex())
 			{
-				_selectItem.item = _selectItem.item;
-				_selectItem.count = _selectItem.count;
 				return;
 			}
 
 			//인덱스가 같으면
 			else if (_inven[_select].item->getIndex() == _selectItem.item->getIndex())
 			{
-				_inven[_select].count++;
-				_selectItem.count--;
-
-				if (_selectItem.count <= 0)
+				//선택했을 때 인벤 칸에서 변화가 없으면
+				if (_selectNumber == _select)
 				{
-					_selectItem.item = nullptr;
-					_isSelect = false;
+					_selectItem.count++;
+					_inven[_select].count--;
+					if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
+
+					if (_selectItem.item->getIndex() < 300 &&
+						_selectItem.count > 10)
+					{
+						_inven[_select].item = _selectItem.item;
+						_inven[_select].count = _selectItem.count;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
+
+					if (((_selectItem.item->getIndex() > 300 && _selectItem.item->getIndex() < 400) || _selectItem.item->getIndex() > 1000) &&
+						_selectItem.count > 5)
+					{
+						_inven[_select].item = _selectItem.item;
+						_inven[_select].count = _selectItem.count;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
+
+					if ((_selectItem.item->getIndex() > 900 && _selectItem.item->getIndex() < 1000) &&
+						_selectItem.count > 1)
+					{
+						_inven[_select].item = _selectItem.item;
+						_inven[_select].count = _selectItem.count;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
 				}
 
-				if(_inven[_select].item->getIndex() < 300 &&
-					_inven[_select].count >= 10)
+				//변화가 있으면
+				else
 				{
-					return;
-				}
+					_inven[_select].count++;
+					_selectItem.count--;
 
-				if (((_inven[_select].item->getIndex() > 300 && _inven[_select].item->getIndex() < 400) || _inven[_select].item->getIndex() > 1000) &&
-					_inven[_select].count >= 5)
-				{
-					return;
-				}
+					if (_selectItem.count <= 0)
+					{
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
 
-				if ((_inven[_select].item->getIndex() > 900 && _inven[_select].item->getIndex() < 1000) &&
-					_inven[_select].count >= 1)
-				{
-					return;
-				}			
+					if (_inven[_select].item->getIndex() < 300 &&
+						_inven[_select].count >= 10)
+					{
+						return;
+					}
+
+					if (((_inven[_select].item->getIndex() > 300 && _inven[_select].item->getIndex() < 400) || _inven[_select].item->getIndex() > 1000) &&
+						_inven[_select].count >= 5)
+					{
+						return;
+					}
+
+					if ((_inven[_select].item->getIndex() > 900 && _inven[_select].item->getIndex() < 1000) &&
+						_inven[_select].count >= 1)
+					{
+						return;
+					}
+				}
 			}
 		}
 	}
