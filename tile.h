@@ -38,8 +38,8 @@ private:
 	// --------- 미니맵 변수	
 
 	// ----------- 던전맵 변수
-	tagTile           _dungeonTiles[32 * 18];
-	DWORD             _dungeonAttribute[32 * 18];
+	tagTile           _dungeonTiles[TILEX * TILEY];
+	DWORD             _dungeonAttribute[TILEX * TILEY];
 	// ----------- 던전맵 변수
 
 	int           _saveTime;

@@ -7,6 +7,11 @@
 
 HRESULT stageManager::init()
 {
+	_itemMg = new itemManager;
+
+	_inven = new inventory;
+	_inven->init();
+
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
 
 	SCENEMANAGER->addScene("Å¸ÀÏ¾À", new tile);
@@ -14,17 +19,34 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
 
 	SCENEMANAGER->changeScene("Å¸ÀÌÆ²¾À");
+
 	return S_OK;
 }
 
 void stageManager::render()
-{
+{	
 	SCENEMANAGER->render();
+
+	if (_inven->getOpen())
+	{
+		_inven->render();
+	}
+
 }
 
 void stageManager::update()
 {
-	SCENEMANAGER->update();
+	if(!_inven->getOpen()) SCENEMANAGER->update();
+
+	if (!_inven->getOpen() && KEYMANAGER->isOnceKeyDown('Z'))
+	{
+		_inven->setOpen(true);
+	}
+
+	if (_inven->getOpen() && KEYMANAGER->isOnceKeyDown('Z'))
+	{
+		_inven->setOpen(false);
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{

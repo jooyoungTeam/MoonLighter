@@ -56,9 +56,11 @@ void playGround::render()
 
 
 
+		int w = _ptMouse.x + (ImageManager::GetInstance()->FindImage("커서")->GetWidth() / ImageManager::GetInstance()->FindImage("커서")->GetMaxFrameX()) * 0.5f;
+		int h = _ptMouse.y + (ImageManager::GetInstance()->FindImage("커서")->GetHeight()) * 0.5f;
 
 		// 마지막 렌더
-		ImageManager::GetInstance()->FindImage("커서")->FrameRender(Vector2(_ptMouse.x, _ptMouse.y), _cursorFrameX, 0);
+		ImageManager::GetInstance()->FindImage("커서")->FrameRender(Vector2(w, h), _cursorFrameX, 0);
 	}
 	// 백버퍼에 그린 내용들을 화면에 뿌려라.
 	D2DRenderer::GetInstance()->EndRender();
