@@ -24,20 +24,15 @@ class aStar : public gameNode
 	int _count;
 	int _aStarTimer;
 	int _index;
+
 	bool _start;
 	bool _end;
 
-	RECT _player;
 	int _playerTileX;
 	int _playerTileY;
 
-	RECT _enemy;
 	int _enemyTileX;
 	int _enemyTileY;
-	float _enemyX;
-	float _enemyY;
-	float _enemyAnlge;
-
 public:
 	aStar();
 	~aStar();
@@ -46,7 +41,7 @@ public:
 	HRESULT init();
 
 	//타일 셋팅 함수
-	void setTiles(int targetX, int targetY);
+	void setTiles();
 
 	//갈 수 있는 길을 찾아서 담을 함수
 	vector<tile*> addOpenList(tile* currentTile);
@@ -57,7 +52,5 @@ public:
 	void release();
 	void update();
 	void render();
-
-	void move();
 };
 

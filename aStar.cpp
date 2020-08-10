@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "aStar.h"
-//
+
 //aStar::aStar()
 //{
 //}
@@ -8,22 +8,16 @@
 //aStar::~aStar()
 //{
 //}
-//
+////
 //HRESULT aStar::init()
 //{
 //	_index = 0;
 //	_count = _start = 0;
-//	_enemyX = 100, _enemyY = WINSIZEY / 2;
-//
-//	_player = RectMakeCenter(WINSIZEX - 100, WINSIZEY / 2, 25, 25);
-//	_enemy = RectMakeCenter(_enemyX, _enemyY, 25, 25);
-//
-//	setTiles(_enemyX, _enemyY);
 //
 //	return S_OK;
 //}
 //
-//void aStar::setTiles(int targetX, int targetY)
+//void aStar::setTiles()
 //{
 //	_index = 0;
 //	for (int i = 0; i < _vTotalList.size(); ++i)
@@ -41,9 +35,6 @@
 //		SAFE_RELEASE(_vCloseList[i]);
 //	}
 //	_vCloseList.clear();
-//
-//	_enemyTileX = _enemyX / TILEWIDTH;
-//	_enemyTileY = _enemyY / TILEHEIGHT;
 //
 //	_startTile = new tile;
 //	_startTile->init(_enemyTileX, _enemyTileY);
@@ -233,36 +224,7 @@
 //
 //void aStar::update()
 //{
-//	move();
 //	_aStarTimer++;
-//
-//	_enemyTileX = _enemy.left / TILEWIDTH;
-//	_enemyTileY = _enemy.top / TILEHEIGHT;
-//
-//	_playerTileX = _player.left / TILEWIDTH;
-//	_playerTileY = _player.top / TILEHEIGHT;
-//
-//
-//	if (KEYMANAGER->isStayKeyDown('A'))
-//	{
-//		_player.left -= 5;
-//		_player.right -= 5;
-//	}
-//	if (KEYMANAGER->isStayKeyDown('D'))
-//	{
-//		_player.left += 5;
-//		_player.right += 5;
-//	}
-//	if (KEYMANAGER->isStayKeyDown('W'))
-//	{
-//		_player.top -= 5;
-//		_player.bottom -= 5;
-//	}
-//	if (KEYMANAGER->isStayKeyDown('S'))
-//	{
-//		_player.top += 5;
-//		_player.bottom += 5;
-//	}
 //
 //	if (_aStarTimer > 25)
 //	{
@@ -270,44 +232,6 @@
 //		_aStarTimer = 0;
 //	}
 //	pathFinder(_currentTile);
-//
-//	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-//	{
-//		for (int i = 0; i < _vTotalList.size(); ++i)
-//		{
-//			if (PtInRect(&_vTotalList[i]->getRect(), _ptMouse))
-//			{
-//				if (_vTotalList[i]->getAttribute() == "start") continue;
-//				if (_vTotalList[i]->getAttribute() == "end") continue;
-//
-//				_vTotalList[i]->setIsOpen(false);
-//				_vTotalList[i]->setAttribute("wall");
-//				_vTotalList[i]->setColor(RGB(230, 140, 200));
-//				break;
-//			}
-//		}
-//	}
-//	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
-//	{
-//		for (int i = 0; i < _vTotalList.size(); ++i)
-//		{
-//			if (PtInRect(&_vTotalList[i]->getRect(), _ptMouse))
-//			{
-//				if (_vTotalList[i]->getAttribute() == "start") continue;
-//				if (_vTotalList[i]->getAttribute() == "end") continue;
-//
-//				_vTotalList[i]->setIsOpen(true);
-//				_vTotalList[i]->setAttribute("null");
-//				_vTotalList[i]->setColor(RGB(250, 150, 0)
-//				);
-//				break;
-//			}
-//		}
-//	}
-//
-//
-//	cout << _enemyX << endl;
-//	_enemy = RectMakeCenter(_enemyX, _enemyY, 25, 25);
 //}
 //
 //void aStar::render()
@@ -315,24 +239,5 @@
 //	for (int i = 0; i < _vTotalList.size(); ++i)
 //	{
 //		_vTotalList[i]->render();
-//	}
-//
-//	Rectangle(getMemDC(), _player);
-//	Rectangle(getMemDC(), _enemy);
-//}
-//
-//void aStar::move()
-//{
-//	if (_vCloseList.size() > 1)
-//	{
-//		_enemyAnlge = getAngle(_enemyX, _enemyY, _vCloseList[_index]->getCenter().x, _vCloseList[_index]->getCenter().y);
-//
-//		_enemyX += cos(_enemyAnlge) * 3;
-//		_enemyY -= sin(_enemyAnlge) * 3;
-//		if (getDistance(_enemyX, _enemyY, _vCloseList[_index]->getCenter().x, _vCloseList[_index]->getCenter().y) < 3)
-//		{
-//			if (_index < _vCloseList.size() - 1)
-//				_index++;
-//		}
 //	}
 //}
