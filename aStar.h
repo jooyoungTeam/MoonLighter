@@ -78,6 +78,9 @@ class aStar : public gameNode
 	int _enemyTileY;
 
 	int _moveIndex;
+
+	int _rndX;
+	int _rndY;
 public:
 	aStar();
 	~aStar();
@@ -98,6 +101,9 @@ public:
 
 	vector<astarTile*> getVClose() { return _vCloseList; }
 	vector<astarTile*> getVOldClose() { return _vOldCloseList; }
+	int getRndX() { return _rndX; }
+	int getRndY() { return _rndY; }
+
 	int getMoveIndex() { return _moveIndex; }
 	void setMoveIndex(int moveIndex) { _moveIndex = moveIndex; }
 
