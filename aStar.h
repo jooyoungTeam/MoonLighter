@@ -12,7 +12,6 @@ struct astarTile
 	int idY;		//타일의 인덱스 Y
 
 	POINT center;	//타일의 중점 값
-	RECT rc;
 
 	//F = G + H
 	//F == 총 거리 비용(totalCost)
@@ -39,8 +38,6 @@ struct astarTile
 		idY = Y;
 
 		center = PointMake(idX * TILESIZE + (TILESIZE / 2), idY * TILESIZE + (TILESIZE / 2));
-
-		rc = RectMakeCenter(center.x, center.y, TILESIZE, TILESIZE);
 	}
 };
 
@@ -56,6 +53,9 @@ class aStar : public gameNode
 
 	vector<astarTile*>			_vCloseList;
 	vector<astarTile*>::iterator _viCloseList;
+
+	vector<astarTile*>			_vOldCloseList;
+	vector<astarTile*>::iterator _vOldiCloseList;
 
 	astarTile* _startTile;		//시작 타일
 	astarTile* _endTile;			//끝 타일
@@ -78,6 +78,9 @@ class aStar : public gameNode
 	int _enemyTileY;
 
 	int _moveIndex;
+
+	int _rndX;
+	int _rndY;
 public:
 	aStar();
 	~aStar();
@@ -97,6 +100,10 @@ public:
 	void release();
 
 	vector<astarTile*> getVClose() { return _vCloseList; }
+	vector<astarTile*> getVOldClose() { return _vOldCloseList; }
+	int getRndX() { return _rndX; }
+	int getRndY() { return _rndY; }
+
 	int getMoveIndex() { return _moveIndex; }
 	void setMoveIndex(int moveIndex) { _moveIndex = moveIndex; }
 

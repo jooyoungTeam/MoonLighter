@@ -2,7 +2,7 @@
 
 class enemy;
 
-enum ENEMYTYPE
+enum ENEMYTYPE		//¿¡³Ê¹Ì Á¾·ù
 {
 	ENEMY_RED_SLIME,
 	ENEMY_BLUE_SLIME,
@@ -12,7 +12,7 @@ enum ENEMYTYPE
 	ENEMY_BOSS
 };
 
-enum GOLEMDIR
+enum GOLEMDIR		//°ñ·½
 {
 	GOLEM_LEFT,
 	GOLEM_RIGHT,
@@ -20,7 +20,7 @@ enum GOLEMDIR
 	GOLEM_BOTTOM
 };
 
-enum POTDIR
+enum POTDIR			//ÆÌ
 {
 	POT_LEFT,
 	POT_RIGHT,
@@ -52,8 +52,9 @@ public:
 class enemyIdleState : public enemyState
 {
 private:
-	//GOLEMDIR _golemDir;
+	int _attackDistance;
 public:
+	enemyIdleState() { _attackDistance = 0; }
 	virtual void update(enemy& enemy, ENEMYTYPE enemyType) override;
 };
 

@@ -62,6 +62,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_state = _idle;
 
 	_isAttack = false;
+
 	_attackDelay = 0;
 
 	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50);
@@ -297,35 +298,21 @@ void enemy::enemyWay()
 
 void enemy::move()
 {
-
-	if (_aStar->getVClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVClose().size())
+	cout << _aStar->getRndX() << endl;
+	if (_aStar->getVOldClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVOldClose().size())
 	{
-		if (getDistance(_x, _y, _aStar->getVClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVClose()[_aStar->getMoveIndex()]->center.y) < 1)
+		_moveAngle = getAngle(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY());
+
+		_x += cos(_moveAngle) * 2;
+		_y -= sin(_moveAngle) * 2;
+
+		if (getDistance(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY()) < 1)
 		{
-			if(_aStar->getMoveIndex() < _aStar->getVClose().size() -1 )
+			if(_aStar->getMoveIndex() < _aStar->getVOldClose().size())
 				_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
 		}
 
-
-		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x < _x)
-		{
-			_x -= 1;
-		}
-		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.x >= _x)
-		{
-			_x += 1;
-		}
-		if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y < _y)
-		{
-			_y -= 1;
-		}
-		else if (_aStar->getVClose()[_aStar->getMoveIndex()]->center.y >= _y)
-		{
-			_y += 1;
-		}
-
 	}
-
 
 }
 

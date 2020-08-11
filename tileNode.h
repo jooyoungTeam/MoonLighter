@@ -45,14 +45,6 @@ struct tagTile
 	string  str;
 };
 
-enum MAPMOVE
-{
-	MOVE_LEFT,
-	MOVE_RIGHT,
-	MOVE_UP,
-	MOVE_DOWN,
-	MOVE_NULL
-};
 
 struct tagSampleObject
 {
@@ -65,13 +57,8 @@ struct tagObject
 {
 	RECT     rc;
 	Image*   img;
-};
-
-
-struct tagMapMove
-{
-	int x, y;
-	RECT rc;
+	bool     isFrameRender;
+	int      frameX;
 };
 
 

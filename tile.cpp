@@ -17,28 +17,6 @@ HRESULT tile::init()
 		_sampleTileOnOff.top = WINSIZEY / 2 - 50;
 		_sampleTileOnOff.bottom = WINSIZEY / 2 + 50;
 	}
-	{
-		_mapMove[MOVE_LEFT].rc.left = 0;
-		_mapMove[MOVE_LEFT].rc.right = 100;
-		_mapMove[MOVE_LEFT].rc.top = 0;
-		_mapMove[MOVE_LEFT].rc.bottom = WINSIZEY;
-
-		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 100;
-		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX;
-		_mapMove[MOVE_RIGHT].rc.top = 0;
-		_mapMove[MOVE_RIGHT].rc.bottom = WINSIZEY;
-
-		_mapMove[MOVE_UP].rc.left = 0;
-		_mapMove[MOVE_UP].rc.right = WINSIZEX;
-		_mapMove[MOVE_UP].rc.top = 0;
-		_mapMove[MOVE_UP].rc.bottom = 100;
-
-		_mapMove[MOVE_DOWN].rc.left = 0;
-		_mapMove[MOVE_DOWN].rc.right = WINSIZEX;
-		_mapMove[MOVE_DOWN].rc.top = WINSIZEY - 100;
-		_mapMove[MOVE_DOWN].rc.bottom = WINSIZEY;
-		_currentMove = MOVE_NULL;
-	}
 
 	{
 		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(200, 200), Pivot::LeftTop);
@@ -77,6 +55,7 @@ void tile::render()
 				Vector2 vec((_tiles[index].rc.left + _tiles[index].rc.right) * 0.5f, (_tiles[index].rc.top + _tiles[index].rc.bottom) * 0.5f);
 
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[index].terrainFrameX, _tiles[index].terrainFrameY);
+				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
 			}
 
 			if (_tiles[index].isDrag)
@@ -90,7 +69,7 @@ void tile::render()
 
 	for (int i = 0; i < _object.size(); i++) // 오브젝트들 렌더
 	{
-		CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top);
+		CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
 		CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 	}
 
@@ -472,7 +451,6 @@ void tile::setMap()
 					break;
 				}
 			}
-			cout << _object.size() << endl;
 		}
 		sampleOnOff();
 	}
@@ -515,25 +493,9 @@ void tile::setMap()
 							tempObject->rc.top = _tiles[index].rc.top;
 							tempObject->rc.right = tempObject->rc.left + tempObject->img->GetWidth();
 							tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetHeight();
-							_canBuild = true;
-							for (int k = 0; k < _object.size(); k++)
-							{
-								RECT rc = tempObject->rc;
-								rc.left += 10;
-								rc.right -= 10;
-								rc.top += 10;
-								rc.bottom -= 10;
-								if (isCollision(rc, _object[k]->rc))
-								{
-									_canBuild = false;
-								}
-
-							}
-							if (_canBuild)
-								_object.push_back(tempObject);
+							_object.push_back(tempObject);
 
 							_isSelectObject = false;
-
 						}
 					}
 					//else if (_button->getType() == BUTTON_CLEAR)
@@ -618,29 +580,6 @@ void tile::load()
 
 void tile::imageLoad()
 {
-	ImageManager::GetInstance()->AddImage("집1", L"Object/build_Bottom1.png");
-	ImageManager::GetInstance()->AddImage("집2", L"Object/build_Bottom2.png");
-	ImageManager::GetInstance()->AddImage("샵", L"Object/build_Shop.png");
-	ImageManager::GetInstance()->AddFrameImage("나무", L"Object/tree.png", 4, 1);
-	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
-	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
-	ImageManager::GetInstance()->AddImage("sampleUI", L"Object/sampleUI.png");
-	ImageManager::GetInstance()->AddImage("sampleUIOnOff", L"Object/sampleUIOnOff.png");
-	ImageManager::GetInstance()->AddImage("objectArchitecture", L"Object/objectArchitecture.png");
-	ImageManager::GetInstance()->AddImage("objectDoor", L"Object/objectDoor.png");
-	ImageManager::GetInstance()->AddImage("objectHouse", L"Object/objectHouse.png");
-
-	ImageManager::GetInstance()->AddImage("build_Bottom1", L"Object/build_Bottom1.png");
-	ImageManager::GetInstance()->AddImage("build_Bottom2", L"Object/build_Bottom2.png");
-	ImageManager::GetInstance()->AddImage("build_Shop", L"Object/build_Shop.png");
-	ImageManager::GetInstance()->AddImage("build_Enchant", L"Object/build_Enchant.png");
-
-	ImageManager::GetInstance()->AddImage("build_Well", L"Object/build_Well.png");
-	ImageManager::GetInstance()->AddImage("buildBoard", L"Object/buildBoard.png");
-	ImageManager::GetInstance()->AddImage("build_fountain", L"Object/build_fountain.png");
-	ImageManager::GetInstance()->AddImage("bench", L"Object/bench.png");
-
-
 	//ImageManager::GetInstance()
 
 }
@@ -706,6 +645,7 @@ void tile::selectObject()
 				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("build_Bottom2");
 				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_Shop");
 				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_Enchant");
+				_currentObject->isFrameRender = false;
 				break;
 			}
 
@@ -716,6 +656,7 @@ void tile::selectObject()
 				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("buildBoard");
 				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_fountain");
 				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("bench");
+				_currentObject->isFrameRender = false;
 				break;
 			}
 			else if (_currentSampleObject == OBJ_DOOR)
@@ -737,40 +678,15 @@ void tile::eraseObject(int arrNum)
 
 void tile::mapMove()
 {
+	if (KEYMANAGER->isStayKeyDown('W'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() - 5);
+	if (KEYMANAGER->isStayKeyDown('S'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 5);
+	if (KEYMANAGER->isStayKeyDown('A'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 5);
+	if (KEYMANAGER->isStayKeyDown('D'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 5);
 
-	for (int i = 0; i < 4; i++)
-	{
-		//_currentMove = MOVE_NULL;
-		if (PtInRect(&_mapMove[i].rc, _ptMouse))
-		{
-			_currentMove = MOVE_NULL;
-			if (i == MOVE_LEFT)
-			{
-				CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 5);
-				_currentMove = MOVE_LEFT;
-			}
-			if (i == MOVE_RIGHT)
-			{
-				CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 5);
-				_currentMove = MOVE_RIGHT;
-			}
-			if (i == MOVE_UP)
-			{
-				CAMERAMANAGER->setY(CAMERAMANAGER->getY() - 5);
-				_currentMove = MOVE_UP;
-			}
-			if (i == MOVE_DOWN)
-			{
-				CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 5);
-				_currentMove = MOVE_DOWN;
-			}
 
-			float x = CAMERAMANAGER->getLeft() * 0.04f;
-			float y = CAMERAMANAGER->getTop() * 0.04f;
-			_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
-		}
-
-	}
+	float x = CAMERAMANAGER->getLeft() * 0.04f;
+	float y = CAMERAMANAGER->getTop() * 0.04f;
+	_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
 }
 
 void tile::sampleOnOff()
@@ -780,32 +696,15 @@ void tile::sampleOnOff()
 		_isActive = !_isActive;
 	}
 
-
 	if (_isActive)
 	{
 		_sampleTileOnOff.right = _sampleTileUI.left;
 		_sampleTileOnOff.left = _sampleTileOnOff.right - 20;
-
-		_mapMove[MOVE_RIGHT].rc.right = _sampleTileOnOff.left;
-		_mapMove[MOVE_RIGHT].rc.left = _mapMove[MOVE_RIGHT].rc.right - 100;
-
-
-		_mapMove[MOVE_UP].rc.right = _sampleTileUI.left;
-
-		_mapMove[MOVE_DOWN].rc.right = _sampleTileUI.left;
-
 	}
 	else
 	{
 		_sampleTileOnOff.right = WINSIZEX;
 		_sampleTileOnOff.left = WINSIZEX - 20;
-
-		_mapMove[MOVE_RIGHT].rc.left = WINSIZEX - 100;
-		_mapMove[MOVE_RIGHT].rc.right = WINSIZEX;
-
-		_mapMove[MOVE_UP].rc.right = WINSIZEX;
-
-		_mapMove[MOVE_DOWN].rc.right = WINSIZEX;
 	}
 }
 
