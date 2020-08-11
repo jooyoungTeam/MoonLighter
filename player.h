@@ -18,8 +18,9 @@ private:
 	playerState*		_CurrentState;						//현재 클래스 상태
 	animation*			_playerMotion;						//플레이어 애니메이션
 	DIRECTION			_playerDirection;					//플레이어 방향
-
+	arrow*				_arrow;
 	int					_index;								//플레이어 인덱스 0
+	int					_arrowCount;						//화살한발만 쏘게
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
 
@@ -47,6 +48,7 @@ public:
 public:
 	void animationLoad();
 	void tileCollision();
+	void arrowShoot();
 
 public:
 	int getIndex() { return _index; }

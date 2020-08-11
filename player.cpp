@@ -14,7 +14,8 @@ HRESULT player::init()
 	_swim = new playerSwimState();
 	_bow = new playerbowState();
 	_sword = new playerSwordState();
-
+	_arrow = new arrow;
+	_arrow->init();
 	_index = 0;
 	_playerX = 500;
 	_playerY = 500;
@@ -34,7 +35,7 @@ void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
 	CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.2f);
-
+	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		CAMERAMANAGER->rectangle(_playerRc, D2D1::ColorF::Red, 1.0f);
@@ -46,12 +47,15 @@ void player::update()
 {
 	KEYANIMANAGER->update();
 	_CurrentState->update(*this);
-
+	_arrow->update();
+	arrowShoot();
+	
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
 }
 
 void player::release()
 {
+	SAFE_DELETE(_arrow);
 }
 
 void player::animationLoad()
@@ -129,21 +133,9 @@ void player::animationLoad()
 	int playerLeftBow[] = { 27, 28, 29, 30, 31, 32, 33, 34, 35 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, false);
 
-	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpArrow", L"image/player/arrow.png", 4, 1);
-	int playerUpArrow[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpArrow", "playerUpArrow", playerUpArrow, 1, 13, true);
-
-	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightArrow", L"image/player/arrow.png", 4, 1);
-	int playerRightArrow[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightArrow", "playerRightArrow", playerRightArrow, 1, 13, true);
-
-	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftArrow", L"image/player/arrow.png", 4, 1);
-	int playerLeftArrow[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftArrow", "playerLeftArrow", playerLeftArrow, 1, 13, true);
-
-	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownArrow", L"image/player/arrow.png", 4, 1);
-	int playerDownArrow[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownArrow", "playerDownArrow", playerDownArrow, 1, 13, true);
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerArrow", L"image/player/arrow.png", 1, 1);
+	int playerArrow[] = { 0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerArrow", "playerArrow", playerArrow, 1, 0, false);
 
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
@@ -227,6 +219,52 @@ void player::animationLoad()
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSwim", L"image/player/swimState.png", 10, 4);
 	int playerUpSwim[] = { 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSwim", "playerUpSwim", playerUpSwim, 9, 13, true);
+}
+
+//활나가는 방향
+void player::arrowShoot()
+{
+	if (_playerDirection == DIRECTION::UP)
+	{
+		//애니메이션 시작하면서 Count가 0이여야 한발씩 나감
+		if (KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay() && _arrowCount == 0)
+		{
+			_arrowCount++;
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP);
+		}
+	}
+	if (_playerDirection == DIRECTION::DOWN)
+	{
+		if (KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay() && _arrowCount == 0)
+		{
+			_arrowCount++;
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN);
+		}
+	}
+	if (_playerDirection == DIRECTION::LEFT)
+	{
+		if (KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay() && _arrowCount == 0)
+		{
+			_arrowCount++;
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT);
+		}
+	}
+	if (_playerDirection == DIRECTION::RIGHT)
+	{
+		if (KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay() && _arrowCount == 0)
+		{
+			_arrowCount++;
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT);
+		}
+	}
+	//애니메이션 끝나면 다시 카운트 초기화
+	if (!KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay())
+	{
+		_arrowCount = 0;
+	}
 }
 
 //타일 충돌용
