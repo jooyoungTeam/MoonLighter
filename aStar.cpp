@@ -120,6 +120,7 @@ void aStar::pathFinder(astarTile * currentTile)
 {
 	if (_vCloseList.size() > 4)
 	{
+		_end = true;
 		return;
 	}
 
@@ -205,15 +206,11 @@ void aStar::pathFinder(astarTile * currentTile)
 
 	//그치만 이 스택메모리 사이즈는 명령어로 조절 가능함.
 
-	pathFinder(_currentTile);
+	//pathFinder(_currentTile);
 }
 
 void aStar::release()
 {
-	for (int i = 0; i < _vTotalList.size(); ++i)
-	{
-		SAFE_DELETE(_vTotalList[i]);
-	}
 	_vTotalList.clear();
 	_vOpenList.clear();
 	_vCloseList.clear();
@@ -227,20 +224,29 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 	_enemyTileY = enemyTileY;
 	_aStarTimer++;
 
+	if (_end)
+	{
+		_moveIndex = 1;
+
+		_vOldCloseList = _vCloseList;
+	}
+
 	if (_aStarTimer > 50)
 	{
 		release();
 		setTiles();
-		pathFinder(_currentTile);
-		_moveIndex = 0;
 		_aStarTimer = 0;
 	}
+	pathFinder(_currentTile);
 }
 
 void aStar::render()
 {
-	for (int i = 0; i < _vCloseList.size(); ++i)
-	{
-		D2DRenderer::GetInstance()->DrawRectangle(_vCloseList[i]->rc, D2D1::ColorF::Blue, 5.f);
-	}
+	//for (int i = 0; i < _vOldCloseList.size(); ++i)
+	//{
+	//	RECT temp;
+	//	temp = RectMakeCenter(_vOldCloseList[i]->center.x, _vOldCloseList[i]->center.y, 50, 50);
+
+	//	D2DRenderer::GetInstance()->DrawRectangle(temp, D2D1::ColorF::Blue, 5.f);
+	//}
 }
