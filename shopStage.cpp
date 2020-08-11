@@ -3,95 +3,94 @@
 
 HRESULT shopStage::init()
 {
+	_backGround = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
+	ImageManager::GetInstance()->AddImage("shop_mid", L"Image/Shop/shop_mid.png");
+	ImageManager::GetInstance()->AddImage("shop_first", L"Image/Shop/shop_first.png");
+	ImageManager::GetInstance()->AddFrameImage("shop_door", L"Image/Shop/shop_door.png",5,1);
 
-	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
-
-	//CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 2000 - WINSIZEX, 2056 - WINSIZEY);
-	//ImageManager::GetInstance()->AddImage("shopBackground", L"Image/map/shop_background.png");
-	loadDungeonMap();
-	//CAMERAMANAGER->setX(1300);
-	//CAMERAMANAGER->setY(700);
+	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
 	_player->init();
+
+	_doorFrameTimer = 0;
+	_doorIndex = 0;
+
 	return S_OK;
 }
 
 void shopStage::render()
 {
-	//CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shopBackground"),0,0);
-	renderDungeonMap();
-
+	CAMERAMANAGER->render(_backGround, _backGround->GetWidth() / 2, 200, 1.15f, 1.0f);
+	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	_player->render();
+
+
+	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
+	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
+	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 65, 1162, 1.15f, 1.0f);
+	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 10, 1109, _doorIndex, 0 ,1.2f,1.f);
 }
 
 void shopStage::update()
 {
 	_player->update();
+	CAMERAMANAGER->setX(_player->getX());
+	CAMERAMANAGER->setY(_player->getY());
 
-	//CAMERAMANAGER->setX(_player->getX());
-	//CAMERAMANAGER->setY(_player->getY());
+
+	doorUpdate();
 }
 
 void shopStage::release()
 {
+
 }
 
-
-void shopStage::loadDungeonMap()
+void shopStage::doorUpdate()
 {
-	HANDLE file;
-	DWORD read;
-
-	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ReadFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
-
-	memset(_dungeonAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
-	for (int i = 0; i < TILEX * TILEY; ++i)
+	switch (_doorState)
 	{
-		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
-	}
-
-	CloseHandle(file);
-}
-
-void shopStage::renderDungeonMap()
-{
-
-	for (int i = 0; i < 19; i++)
-	{
-		for (int j = 0; j < 33; j++)
+	case DOOR_CLOSE:
+		if (KEYMANAGER->isOnceKeyDown('E'))
 		{
-			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
-			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
-
-			int index = (i + cullY) * TILEX + (j + cullX);
-
-			if (_dungeonTiles[index].terrain != TR_NONE)
-			{
-				Vector2 vec((_dungeonTiles[index].rc.left + _dungeonTiles[index].rc.right) * 0.5f, (_dungeonTiles[index].rc.top + _dungeonTiles[index].rc.bottom) * 0.5f);
-
-				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _dungeonTiles[index].terrainFrameX, _dungeonTiles[index].terrainFrameY);
-
-				CAMERAMANAGER->rectangle(_dungeonTiles[index].rc, D2D1::ColorF::Black, 1.0f);
-
-				/*	char str2[10];
-					sprintf_s(str2, "(%d,%d)", _dungeonTiles[index].idX, _dungeonTiles[index].idY);
-
-					string tempStr = str2;
-
-					wstring str;
-					str.assign(tempStr.begin(), tempStr.end());
-
-					D2DRenderer::GetInstance()->RenderText(_dungeonTiles[index].rc.left, _dungeonTiles[index].rc.top, str, 15, D2DRenderer::DefaultBrush::White);*/
-			}
-
-
+			_doorState = DOOR_OPENING;
 		}
+		break;
+	case DOOR_OPENING:
+		_doorFrameTimer++;
+
+		if (_doorFrameTimer > 5)
+		{
+			_doorIndex++;
+
+			if (_doorIndex == 4)
+				_doorState = DOOR_DELAY;
+
+			_doorFrameTimer = 0;
+		}
+		break;
+	case DOOR_CLOSING:
+		_doorFrameTimer++;
+
+		if (_doorFrameTimer > 5)
+		{
+			_doorIndex--;
+
+			if (_doorIndex == 0)
+				_doorState = DOOR_CLOSE;
+
+			_doorFrameTimer = 0;
+		}
+		break;
+	case DOOR_DELAY:
+		_doorFrameTimer++;
+
+		if (_doorFrameTimer > 100)
+		{
+			_doorState = DOOR_CLOSING;
+			_doorFrameTimer = 0;
+		}
+		break;
 	}
-
-
-
 }

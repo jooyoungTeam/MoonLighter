@@ -57,7 +57,7 @@ public:
 	void zOrderSort(int i, int j);
 
 	// 랜더 함수 (랜더 부분에 넣을 것)
-	void zOrderRender();
+	void zOrderALLRender();
 
 	int zOrderSize() { return _vZorder.size(); }
 
@@ -68,7 +68,9 @@ public:
 	void fillRectangle(const FloatRect rect, const D2D1::ColorF::Enum& color, float alpha);
 	void ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
 	void render(Image* img, float destX, float destY, float alpha);
+	void render(Image* img, float destX, float destY, float scale, float alpha);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);
+	void frameRender(Image* img, float destX, float destY, int frameX, int frameY, float scale, float alpha);
 	void aniRender(Image * img, int destX, int destY, animation * ani, float scale);
 public:
 	float getLeft() { return _left; }

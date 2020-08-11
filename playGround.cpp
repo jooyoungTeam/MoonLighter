@@ -44,7 +44,7 @@ void playGround::update()
 void playGround::render()
 {
 	// 백버퍼 초기화
-	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::White);
+	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::Black);
 	{
 		_stageManager->render();
 
@@ -56,12 +56,11 @@ void playGround::render()
 
 
 
-		int w = _ptMouse.x + (ImageManager::GetInstance()->FindImage("커서")->GetWidth() / ImageManager::GetInstance()->FindImage("커서")->GetMaxFrameX()) * 0.5f;
-		int h = _ptMouse.y + (ImageManager::GetInstance()->FindImage("커서")->GetHeight()) * 0.5f;
-
 		// 마지막 렌더
+		int w = _ptMouse.x + (ImageManager::GetInstance()->FindImage("커서")->GetFrameSize().x) * 0.5f;
+		int h = _ptMouse.y + (ImageManager::GetInstance()->FindImage("커서")->GetHeight()) * 0.5f;
 		ImageManager::GetInstance()->FindImage("커서")->SetScale(0.7f);
-		ImageManager::GetInstance()->FindImage("커서")->FrameRender(Vector2(w, h), _cursorFrameX, 0);
+		ImageManager::GetInstance()->FindImage("커서")->FrameRender(Vector2(w - 11, h - 14), _cursorFrameX, 0);
 	}
 	// 백버퍼에 그린 내용들을 화면에 뿌려라.
 	D2DRenderer::GetInstance()->EndRender();
@@ -73,7 +72,6 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("집1", L"Object/build_Bottom1.png");
 	ImageManager::GetInstance()->AddImage("집2", L"Object/build_Bottom2.png");
 	ImageManager::GetInstance()->AddImage("샵", L"Object/build_Shop.png");
-	ImageManager::GetInstance()->AddFrameImage("나무", L"Object/tree.png", 4, 1);
 	ImageManager::GetInstance()->AddFrameImage("mapTiles", L"mapTiles.png", SAMPLETILEX, SAMPLETILEY);
 	ImageManager::GetInstance()->AddImage("map1", L"Image/map/map1.png");
 	ImageManager::GetInstance()->AddImage("sampleUI", L"Object/sampleUI.png");

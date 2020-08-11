@@ -45,6 +45,12 @@ private:
 	DWORD             _dungeonAttribute[TILEX * TILEY];
 	// ----------- ´øÀü¸Ê º¯¼ö
 
+	// ----------- ¸¶À» ¸Ê º¯¼ö
+	tagTile           _townTiles[TILEX * TILEY];
+	DWORD             _townAttribute[TILEX * TILEY];
+	// ----------- ¸¶À» ¸Ê º¯¼ö
+
+
 	int           _saveTime;
 	int			  _dragNumX;
 	int			  _dragNumY;
@@ -62,16 +68,23 @@ public:
 	void drag();
 	void setup();
 	void setMap();
-	void save();
-	void load();
+	void saveLoad();
 	void imageLoad();
-	void loadDungeonMap();
-	void renderDungeonMap();
 	void selectObject();
 	void eraseObject(int arrNum);
 
 	void mapMove();
 	void sampleOnOff();
+
+	// ----------------------------------
+	void saveDungeonMap();
+	void saveTownMap();
+	void renderDungeonMap();
+
+	void loadDungeonMap();
+	void loadTownMap();
+	void renderTownMap();
+	// ----------------------------------
 
 	tagTile* getDungeonTile() { return _dungeonTiles; }
 	DWORD* getDungeonAttribute() { return _dungeonAttribute; }

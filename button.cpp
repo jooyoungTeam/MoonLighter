@@ -10,35 +10,20 @@ HRESULT button::init()
 
 void button::render()
 {
-	if (_currentType == BUTTON_OBJECT)
+
+	for (int i = 0; i < BUTTON_END; i++)
 	{
-		for (int i = 0; i < BUTTON_END; i++)
+		if (_button[i].state == BUTTON_OFF) continue;
+
+		if (i == _currentType)
 		{
-			if (_button[i].type == _currentType)
-			{
-				D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
-			}
-			else
-			{
-				D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
-			}
-			D2DRenderer::GetInstance()->RenderText(_button[i].pos.x - 35, _button[i].pos.y - 10, _button[i].name, 15);
+			D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
 		}
-	}
-	else
-	{
-		for (int i = 0; i < BUTTON_END; i++)
+		else
 		{
-			if (_button[i].type == _currentType)
-			{
-				D2DRenderer::GetInstance()->FillRectangle(_button[i].rc, D2D1::ColorF::Gray, 1);
-			}
-			else
-			{
-				D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
-			}
-			D2DRenderer::GetInstance()->RenderText(_button[i].pos.x - 35, _button[i].pos.y - 10, _button[i].name, 15);
+			D2DRenderer::GetInstance()->DrawRectangle(_button[i].rc, D2D1::ColorF::Black, 1);
 		}
+		D2DRenderer::GetInstance()->RenderText(_button[i].rc.left + 5, _button[i].rc.top + 5, _button[i].name, 15);
 	}
 
 
@@ -52,13 +37,54 @@ void button::update()
 	{
 		if (PtInRect(&_button[i].rc, _ptMouse))
 		{
-			_currentType = _button[i].type;
+			if (i == BUTTON_EXIT)
+				SCENEMANAGER->changeScene("≈∏¿Ã∆≤æ¿");
+			
+			_currentType = (BUTTONTYPE)i;
 			break;
 		}
 	}
 
-	
+	if (_currentType == BUTTON_SAVE)
+	{
+		for (int i = 0; i < BUTTON_END; i++)
+		{
+			if (_button[i].state == BUTTON_TEMP)
+				_button[i].state = BUTTON_OFF;
+		}
+		_button[BUTTON_SAVE_DUNGEON].state = BUTTON_TEMP;
+		_button[BUTTON_SAVE_TOWN].state = BUTTON_TEMP;
+	}
+	else if (_currentType == BUTTON_LOAD)
+	{
+		for (int i = 0; i < BUTTON_END; i++)
+		{
+			if (_button[i].state == BUTTON_TEMP)
+				_button[i].state = BUTTON_OFF;
+		}
 
+		_button[BUTTON_LOAD_DUNGEON].state = BUTTON_TEMP;
+		_button[BUTTON_LOAD_TOWN].state = BUTTON_TEMP;
+	}
+	else if (_currentType == BUTTON_ERASE)
+	{
+		for (int i = 0; i < BUTTON_END; i++)
+		{
+			if (_button[i].state == BUTTON_TEMP)
+				_button[i].state = BUTTON_OFF;
+		}
+
+		_button[BUTTON_ERASE_TERRAIN].state = BUTTON_TEMP;
+		_button[BUTTON_ERASE_OBJECT].state = BUTTON_TEMP;
+	}
+	else if(_currentType == BUTTON_TERRAIN || _currentType == BUTTON_OBJECT)
+	{
+		for (int i = 0; i < BUTTON_END; i++)
+		{
+			if (_button[i].state == BUTTON_TEMP)
+				_button[i].state = BUTTON_OFF;
+		}
+	}
 }
 
 void button::release()
@@ -67,27 +93,54 @@ void button::release()
 
 void button::setButton()
 {
-	for (int i = 0; i < BUTTON_END; i++)
-	{
-		if (i == 5)
-		{
-			_button[i].pos.x = WINSIZEX / 2 + 530;
-			_button[i].pos.y = 150;
-		}
-		else
-		{
-			_button[i].pos.x = WINSIZEX / 2 + 330 + i * 100;
-			_button[i].pos.y = 100;
-		}
-		_button[i].type = (BUTTONTYPE)i;
-		_button[i].rc = RectMakeCenter(_button[i].pos.x, _button[i].pos.y, 80, 30);
-	}
+	_button[BUTTON_TERRAIN].rc = RectMakeCenter(WINSIZEX / 2 + 330, 100, 80, 30);
+	_button[BUTTON_TERRAIN].name = L"  TERRAIN";
+	_button[BUTTON_TERRAIN].state = BUTTON_ALWAYS;
 
 
-	_button[0].name = L"  TERRAIN";
-	_button[1].name = L"   OBJECT";
-	_button[2].name = L"    SAVE";
-	_button[3].name = L"    LOAD";
-	_button[4].name = L"   ERASE";
-	_button[5].name = L"COMPLETE";
+	_button[BUTTON_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 430, 100, 80, 30);
+	_button[BUTTON_OBJECT].name = L"   OBJECT";
+	_button[BUTTON_OBJECT].state = BUTTON_ALWAYS;
+
+
+	_button[BUTTON_SAVE].rc = RectMakeCenter(WINSIZEX / 2 + 530, 100, 80, 30);
+	_button[BUTTON_SAVE].name = L"    SAVE";
+	_button[BUTTON_SAVE].state = BUTTON_ALWAYS;
+
+	_button[BUTTON_SAVE_DUNGEON].rc = RectMakeCenter(WINSIZEX / 2 + 480, 150, 80, 30);
+	_button[BUTTON_SAVE_DUNGEON].name = L"DUNGEON";
+	_button[BUTTON_SAVE_DUNGEON].state = BUTTON_OFF;
+	_button[BUTTON_SAVE_TOWN].rc = RectMakeCenter(WINSIZEX / 2 + 580, 150, 80, 30);
+	_button[BUTTON_SAVE_TOWN].name = L"   TOWN";
+	_button[BUTTON_SAVE_TOWN].state = BUTTON_OFF;
+
+
+	_button[BUTTON_LOAD].rc = RectMakeCenter(WINSIZEX / 2 + 630, 100, 80, 30);
+	_button[BUTTON_LOAD].name = L"    LOAD";
+	_button[BUTTON_LOAD].state = BUTTON_ALWAYS;
+
+	_button[BUTTON_LOAD_DUNGEON].rc = RectMakeCenter(WINSIZEX / 2 + 580, 150, 80, 30);
+	_button[BUTTON_LOAD_DUNGEON].name = L"DUNGEON";
+	_button[BUTTON_LOAD_DUNGEON].state = BUTTON_OFF;
+	_button[BUTTON_LOAD_TOWN].rc = RectMakeCenter(WINSIZEX / 2 + 680, 150, 80, 30);
+	_button[BUTTON_LOAD_TOWN].name = L" TOWN";
+	_button[BUTTON_LOAD_TOWN].state = BUTTON_OFF;
+
+
+	_button[BUTTON_ERASE].rc = RectMakeCenter(WINSIZEX / 2 + 730, 100, 80, 30);
+	_button[BUTTON_ERASE].name = L"   ERASE";
+	_button[BUTTON_ERASE].state = BUTTON_ALWAYS;
+
+	_button[BUTTON_ERASE_TERRAIN].rc = RectMakeCenter(WINSIZEX / 2 + 630, 150, 80, 30);
+	_button[BUTTON_ERASE_TERRAIN].name = L"TERRAIN";
+	_button[BUTTON_ERASE_TERRAIN].state = BUTTON_OFF;
+	_button[BUTTON_ERASE_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 730, 150, 80, 30);
+	_button[BUTTON_ERASE_OBJECT].name = L"OBJECT";
+	_button[BUTTON_ERASE_OBJECT].state = BUTTON_OFF;
+
+
+	_button[BUTTON_EXIT].rc = RectMakeCenter(WINSIZEX / 2 + 530, 50, 50, 30);
+	_button[BUTTON_EXIT].name = L"  EXIT";
+	_button[BUTTON_EXIT].state = BUTTON_ALWAYS;
+
 }
