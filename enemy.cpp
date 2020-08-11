@@ -20,56 +20,61 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_width = width;
 	_height = height;
 	_type = type;
-	_maxHP = _curHP = _saveHP = 100;
+	_maxHP = _curHP = 100;
 	_speed = 0;
-	_bar.width = 50;
-	_bar.x = _x;
+	_bar.width = 80;
+	_saveHP = _bar.width;
+	_bar.x = _x - _width;
 	_bar.y = _y - (_height / 2) - 15;
 
-	_bar.rc = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(50, 5), Pivot::Center));
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 	_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
-
-	_backBar = ImageManager::GetInstance()->FindImage("backBar");
-	_middleBar = ImageManager::GetInstance()->FindImage("middleBar");
-	_frontBar = ImageManager::GetInstance()->FindImage("frontBar");
-
 
 	switch (_type)
 	{
 	case ENEMY_RED_SLIME:
-		//_state->enemyIdle()
+		_bar.x = _x - _width;
 		_motion = KEYANIMANAGER->findAnimation(_index, "redSlime");
 		_img = ImageManager::GetInstance()->FindImage("redSlime");
 		_motion->start();
 		break;
 	case ENEMY_BLUE_SLIME:
+		_bar.x = _x - _width;
 		_motion = KEYANIMANAGER->findAnimation(_index, "blueSlime");
 		_img = ImageManager::GetInstance()->FindImage("blueSlime");
 		_motion->start();
 		break;
 	case ENEMY_YELLOW_SLIME:
+		_bar.x = _x - _width;
 		_motion = KEYANIMANAGER->findAnimation(_index, "yellowSlime");
 		_img = ImageManager::GetInstance()->FindImage("yellowSlime");
 		_motion->start();
 		break;
 	case ENEMY_GOLEM:
+		_bar.x = _x - _width + 30;
 		_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
 		set();
 		break;
 	case ENEMY_POT:
+		_bar.x = _x - _width;
 		_motion = KEYANIMANAGER->findAnimation(_index, "potLeft");
 		_img = ImageManager::GetInstance()->FindImage("pot");
 		_motion->start();
 		break;
 	case ENEMY_BOSS:
+		_bar.x = _x - _width;
 		_motion = KEYANIMANAGER->findAnimation(_index, "boss");
 		_img = ImageManager::GetInstance()->FindImage("boss");
 		_motion->start();
 		break;
 	}
+
+	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+
 	_state = _idle;
 
 	_isAttack = false;
@@ -81,6 +86,8 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_attackDelay = 0;
 	_attackAngle = 0;
 	_middleBarCut = 0;
+	_barAlpha = 0;
+	_hitBoolCount = 0;
 
 	vector<POINT> tempV;
 	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50, tempV, false);
@@ -98,24 +105,13 @@ void enemy::update()
 	_state->update(*this,  _type);
 	enemyWay();
 	KEYANIMANAGER->update();
-	if (_curHP <= 0)
-	{
-		_curHP = 0;
-		_state = _dead;
-	}
-	if (_isHit)
-	{
-		_saveHP--;
-	}
-	if (_saveHP <= 0)
-	{
-		_isHit = false;
-	}
+	checkBoolCount();
 	setGauge(_curHP, _maxHP);
-	//cout << "¼¼ÀÌºê" << _saveHP << "ÇöÀç" << _curHP << endl;
-	_bar.x = _x;
-	_bar.y = _y - (_height / 2) - 15;
-	_bar.rc = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_frontBar->GetWidth(), 5), Pivot::Center));
+	setBar();
+	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_saveHP, 5), Pivot::LeftTop));
+	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_bar.width, 5.f), Pivot::LeftTop));
+
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 }
 
@@ -124,13 +120,9 @@ void enemy::render()
 	_aStar->render();
 	_img->aniRender(Vector2(_x, _y), _motion, _scale);
 
-	_backBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_middleBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_middleBar->SetSize(Vector2(_saveHP, _backBar->GetHeight()));
-	_frontBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_frontBar->SetSize(Vector2(_bar.width, _backBar->GetHeight()));
-	
-	D2DRenderer::GetInstance()->DrawRectangle(_bar.rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
 	
 }
 
@@ -167,6 +159,10 @@ void enemy::ani()
 	//°ñ·½
 	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
 	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8,4);
+	ImageManager::GetInstance()->AddFrameImage("golemAttackRed", L"image/enemy/GolemAttack_Red.png", 13, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemAttackWhite", L"image/enemy/GolemAttack_White.png", 13, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemRed", L"image/enemy/GolemMove_Red.png", 8, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemWhite", L"image/enemy/GolemMove_White.png", 8, 4);
 
 
 	//º¸½º
@@ -183,11 +179,6 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
-
-	//Ã¼·Â¹Ù
-	ImageManager::GetInstance()->AddImage("backBar", L"image/enemy/backBar.png");
-	ImageManager::GetInstance()->AddImage("middleBar", L"image/enemy/middleBar.png");
-	ImageManager::GetInstance()->AddImage("frontBar", L"image/enemy/frontBar.png");
 
 
 
@@ -242,28 +233,43 @@ void enemy::ani()
 	//°ñ·½
 	int goLeftAttack[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttack", "golemAttack", goLeftAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttackRed", "golemAttackRed", goLeftAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttackWhite", "golemAttackWhite", goLeftAttack, 13, 13, false);
 
 	int goRightAttack[] = { 13,14,15,16,17,18,19,20,21,22,23,24,25 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttack", "golemAttack", goRightAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttackRed", "golemAttackRed", goRightAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttackWhite", "golemAttackWhite", goRightAttack, 13, 13, false);
 
 	int goUpAttack[] = { 26,27,28,29,30,31,32,33,34,35,36,37,38 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttack", "golemAttack", goUpAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttackRed", "golemAttackRed", goUpAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttackWhite", "golemAttackWhite", goUpAttack, 13, 13, false);
 
 	int goDownAttack[] = {39,40,41,42,43,44,45,46,47,48,49,50,51 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttack", "golemAttack", goDownAttack, 13, 13, false);
-	
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttackRed", "golemAttackRed", goDownAttack, 13, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttackWhite", "golemAttackWhite", goDownAttack, 13, 13, false);
 
 	int goLeft[] = { 0,1,2,3,4,5,6,7 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeft", "golem", goLeft, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftRed", "golemRed", goLeft, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftWhite", "golemWhite", goLeft, 8, 13, true);
 
 	int goRight[] = { 8,9,10,11,12,13,14,15 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRight", "golem", goRight, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightRed", "golemRed", goRight, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightWhite", "golemWhite", goRight, 8, 13, true);
 
 	int goUp[] = { 16,17,18,19,20,21,22,23 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUp", "golem", goUp, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpRed", "golemRed", goUp, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpWhite", "golemWhite", goUp, 8, 13, true);
 
 	int goDown[] = { 24,25,26,27,28,29,30,31 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDown", "golem", goDown, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownRed", "golemRed", goDown, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownWhite", "golemWhite", goDown, 8, 13, true);
 
 
 
@@ -362,8 +368,102 @@ void enemy::move()
 	}
 }
 
+void enemy::hitMove()
+{
+	switch (_type)
+	{
+	case ENEMY_RED_SLIME:
+		_speed = -1.5f;
+		break;
+	case ENEMY_BLUE_SLIME:
+		_speed = -1.3f;
+		break;
+	case ENEMY_YELLOW_SLIME:
+		_speed = -1.3f;
+		break;
+	case ENEMY_GOLEM:
+		_speed = -2.f;
+		break;
+
+	}
+	
+	_moveAngle = getAngle(_x, _y, _pX, _pY);
+
+	_x += cosf(_moveAngle) * _speed;
+	_y -= sinf(_moveAngle) * _speed;
+
+	
+}
+
+void enemy::setBar()
+{
+	switch (_type)
+	{
+	case ENEMY_RED_SLIME:
+		_bar.x = _x - _width + 30;
+		_bar.y = _y - (_height / 2) - 15;
+		break;
+	case ENEMY_BLUE_SLIME:
+		_bar.x = _x - _width - 10;
+		_bar.y = _y - (_height / 2) - 10;
+		break;
+	case ENEMY_YELLOW_SLIME:
+		_bar.x = _x - _width - 10;
+		_bar.y = _y - (_height / 2) - 10;
+		break;
+	case ENEMY_GOLEM:
+		_bar.x = _x - _width + 30;
+		_bar.y = _y - (_height / 2) - 40;
+		break;
+	case ENEMY_POT:
+		_bar.x = _x - _width + 10;
+		_bar.y = _y - (_height / 2) - 15;
+		break;
+
+	}
+}
+
+void enemy::enemyHit()
+{
+}
+
+void enemy::checkBoolCount()
+{
+	if (_curHP <= 0)
+	{
+		_curHP = 0;
+		_state = _dead;
+	}
+	if (_isHit)
+	{
+		_hitBoolCount++;
+		enemyHit();
+		_barAlpha -= 0.02;
+		if (_saveHP >= _bar.width)
+		{
+			_saveHP--;
+		}
+	}
+	if (_hitBoolCount > 20)
+	{
+		_isHit = false;
+		_hitBoolCount = 0;
+	}
+	if (!_isHit)
+	{
+		_hitCount = 0;
+		_barAlpha = 0;
+	}
+
+	if (_saveHP <= 0)
+	{
+		_barAlpha = 0;
+		_isHit = false;
+	}
+}
+
 void enemy::setGauge(float curHP, float maxHP)
 {
-	_bar.width = (curHP / maxHP) * _backBar->GetWidth();
+	_bar.width = (curHP / maxHP) * 80;
 }
 

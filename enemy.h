@@ -5,9 +5,11 @@
 
 struct tagBar
 {
-	FloatRect rc;
 	float x, y;
 	float width;
+	FloatRect back;
+	FloatRect middle;
+	FloatRect front;
 };
 
 class enemy : public gameNode
@@ -47,6 +49,8 @@ protected:
 	int _middleBarCut;	//미들바 점점 줄어들게...
 	int _rndX;			//astar 랜덤 값 준거
 	int _rndY;			//이것또한..
+	int _hitCount;		//맞을때 반짝
+	int _hitBoolCount;
 
 
 	float _x, _y;		//에너미 중심
@@ -57,6 +61,8 @@ protected:
 	float _attackAngle;	//슬라임 달려가는 공격 앵글 넣어주려구
 	float _scale;		//에너미 그림마다 스케일 주랴구
 	float _speed;		//에너미 움직이는 스피드
+	float _barAlpha;	//맞을때만 잠깐 나오려구
+
 
 	bool _isAttack;		//공격하는지?
 	bool _isCol;
@@ -80,7 +86,11 @@ public:
 	virtual void set() {}		//상속받아서 초기화 할 곳
 	virtual void enemyWay();	//방향 결정
 	virtual void move();		//astar
+	virtual void hitMove();
 	virtual void directionCheck() {}//골렘 방향 돌려주는거
+	void setBar();				//에너미마다 체력바 위치 정해줌
+	virtual void enemyHit();
+	void checkBoolCount();		//불값이랑 카운트 체크용
 
 	void setGauge(float curHP, float maxHP);	//체력바
 
@@ -101,6 +111,7 @@ public:
 	void setHP(int hp = 30) { _curHP -= hp; }
 	void setSaveHP(int hp) { _saveHP = hp; }
 	void setIsHit(bool hit) { _isHit = hit; }
+	void setBarAlpha(float alpha) { _barAlpha = alpha; }
 
 	//---------------------------------get-----------------------------------
 
@@ -123,6 +134,7 @@ public:
 	bool getRealDead() { return _realDead; }
 	bool getIsHit() { return _isHit; }
 
+	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }
 	FloatRect getEnemyRect() { return _rc; }
 	FloatRect getPlayerRect() { return _pRc; }

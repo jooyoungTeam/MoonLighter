@@ -10,9 +10,13 @@ void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 		enemy.directionCheck();
 	}
 
-	if (enemyType != ENEMY_POT)
+	if (enemyType != ENEMY_POT && !enemy.getIsHit())
 	{
 		enemy.move();
+	}
+	if (enemyType != ENEMY_POT && enemy.getIsHit())
+	{
+		enemy.hitMove();
 	}
 	if (enemyType == ENEMY_GOLEM)
 	{

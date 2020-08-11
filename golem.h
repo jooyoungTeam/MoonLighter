@@ -10,8 +10,8 @@ private:
 	int _count;
 
 public:
-	golem();
-	~golem();
+	golem() {}
+	~golem() {}
 
 	virtual void render();
 	virtual void set();
@@ -20,5 +20,6 @@ public:
 	virtual void directionCheck();
 	void direcitonChange();
 	virtual void dead();
+	virtual void enemyHit();
 };
 

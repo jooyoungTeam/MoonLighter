@@ -34,7 +34,6 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
-	playerCol();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -81,6 +80,7 @@ void enemyManager::update()
 	{
 		potBullet();
 	}
+	playerCol();
 	_bullet->update();
 	//cout << _testCount << endl;
 
@@ -204,9 +204,11 @@ void enemyManager::playerCol()
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
-					_vEnemy[i]->setSaveHP(_vEnemy[i]->getCurHP());
+					_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
 					_vEnemy[i]->setHP();
 					_vEnemy[i]->setIsHit(true);
+					_vEnemy[i]->setBarAlpha(1.0);
+					//_vEnemy[i]->setState(_vEnemy[i]->getHit());
 					if (_vEnemy[i]->getCurHP() <= 0)
 					{
 						_vEnemy[i]->setOnceAni(true);

@@ -1,25 +1,14 @@
 #include "stdafx.h"
 #include "golem.h"
 
-golem::golem()
-{
-}
-
-golem::~golem()
-{
-}
-
 
 void golem::render()
 {
 	_aStar->render();
 	_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
-	_backBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_middleBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_middleBar->SetSize(Vector2(_saveHP, _backBar->GetHeight()));
-	_frontBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
-	_frontBar->SetSize(Vector2(_bar.width, _backBar->GetHeight()));
-	D2DRenderer::GetInstance()->DrawRectangle(_bar.rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
+	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
 }
 
 void golem::set()
@@ -161,6 +150,42 @@ void golem::dead()
 	{
 		_realDead = true;
 	}
+}
+
+void golem::enemyHit()
+{
+	if (_state == _idle)
+	{
+		_img = ImageManager::GetInstance()->FindImage("golemRed");
+		_hitCount++;
+		if (_hitCount > 10 && _hitCount <= 20)
+		{
+			_img = ImageManager::GetInstance()->FindImage("golemWhite");
+		}
+		if (_hitCount > 20 && _hitCount <= 30)
+		{
+			_isHit = false;
+			_img = ImageManager::GetInstance()->FindImage("golem");
+		}
+
+	}
+	if (_state == _attack)
+	{
+		_img = ImageManager::GetInstance()->FindImage("golemAttackRed");
+		_hitCount++;
+		if (_hitCount > 5 && _hitCount <= 10)
+		{
+			_img = ImageManager::GetInstance()->FindImage("golemAttackWhite");
+		}
+		if (_hitCount > 10 && _hitCount <= 15)
+		{
+			_img = ImageManager::GetInstance()->FindImage("golemAttackRed");
+			_isHit = false;
+			_img = ImageManager::GetInstance()->FindImage("golemAttack");
+		}
+
+	}
+
 }
 
 void golem::directionCheck()
