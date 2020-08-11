@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "aStar.h"
 
 enum npcType			// NPC 종류 ENUM
 {
@@ -10,8 +11,10 @@ enum npcType			// NPC 종류 ENUM
 
 enum npcActionState		// NPC 행동 ENUM
 {
+	NPC_ENTER,			// NPC 입장
 	NPC_IDLE,			// 쇼핑하기전 배회?상태
 	NPC_SHOPPING,		// 아이템 쇼핑 상태
+	NPC_CHECKITEM,		// 아이템 확인 상태
 	NPC_BUY,			// 아이템 결제 상태
 	NPC_AWAY			// 떠나는 상태
 };
@@ -37,19 +40,33 @@ enum npcEmotionState	// NPC 기분 NUM
 class shopNPC : public gameNode
 {
 private:
+	aStar*				_aStar;
 	Image*				_img;				// NPC의 이미지
 	npcType				_npcType;			// NPC의 종류
 	npcActionState		_npcActionState;
 	npcState			_npcState;			// NPC의 상태
 	npcEmotionState     _npcEmotionState;	// NPC의 기분상태
+	vector<POINT>		_vUnMove;
+
+	POINT				_goToPoint;			// 가야 할곳
+	POINT				_itemWayPoint[4];	// 아이템 고르는 좌표
+	POINT				_counterPoint;		// 카운터 좌표
+	POINT				_aroundPoint[4];	// 배회 좌표
 
 	float				_centerX;			// 중점 x
 	float				_centerY;			// 중점 y
 	float				_angle;				// 각도
+	float				_frameTimer;		// 프레임타이머
+	float				_delayTimer;
 
+	int					_indexX;			// 프레임인덱스X
+	int					_indexY;			// 프레임인덱스Y
+	int					_aStarIndex;		// 에이스타 인덱스
 	int					_rndChoiceItem;		// 아이템 고르는 난수
 	int					_price;				// 고른 물건의 가격
-	bool				_checkItem[4];		// 아이템 확인 여부
+	int					_checkItemCount;
+
+	bool				_checkItem[4];		// 아이템 확인 여부(똑같은 아이템 안보기)
 
 public:
 	shopNPC() {}
@@ -62,5 +79,10 @@ public:
 	
 	void	comparePrice();					// 가격 비교 함수
 
+	void	unMoveSet();					// 못 움직이는곳 셋팅
+	void    wayPointSet();					// 가야되는곳 셋팅
+
+	void	chooseItem();					// 아이템 뽑기
+	
 };
 

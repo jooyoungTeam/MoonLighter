@@ -9,7 +9,7 @@ aStar::~aStar()
 {
 }
 
-HRESULT aStar::init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY)
+HRESULT aStar::init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY, vector<POINT> unMoveTile, bool npc)
 {
 	_index = 0;
 	_count = _start = 0;
@@ -25,6 +25,10 @@ HRESULT aStar::init(int totalTileX, int totalTileY, int playerX, int playerY, in
 	
 	_rndX = RND->getFromIntTo(-30, 30);
 	_rndY = RND->getFromIntTo(-30, 30);
+
+	_isNPC = npc;
+
+	_vUnMoveTile = unMoveTile;
 
 	setTiles();
 
@@ -68,6 +72,19 @@ void aStar::setTiles()
 
 		}
 	}
+
+	for (int i = 0; i < _vUnMoveTile.size(); ++i)
+	{
+		_vTotalList[_vUnMoveTile[i].y * _totalTileX + _vUnMoveTile[i].x]->attribute = "wall";
+		_vTotalList[_vUnMoveTile[i].y * _totalTileX + _vUnMoveTile[i].x]->isOpen = false;
+
+	/*	cout << _vTotalList[_vUnMoveTile[i].y * _totalTileY + _vUnMoveTile[i].x]->attribute << endl;
+		cout << _vUnMoveTile[i].x << endl;
+		cout << _vUnMoveTile[i].y << endl;*/
+
+	}
+
+
 }
 
 vector<astarTile*> aStar::addOpenList(astarTile* currentTile)
@@ -90,7 +107,11 @@ vector<astarTile*> aStar::addOpenList(astarTile* currentTile)
 			//예외처리 
 			if (!node->isOpen) continue;
 			if (node->attribute == "start") continue;
-			if (node->attribute == "wall") continue;
+			if (node->attribute == "wall")
+			{
+				cout << "들어옴" << endl;
+				continue;
+			}
 
 
 			//현재 타일을 계속 갱신해준다
@@ -121,10 +142,16 @@ vector<astarTile*> aStar::addOpenList(astarTile* currentTile)
 
 void aStar::pathFinder(astarTile * currentTile)
 {
-	if (_vCloseList.size() > 4)
+	
+	if (!_isNPC)
 	{
-		_end = true;
-		return;
+		if (_vCloseList.size() > 4)
+		{
+			if(!_end)
+				_moveIndex = 0;
+			_end = true;
+			return;
+		}
 	}
 
 	//비교하기 매우 쉽게 임의의 경로비용을 설정해둠
@@ -172,10 +199,15 @@ void aStar::pathFinder(astarTile * currentTile)
 
 	if (tempTile->attribute == "end")
 	{
-		while (_currentTile->parentNode != NULL)
+		/*while (_currentTile->parentNode != NULL)
 		{
 			_currentTile = _currentTile->parentNode;
-		}
+		}*/
+		_vCloseList.push_back(tempTile);
+		
+		if(!_end)
+			_moveIndex = 0;
+
 		_end = true;
 		return;
 	}
@@ -199,17 +231,6 @@ void aStar::pathFinder(astarTile * currentTile)
 	}
 
 	_currentTile = tempTile;
-
-	//함수 내부에서 자기 자신을 호출하는 것이 재귀함수
-	//재귀함수는 일단 속도가 느리지만 코드가 매우 단촐해진다는 장점이 있음
-	//그치만 주의해야하는게
-	//재귀호출시 소량의 메모리가 쌓임(스택 메모리) 이 스택 메모리가
-	//약 1.2메가를 넘게되면 메모리 오버로 터지는 이 현상을
-	//스택 오버 플로우 라고 함 (stack overflow)
-
-	//그치만 이 스택메모리 사이즈는 명령어로 조절 가능함.
-
-	//pathFinder(_currentTile);
 }
 
 void aStar::release()
@@ -229,29 +250,89 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 
 	if (_end)
 	{
-		_moveIndex = 1;
-
 		_vOldCloseList = _vCloseList;
 	}
 
-	if (_aStarTimer > 50)
+	if (!_isNPC)
 	{
-		_rndX = RND->getFromIntTo(-30, 30);
-		_rndY = RND->getFromIntTo(-30, 30);
-		release();
-		setTiles();
-		_aStarTimer = 0;
+		if (_aStarTimer > 50)
+		{
+			_rndX = RND->getFromIntTo(-30, 30);
+			_rndY = RND->getFromIntTo(-30, 30);
+			release();
+			setTiles();
+			_aStarTimer = 0;
+		}
+
 	}
+	else
+	{
+		if (_changePoint)
+		{
+			_changePoint = false;
+			release();
+			setTiles();
+			_aStarTimer = 0;
+		}
+	}
+
 	pathFinder(_currentTile);
 }
 
 void aStar::render()
 {
+	/*for (int i = 0; i < _vTotalList.size(); ++i)
+	{
+		if (_vTotalList[i]->attribute == "wall")
+		{
+			RECT temp;
+			temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
+
+			CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Green, 5.f);
+		}
+
+		else if (_vTotalList[i]->attribute == "start")
+		{
+			RECT temp;
+			temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
+
+			CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Yellow, 5.f);
+		}
+
+		else if (_vTotalList[i]->attribute == "end")
+		{
+			RECT temp;
+			temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
+
+			CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Purple, 5.f);
+		}
+		else
+		{
+			RECT temp;
+			temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
+
+			CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Blue, 5.f);
+		}
+		
+	}*/
+
 	//for (int i = 0; i < _vOldCloseList.size(); ++i)
 	//{
 	//	RECT temp;
 	//	temp = RectMakeCenter(_vOldCloseList[i]->center.x, _vOldCloseList[i]->center.y, 50, 50);
 
-	//	D2DRenderer::GetInstance()->DrawRectangle(temp, D2D1::ColorF::Blue, 5.f);
+	//	//D2DRenderer::GetInstance()->DrawRectangle(temp, D2D1::ColorF::Blue, 5.f);
+
+	//	CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Red, 5.f);
+	//}
+
+	//for (int i = 0; i < _vCloseList.size(); ++i)
+	//{
+	//	RECT temp;
+	//	temp = RectMakeCenter(_vCloseList[i]->center.x, _vCloseList[i]->center.y, 50, 50);
+
+	//	//D2DRenderer::GetInstance()->DrawRectangle(temp, D2D1::ColorF::Blue, 5.f);
+
+	//	CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Red, 5.f);
 	//}
 }

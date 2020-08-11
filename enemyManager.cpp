@@ -20,6 +20,8 @@ HRESULT enemyManager::init()
 	_bullet = new bullet;
 	_bullet->init();
 	
+	_test = false;
+	
 
 
 	return S_OK;
@@ -32,37 +34,65 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
+	playerCol();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		_vEnemy[i]->update();
-		_vEnemy[i]->playerCheck(_x, _y);	//나중에 여기에 플레이어 위치 넣어주셈
+		_vEnemy[i]->playerCheck(_x, _y, _rc);	
 	}
+	for (int i = 0; i < _vEnemy.size(); ++i)
+	{
+		if (_vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME)
+		{
+			if (_vEnemy[i]->getIsCol())
+			{
+				_test = true;
+			}
+			if (!_vEnemy[i]->getIsCol())
+			{
+				_test = false;
+			}
+		}
+	}
+	if (!_test)
+	{
+		if (KEYMANAGER->isStayKeyDown(VK_UP))
+		{
+			_y -= 2;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+		{
+			_y += 2;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+		{
+			_x -= 2;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+		{
+			_x += 2;
+		}
 
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
-	{
-		_y -= 2;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		_y += 2;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-	{
-		_x -= 2;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		_x += 2;
+
 	}
 
 	if (_bulletDelay > 90)
 	{
 		potBullet();
-
 	}
 	_bullet->update();
 	//cout << _testCount << endl;
+
+	for (int i = 0; i < _vEnemy.size(); ++i)
+	{
+		if (_vEnemy[i]->getRealDead())
+		{
+			enemyDead(i);
+		}
+	}
+
+
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 }
 
@@ -79,11 +109,11 @@ void enemyManager::render()
 
 void enemyManager::setEnemy()
 {
-	int i = 0;
+	int i = 1;
 
 	enemy* redS1;
 	redS1 = new redSlime;
-	redS1->playerCheck(_x, _y);
+	redS1->playerCheck(_x, _y, _rc);
 	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS1);
 
@@ -91,15 +121,16 @@ void enemyManager::setEnemy()
 
 	enemy* gol1;
 	gol1 = new golem;
-	gol1->playerCheck(_x, _y);
+	gol1->playerCheck(_x, _y, _rc);
 	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
+	
 	i++;
 
 	enemy* pot1;
 	pot1 = new pot;
-	pot1->playerCheck(_x, _y);
+	pot1->playerCheck(_x, _y, _rc);
 	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot1);
 
@@ -109,7 +140,7 @@ void enemyManager::setEnemy()
 
 	enemy* pot2;
 	pot2 = new pot;
-	pot2->playerCheck(_x, _y);
+	pot2->playerCheck(_x, _y, _rc);
 	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
@@ -119,16 +150,16 @@ void enemyManager::setEnemy()
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
-	yelS1->playerCheck(_x, _y);
-	yelS1->init(i , 200, 100, 50, 50, ENEMY_YELLOW_SLIME);
+	yelS1->playerCheck(_x, _y, _rc);
+	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
 	i++;
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
-	bleS1->playerCheck(_x, _y);
-	bleS1->init(i, 400, 100, 50, 50, ENEMY_BLUE_SLIME);
+	bleS1->playerCheck(_x, _y, _rc);
+	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
 
@@ -161,4 +192,38 @@ void enemyManager::potBullet()
 
 		}
 	}
+}
+
+void enemyManager::playerCol()
+{
+	for (int i = 0; i < _vEnemy.size(); ++i)
+	{
+		if (_vEnemy[i]->getState() != _vEnemy[i]->getDead())
+		{
+			if (PtInRect(&_vEnemy[i]->getEnemyRect().GetRect(), _ptMouse))
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_vEnemy[i]->setSaveHP(_vEnemy[i]->getCurHP());
+					_vEnemy[i]->setHP();
+					_vEnemy[i]->setIsHit(true);
+					if (_vEnemy[i]->getCurHP() <= 0)
+					{
+						_vEnemy[i]->setOnceAni(true);
+					}
+				}
+			}
+		}
+	}
+}
+
+void enemyManager::bulletCol()
+{
+}
+
+void enemyManager::enemyDead(int arr)
+{
+	
+	_vEnemy.erase(_vEnemy.begin() + arr);
+	
 }

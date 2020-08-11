@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "player.h"
+#include "shopNPC.h"
 #include "tile.h"
 
 enum doorState
@@ -17,6 +18,7 @@ private:
 	Image* _backGround;
 	doorState _doorState;
 	player* _player;
+	shopNPC* _shopNPC;
 	POINT _wayPoint[4];
 	POINT _buyPoint;
 

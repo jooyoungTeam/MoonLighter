@@ -14,6 +14,7 @@ class playerIdleSwimState;
 class playerSwimState;
 class playerbowState;
 class playerSwordState;
+class playerbroomState;
 
 class playerState
 {
@@ -32,6 +33,7 @@ public:
 	static playerSwimState* swim;
 	static playerbowState* bow;
 	static playerSwordState* sword;
+	static playerbroomState* broom;
 };
 
 class playerIdleState : public playerState
@@ -96,6 +98,12 @@ public:
 };
 
 class playerSwordState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerBroomState : public playerState
 {
 public:
 	virtual void update(player& player) override;

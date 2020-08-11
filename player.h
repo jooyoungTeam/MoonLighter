@@ -38,6 +38,7 @@ private:
 	playerState*	    _swim;
 	playerState*	    _bow;
 	playerState*	    _sword;
+	playerState*	    _broom;
 
 public:
 	virtual HRESULT init();
@@ -87,7 +88,7 @@ public:
 	playerState* getSwimState()		{ return _swim; }
 	playerState* getBowState()		{ return _bow; }
 	playerState* getSwordState()	{ return _sword; }
-
+	playerState* getBroomState()	{ return _broom; }
 };
 
 

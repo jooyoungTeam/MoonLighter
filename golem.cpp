@@ -14,7 +14,12 @@ void golem::render()
 {
 	_aStar->render();
 	_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
-	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Yellow, 1.f);
+	_backBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_middleBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_middleBar->SetSize(Vector2(_saveHP, _backBar->GetHeight()));
+	_frontBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_frontBar->SetSize(Vector2(_bar.width, _backBar->GetHeight()));
+	D2DRenderer::GetInstance()->DrawRectangle(_bar.rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
 }
 
 void golem::set()
@@ -31,8 +36,6 @@ void golem::attack()
 {
 	if (!_isAttack)
 	{
-	//cout << "µé¾î¿È" << endl;
-
 		switch (_golemDir)
 		{
 		case GOLEM_LEFT:
@@ -40,29 +43,38 @@ void golem::attack()
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemLeftAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
+			_attackRc = RectMakePivot(Vector2(_x - 70, _y + 20), Vector2(_width + 10, _height - 60), Pivot::Center);
 			break;
 		case GOLEM_RIGHT:
 			_attackDelay = 0;
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemRightAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
+			_attackRc = RectMakePivot(Vector2(_x + 70, _y + 20), Vector2(_width + 10, _height - 60), Pivot::Center);
 			break;
 		case GOLEM_TOP:
 			_attackDelay = 0;
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemUpAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
+			_attackRc = RectMakePivot(Vector2(_x, _y - 60), Vector2(_width - 30, _height - 30), Pivot::Center);
 			break;
 		case GOLEM_BOTTOM:
 			_attackDelay = 0;
 			_motion = KEYANIMANAGER->findAnimation(_index, "golemDownAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
+			_attackRc = RectMakePivot(Vector2(_x, _y + 80), Vector2(_width - 30, _height - 30), Pivot::Center);
 			break;
 		}
 		_isAttack = true;
 		_state = _attack;
 
+		RECT temp;
+		if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
+		{
+			_attackRc = RectMakePivot(Vector2(0,0), Vector2(0,0), Pivot::Center);
+		}
 	}
 	
 }
@@ -133,6 +145,21 @@ void golem::direcitonChange()
 			_motion->start();
 			break;
 		}
+	}
+}
+
+void golem::dead()
+{
+	if (_onceAni)
+	{
+		_img = ImageManager::GetInstance()->FindImage("redSlimeDead");
+		_motion = KEYANIMANAGER->findAnimation(_index, "redSlimeDead");
+		_motion->start();
+		_onceAni = false;
+	}
+	if (!KEYANIMANAGER->findAnimation(_index, "redSlimeDead")->isPlay())
+	{
+		_realDead = true;
 	}
 }
 

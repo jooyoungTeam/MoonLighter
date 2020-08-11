@@ -12,7 +12,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_aStar = new aStar;
 
 	_index = index;
-
+	_scale = 1.0f;
 	ani();
 
 	_x = x;
@@ -20,9 +20,20 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_width = width;
 	_height = height;
 	_type = type;
-	_maxHP = 100;
+	_maxHP = _curHP = _saveHP = 100;
+	_speed = 0;
+	_bar.width = 50;
+	_bar.x = _x;
+	_bar.y = _y - (_height / 2) - 15;
 
+	_bar.rc = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(50, 5), Pivot::Center));
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
+	_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
+
+	_backBar = ImageManager::GetInstance()->FindImage("backBar");
+	_middleBar = ImageManager::GetInstance()->FindImage("middleBar");
+	_frontBar = ImageManager::GetInstance()->FindImage("frontBar");
+
 
 	switch (_type)
 	{
@@ -62,10 +73,17 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_state = _idle;
 
 	_isAttack = false;
+	_isCol = false;
+	_onceAni = false;
+	_realDead = false;
+	_isHit = false;
 
 	_attackDelay = 0;
+	_attackAngle = 0;
+	_middleBarCut = 0;
 
-	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50);
+	vector<POINT> tempV;
+	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50, tempV, false);
 
 	return S_OK;
 }
@@ -78,28 +96,49 @@ void enemy::update()
 {
 	_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
 	_state->update(*this,  _type);
-	if (_type != ENEMY_POT)
-	{
-		move();
-	}
 	enemyWay();
 	KEYANIMANAGER->update();
-	//attack();
+	if (_curHP <= 0)
+	{
+		_curHP = 0;
+		_state = _dead;
+	}
+	if (_isHit)
+	{
+		_saveHP--;
+	}
+	if (_saveHP <= 0)
+	{
+		_isHit = false;
+	}
+	setGauge(_curHP, _maxHP);
+	//cout << "세이브" << _saveHP << "현재" << _curHP << endl;
+	_bar.x = _x;
+	_bar.y = _y - (_height / 2) - 15;
+	_bar.rc = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_frontBar->GetWidth(), 5), Pivot::Center));
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 }
 
 void enemy::render()
 {
-	//_img->SetScale(0.5f);
 	_aStar->render();
-	_img->aniRender(Vector2(_x, _y), _motion,1.0f);
-	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Yellow, 1.f);
+	_img->aniRender(Vector2(_x, _y), _motion, _scale);
+
+	_backBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_middleBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_middleBar->SetSize(Vector2(_saveHP, _backBar->GetHeight()));
+	_frontBar->Render(Vector2(_bar.rc.left, _bar.rc.top));
+	_frontBar->SetSize(Vector2(_bar.width, _backBar->GetHeight()));
+	
+	D2DRenderer::GetInstance()->DrawRectangle(_bar.rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
+	
 }
 
-void enemy::playerCheck(float x, float y)
+void enemy::playerCheck(float x, float y, FloatRect rc)
 {
 	_pX = x;
 	_pY = y;
+	_pRc = rc;
 	//cout << _pX << endl;
 }
 
@@ -110,6 +149,7 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("redSlime", L"image/enemy/slimeIlde.png", 10, 1);
 	ImageManager::GetInstance()->AddFrameImage("redSlimeJump", L"image/enemy/slimeJump.png", 12, 1);
 	ImageManager::GetInstance()->AddFrameImage("redSlimeDead", L"image/enemy/slimeDead.png", 11, 1);
+	ImageManager::GetInstance()->AddFrameImage("slimeAttack", L"image/enemy/slimeAttack.png", 8, 1);
 
 	//블루 슬라임
 	ImageManager::GetInstance()->AddFrameImage("blueSlime", L"image/enemy/blueSlime.png", 8, 1);
@@ -138,13 +178,16 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("boss", L"image/enemy/idleBoss.png", 2, 1);
 	ImageManager::GetInstance()->AddFrameImage("bossAttackIdle", L"image/enemy/attackIdle.png", 2, 1);
 	ImageManager::GetInstance()->AddFrameImage("bossHand", L"image/enemy/hand.png", 19, 1);
-	ImageManager::GetInstance()->AddFrameImage("slimeAttack", L"image/enemy/slimeAttack.png", 8, 1);
 	ImageManager::GetInstance()->AddFrameImage("bossHandFly", L"image/enemy/FistShoot.png", 22, 3);
 	ImageManager::GetInstance()->AddImage("Boss_Rock0", L"image/enemy/Boss_Rock0.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
 
+	//체력바
+	ImageManager::GetInstance()->AddImage("backBar", L"image/enemy/backBar.png");
+	ImageManager::GetInstance()->AddImage("middleBar", L"image/enemy/middleBar.png");
+	ImageManager::GetInstance()->AddImage("frontBar", L"image/enemy/frontBar.png");
 
 
 
@@ -260,17 +303,6 @@ void enemy::ani()
 }
 
 
-void enemy::attack()
-{
-}
-
-void enemy::enemyMove()
-{
-}
-
-void enemy::set()
-{
-}
 
 void enemy::enemyWay()
 {
@@ -298,13 +330,28 @@ void enemy::enemyWay()
 
 void enemy::move()
 {
-	cout << _aStar->getRndX() << endl;
+	switch (_type)
+	{
+	case ENEMY_RED_SLIME:
+		_speed = 1.5f;
+		break;
+	case ENEMY_BLUE_SLIME:
+		_speed = 0.7f;
+		break;
+	case ENEMY_YELLOW_SLIME:
+		_speed = 0.7f;
+		break;
+	case ENEMY_GOLEM:
+		_speed = 2.f;
+		break;
+
+	}
 	if (_aStar->getVOldClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVOldClose().size())
 	{
 		_moveAngle = getAngle(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY());
 
-		_x += cos(_moveAngle) * 2;
-		_y -= sin(_moveAngle) * 2;
+		_x += cosf(_moveAngle) * _speed;
+		_y -= sinf(_moveAngle) * _speed;
 
 		if (getDistance(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY()) < 1)
 		{
@@ -313,10 +360,10 @@ void enemy::move()
 		}
 
 	}
-
 }
 
-void enemy::directionCheck()
+void enemy::setGauge(float curHP, float maxHP)
 {
-
+	_bar.width = (curHP / maxHP) * _backBar->GetWidth();
 }
+

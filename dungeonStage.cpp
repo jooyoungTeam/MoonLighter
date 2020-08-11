@@ -8,8 +8,11 @@ HRESULT dungeonStage::init()
 	_tile = new tile;
 	_tile->imageLoad();
 
+	_player = new player;
+	_player->init();
 	_enemy = new enemyManager;
 	_enemy->init();
+
 
 	loadDungeonMap();
 	
@@ -22,6 +25,7 @@ void dungeonStage::render()
 {
 	renderDungeonMap();
 	//CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("dungeonBackground"), 0, 0);
+	_player->render();
 	_enemy->render();
 
 	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
@@ -29,6 +33,7 @@ void dungeonStage::render()
 
 void dungeonStage::update()
 {
+	_player->update();
 	_enemy->update();
 	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 
