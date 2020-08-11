@@ -184,6 +184,8 @@
     <ClInclude Include="redSlime.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="shopNPC.h" />
+    <ClInclude Include="shopNPCManager.h" />
     <ClInclude Include="shopStage.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
@@ -238,6 +240,8 @@
     <ClCompile Include="pot.cpp" />
     <ClCompile Include="redSlime.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="shopNPC.cpp" />
+    <ClCompile Include="shopNPCManager.cpp" />
     <ClCompile Include="shopStage.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stageManager.cpp" />

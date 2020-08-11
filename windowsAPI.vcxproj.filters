@@ -231,6 +231,12 @@
     <ClInclude Include="UI.h">
       <Filter>playGround\김지아</Filter>
     </ClInclude>
+    <ClInclude Include="shopNPC.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
+    <ClInclude Include="shopNPCManager.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -379,6 +385,12 @@
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>playGround\김지아</Filter>
+    </ClCompile>
+    <ClCompile Include="shopNPC.cpp">
+      <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="shopNPCManager.cpp">
+      <Filter>playGround\송용은</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

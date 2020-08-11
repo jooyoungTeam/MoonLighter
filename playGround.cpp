@@ -44,7 +44,7 @@ void playGround::update()
 void playGround::render()
 {
 	// 백버퍼 초기화
-	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::White);
+	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::Black);
 	{
 		_stageManager->render();
 

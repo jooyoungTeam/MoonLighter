@@ -2,14 +2,28 @@
 #include "gameNode.h"
 #include "player.h"
 #include "tile.h"
+
+enum doorState
+{
+	DOOR_CLOSE,
+	DOOR_OPENING,
+	DOOR_CLOSING,
+	DOOR_DELAY
+};
+
 class shopStage : public gameNode
 {
 private:
+	Image* _backGround;
+	doorState _doorState;
 	player* _player;
-	tile* _tile;
+	POINT _wayPoint[4];
+	POINT _buyPoint;
 
-	tagTile           _dungeonTiles[TILEX * TILEY];
-	DWORD             _dungeonAttribute[TILEX * TILEY];
+	int	  _doorFrameTimer;
+	int   _doorIndex;
+
+	bool  _enterNPC;
 public:
 	shopStage() {}
 	~shopStage() {}
@@ -19,7 +33,6 @@ public:
 	void update();
 	void release();
 
-	void loadDungeonMap();
-	void renderDungeonMap();
+	void doorUpdate();
 };
 

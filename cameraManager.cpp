@@ -187,12 +187,22 @@ void cameraManager::ellipse(float x, float y, const float radius, const D2D1::Co
 	D2DRenderer::GetInstance()->DrawEllipse(Vector2(relativeX, relativeY), radius, color,strokeWidth);
 }
 
-
 void cameraManager::render(Image * img, float destX, float destY, float alpha)
 {
 	float relativeLeft = getRelativeLeft(destX);
 	float relativeTop = getRelativeTop(destY);
 	img->SetAlpha(alpha);
+
+	if (img) img->Render(Vector2(relativeLeft, relativeTop));
+}
+
+
+void cameraManager::render(Image * img, float destX, float destY, float scale,float alpha)
+{
+	float relativeLeft = getRelativeLeft(destX);
+	float relativeTop = getRelativeTop(destY);
+	img->SetAlpha(alpha);
+	img->SetScale(scale);
 
 	if (img) img->Render(Vector2(relativeLeft, relativeTop));
 }
@@ -205,6 +215,16 @@ void cameraManager::frameRender(Image * img, float destX, float destY, int frame
 	float relativeTop = getRelativeTop(destY);
 
 	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop),frameX,frameY);
+}
+
+void cameraManager::frameRender(Image * img, float destX, float destY, int frameX, int frameY, float scale, float alpha)
+{
+	float relativeLeft = getRelativeLeft(destX);
+	float relativeTop = getRelativeTop(destY);
+	img->SetAlpha(alpha);
+	img->SetScale(scale);
+
+	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop), frameX, frameY);
 }
 
 void cameraManager::setX(float relativeX)
