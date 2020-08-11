@@ -14,6 +14,7 @@ class player : public gameNode
 {
 private:
 	FloatRect			_playerRc;							//플레이어 렉트
+	FloatRect			_playerAttackRc;					//플레이어 공격렉트
 	Image*				_playerImg;							//플레이어 이미지
 	playerState*		_CurrentState;						//현재 클래스 상태
 	animation*			_playerMotion;						//플레이어 애니메이션
@@ -23,10 +24,13 @@ private:
 	int					_arrowCount;						//화살한발만 쏘게
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
+	float				_playerAttackX, _playerAttackY;		//플레이어 공격위치
+	float				_playerAttackW, _playerAttackH;		//플레이어 공격범위
 
 	bool				_swordAttack;						//플레이어 검 공격하는중
 	bool				_swordAttackCombo;					//플레이어 검 콤보공격
 	bool				_weaponChange;						//플레이어 무기 변경
+	bool				_attackRcbool;						//플레이어 공격렉트 꺼주기
 
 	//플레이어 상태 정의
 	playerState*	    _idle;
@@ -60,6 +64,7 @@ public:
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
+	bool getAttackRcbool() { return _attackRcbool; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
 	Image* getImage() { return _playerImg; }
@@ -74,9 +79,14 @@ public:
 	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
 	void setSwrodAttackCombo(bool swordAttackCombo) { _swordAttackCombo = swordAttackCombo; }
 	void setWeaponChange(bool weaponChange) { _weaponChange = weaponChange; }
+	void setAttackRcbool(bool attackrcbool) { _attackRcbool = attackrcbool; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion = playerMotion, _playerImg = img; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }
+	void setAttackRc(float playerAttackX, float playerAttackY, float playerAttackW, float playerAttackH)
+	{
+		_playerAttackX = playerAttackX, _playerAttackY = playerAttackY, _playerAttackW = playerAttackW, _playerAttackH = playerAttackH;
+	}
 
 public:
 	playerState* getIdleState()		{ return _idle; }

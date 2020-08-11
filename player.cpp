@@ -20,8 +20,10 @@ HRESULT player::init()
 	_index = 0;
 	_playerX = 500;
 	_playerY = 500;
+	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
 
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
+	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 
 	_CurrentState = _idle;
 
@@ -40,7 +42,8 @@ void player::render()
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		CAMERAMANAGER->rectangle(_playerRc, D2D1::ColorF::Red, 1.0f);
-		CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Red, 1.0f);
+		CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Red, 0.5f);
+		CAMERAMANAGER->rectangle(_playerAttackRc, D2D1::ColorF::Blue, 1.0f);
 	}
 }
 
@@ -51,7 +54,8 @@ void player::update()
 	_arrow->update();
 	arrowShoot();
 	
-	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
+	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center); 
+	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 }
 
 void player::release()

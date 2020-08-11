@@ -225,36 +225,37 @@ void playerIdleState::update(player & player)
 		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
 			player.setSwordAttack(true);
-
+			player.setAttackRcbool(true);
 			if (player.getDirection() == DIRECTION::UP)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpSword1"), ImageManager::GetInstance()->FindImage("playerUpSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX(), player.getY() - 50, 50, 60);
 			}
 
 			if (player.getDirection() == DIRECTION::DOWN)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSword1"), ImageManager::GetInstance()->FindImage("playerDownSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX(), player.getY() + 50, 50, 60);
 			}
 
 			if (player.getDirection() == DIRECTION::LEFT)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftSword1"), ImageManager::GetInstance()->FindImage("playerLeftSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX() - 50, player.getY(), 60, 50);
 			}
 
 			if (player.getDirection() == DIRECTION::RIGHT)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSword1"), ImageManager::GetInstance()->FindImage("playerRightSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX() + 50, player.getY(), 60, 50);
 			}
 		}
 	}
-
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-	//cout << player.getWeaponChange() << endl;
 }
 
 //walk 상태
@@ -671,24 +672,28 @@ void playerWalkState::update(player & player)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpSword1"), ImageManager::GetInstance()->FindImage("playerUpSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX(), player.getY() - 50, 50, 60);
 			}
 
 			if (player.getDirection() == DIRECTION::DOWN)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSword1"), ImageManager::GetInstance()->FindImage("playerDownSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX(), player.getY() + 50, 50, 60);
 			}
 
 			if (player.getDirection() == DIRECTION::LEFT)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftSword1"), ImageManager::GetInstance()->FindImage("playerLeftSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX() - 50, player.getY(), 60, 50);
 			}
 
 			if (player.getDirection() == DIRECTION::RIGHT)
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSword1"), ImageManager::GetInstance()->FindImage("playerRightSword1"));
 				player.setCurrentState(player.getSwordState());
+				player.setAttackRc(player.getX() + 50, player.getY(), 60, 50);
 			}
 		}
 	}
@@ -1268,7 +1273,7 @@ void playerbowState::update(player & player)
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftBow")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightBow")->isPlay())
 	{
 		//아무키도 누르지않으면 아이들 상태로 전환
-		if (KEYMANAGER->getKeyUp() == NULL)
+		if (KEYMANAGER->getKeyUp() == NULL || KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('S') || KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('D'))
 		{
 			if (player.getDirection() == DIRECTION::UP)
 			{
@@ -1354,6 +1359,8 @@ void playerSwordState::update(player & player)
 			if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpSword1")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSword1")->isPlay()
 				&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftSword1")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSword1")->isPlay())
 			{
+				player.setAttackRcbool(false);
+				player.setAttackRc(player.getX(), player.getY(), 0, 0);
 				//키누르면 2타로 넘어감
 				if (player.getSwordAttackCombo())
 				{
@@ -1361,18 +1368,22 @@ void playerSwordState::update(player & player)
 					if (player.getDirection() == DIRECTION::UP)
 					{
 						player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpSword2"), ImageManager::GetInstance()->FindImage("playerUpSword2"));
+						player.setAttackRc(player.getX(), player.getY() - 50, 50, 60);
 					}
 					if (player.getDirection() == DIRECTION::DOWN)
 					{
 						player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownSword2"), ImageManager::GetInstance()->FindImage("playerDownSword2"));
+						player.setAttackRc(player.getX(), player.getY() + 50, 50, 60);
 					}
 					if (player.getDirection() == DIRECTION::LEFT)
 					{
 						player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftSword2"), ImageManager::GetInstance()->FindImage("playerLeftSword2"));
+						player.setAttackRc(player.getX() - 50, player.getY(), 60, 50);
 					}
 					if (player.getDirection() == DIRECTION::RIGHT)
 					{
 						player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSword2"), ImageManager::GetInstance()->FindImage("playerRightSword2"));
+						player.setAttackRc(player.getX() + 50, player.getY(), 60, 50);
 					}
 					player.setSwrodAttackCombo(false);
 				}
@@ -1387,9 +1398,11 @@ void playerSwordState::update(player & player)
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftSword2")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightSword2")->isPlay())
 	{
 		player.setSwrodAttackCombo(false);
+		player.setAttackRcbool(false);
+		player.setAttackRc(player.getX(), player.getY(), 0, 0);
 
 		//아무키도 누르지않으면 아이들 상태로 전환
-		if (KEYMANAGER->getKeyUp() == NULL)
+		if (KEYMANAGER->getKeyUp() == NULL || KEYMANAGER->isOnceKeyUp('W') || KEYMANAGER->isOnceKeyUp('S') || KEYMANAGER->isOnceKeyUp('A') || KEYMANAGER->isOnceKeyUp('D'))
 		{
 			if (player.getDirection() == DIRECTION::UP)
 			{
