@@ -22,6 +22,9 @@ HRESULT aStar::init(int totalTileX, int totalTileY, int playerX, int playerY, in
 	
 	_enemyTileX = enemyX;
 	_enemyTileY = enemyY;
+	
+	_rndX = RND->getFromIntTo(-30, 30);
+	_rndY = RND->getFromIntTo(-30, 30);
 
 	setTiles();
 
@@ -233,6 +236,8 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 
 	if (_aStarTimer > 50)
 	{
+		_rndX = RND->getFromIntTo(-30, 30);
+		_rndY = RND->getFromIntTo(-30, 30);
 		release();
 		setTiles();
 		_aStarTimer = 0;
