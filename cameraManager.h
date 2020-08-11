@@ -57,7 +57,7 @@ public:
 	void zOrderSort(int i, int j);
 
 	// 랜더 함수 (랜더 부분에 넣을 것)
-	void zOrderRender();
+	void zOrderALLRender();
 
 	int zOrderSize() { return _vZorder.size(); }
 
