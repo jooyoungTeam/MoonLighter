@@ -10,6 +10,12 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddImage("invenSpace", L"image/UI/invenSpace.png");
 	ImageManager::GetInstance()->AddImage("select", L"image/UI/invenslot.png");
 	ImageManager::GetInstance()->AddImage("pendant", L"image/UI/pendant.png");
+	ImageManager::GetInstance()->AddImage("empty_weapon", L"image/UI/empty_sword.png");
+	ImageManager::GetInstance()->AddImage("empty_helmet", L"image/UI/empty_helmet.png");
+	ImageManager::GetInstance()->AddImage("empty_top", L"image/UI/empty_top.png");
+	ImageManager::GetInstance()->AddImage("empty_shoes", L"image/UI/empty_shoes.png");
+	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
+	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
 
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
@@ -102,10 +108,10 @@ void inventory::update()
 	_frameCount++;
 	draw();
 
-	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 60), Vector2(60, 60), Pivot::LeftTop);
-	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 60), Vector2(60, 60), Pivot::LeftTop);
+	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+	if (KEYMANAGER->isOnceKeyDown('D'))
 	{
 		if (!_isSwap)
 		{
@@ -136,7 +142,7 @@ void inventory::update()
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	if (KEYMANAGER->isOnceKeyDown('A'))
 	{
 		if (!_isSwap)
 		{
@@ -145,8 +151,11 @@ void inventory::update()
 			if (_select % 5 == 4 || _select < 0)
 			{
 				_isSwap = true;
-				if (_select < 0) _select = 5;
-				else _select = _select / 5 + 1;
+				if (_state == INVEN_STATE::NOTE)
+				{
+					if (_select < 0) _select = 5;
+					else _select = _select / 5 + 1;
+				}				
 			}
 		}
 
@@ -165,7 +174,7 @@ void inventory::update()
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
 		if (!_isSwap)
 		{
@@ -193,7 +202,7 @@ void inventory::update()
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	if (KEYMANAGER->isOnceKeyDown('S'))
 	{
 		if (!_isSwap)
 		{
@@ -259,14 +268,27 @@ void inventory::render()
 			//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 			ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
 			ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_gear[i].rc.left - 5, _gear[i].rc.top - 5));
+
+			if (_gear[i].item == nullptr)
+			{
+				ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[0].rc.GetCenter().x - 26, _gear[0].rc.GetCenter().y - 25));
+				ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[5].rc.GetCenter().x - 26, _gear[5].rc.GetCenter().y - 25));
+				ImageManager::GetInstance()->FindImage("empty_helmet")->Render(Vector2(_gear[1].rc.GetCenter().x - 26, _gear[1].rc.GetCenter().y - 25));
+				ImageManager::GetInstance()->FindImage("empty_top")->Render(Vector2(_gear[2].rc.GetCenter().x - 26, _gear[2].rc.GetCenter().y - 25));
+				ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
+				ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
+			}
+
 			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
 		}
+		
 	}
 
 	//내가 선택한 아이템 창
 	if (_selectItem.item != nullptr)
 	{
-		D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
+		//D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
+		ImageManager::GetInstance()->FindImage("inven_select")->Render(Vector2(_selectItem.rc.left, _selectItem.rc.top));
 		_selectItem.item->getImg()->Render(Vector2(_selectItem.rc.GetCenter().x - _selectItem.item->getImg()->GetWidth() / 2, _selectItem.rc.GetCenter().y - _selectItem.item->getImg()->GetHeight() / 2));
 		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
 	}
@@ -291,20 +313,7 @@ void inventory::putItem(item* item)
 		{
 			if (_inven[i].item->getIndex() == item->getIndex())
 			{
-				if (_inven[i].item->getIndex() < 300 &&
-					_inven[i].count >= 10)
-				{
-					continue;
-				}
-
-				if (((_inven[i].item->getIndex() > 300 && _inven[i].item->getIndex() < 400) || _inven[i].item->getIndex() > 1000) &&
-					_inven[i].count >= 5)
-				{
-					continue;
-				}
-
-				if ((_inven[i].item->getIndex() > 900 && _inven[i].item->getIndex() < 1000) &&
-					_inven[i].count >= 1)
+				if (_inven[i].count >= _inven[i].item->getLimit())
 				{
 					continue;
 				}
@@ -331,7 +340,7 @@ void inventory::moveItem()
 
 		if (_inven[_select].item != nullptr && !_isSwap)
 		{
-			_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 60), Vector2(60, 60), Pivot::LeftTop);
+			_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 			_selectItem.item = _inven[_select].item;
 			_inven[_select].count--;
 
@@ -341,7 +350,7 @@ void inventory::moveItem()
 
 		else if (_gear[_select].item != nullptr && _isSwap && _state == INVEN_STATE::NOTE)
 		{
-			_selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 60), Vector2(60, 60), Pivot::LeftTop);
+			_selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 			_selectItem.item = _gear[_select].item;
 			_gear[_select].count--;
 
@@ -374,33 +383,14 @@ void inventory::moveItem()
 			//인덱스가 같으면
 			else if (_inven[_select].item->getIndex() == _selectItem.item->getIndex())
 			{
-				//선택했을 때 인벤 칸에서 변화가 없으면
+				//선택했을 때의 인벤 칸에서 변화가 없으면
 				if (_selectNumber == _select)
 				{
 					_selectItem.count++;
 					_inven[_select].count--;
 					if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
 
-					if (_selectItem.item->getIndex() < 300 &&
-						_selectItem.count > 10)
-					{
-						_inven[_select].item = _selectItem.item;
-						_inven[_select].count = _selectItem.count;
-						_selectItem.item = nullptr;
-						_isSelect = false;
-					}
-
-					if (((_selectItem.item->getIndex() > 300 && _selectItem.item->getIndex() < 400) || _selectItem.item->getIndex() > 1000) &&
-						_selectItem.count > 5)
-					{
-						_inven[_select].item = _selectItem.item;
-						_inven[_select].count = _selectItem.count;
-						_selectItem.item = nullptr;
-						_isSelect = false;
-					}
-
-					if ((_selectItem.item->getIndex() > 900 && _selectItem.item->getIndex() < 1000) &&
-						_selectItem.count > 1)
+					if (_selectItem.count > _selectItem.item->getLimit())
 					{
 						_inven[_select].item = _selectItem.item;
 						_inven[_select].count = _selectItem.count;
@@ -412,31 +402,25 @@ void inventory::moveItem()
 				//변화가 있으면
 				else
 				{
-					_inven[_select].count++;
-					_selectItem.count--;
+					//인벤 카운트가 한계치를 넘으면
+					if (_inven[_select].count + _selectItem.count > _inven[_select].item->getLimit())
+					{
+						_selectItem.count = (_inven[_select].count + _selectItem.count) - _inven[_select].item->getLimit();
+						_inven[_select].count = _inven[_select].item->getLimit();
+					}
 
+					//넘지 않는다면
+					else
+					{
+						_inven[_select].count = _inven[_select].count + _selectItem.count;
+						_selectItem.count = 0;
+					}
+
+					//선택 아이템 카운트가 0 이하가 되면 비워라
 					if (_selectItem.count <= 0)
 					{
 						_selectItem.item = nullptr;
 						_isSelect = false;
-					}
-
-					if (_inven[_select].item->getIndex() < 300 &&
-						_inven[_select].count >= 10)
-					{
-						return;
-					}
-
-					if (((_inven[_select].item->getIndex() > 300 && _inven[_select].item->getIndex() < 400) || _inven[_select].item->getIndex() > 1000) &&
-						_inven[_select].count >= 5)
-					{
-						return;
-					}
-
-					if ((_inven[_select].item->getIndex() > 900 && _inven[_select].item->getIndex() < 1000) &&
-						_inven[_select].count >= 1)
-					{
-						return;
 					}
 				}
 			}

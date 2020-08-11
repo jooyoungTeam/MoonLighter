@@ -7,7 +7,7 @@
 
 enum class INVEN_STATE
 {
-	NOTE, BOX
+	NOTE, SHOP, BOX
 };
 
 enum class MIRROR_STATE
