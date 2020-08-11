@@ -13,6 +13,7 @@ HRESULT stageManager::init()
 
 	_inven = new inventory;
 	_inven->init();
+	_isInven = false;
 
 	_itemMg = new itemManager;
 
@@ -31,26 +32,27 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	if (_inven->getOpen()) _inven->render();
+	if (_isInven) _inven->render();
 }
 
 
 void stageManager::update()
 {
-	if(!_inven->getOpen()) SCENEMANAGER->update();
+	if(!_isInven) SCENEMANAGER->update();
 
-	if (!_inven->getOpen() && KEYMANAGER->isOnceKeyDown('I'))
+	if (!_isInven && KEYMANAGER->isOnceKeyDown('I'))
 	{
-		_inven->setOpen(true);
+		_isInven = true;
 		_inven->setState(INVEN_STATE::NOTE);
 	}
 
-	if (_inven->getOpen() && KEYMANAGER->isOnceKeyDown('I'))
+	if (_isInven && KEYMANAGER->isOnceKeyDown('I'))
 	{
-		_inven->setOpen(false);
+		_isInven = false;
+		_inven->setSale(false);
 	}
 
-	if (_inven->getOpen()) _inven->update();
+	if (_isInven) _inven->update();
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{

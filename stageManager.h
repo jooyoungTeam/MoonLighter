@@ -13,6 +13,8 @@ private:
 	inventory* _inven;
 	itemManager* _itemMg;
 
+	bool _isInven;
+
 public:
 	stageManager() {}
 	~stageManager() {}
