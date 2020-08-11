@@ -2,6 +2,14 @@
 #include "gameNode.h"
 #include <vector>
 
+enum class ARROWDIRECTION
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+};
+
 struct tagArrow
 {
 	Image*  	arrowImage;
@@ -14,6 +22,8 @@ struct tagArrow
 	float		shootX, shootY;			//총알 발사된 위치
 	bool		shoot;					//발사할건지
 	int			count;
+
+	ARROWDIRECTION arrowDirection;
 };
 
 class arrow : public gameNode
@@ -31,7 +41,7 @@ public:
 	virtual void update();
 	virtual void render();
 	
-	void IsArrowShot(float x, float y, const char* imageName);
+	void IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection);
 	void arrowMove();
 	void playerRemoveArrow(int index);
 };
