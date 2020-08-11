@@ -228,6 +228,9 @@
     <ClInclude Include="townStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>playGround\김지아</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -373,6 +376,9 @@
     </ClCompile>
     <ClCompile Include="townStage.cpp">
       <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>playGround\김지아</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

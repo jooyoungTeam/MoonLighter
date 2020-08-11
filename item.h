@@ -22,10 +22,13 @@ private:
 	int _price;
 
 public:
+	item() {}
+	~item() {}
+
 	HRESULT init(ITEMTYPE type, float x, float y);
-	void release();
-	void update();
 	void render();
+	void update();
+	void release();
 	
 	void sort();
 

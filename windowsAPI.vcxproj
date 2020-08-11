@@ -197,6 +197,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="townStage.h" />
     <ClInclude Include="txtData.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="windowsAPI.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="townStage.cpp" />
     <ClCompile Include="txtData.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="windowsAPI.cpp" />

@@ -36,6 +36,8 @@ struct tagGear
 	int count;
 };
 
+class player;
+
 class inventory : public gameNode
 {
 private:
@@ -57,11 +59,16 @@ private:
 	int _frameCount;					//미러프레임용
 	int _mirrorFrameX;					//미러프레임X
 
+	player* _player;
+
 public:
+	inventory() {}
+	~inventory() {}
+
 	HRESULT init();
-	void release();
-	void update();
 	void render();
+	void update();
+	void release();
 
 	void putItem(item* item);								//인벤에 아이템 넣기
 	void moveItem();										//인벤에서 아이템 옮기기
@@ -76,4 +83,8 @@ public:
 public:
 	void setOpen(BOOL open = FALSE) { _isOpen = open; }		//인벤 열었다는 불 값 설정하기
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
+
+public:
+	//플레이어 참조용
+	void getPlayerMemoryAddressLik(player* player) { _player = player; }
 };

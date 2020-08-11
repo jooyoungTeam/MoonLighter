@@ -8,10 +8,13 @@
 
 HRESULT stageManager::init()
 {
-	_itemMg = new itemManager;
+	_ui = new UI;
+	_ui->init();
 
 	_inven = new inventory;
 	_inven->init();
+
+	_itemMg = new itemManager;
 
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
 
@@ -26,11 +29,11 @@ HRESULT stageManager::init()
 }
 
 void stageManager::render()
-{	
+{
 	SCENEMANAGER->render();
-
-	if (_inven->getOpen()) _inven->render();	
+	if (_inven->getOpen()) _inven->render();
 }
+
 
 void stageManager::update()
 {

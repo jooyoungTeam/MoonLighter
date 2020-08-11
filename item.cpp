@@ -29,8 +29,9 @@ HRESULT item::init(ITEMTYPE type, float x, float y)
 	return S_OK;
 }
 
-void item::release()
+void item::render()
 {
+	_img->Render(Vector2(_rc.left, _rc.top));
 }
 
 void item::update()
@@ -38,9 +39,8 @@ void item::update()
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
 
-void item::render()
+void item::release()
 {
-	_img->Render(Vector2(_rc.left, _rc.top));
 }
 
 void item::sort()

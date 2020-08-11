@@ -6,13 +6,12 @@ HRESULT itemManager::init()
 	return S_OK;
 }
 
-void itemManager::release()
+void itemManager::render()
 {
 	for (int i = 0; i < _vItem.size(); ++i)
 	{
-		SAFE_DELETE(_vItem[i]);
+		_vItem[i]->render();
 	}
-	_vItem.clear();
 }
 
 void itemManager::update()
@@ -23,12 +22,13 @@ void itemManager::update()
 	}
 }
 
-void itemManager::render()
+void itemManager::release()
 {
 	for (int i = 0; i < _vItem.size(); ++i)
 	{
-		_vItem[i]->render();
+		SAFE_DELETE(_vItem[i]);
 	}
+	_vItem.clear();
 }
 
 void itemManager::setItem(ITEMTYPE type, float x, float y)
