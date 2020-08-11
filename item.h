@@ -18,18 +18,25 @@ private:
 	Image* _img;
 	float _x, _y;
 	int _itemIndex;
+	int _limitCount;
+	int _price;
 
 public:
+	item() {}
+	~item() {}
+
 	HRESULT init(ITEMTYPE type, float x, float y);
-	void release();
-	void update();
 	void render();
+	void update();
+	void release();
 	
 	void sort();
 
 public:
-	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기
 	FloatRect getRc() { return _rc; }						//아이템 렉트 가져가기
 	Image* getImg() { return _img; }						//아이템 이미지 가져가기
+	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기
+	int getLimit() { return _limitCount; }					//아이템 개수 한계치 가져가기
+	int getPrice() { return _price; }						//아이템 가격 가져가기
 };
 

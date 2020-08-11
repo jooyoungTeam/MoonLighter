@@ -8,6 +8,9 @@ private:
 	vector<item*> _vItem;
 
 public:
+	itemManager() {}
+	~itemManager() {}
+
 	HRESULT init();
 	void release();
 	void update();
