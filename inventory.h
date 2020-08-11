@@ -15,11 +15,6 @@ enum class MIRROR_STATE
 	STOP, STAY, ACTIVE
 };
 
-enum class GEAR_KIND
-{
-	WEAPON1, WEAPON2, HELMET, TOP, SHOES, POTION
-};
-
 struct tagInven
 {
 	FloatRect rc;
@@ -30,9 +25,10 @@ struct tagInven
 
 struct tagGear
 {
-	GEAR_KIND kind;
+	Image* img;
 	FloatRect rc;
 	item* item;
+	wstring number;
 	int count;
 };
 
