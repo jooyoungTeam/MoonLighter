@@ -18,6 +18,9 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
 	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
 
+	ImageManager::GetInstance()->AddImage("inven_weapon_1", L"Image/UI/Inven_weapon_1.png");
+	ImageManager::GetInstance()->AddImage("inven_weapon_2", L"Image/UI/Inven_weapon_2.png");
+
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
 	{
@@ -79,14 +82,6 @@ HRESULT inventory::init()
 		_gear[i].item = nullptr;
 	}
 
-	//장비창 속성
-	_gear[0].kind = GEAR_KIND::WEAPON1;
-	_gear[5].kind = GEAR_KIND::WEAPON2;
-	_gear[1].kind = GEAR_KIND::HELMET;
-	_gear[2].kind = GEAR_KIND::TOP;
-	_gear[3].kind = GEAR_KIND::SHOES;
-	_gear[4].kind = GEAR_KIND::POTION;
-
 	//인벤 상태
 	_state = INVEN_STATE::NOTE;
 	//미러 상태
@@ -121,6 +116,7 @@ void inventory::render()
 		if (i == _select && !_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[i].rc.left - 7, _inven[i].rc.top - 7));
 	}
 
+	//펜던트
 	ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
 
 	//장비창 관련 렌더
@@ -131,23 +127,25 @@ void inventory::render()
 			//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 			ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
 			ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_gear[i].rc.left - 5, _gear[i].rc.top - 5));
+			_gear[i].img->Render(Vector2(_gear[i].rc.GetCenter().x - 26, _gear[i].rc.GetCenter().y - 25));
 
-			if (_gear[i].item == nullptr)
+			if (_gear[i].item != nullptr)
 			{
-				ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[0].rc.GetCenter().x - 26, _gear[0].rc.GetCenter().y - 25));
-				ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[5].rc.GetCenter().x - 26, _gear[5].rc.GetCenter().y - 25));
-				ImageManager::GetInstance()->FindImage("empty_helmet")->Render(Vector2(_gear[1].rc.GetCenter().x - 26, _gear[1].rc.GetCenter().y - 25));
-				ImageManager::GetInstance()->FindImage("empty_top")->Render(Vector2(_gear[2].rc.GetCenter().x - 26, _gear[2].rc.GetCenter().y - 25));
-				ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
-				ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
+				_gear[i].item->getImg()->Render(Vector2(_gear[i].rc.GetCenter().x - _gear[i].item->getImg()->GetWidth() / 2, _gear[i].rc.GetCenter().y - _gear[i].item->getImg()->GetHeight() / 2));
+				D2DRenderer::GetInstance()->RenderText(_gear[4].rc.right - _gear[i].number.length() * 20, _gear[4].rc.bottom - 20, to_wstring(_gear[4].count), 20, D2DRenderer::DefaultBrush::Black);
 			}
 
 			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
 		}
-
 	}
 
-	//내가 선택한 아이템 창
+	//장비 변경
+	//플레이어 불값true
+	ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+	//플레이어 불값false
+	//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+
+	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
 	{
 		//D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
@@ -293,6 +291,24 @@ void inventory::update()
 	moveItem();
 	useMirror();
 	equipGear();
+
+	for (int i = 0; i < GEARSPACE; i++)
+	{
+		if (_gear[i].item == nullptr)
+		{
+			_gear[0].img = ImageManager::GetInstance()->FindImage("empty_weapon");
+			_gear[5].img = ImageManager::GetInstance()->FindImage("empty_weapon");
+			_gear[1].img = ImageManager::GetInstance()->FindImage("empty_helmet");
+			_gear[2].img = ImageManager::GetInstance()->FindImage("empty_top");
+			_gear[3].img = ImageManager::GetInstance()->FindImage("empty_shoes");
+			_gear[4].img = ImageManager::GetInstance()->FindImage("empty_potion");
+		}
+
+		else
+		{
+			_gear[i].img = nullptr;
+		}
+	}	
 }
 
 void inventory::release()
@@ -339,14 +355,15 @@ void inventory::moveItem()
 {
 	if (!_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
-		_isSelect = true;
-		_selectItem.count++;
 		_selectNumber = _select;
+		_selectItem.count = 0;
 
 		if (_inven[_select].item != nullptr && !_isSwap)
 		{
+			_isSelect = true;
 			_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 			_selectItem.item = _inven[_select].item;
+			_selectItem.count++;
 			_inven[_select].count--;
 
 			//인벤 카운트가 0 이하가 되면 비워버린다
@@ -355,8 +372,10 @@ void inventory::moveItem()
 
 		else if (_gear[_select].item != nullptr && _isSwap && _state == INVEN_STATE::NOTE)
 		{
+			_isSelect = true;
 			_selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 			_selectItem.item = _gear[_select].item;
+			_selectItem.count++;
 			_gear[_select].count--;
 
 			//장비창 카운트가 0 이하가 되면 비워버린다
@@ -366,37 +385,29 @@ void inventory::moveItem()
 
 	if (_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
-		//선택한 인벤이 비어있으면
-		if (_inven[_select].item == nullptr)
+		if (!_isSwap)
 		{
-			_inven[_select].item = _selectItem.item;
-			_inven[_select].count = _selectItem.count;
-			_selectItem.count = 0;
-			_selectItem.item = nullptr;
-			_isSelect = false;
-		}
-
-		//비어있지 않으면
-		else
-		{
-			//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
-			if (_inven[_select].item->getIndex() != _selectItem.item->getIndex())
+			//선택한 인벤이 비어있으면
+			if (_inven[_select].item == nullptr)
 			{
-				return;
+				_inven[_select].item = _selectItem.item;
+				_inven[_select].count = _selectItem.count;
+				_selectItem.count = 0;
+				_selectItem.item = nullptr;
+				_isSelect = false;
 			}
 
-			//인덱스가 같으면
-			else if (_inven[_select].item->getIndex() == _selectItem.item->getIndex())
+			//비어있지 않으면
+			else
 			{
-				//선택했을 때의 인벤 칸에서 변화가 없으면
-				if (_selectNumber == _select)
+				//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
+				if (_inven[_select].item->getIndex() != _selectItem.item->getIndex())
 				{
-					_selectItem.count++;
-					_inven[_select].count--;
-					if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
-
-					if (_selectItem.count > _selectItem.item->getLimit())
+					//아이템을 가지고 왔던 인벤 창이 비어있다면
+					if (_inven[_selectNumber].item == nullptr)
 					{
+						_inven[_selectNumber].item = _inven[_select].item;
+						_inven[_selectNumber].count = _inven[_select].count;
 						_inven[_select].item = _selectItem.item;
 						_inven[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
@@ -404,32 +415,122 @@ void inventory::moveItem()
 					}
 				}
 
-				//변화가 있으면
-				else
+				//인덱스가 같으면
+				else if (_inven[_select].item->getIndex() == _selectItem.item->getIndex())
 				{
-					//인벤 카운트가 한계치를 넘으면
-					if (_inven[_select].count + _selectItem.count > _inven[_select].item->getLimit())
+					//선택했을 때의 인벤 칸에서 변화가 없으면
+					if (_selectNumber == _select)
 					{
-						_selectItem.count = (_inven[_select].count + _selectItem.count) - _inven[_select].item->getLimit();
-						_inven[_select].count = _inven[_select].item->getLimit();
+						_selectItem.count++;
+						_inven[_select].count--;
+
+						//인벤 카운트가 0이 되면 비워라
+						if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
+
+						//선택 카운트가 최대라는 건 인벤에서 다 가져왔다는 뜻이니까
+						//더 가져오려고 하면 다시 돌려놓아라
+						if (_selectItem.count > _selectItem.item->getLimit())
+						{
+							_inven[_select].item = _selectItem.item;
+							_inven[_select].count = _selectItem.count;
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
 					}
 
-					//넘지 않는다면
+					//변화가 있으면
 					else
 					{
-						_inven[_select].count = _inven[_select].count + _selectItem.count;
-						_selectItem.count = 0;
-					}
+						//인벤 카운트가 한계치를 넘으면
+						if (_inven[_select].count + _selectItem.count > _inven[_select].item->getLimit())
+						{
+							_selectItem.count = (_inven[_select].count + _selectItem.count) - _inven[_select].item->getLimit();
+							_inven[_select].count = _inven[_select].item->getLimit();
+						}
 
-					//선택 아이템 카운트가 0 이하가 되면 비워라
-					if (_selectItem.count <= 0)
-					{
-						_selectItem.item = nullptr;
-						_isSelect = false;
+						//넘지 않는다면
+						else
+						{
+							_inven[_select].count = _inven[_select].count + _selectItem.count;
+							_selectItem.count = 0;
+						}
+
+						//선택 아이템 카운트가 0 이하가 되면 비워라
+						if (_selectItem.count <= 0)
+						{
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
 					}
 				}
 			}
 		}
+		
+		if (_isSwap)
+		{
+			//장비창에 옮기기(포션칸에 포션을 옮긴다고 한다면)
+			if (_state == INVEN_STATE::NOTE)
+			{
+				if (_select == 4) 
+				{
+					if (_selectItem.item->getIndex() > 1000)
+					{
+						//포션칸이 비어있으면
+						if (_gear[_select].item == nullptr)
+						{
+							_gear[_select].item = _selectItem.item;
+							_gear[_select].count = _selectItem.count;
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
+
+						//비어있지 않으면
+						else
+						{
+							//장비창에서 그대로 포션을 챙기고 있는 상태
+							if (_selectNumber == _select)
+							{
+								_selectItem.count++;
+								_gear[_select].count--;
+
+								//장비창에 있는 아이템을 모두 들었다면
+								if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
+
+								//장비창에 있는 포션을 다 챙겨서 내가 다 들어버리면
+								//다시 돌려놓기
+								if (_selectItem.count > _selectItem.item->getLimit())
+								{
+									_gear[_select].item = _selectItem.item;
+									_gear[_select].count = _selectItem.count;
+								}
+							}
+
+							//인벤에서 가져온 포션이라면
+							else
+							{
+								_selectItem.count--;
+								_gear[_select].count++;
+
+								//포션 한계치를 넘으면
+								if (_gear[_select].count + _selectItem.count > _gear[_select].item->getLimit())
+								{
+									_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
+									_gear[_select].count = _gear[_select].item->getLimit();
+								}
+
+								//다 내려놨다면
+								if (_selectItem.count <= 0)
+								{
+									_selectItem.count = 0;
+									_selectItem.item = nullptr;
+									_isSelect = false;
+								}
+							}
+						}
+					}
+				}
+			}
+		}			
 	}
 }
 //===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//

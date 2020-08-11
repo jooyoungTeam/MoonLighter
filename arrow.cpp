@@ -55,7 +55,7 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection)
 
 	arrow.arrowImage = ImageManager::GetInstance()->FindImage("playerArrow");
 	
-	arrow.speed = 5.0f;
+	arrow.speed = 10.0f;
 	arrow.x = arrow.shootX = x;
 	arrow.y = arrow.shootY = y;
 
