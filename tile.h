@@ -32,13 +32,8 @@ private:
 	vector<tagObject*> _object;
 	tagObject*         _currentObject;          //선택한 오브젝트
 	bool               _isSelectObject;
-	bool               _canBuild;
 	// --------- object ---------- //
 
-	// --------- 맵 이동 변수
-	tagMapMove    _mapMove[4];
-	MAPMOVE       _currentMove;
-	// --------- 맵 이동 변수
 
 	// --------- 미니맵 변수	
 	FloatRect     _miniMap;
