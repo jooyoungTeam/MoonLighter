@@ -237,7 +237,7 @@ void playerIdleState::update(player & player)
 
 	//天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天
 
-	cout << player.getWeaponChange() << endl;
+	//cout << player.getWeaponChange() << endl;
 }
 
 //walk 鼻鷓

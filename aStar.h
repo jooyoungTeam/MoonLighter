@@ -57,6 +57,8 @@ class aStar : public gameNode
 	vector<astarTile*>			_vOldCloseList;
 	vector<astarTile*>::iterator _vOldiCloseList;
 
+	vector<POINT>				_vUnMoveTile;
+
 	astarTile* _startTile;		//시작 타일
 	astarTile* _endTile;			//끝 타일
 	astarTile* _currentTile;		//현재 타일(노드)
@@ -81,12 +83,15 @@ class aStar : public gameNode
 
 	int _rndX;
 	int _rndY;
+
+	bool _isNPC;
+	bool _changePoint;
 public:
 	aStar();
 	~aStar();
 
 	// 다 아는 그거
-	HRESULT init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY);
+	HRESULT init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY, vector<POINT> unMoveTile, bool npc);
 
 	//타일 셋팅 함수
 	void setTiles();
@@ -109,5 +114,7 @@ public:
 
 	void update(int playerTileX, int playerTileY, int enemyTileX, int enemyTileY);
 	void render();
+
+	void changeWayPoint() { _changePoint = true; 	_moveIndex = 0; }
 };
 

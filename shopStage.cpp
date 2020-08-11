@@ -13,6 +13,9 @@ HRESULT shopStage::init()
 	_player = new player;
 	_player->init();
 
+	_shopNPC = new shopNPC;
+	_shopNPC->init();
+
 	_doorFrameTimer = 0;
 	_doorIndex = 0;
 
@@ -23,8 +26,11 @@ void shopStage::render()
 {
 	CAMERAMANAGER->render(_backGround, _backGround->GetWidth() / 2, 200, 1.15f, 1.0f);
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
+
 	_player->render();
 
+	if(_enterNPC)
+		_shopNPC->render();
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
@@ -35,9 +41,15 @@ void shopStage::render()
 void shopStage::update()
 {
 	_player->update();
+
+	if(_enterNPC)
+		_shopNPC->updadte();
+
+	//cout << "x: " << _player->getX() << endl;
+	//cout << "y: " << _player->getY() << endl;
+	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
-
 
 	doorUpdate();
 }
@@ -59,7 +71,6 @@ void shopStage::doorUpdate()
 		break;
 	case DOOR_OPENING:
 		_doorFrameTimer++;
-
 		if (_doorFrameTimer > 5)
 		{
 			_doorIndex++;
@@ -84,9 +95,10 @@ void shopStage::doorUpdate()
 		}
 		break;
 	case DOOR_DELAY:
+		_enterNPC = true;
 		_doorFrameTimer++;
 
-		if (_doorFrameTimer > 100)
+		if (_doorFrameTimer > 130)
 		{
 			_doorState = DOOR_CLOSING;
 			_doorFrameTimer = 0;
