@@ -209,7 +209,6 @@ void tile::drag()
 	if (KEYMANAGER->isOnceKeyDown(VK_LSHIFT))
 	{
 		int size = _sampleTileUI.right - _sampleTileUI.left;
-		cout << size << endl;
 		_drag.isDraw = true;
 		_drag.startPos = _ptMouse;
 		_drag.startPos.x += CAMERAMANAGER->getLeft();
@@ -269,6 +268,17 @@ void tile::drag()
 	{
 		_drag.isDraw = false;
 
+		if (_button->getType() == BUTTON_ERASE_OBJECT)
+		{
+			for (int i = 0; i < _object.size(); i++)
+			{
+				if (isCollision(_drag.rc, _object[i]->rc))
+				{
+					eraseObject(i);
+				}
+			}
+		}
+
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
@@ -279,6 +289,13 @@ void tile::drag()
 					_tiles[i].terrainFrameX = _currentTile.x;
 					_tiles[i].terrainFrameY = _currentTile.y;
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+				}
+
+				if (_button->getType() == BUTTON_ERASE_TERRAIN)
+				{
+					_tiles[i].terrainFrameX = _currentTile.x;
+					_tiles[i].terrainFrameY = _currentTile.y;
+					_tiles[i].terrain = TR_NONE;
 				}
 
 				if (_currentTile.x == 6 && _currentTile.y == 2)
@@ -537,6 +554,11 @@ void tile::setMap()
 							}
 							_object.push_back(tempObject);
 
+							if(KEYMANAGER->isStayKeyDown(VK_LCONTROL))
+							{
+								
+							}
+
 							_isSelectObject = false;
 						}
 					}
@@ -560,9 +582,6 @@ void tile::setMap()
 		}
 
 	}
-
-
-
 	// 지금 렉트 검사
 	for (int i = 0; i < 19; i++)
 	{
@@ -595,6 +614,10 @@ void tile::imageLoad()
 	//ImageManager::GetInstance()
 
 	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
+	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
+	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
+	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
 
 	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
 	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 4, 1);
@@ -777,9 +800,11 @@ void tile::selectObject()
 			}
 			else if (_currentSampleObject == OBJ_DOOR)
 			{
-				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1");
-
-				_currentObject->isFrameRender = true;
+				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("object_door1");
+				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("object_door2");
+				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("object_door3");
+				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("object_door4");
+				_currentObject->isFrameRender = false;
 				break;
 			}
 			else if (_currentSampleObject == OBJ_PLANT)
