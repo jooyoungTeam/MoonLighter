@@ -45,15 +45,20 @@ private:
 	int _select;						//현재 인벤 번호
 	int _selectNumber;					//선택했을 때의 인벤 번호
 	int _count;							//미러 딜레이
-	bool _isOpen;						//인벤 열었나?
+	//bool _isOpen;						//아이템 열었는지
 	bool _isSelect;						//아이템 선택하는 불 값
+	bool _isSale;						//아이템 판매하는 불 값
 
 	tagGear _gear[GEARSPACE];			//장비칸
 	bool _isSwap;						//넘어가기
 
 	MIRROR_STATE _mirror;				//미러 상태
 	int _frameCount;					//미러프레임용
-	int _mirrorFrameX;					//미러프레임X
+	int _mirrorFrameX;					//미러 프레임X
+	int _mirrorBallFrameX;				//미러 안 공 프레임X
+	int _saleFrameX;					//판매 프레임X
+
+	int _gold;							//소지금
 
 	player* _player;
 
@@ -68,19 +73,20 @@ public:
 
 	void putItem(item* item);								//인벤에 아이템 넣기
 	void moveItem();										//인벤에서 아이템 옮기기
-	void equipGear();										//장비 입기
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
 
 public:
-	bool getOpen() { return _isOpen; }						//인벤 열었다는 불 값 가져가기
+	int getGold() { return _gold; }							//소지금 가져가기
+	//bool getOpen() { return _isOpen; }						//인벤 열었다는 불 값 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:
-	void setOpen(BOOL open = FALSE) { _isOpen = open; }		//인벤 열었다는 불 값 설정하기
+	//void setOpen(BOOL open = FALSE) { _isOpen = open; }		//인벤 열었다는 불 값 설정하기
+	void setSale(BOOL sale = FALSE) { _isSale = sale; }		//판매하는 불 값 설정하기
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 
 public:
 	//플레이어 참조용
-	void getPlayerMemoryAddressLik(player* player) { _player = player; }
+	void getPlayerMemoryAddressLink(player* player) { _player = player; }
 };

@@ -15,11 +15,12 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddImage("empty_helmet", L"image/UI/empty_helmet.png");
 	ImageManager::GetInstance()->AddImage("empty_top", L"image/UI/empty_top.png");
 	ImageManager::GetInstance()->AddImage("empty_shoes", L"image/UI/empty_shoes.png");
-	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
-	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
-
 	ImageManager::GetInstance()->AddImage("inven_weapon_1", L"Image/UI/Inven_weapon_1.png");
 	ImageManager::GetInstance()->AddImage("inven_weapon_2", L"Image/UI/Inven_weapon_2.png");
+	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
+	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
+	ImageManager::GetInstance()->AddFrameImage("mirror_empty", L"Image/UI/mirror_empty.png", 10, 1);
+	ImageManager::GetInstance()->AddFrameImage("mirror_sale", L"Image/UI/mirror_sale.png", 8, 1);
 
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
@@ -88,8 +89,8 @@ HRESULT inventory::init()
 	_mirror = MIRROR_STATE::STOP;
 
 	_select = 0;
-	_isOpen = false;
 	_isSwap = false;
+	_isSale = false;
 	_isSelect = false;
 
 	return S_OK;
@@ -140,10 +141,13 @@ void inventory::render()
 	}
 
 	//장비 변경
-	//플레이어 불값true
-	ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
 	//플레이어 불값false
+	ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+	//플레이어 불값true
 	//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+
+	//미러 안 공
+	ImageManager::GetInstance()->FindImage("mirror_empty")->FrameRender(Vector2(_inven[20].rc.GetCenter().x - 5, _inven[20].rc.GetCenter().y), _mirrorBallFrameX, 0);
 
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
@@ -157,6 +161,9 @@ void inventory::render()
 	//미러
 	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
 	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
+
+	//아이템을 팔겠다면
+	if (_isSale) ImageManager::GetInstance()->FindImage("mirror_sale")->FrameRender(Vector2(_selectItem.rc.GetCenter().x, _selectItem.rc.GetCenter().y), _saleFrameX, 0);
 }
 
 void inventory::update()
@@ -290,7 +297,6 @@ void inventory::update()
 
 	moveItem();
 	useMirror();
-	equipGear();
 
 	for (int i = 0; i < GEARSPACE; i++)
 	{
@@ -358,17 +364,28 @@ void inventory::moveItem()
 		_selectNumber = _select;
 		_selectItem.count = 0;
 
-		if (_inven[_select].item != nullptr && !_isSwap)
+		if (!_isSwap)
 		{
-			_isSelect = true;
-			_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-			_selectItem.item = _inven[_select].item;
-			_selectItem.count++;
-			_inven[_select].count--;
+			//미러를 선택했다면
+			if (_select == 20)
+			{
+				_isSelect = true;
+				_isSale = true;
+				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+			}
 
-			//인벤 카운트가 0 이하가 되면 비워버린다
-			if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
-		}
+			if (_inven[_select].item != nullptr)
+			{
+				_isSelect = true;
+				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+				_selectItem.item = _inven[_select].item;
+				_selectItem.count++;
+				_inven[_select].count--;
+
+				//인벤 카운트가 0 이하가 되면 비워버린다
+				if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
+			}
+		}		
 
 		else if (_gear[_select].item != nullptr && _isSwap && _state == INVEN_STATE::NOTE)
 		{
@@ -390,6 +407,8 @@ void inventory::moveItem()
 			//선택한 인벤이 비어있으면
 			if (_inven[_select].item == nullptr)
 			{
+				if (_isSale) return;
+
 				_inven[_select].item = _selectItem.item;
 				_inven[_select].count = _selectItem.count;
 				_selectItem.count = 0;
@@ -400,6 +419,13 @@ void inventory::moveItem()
 			//비어있지 않으면
 			else
 			{
+				if (_isSale)
+				{
+					_inven[_select].item = nullptr;
+					_isSelect = false;
+					_isSale = false;
+				}
+
 				//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
 				if (_inven[_select].item->getIndex() != _selectItem.item->getIndex())
 				{
@@ -536,12 +562,6 @@ void inventory::moveItem()
 //===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
 
 
-void inventory::equipGear()
-{
-
-}
-
-
 //===========================================↓↓미러 사용하기↓↓===========================================//
 void inventory::useMirror()
 {
@@ -598,6 +618,22 @@ void inventory::draw()
 				_mirrorFrameX = 3;
 			}
 		}
+
+		_mirrorBallFrameX++;
+		if (_mirrorBallFrameX > ImageManager::GetInstance()->FindImage("mirror_empty")->GetMaxFrameX() - 1);
+		{
+			_mirrorBallFrameX = 0;
+		}
+
+		if (_isSale)
+		{
+			_saleFrameX++;
+			if (_saleFrameX > ImageManager::GetInstance()->FindImage("mirror_sale")->GetMaxFrameX() - 1)
+			{
+				_saleFrameX = 0;
+			}
+		}		
+
 		_frameCount = 0;
 	}	
 }
