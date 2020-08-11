@@ -424,6 +424,7 @@ void inventory::moveItem()
 					_inven[_select].item = nullptr;
 					_isSelect = false;
 					_isSale = false;
+					return;
 				}
 
 				//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
