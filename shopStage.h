@@ -5,11 +5,13 @@
 class shopStage : public gameNode
 {
 private:
-	player* _player;
-	tile* _tile;
+	Image* _backGround;
 
-	tagTile           _dungeonTiles[TILEX * TILEY];
-	DWORD             _dungeonAttribute[TILEX * TILEY];
+	player* _player;
+
+	POINT _wayPoint[4];
+	POINT _buyPoint;
+
 public:
 	shopStage() {}
 	~shopStage() {}
@@ -18,8 +20,5 @@ public:
 	void render();
 	void update();
 	void release();
-
-	void loadDungeonMap();
-	void renderDungeonMap();
 };
 

@@ -228,6 +228,12 @@
     <ClInclude Include="townStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
+    <ClInclude Include="shopNPC.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
+    <ClInclude Include="shopNPCManager.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -373,6 +379,12 @@
     </ClCompile>
     <ClCompile Include="townStage.cpp">
       <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="shopNPC.cpp">
+      <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="shopNPCManager.cpp">
+      <Filter>playGround\송용은</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
