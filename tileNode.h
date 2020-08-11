@@ -23,7 +23,7 @@ enum TERRAIN
 
 enum OBJECT
 {
-	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR,
+	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT,
 	OBJ_NONE,
 };
 
@@ -59,6 +59,7 @@ struct tagObject
 	Image*   img;
 	bool     isFrameRender;
 	int      frameX;
+	int      count;
 };
 
 

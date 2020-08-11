@@ -66,14 +66,32 @@ void tile::render()
 	}
 
 
-
 	for (int i = 0; i < _object.size(); i++) // 오브젝트들 렌더
 	{
-		CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
+		if (_object[i]->isFrameRender)
+		{
+			CAMERAMANAGER->zOrderFrameRender(_object[i]->img, (_object[i]->rc.left + _object[i]->rc.right) * 0.5f, (_object[i]->rc.top + _object[i]->rc.bottom) * 0.5f, _object[i]->rc.bottom, _object[i]->frameX, 0);
+			_object[i]->count++;
+			if (_object[i]->count % 10 == 0)
+			{
+				_object[i]->count = 0;
+				_object[i]->frameX++;
+
+				if (_object[i]->img->GetMaxFrameX() <= _object[i]->frameX)
+				{
+					_object[i]->frameX = 0;
+				}
+			}
+
+		}
+		else
+		{
+			CAMERAMANAGER->zOrderRender(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, _object[i]->rc.bottom, 1);
+		}
+		//CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
 		CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 	}
-
-
+	CAMERAMANAGER->zOrderALLRender();
 
 	// 선택중인 렉트
 	{
@@ -112,12 +130,16 @@ void tile::render()
 			{
 				ImageManager::GetInstance()->FindImage("objectDoor")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
 			}
+			else if (_currentSampleObject == OBJ_PLANT)
+			{
+				ImageManager::GetInstance()->FindImage("objectPlant")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+			}
 		}
 
 
 		_button->render();
 
-		if (_button->getType() != BUTTON_OBJECT)
+		if (_button->getType() == BUTTON_TERRAIN)
 			D2DRenderer::GetInstance()->DrawRectangle(_currentRect, D2D1::ColorF::LimeGreen, 1.0f, 5);
 		// ------------------ 마지막 렌더 ------------------------------------ 
 
@@ -145,8 +167,20 @@ void tile::render()
 	if (_isSelectObject)
 	{
 		_currentObject->img->SetAlpha(0.5f);
-		_currentObject->img->Render(Vector2(_ptMouse.x, _ptMouse.y));
-		_currentObject->rc = RectMake(_ptMouse.x, _ptMouse.y, _currentObject->img->GetWidth(), _currentObject->img->GetHeight());
+		if (_currentObject->isFrameRender)
+		{
+			_currentObject->rc = RectMake(_ptMouse.x, _ptMouse.y, _currentObject->img->GetFrameSize().x, _currentObject->img->GetFrameSize().y);
+			_currentObject->img->FrameRender(Vector2((_currentObject->rc.left + _currentObject->rc.right) * 0.5f, (_currentObject->rc.top + _currentObject->rc.bottom) * 0.5f), 1, 0);
+
+		}
+		else
+		{
+
+			_currentObject->rc = RectMake(_ptMouse.x, _ptMouse.y, _currentObject->img->GetWidth(), _currentObject->img->GetHeight());
+			_currentObject->img->Render(Vector2(_ptMouse.x, _ptMouse.y));
+		}
+
+
 
 		D2DRenderer::GetInstance()->FillRectangle(_currentObject->rc, D2D1::ColorF::LimeGreen, 0.4f);
 
@@ -159,13 +193,10 @@ void tile::render()
 
 void tile::update()
 {
-
 	mapMove();
 	setMap();
 	drag();
-	save();
-	load();
-
+	saveLoad();
 }
 
 void tile::release()
@@ -441,7 +472,15 @@ void tile::setMap()
 
 			_button->update();
 		}
-		if (_button->getType() == BUTTON_ERASE)
+
+		sampleOnOff();
+	}
+
+
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+	{
+
+		if (_button->getType() == BUTTON_ERASE_OBJECT)
 		{
 			for (int i = 0; i < _object.size(); i++)
 			{
@@ -452,12 +491,6 @@ void tile::setMap()
 				}
 			}
 		}
-		sampleOnOff();
-	}
-
-
-	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-	{
 
 		for (int i = 0; i < 19; i++)
 		{
@@ -488,16 +521,30 @@ void tile::setMap()
 						{
 							tagObject* tempObject = new tagObject;
 							tempObject->img = _currentObject->img;
-
+							tempObject->isFrameRender = _currentObject->isFrameRender;
 							tempObject->rc.left = _tiles[index].rc.left;
 							tempObject->rc.top = _tiles[index].rc.top;
-							tempObject->rc.right = tempObject->rc.left + tempObject->img->GetWidth();
-							tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetHeight();
+							tempObject->frameX = 0;
+							if (tempObject->isFrameRender)
+							{
+								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetFrameSize().x;
+								tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetFrameSize().y;
+							}
+							else
+							{
+								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetWidth();
+								tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetHeight();
+							}
 							_object.push_back(tempObject);
 
 							_isSelectObject = false;
 						}
 					}
+					else if (_button->getType() == BUTTON_ERASE_TERRAIN)
+					{
+						_tiles[index].terrain = TR_NONE;
+					}
+				
 					//else if (_button->getType() == BUTTON_CLEAR)
 					//{
 					//	_tiles[i].objFrameX = NULL;
@@ -535,11 +582,101 @@ void tile::setMap()
 	}
 }
 
-void tile::save()
+void tile::saveLoad()
 {
-	if (_button->getType() == BUTTON_SAVE)
-	{
+	saveDungeonMap();
+	saveTownMap();
+	loadDungeonMap();
+	loadTownMap();
+}
 
+void tile::imageLoad()
+{
+	//ImageManager::GetInstance()
+
+	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+
+	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 4, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_fountain1", L"Object/plant_fountain1.png", 9, 1);
+
+}
+
+void tile::loadDungeonMap()
+{
+	if (_button->getType() == BUTTON_LOAD_DUNGEON)
+	{
+		HANDLE file;
+		DWORD read;
+
+		file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		ReadFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+
+		memset(_dungeonAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
+		for (int i = 0; i < TILEX * TILEY; ++i)
+		{
+			if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
+		}
+
+		CloseHandle(file);
+		_button->setType(BUTTON_TERRAIN);
+	}
+}
+
+void tile::loadTownMap()
+{
+	if (_button->getType() == BUTTON_LOAD_DUNGEON)
+	{
+		HANDLE file;
+		DWORD read;
+
+		file = CreateFile("townMap.map", GENERIC_READ, NULL, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		ReadFile(file, _townTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+
+		memset(_townAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
+		for (int i = 0; i < TILEX * TILEY; ++i)
+		{
+			if (_townTiles[i].terrain == TR_WALL) _townAttribute[i] |= ATTR_UNMOVE;
+		}
+
+		CloseHandle(file);
+	}
+}
+
+void tile::renderTownMap()
+{
+	for (int i = 0; i < 19; i++)
+	{
+		for (int j = 0; j < 33; j++)
+		{
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+
+			int index = (i + cullY) * TILEX + (j + cullX);
+
+			if (_townTiles[index].terrain != TR_NONE)
+			{
+				Vector2 vec((_townTiles[index].rc.left + _townTiles[index].rc.right) * 0.5f, (_townTiles[index].rc.top + _townTiles[index].rc.bottom) * 0.5f);
+
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _townTiles[index].terrainFrameX, _townTiles[index].terrainFrameY);
+
+				CAMERAMANAGER->rectangle(_townTiles[index].rc, D2D1::ColorF::Black, 1.0f);
+			}
+
+
+		}
+	}
+
+}
+
+void tile::saveDungeonMap()
+{
+	if (_button->getType() == BUTTON_SAVE_DUNGEON)
+	{
 		_saveTime++;
 		if (_saveTime % 50 == 0)
 		{
@@ -547,10 +684,10 @@ void tile::save()
 			HANDLE file;
 			DWORD write;
 
-			file = CreateFile("tilemap.map", GENERIC_WRITE, NULL, NULL,
+			file = CreateFile("dungeonMap.map", GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-			WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+			WriteFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 
 			CloseHandle(file);
 
@@ -560,47 +697,28 @@ void tile::save()
 	}
 }
 
-void tile::load()
+void tile::saveTownMap()
 {
-	if (_button->getType() == BUTTON_LOAD)
+	if (_button->getType() == BUTTON_SAVE_TOWN)
 	{
-		HANDLE file;
-		DWORD read;
+		_saveTime++;
+		if (_saveTime % 50 == 0)
+		{
+			// ----------------- 중복 실행 안되도록 여기에 입력
+			HANDLE file;
+			DWORD write;
 
-		file = CreateFile("tilemap.map", GENERIC_READ, NULL, NULL,
-			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+			file = CreateFile("townMap.map", GENERIC_WRITE, NULL, NULL,
+				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-		ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+			WriteFile(file, _townTiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 
-		CloseHandle(file);
-		_button->setType(BUTTON_TERRAIN);
+			CloseHandle(file);
+
+			_saveTime = 0;
+			_button->setType(BUTTON_TERRAIN);
+		}
 	}
-
-}
-
-void tile::imageLoad()
-{
-	//ImageManager::GetInstance()
-
-}
-
-void tile::loadDungeonMap()
-{
-	HANDLE file;
-	DWORD read;
-
-	file = CreateFile("dungeonMap.map", GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ReadFile(file, _dungeonTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
-
-	memset(_dungeonAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-		if (_dungeonTiles[i].terrain == TR_WALL) _dungeonAttribute[i] |= ATTR_UNMOVE;
-	}
-
-	CloseHandle(file);
 }
 
 void tile::renderDungeonMap()
@@ -627,8 +745,6 @@ void tile::renderDungeonMap()
 
 		}
 	}
-
-
 
 }
 
@@ -661,7 +777,19 @@ void tile::selectObject()
 			}
 			else if (_currentSampleObject == OBJ_DOOR)
 			{
+				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1");
 
+				_currentObject->isFrameRender = true;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_PLANT)
+			{
+				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1");
+				if (i == 1)		    _currentObject->img = ImageManager::GetInstance()->FindImage("plant_fountain1");
+				if (i == 2)		    _currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree2");
+
+				_currentObject->isFrameRender = true;
+				break;
 			}
 		}
 
@@ -673,8 +801,6 @@ void tile::eraseObject(int arrNum)
 {
 	_object.erase(_object.begin() + arrNum);
 }
-
-
 
 void tile::mapMove()
 {
@@ -707,8 +833,6 @@ void tile::sampleOnOff()
 		_sampleTileOnOff.left = WINSIZEX - 20;
 	}
 }
-
-
 
 TERRAIN tile::terrainSelect(int frameX, int frameY)
 {

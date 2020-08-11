@@ -1,32 +1,51 @@
 #pragma once
 #include "gameNode.h"
 
+typedef void(*CALLBACK_FUNCTION)(void);
+
 enum BUTTONTYPE
 {
 	BUTTON_TERRAIN,
 	BUTTON_OBJECT,
 	BUTTON_SAVE,
+	BUTTON_SAVE_DUNGEON,
+	BUTTON_SAVE_TOWN,
 	BUTTON_LOAD,
+	BUTTON_LOAD_DUNGEON,
+	BUTTON_LOAD_TOWN,
+
 	BUTTON_ERASE,
-	BUTTON_COMPLETE,
+	BUTTON_ERASE_TERRAIN,
+	BUTTON_ERASE_OBJECT,
+
+	BUTTON_EXIT,
 	BUTTON_END
+
+};
+
+enum BUTTONSTATE
+{
+	BUTTON_ALWAYS,  // 항상 켜있음
+	BUTTON_TEMP,    // 껐다가 켰다가하는 버튼
+	BUTTON_OFF,		// 꺼진 상태
 };
 
 
 struct tagButton
 {
 	RECT	      rc;
-	POINT         pos;
-	BUTTONTYPE    type;
     wstring       name;
+	BUTTONSTATE   state;
 };
 
 
 class button :	public gameNode
 {
 private:
-	tagButton       _button[BUTTON_END];
-	BUTTONTYPE      _currentType;
+	tagButton         _button[BUTTON_END];
+	BUTTONTYPE        _currentType;
+
+	int _saveCount;
 public:
 	button() {}
 	~button() {}

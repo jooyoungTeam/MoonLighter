@@ -112,7 +112,7 @@ void cameraManager::zOrderSort(int i, int j)
 	zOrderSort(left, j);
 }
 
-void cameraManager::zOrderRender()
+void cameraManager::zOrderALLRender()
 {
 	zOrderSort(0, _vZorder.size() - 1);
 
