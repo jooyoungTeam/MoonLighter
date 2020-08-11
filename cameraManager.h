@@ -70,6 +70,7 @@ public:
 	void render(Image* img, float destX, float destY, float alpha);
 	void render(Image* img, float destX, float destY, float scale, float alpha);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);
+	void frameRender(Image* img, float destX, float destY, int frameX, int frameY, float scale, float alpha);
 	void aniRender(Image * img, int destX, int destY, animation * ani, float scale);
 public:
 	float getLeft() { return _left; }

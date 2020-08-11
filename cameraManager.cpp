@@ -217,6 +217,16 @@ void cameraManager::frameRender(Image * img, float destX, float destY, int frame
 	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop),frameX,frameY);
 }
 
+void cameraManager::frameRender(Image * img, float destX, float destY, int frameX, int frameY, float scale, float alpha)
+{
+	float relativeLeft = getRelativeLeft(destX);
+	float relativeTop = getRelativeTop(destY);
+	img->SetAlpha(alpha);
+	img->SetScale(scale);
+
+	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop), frameX, frameY);
+}
+
 void cameraManager::setX(float relativeX)
 {
 	relativeX = min(_maxX, relativeX);
