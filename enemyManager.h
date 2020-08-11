@@ -19,6 +19,7 @@ private:
 	FloatRect _rc;
 	float _x, _y;
 	int _bulletDelay;
+	bool _test;
 
 
 
@@ -33,6 +34,11 @@ public:
 
 	void setEnemy();
 	void potBullet();
+	void playerCol();
+	void bulletCol();
+	void enemyDead(int arr);
+
+	FloatRect getPlayerRc() { return _rc; }
 	//void setPlayerLink(player* player) { _player = player; }
 };
 

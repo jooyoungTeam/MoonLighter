@@ -28,7 +28,7 @@ void bullet::update()
 			_viBullet->index = 0;
 		}
 
-		_viBullet->rc = RectMakePivot(Vector2(_viBullet->x, _viBullet->y), Vector2(10, 10), Pivot::Center);
+		_viBullet->rc = RectMakePivot(Vector2(_viBullet->x, _viBullet->y), Vector2(10, 20), Pivot::Center);
 
 		if ((getDistance(_viBullet->x, _viBullet->y, _viBullet->sX, _viBullet->sY) > 1500))
 		{
@@ -43,6 +43,7 @@ void bullet::render()
 	{
 		_viBullet->img->SetScale(1.5);
 		_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
+		D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
 	}
 }
 

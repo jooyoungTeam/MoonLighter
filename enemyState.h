@@ -53,8 +53,9 @@ class enemyIdleState : public enemyState
 {
 private:
 	int _attackDistance;
+	int _attackDelayCount;
 public:
-	enemyIdleState() { _attackDistance = 0; }
+	enemyIdleState() { _attackDistance = 0; _attackDelayCount = 0; }
 	virtual void update(enemy& enemy, ENEMYTYPE enemyType) override;
 };
 

@@ -19,5 +19,6 @@ public:
 	virtual void enemyMove();
 	virtual void directionCheck();
 	void direcitonChange();
+	virtual void dead();
 };
 
