@@ -18,6 +18,9 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
 	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
 
+	ImageManager::GetInstance()->AddImage("inven_weapon_1", L"Image/UI/Inven_weapon_1.png");
+	ImageManager::GetInstance()->AddImage("inven_weapon_2", L"Image/UI/Inven_weapon_2.png");
+
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
 	{
@@ -113,6 +116,7 @@ void inventory::render()
 		if (i == _select && !_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[i].rc.left - 7, _inven[i].rc.top - 7));
 	}
 
+	//펜던트
 	ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
 
 	//장비창 관련 렌더
@@ -134,6 +138,12 @@ void inventory::render()
 			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
 		}
 	}
+
+	//장비 변경
+	//플레이어 불값true
+	ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+	//플레이어 불값false
+	//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
 
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
@@ -346,6 +356,7 @@ void inventory::moveItem()
 	if (!_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
 		_selectNumber = _select;
+		_selectItem.count = 0;
 
 		if (_inven[_select].item != nullptr && !_isSwap)
 		{
@@ -392,7 +403,16 @@ void inventory::moveItem()
 				//선택한 인벤의 아이템 인덱스가 들고 있는 아이템 인덱스와 같지 않으면
 				if (_inven[_select].item->getIndex() != _selectItem.item->getIndex())
 				{
-					return;
+					//아이템을 가지고 왔던 인벤 창이 비어있다면
+					if (_inven[_selectNumber].item == nullptr)
+					{
+						_inven[_selectNumber].item = _inven[_select].item;
+						_inven[_selectNumber].count = _inven[_select].count;
+						_inven[_select].item = _selectItem.item;
+						_inven[_select].count = _selectItem.count;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
 				}
 
 				//인덱스가 같으면
@@ -451,36 +471,63 @@ void inventory::moveItem()
 			//장비창에 옮기기(포션칸에 포션을 옮긴다고 한다면)
 			if (_state == INVEN_STATE::NOTE)
 			{
-				if (_select == 4 && _selectItem.item->getIndex() > 1000)
+				if (_select == 4) 
 				{
-					//포션칸이 비어있으면
-					if (_gear[_select].item == nullptr)
+					if (_selectItem.item->getIndex() > 1000)
 					{
-						_gear[_select].item = _selectItem.item;
-						_gear[_select].count = _selectItem.count;
-						_selectItem.item = nullptr;
-						_isSelect = false;
-					}
-
-					//비어있지 않으면
-					else
-					{
-						_selectItem.count--;
-						_gear[_select].count++;
-
-						if (_gear[_select].count > _gear[_select].item->getLimit())
+						//포션칸이 비어있으면
+						if (_gear[_select].item == nullptr)
 						{
-							_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
-							_gear[_select].count = _gear[_select].item->getLimit();
+							_gear[_select].item = _selectItem.item;
+							_gear[_select].count = _selectItem.count;
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
+
+						//비어있지 않으면
+						else
+						{
+							//장비창에서 그대로 포션을 챙기고 있는 상태
+							if (_selectNumber == _select)
+							{
+								_selectItem.count++;
+								_gear[_select].count--;
+
+								//장비창에 있는 아이템을 모두 들었다면
+								if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
+
+								//장비창에 있는 포션을 다 챙겨서 내가 다 들어버리면
+								//다시 돌려놓기
+								if (_selectItem.count > _selectItem.item->getLimit())
+								{
+									_gear[_select].item = _selectItem.item;
+									_gear[_select].count = _selectItem.count;
+								}
+							}
+
+							//인벤에서 가져온 포션이라면
+							else
+							{
+								_selectItem.count--;
+								_gear[_select].count++;
+
+								//포션 한계치를 넘으면
+								if (_gear[_select].count + _selectItem.count > _gear[_select].item->getLimit())
+								{
+									_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
+									_gear[_select].count = _gear[_select].item->getLimit();
+								}
+
+								//다 내려놨다면
+								if (_selectItem.count <= 0)
+								{
+									_selectItem.count = 0;
+									_selectItem.item = nullptr;
+									_isSelect = false;
+								}
+							}
 						}
 					}
-				}
-
-				//포션칸 아니면 무시하기
-				if(_select != 4 || _selectItem.item->getIndex() < 1000)
-				{
-					_selectItem.item = _selectItem.item;
-					return;
 				}
 			}
 		}			

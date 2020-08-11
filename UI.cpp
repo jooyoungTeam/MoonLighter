@@ -34,7 +34,6 @@ void UI::render()
 
 void UI::update()
 {
-
 }
 
 void UI::release()
