@@ -40,6 +40,9 @@ void shopNPC::updadte()
 {
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
 
+	directionCheck();
+
+
 	switch (_npcActionState)
 	{
 	case NPC_ENTER:
@@ -53,23 +56,26 @@ void shopNPC::updadte()
 		}
 		break;
 	case NPC_IDLE:
-
+		
 		break;
+
 	case NPC_SHOPPING:
-		if (_aStar->getVOldClose().size() > 0)
+
+		if (_aStar->getVShortest().size() > 0)
 		{
-			_angle = getAngle(_centerX, _centerY, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y);
+			_angle = getAngle(_centerX, _centerY, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y);
 
-			_centerX += cosf(_angle) * 2;
-			_centerY -= sinf(_angle) * 2;
+			// 이동 시켜줌
+			_centerX += cosf(_angle);
+			_centerY -= sinf(_angle);
 
-			if (getDistance(_centerX, _centerY, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y) < 1)
+			if (getDistance(_centerX, _centerY, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y) < 1)
 			{
-				if (_aStar->getMoveIndex() < _aStar->getVOldClose().size() - 1)
-					_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
+				if (_aStar->getMoveIndex() > 0)
+					_aStar->setMoveIndex(_aStar->getMoveIndex() - 1);
 			}
 
-			if (getDistance(_centerX, _centerY, _aStar->getVOldClose()[_aStar->getVOldClose().size() - 1]->center.x, _aStar->getVOldClose()[_aStar->getVOldClose().size() - 1]->center.y) < 3)
+			if (getDistance(_centerX, _centerY, _aStar->getVShortest()[0]->center.x, _aStar->getVShortest()[0]->center.y) < 3)
 			{
 
 				_npcActionState = NPC_CHECKITEM;
@@ -78,9 +84,12 @@ void shopNPC::updadte()
 			}
 		}
 		break;
+
 	case NPC_CHECKITEM:
 		_delayTimer++;
-		if (_delayTimer > 50)
+	
+
+		if (_delayTimer > 200)
 		{
 			_npcActionState = NPC_SHOPPING;
 			_delayTimer = 0;
@@ -124,19 +133,48 @@ void shopNPC::comparePrice()
 void shopNPC::unMoveSet()
 {
 	POINT temp;
-	temp.x = 11;
+
+	temp.x = 8;
+	temp.y = 21;
+	_vUnMove.push_back(temp);
+
+	temp.x = 8;
+	temp.y = 20;
+	_vUnMove.push_back(temp);
+
+	temp.x = 8;
 	temp.y = 19;
 	_vUnMove.push_back(temp);
 
-	temp.x = 12;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 11;
+	temp.x = 8;
 	temp.y = 18;
 	_vUnMove.push_back(temp);
 
-	temp.x = 12;
+	temp.x = 8;
+	temp.y = 17;
+	_vUnMove.push_back(temp);
+
+	temp.x = 8;
+	temp.y = 16;
+	_vUnMove.push_back(temp);
+
+	temp.x = 8;
+	temp.y = 15;
+	_vUnMove.push_back(temp);
+
+	temp.x = 8;
+	temp.y = 14;
+	_vUnMove.push_back(temp);
+
+	temp.x = 10;
+	temp.y = 17;
+	_vUnMove.push_back(temp);
+
+	temp.x = 11;
+	temp.y = 19;
+	_vUnMove.push_back(temp);
+
+	temp.x = 11;
 	temp.y = 18;
 	_vUnMove.push_back(temp);
 
@@ -145,6 +183,26 @@ void shopNPC::unMoveSet()
 	_vUnMove.push_back(temp);
 
 	temp.x = 12;
+	temp.y = 19;
+	_vUnMove.push_back(temp);
+
+	temp.x = 12;
+	temp.y = 18;
+	_vUnMove.push_back(temp);
+
+	temp.x = 12;
+	temp.y = 17;
+	_vUnMove.push_back(temp);
+
+	temp.x = 13;
+	temp.y = 19;
+	_vUnMove.push_back(temp);
+
+	temp.x = 13;
+	temp.y = 18;
+	_vUnMove.push_back(temp);
+
+	temp.x = 13;
 	temp.y = 17;
 	_vUnMove.push_back(temp);
 }
@@ -172,13 +230,48 @@ void shopNPC::wayPointSet()
 	_counterPoint.y = 16;
 }
 
+void shopNPC::directionCheck()
+{
+	float DegAngle = _angle * 180 / PI; // 라디안 디그리(각도)로 변환
+
+	// 오른쪽 방향
+	if ((DegAngle <= 45 && DegAngle > 0) || (DegAngle <= 360 && DegAngle > 315))
+	{
+		_indexY = 2;
+	}
+
+	// 위쪽 방향
+	if ((DegAngle <= 135 && DegAngle > 45))
+	{
+		_indexY = 3;
+	}
+
+	// 왼쪽 방향
+	if ((DegAngle <= 225 && DegAngle > 135))
+	{
+		_indexY = 1;
+	}
+
+	// 아래쪽 방향 
+	if ((DegAngle <= 315 && DegAngle > 225))
+	{
+		_indexY = 0;
+	}
+
+}
+
 void shopNPC::chooseItem()
 {
+	// 4개의 아이템을 전부 봤을 시 리턴
+	if (_checkItemCount > 4) return;
+
+	// 중복 방지 (안 본 아이템이 나올때 까지 루프)
 	while (_checkItem[_rndChoiceItem])
 	{
 		_rndChoiceItem = RND->getInt(4);
 	}
 
+	// 확인한 아이템 숫자 늘려주기
 	_checkItemCount++;
 
 	switch (_rndChoiceItem)

@@ -11,6 +11,7 @@ HRESULT dungeonStage::init()
 	_player = new player;
 	_player->init();
 	_enemy = new enemyManager;
+	_enemy->setPlayerLink(_player);
 	_enemy->init();
 
 

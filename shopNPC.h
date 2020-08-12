@@ -12,7 +12,8 @@ enum npcType			// NPC 종류 ENUM
 enum npcActionState		// NPC 행동 ENUM
 {
 	NPC_ENTER,			// NPC 입장
-	NPC_IDLE,			// 쇼핑하기전 배회?상태
+	NPC_IDLE,			// NPC 가만히있는 상태
+	NPC_WALK,			// 쇼핑하기전 배회?상태
 	NPC_SHOPPING,		// 아이템 쇼핑 상태
 	NPC_CHECKITEM,		// 아이템 확인 상태
 	NPC_BUY,			// 아이템 결제 상태
@@ -82,7 +83,7 @@ public:
 	void	unMoveSet();					// 못 움직이는곳 셋팅
 	void    wayPointSet();					// 가야되는곳 셋팅
 
+	void	directionCheck();				// 방향 검사
 	void	chooseItem();					// 아이템 뽑기
-	
 };
 

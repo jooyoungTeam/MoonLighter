@@ -7,12 +7,15 @@
 #include "boss.h"
 #include "bullet.h"
 
+class player;
+
 class enemyManager : public gameNode
 {
 private:
 	vector<enemy*> _vEnemy;
 	vector<enemy*>::iterator _viEnemy;
 	enemy* _enemy;
+	player* _player;
 
 	bullet* _bullet;
 
@@ -39,6 +42,6 @@ public:
 	void enemyDead(int arr);
 
 	FloatRect getPlayerRc() { return _rc; }
-	//void setPlayerLink(player* player) { _player = player; }
+	void setPlayerLink(player* player) { _player = player; }
 };
 

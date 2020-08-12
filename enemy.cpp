@@ -338,17 +338,17 @@ void enemy::move()
 		break;
 
 	}
-	if (_aStar->getVOldClose().size() > 0 && _aStar->getMoveIndex() < _aStar->getVOldClose().size())
+	if (_aStar->getVShortest().size() > 0)
 	{
-		_moveAngle = getAngle(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY());
+		_moveAngle = getAngle(_x, _y, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY());
 
 		_x += cosf(_moveAngle) * _speed;
 		_y -= sinf(_moveAngle) * _speed;
 
-		if (getDistance(_x, _y, _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVOldClose()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY()) < 1)
+		if (getDistance(_x, _y, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY()) < 1)
 		{
-			if(_aStar->getMoveIndex() < _aStar->getVOldClose().size())
-				_aStar->setMoveIndex(_aStar->getMoveIndex() + 1);
+			if(_aStar->getMoveIndex() > 0)
+				_aStar->setMoveIndex(_aStar->getMoveIndex() - 1);
 		}
 
 	}
