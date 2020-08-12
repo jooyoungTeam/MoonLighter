@@ -21,6 +21,7 @@ HRESULT item::init(ITEMTYPE type, float x, float y)
 	_type = type;
 	_x = x;
 	_y = y;
+	_Shake = 0;
 
 	sort();
 
@@ -34,8 +35,30 @@ void item::render()
 	_img->Render(Vector2(_rc.left, _rc.top));
 }
 
+void item::cameraRender()
+{
+	CAMERAMANAGER->render(_img, _rc.left, _rc.top, 1.f);
+}
+
 void item::update()
 {
+	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
+}
+
+void item::fieldUpdate()
+{
+	if (_Shake > 5)
+	{
+		_Shake--;
+	}
+
+	if (_Shake < -5)
+	{
+		_Shake++;
+	}
+
+	_y += _Shake;
+
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
 
