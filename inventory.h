@@ -7,7 +7,7 @@
 
 enum class INVEN_STATE
 {
-	NOTE, SHOP, BOX
+	NOTE, SHOP
 };
 
 enum class MIRROR_STATE
@@ -33,6 +33,7 @@ struct tagGear
 };
 
 class player;
+class UI;
 
 class inventory : public gameNode
 {
@@ -42,6 +43,7 @@ private:
 	tagInven _inven[INVENSPACE];		//인벤
 	tagInven _selectItem;				//선택한 아이템
 	Image* _mirrorImg;					//거울이미지
+	Image* _saleImg;					//판매이미지
 	int _select;						//현재 인벤 번호
 	int _selectNumber;					//선택했을 때의 인벤 번호
 	int _count;							//미러 딜레이
@@ -61,6 +63,7 @@ private:
 	int _gold;							//소지금
 
 	player* _player;
+	UI* _ui;
 
 public:
 	inventory() {}
@@ -89,4 +92,6 @@ public:
 public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
+	//UI 참조용
+	void getUIMemoryAddressLink(UI* ui) { _ui = ui; }
 };

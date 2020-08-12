@@ -17,6 +17,9 @@ HRESULT stageManager::init()
 
 	_itemMg = new itemManager;
 
+	_ui->getInvenMemoryAddressLink(_inven);
+	_inven->getUIMemoryAddressLink(_ui);
+
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
 
 	SCENEMANAGER->addScene("Å¸ÀÏ¾À", new tile);
@@ -32,6 +35,7 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
+	//ui->render();
 	if (_isInven) _inven->render();
 }
 
