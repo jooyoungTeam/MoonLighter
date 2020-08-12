@@ -18,16 +18,16 @@ void cameraManager::settingCamera(float left, float top, float width, float heig
 	_height = height;
 
 	_minLeft = minL;
-	_minTop  = minT;
+	_minTop = minT;
 	_maxLeft = maxL;
-	_maxTop  = maxT;
+	_maxTop = maxT;
 
 	_x = _left + (_width * 0.5f);
-	_y = _top  + (_height * 0.5f);
+	_y = _top + (_height * 0.5f);
 	_minX = _minLeft + (_width * 0.5f);
-	_minY = _minTop  + (_height * 0.5f);
+	_minY = _minTop + (_height * 0.5f);
 	_maxX = _maxLeft + (_width * 0.5f);
-	_maxY = _maxTop  + (_height * 0.5f);
+	_maxY = _maxTop + (_height * 0.5f);
 }
 
 void cameraManager::zOrderClear()
@@ -35,7 +35,7 @@ void cameraManager::zOrderClear()
 	_vZorder.clear();
 }
 
-void cameraManager::zOrderRender(Image * img, float x, float y, float z, float alpha)
+void cameraManager::zOrderRender(Image * img, float x, float y, float z, float alpha, float scale)
 {
 	tagZoder tempZorder;
 
@@ -48,11 +48,11 @@ void cameraManager::zOrderRender(Image * img, float x, float y, float z, float a
 	tempZorder.frame.y = NULL;
 	tempZorder.ani = NULL;
 	tempZorder.alpha = alpha;
-
+	tempZorder.scale = scale;
 	_vZorder.push_back(tempZorder);
 }
 
-void cameraManager::zOrderFrameRender(Image * img, float x, float y, float z, float frmaeX, float frameY)
+void cameraManager::zOrderFrameRender(Image * img, float x, float y, float z, float frmaeX, float frameY, float scale, float alpha)
 {
 	tagZoder tempZorder;
 
@@ -64,13 +64,14 @@ void cameraManager::zOrderFrameRender(Image * img, float x, float y, float z, fl
 	tempZorder.frame.x = frmaeX;
 	tempZorder.frame.y = frameY;
 	tempZorder.ani = NULL;
-	tempZorder.alpha = NULL;
+	tempZorder.alpha = alpha;
+	tempZorder.scale = scale;
 
 	_vZorder.push_back(tempZorder);
 }
 
 
-void cameraManager::zOrderAniRender(Image * img, float x, float y, float z, animation * ani,float scale)
+void cameraManager::zOrderAniRender(Image * img, float x, float y, float z, animation * ani, float scale)
 {
 	tagZoder tempZorder;
 
@@ -121,13 +122,13 @@ void cameraManager::zOrderALLRender()
 		switch (_vZorder[i].rendertype)
 		{
 		case renderType::RENDER:
-			render(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y,_vZorder[i].alpha);
+			render(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].scale, _vZorder[i].alpha);
 			break;
 		case renderType::FRAME_RENDER:
-			frameRender(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].frame.x, _vZorder[i].frame.y);
+			frameRender(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].frame.x, _vZorder[i].frame.y, _vZorder[i].scale, _vZorder[i].alpha);
 			break;
 		case renderType::ANI_RENDER:
-			aniRender( _vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].ani, _vZorder[i].scale);
+			aniRender(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].ani, _vZorder[i].scale);
 			break;
 		}
 	}
@@ -136,7 +137,7 @@ void cameraManager::zOrderALLRender()
 }
 
 
-void cameraManager::rectangle(const RECT rect,const D2D1::ColorF::Enum& color, float alpha, float strokeWidth)
+void cameraManager::rectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth)
 {
 	RECT rc;
 	rc.left = getRelativeLeft(rect.left);
@@ -184,7 +185,7 @@ void cameraManager::ellipse(float x, float y, const float radius, const D2D1::Co
 {
 	float relativeX = getRelativeLeft(x);
 	float relativeY = getRelativeTop(y);
-	D2DRenderer::GetInstance()->DrawEllipse(Vector2(relativeX, relativeY), radius, color,strokeWidth);
+	D2DRenderer::GetInstance()->DrawEllipse(Vector2(relativeX, relativeY), radius, color, strokeWidth);
 }
 
 void cameraManager::render(Image * img, float destX, float destY, float alpha)
@@ -197,7 +198,7 @@ void cameraManager::render(Image * img, float destX, float destY, float alpha)
 }
 
 
-void cameraManager::render(Image * img, float destX, float destY, float scale,float alpha)
+void cameraManager::render(Image * img, float destX, float destY, float scale, float alpha)
 {
 	float relativeLeft = getRelativeLeft(destX);
 	float relativeTop = getRelativeTop(destY);
@@ -214,7 +215,7 @@ void cameraManager::frameRender(Image * img, float destX, float destY, int frame
 	float relativeLeft = getRelativeLeft(destX);
 	float relativeTop = getRelativeTop(destY);
 
-	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop),frameX,frameY);
+	if (img) img->FrameRender(Vector2(relativeLeft, relativeTop), frameX, frameY);
 }
 
 void cameraManager::frameRender(Image * img, float destX, float destY, int frameX, int frameY, float scale, float alpha)
@@ -241,6 +242,12 @@ void cameraManager::setY(float relativeY)
 	relativeY = max(_minY, relativeY);
 	_y = floor(relativeY);
 	_top = _y - (_height * 0.5f);
+}
+
+void cameraManager::setXY(float x, float y)
+{
+	setX(x);
+	setY(y);
 }
 
 

@@ -51,7 +51,7 @@ HRESULT shopNPC::init()
 	}
 
 	_aStar->init(WINSIZEX / 50, 1400 / 50, _centerX / 50, _centerY / 50 - 3, _goToPoint.x, _goToPoint.y, _vUnMove, true);
-	
+	_item->init(ITEMTYPE::CRYSTAL_ENERGY, _centerX, _centerY - 50);
 
 	return S_OK;
 }
@@ -62,16 +62,11 @@ void shopNPC::release()
 
 void shopNPC::updadte()
 {
-	if (KEYMANAGER->isOnceKeyDown('L'))
-	{
-		_item->init(ITEMTYPE::CRYSTAL_ENERGY, _centerX, _centerY - 50);
-	}
-
 	directionCheck();
-	_item->update();
 
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
 	_item->setItemPos(_centerX, _centerY - 50);
+	_item->update();
 
 	_thinkBoxX = _centerX;
 	_thinkBoxY = _centerY - 80;
@@ -129,6 +124,8 @@ void shopNPC::updadte()
 			// 구매했으면 BUY 상태로 바꿔라
 			if (_isBuy)
 			{
+				_goToPoint = _counterPoint;
+				_aStar->changeWayPoint();
 				_npcActionState = NPC_BUY;
 				break;
 			}
@@ -142,8 +139,9 @@ void shopNPC::updadte()
 		}
 		break;
 	case NPC_BUY:
+		frameUpdate();
+		move();
 
-		_npcActionState = NPC_AWAY;
 		break;
 	case NPC_AWAY:
 
@@ -239,10 +237,21 @@ void shopNPC::move()
 
 		if (getDistance(_centerX, _centerY, _aStar->getVShortest()[0]->center.x, _aStar->getVShortest()[0]->center.y) < 3)
 		{
-			_npcActionState = NPC_CHECKITEM;
-			_npcEmotionState = NPC_CHOOSE;
-			_emotionImg = _emotionImg = ImageManager::GetInstance()->FindImage("thinking");
-			_emotionIndexX = 0;
+			if (_npcActionState == NPC_SHOPPING)
+			{
+				_npcActionState = NPC_CHECKITEM;
+				_npcEmotionState = NPC_CHOOSE;
+				_emotionImg = _emotionImg = ImageManager::GetInstance()->FindImage("thinking");
+				_emotionIndexX = 0;
+			}
+			else if (_npcActionState == NPC_BUY)
+			{
+				_npcActionState = NPC_AWAY;
+			}
+			else if (_npcActionState == NPC_AWAY)
+			{
+
+			}
 		}
 	}
 }
@@ -361,8 +370,8 @@ void shopNPC::wayPointSet()
 	_itemWayPoint[3].y = 20;
 
 	// 계산대
-	_counterPoint.x = 20;
-	_counterPoint.y = 16;
+	_counterPoint.x = 17;
+	_counterPoint.y = 18;
 }
 
 void shopNPC::directionCheck()

@@ -46,9 +46,12 @@ private:
 	playerState*	    _sword;
 	playerState*	    _broom;
 	playerState*		_bed;
+	playerState*		_teleport;
+	playerState*		_teleportIn;
+	playerState*		_teleportOut;
 
 public:
-	virtual HRESULT init();
+	virtual HRESULT init(float x, float y);
 	void render();
 	void update();
 	void release();
@@ -64,13 +67,13 @@ public:
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
 	float getShadowY() { return _playerShadowY; }
-	float getAttackRc() { return _playerAttackX, _playerAttackY, _playerAttackW, _playerAttackH; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
 	bool getAttackRcbool() { return _attackRcbool; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
+	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	Image* getImage() { return _playerImg; }
 	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
@@ -104,6 +107,9 @@ public:
 	playerState* getSwordState()	{ return _sword; }
 	playerState* getBroomState()	{ return _broom; }
 	playerState* getBedState()		{ return _bed; }
+	playerState* getTeleport()		{ return _teleport; }
+	playerState* getTeleportIn()	{ return _teleportIn; }
+	playerState* getTeleportOut()	{ return _teleportOut; }
 };
 
 

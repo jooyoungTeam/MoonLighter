@@ -9,7 +9,6 @@ class tile : public gameNode
 private:
 	button*           _button;
 	tagTile           _tiles[TILEX * TILEY];
-	vector<int>		  _vDragTile;
 	tagDragRect       _drag;
 	POINT             _currentTile; //인덱스
 	RECT              _currentRect;           
@@ -50,6 +49,13 @@ private:
 	DWORD             _townAttribute[TILEX * TILEY];
 	// ----------- 마을 맵 변수
 
+	// ----------- 충돌 처리 타일로 바꿔줄 렉트
+
+	// ----------- 충돌 처리 타일로 바꿔줄 렉트
+
+
+
+	int           _frameCount;
 
 	int           _saveTime;
 	int			  _dragNumX;
@@ -72,6 +78,8 @@ public:
 	void imageLoad();
 	void selectObject();
 	void eraseObject(int arrNum);
+
+	void autoTile();
 
 	void mapMove();
 	void sampleOnOff();

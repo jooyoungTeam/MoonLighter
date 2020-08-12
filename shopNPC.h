@@ -104,6 +104,8 @@ public:
 	RECT getNPCRect() { return _rc; }
 	int  getSelectPrice() { return _selectPrice; }
 	int  getRndItem() { return _rndChoiceItem; }
+	bool getIsBuy() { return _isBuy; }
+	
 
 public:
 	//============================ Set ===========================

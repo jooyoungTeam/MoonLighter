@@ -1525,12 +1525,30 @@ void playerBedState::update(player & player)
 	//애니메이션이 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerBed")->isPlay())
 	{
-		player.setShadowX(515);
-		player.setShadowY(550);
+		player.setShadowX(player.getShadowX() + 11);
+		player.setShadowY(player.getShadowY() + 50);
 		player.setX(player.getShadowX());
 		player.setY(player.getShadowY()- 50);
 
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 	}
+}
+
+//텔레포트 상태
+void playerTeleportState::update(player & player)
+{
+
+}
+
+//텔레포트(던전) 들어가기 상태
+void playerTeleportInState::update(player & player)
+{
+
+}
+
+//텔레포트(탈출) 상태
+void playerTeleportOutState::update(player & player)
+{
+
 }
