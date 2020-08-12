@@ -47,9 +47,9 @@ public:
 public:
 	void zOrderClear();
 	// 제트오더 랜더 추가 ( 렌더 타입, 이미지, 중점 x, 중점 y)
-	void zOrderRender(Image* img, float x, float y, float z,float alpha);
+	void zOrderRender(Image* img, float x, float y, float z,float alpha, float scale);
 	// 제트오더 랜더 추가 ( 렌더 타입, 이미지, 중점 x, 중점 y, 프레임 x, 프레임 y)
-	void zOrderFrameRender(Image* img, float x, float y, float z, float frmaeX, float frameY);
+	void zOrderFrameRender(Image* img, float x, float y, float z, float frmaeX, float frameY, float scale, float alpha);
 	// 제트오더 랜더 추가 ( 렌더 타입, 이미지, 중점 x, 중점 y, 애니메이션)
 	void zOrderAniRender(Image* img, float x, float y, float z, animation* ani,float scale);
 
@@ -79,6 +79,7 @@ public:
 	float getY() { return _y; }
 	void  setX(float relativeX);
 	void  setY(float relativeY);
+	void  setXY(float x, float y);
 public:
 	float getRelativeLeft(float left) { float relativeLeft; return relativeLeft = left - _left; }
 	float getRelativeTop(float top) { float relativeTop;  return relativeTop = top - _top; }
