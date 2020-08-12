@@ -200,7 +200,7 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
-	ImageManager::GetInstance()->AddImage("bossLong", L"image/enemy/long.png");
+	ImageManager::GetInstance()->AddFrameImage("bossLong", L"image/enemy/long.png", 6, 1);
 
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 

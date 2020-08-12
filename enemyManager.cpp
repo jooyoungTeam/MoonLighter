@@ -228,7 +228,7 @@ void enemyManager::playerCol()
 				}
 			}
 			
-			//if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect(), &_player.))
+			//if (IntersectRect(&temp, &_enemy->getEnemyAttackRect().GetRect(), &_player->getAttackRc()))
 		}
 	}
 
