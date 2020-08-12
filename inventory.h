@@ -4,6 +4,7 @@
 
 #define INVENSPACE 22					//인벤칸수(왼쪽)
 #define GEARSPACE 6						//장비칸수(오른쪽)
+#define SHOPSPACE 4						//상점칸수
 
 enum class INVEN_STATE
 {
@@ -19,8 +20,8 @@ struct tagInven
 {
 	FloatRect rc;
 	item* item;
-	wstring number;
 	int count;
+	wstring number;
 };
 
 struct tagGear
@@ -28,8 +29,18 @@ struct tagGear
 	Image* img;
 	FloatRect rc;
 	item* item;
-	wstring number;
 	int count;
+	wstring number;
+};
+
+struct tagShop
+{
+	FloatRect rc;
+	item* item;
+	int count;
+	int price;
+	wstring countNum;
+	wstring priceNum;
 };
 
 class player;
@@ -51,6 +62,7 @@ private:
 	bool _isSale;						//아이템 판매하는 불 값
 
 	tagGear _gear[GEARSPACE];			//장비칸
+	tagShop _shop[SHOPSPACE];			//상점칸
 	bool _isSwap;						//넘어가기
 
 	MIRROR_STATE _mirror;				//미러 상태
@@ -80,6 +92,7 @@ public:
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
+	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:

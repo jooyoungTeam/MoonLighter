@@ -22,6 +22,7 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddFrameImage("mirror_ball", L"Image/UI/mirror_empty.png", 10, 1);
 	ImageManager::GetInstance()->AddFrameImage("mirror_sale", L"Image/UI/inven_sale.png", 29, 1);
 	ImageManager::GetInstance()->AddFrameImage("inven_sale", L"Image/UI/mirror_sale.png", 8, 1);
+	ImageManager::GetInstance()->AddImage("showcase", L"Image/UI/showcase.png");
 
 	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
 	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
@@ -87,6 +88,16 @@ HRESULT inventory::init()
 		_gear[i].item = nullptr;
 	}
 
+	//쇼케이스
+	for (int i = 0; i < SHOPSPACE; i++)
+	{
+		if (i < 2)
+		_shop[i].rc = RectMakePivot(Vector2(950 + i, 220 + i * 285), Vector2(60, 60), Pivot::Center);
+
+		else
+		_shop[i].rc = RectMakePivot(Vector2(1252, 505 + i * 285 - 856), Vector2(60, 60), Pivot::Center);
+	}
+
 	//인벤 상태
 	_state = INVEN_STATE::NOTE;
 	//미러 상태
@@ -110,11 +121,10 @@ void inventory::render()
 	//인벤
 	ImageManager::GetInstance()->FindImage("inven")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 
-	//인벤토리 관련 렌더
+	//인벤토리
 	for (int i = 0; i < INVENSPACE; i++)
 	{
 		//D2DRenderer::GetInstance()->DrawRectangle(_inven[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-		ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
 		if (i <= 20) ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_inven[i].rc.left - 5, _inven[i].rc.top - 5));
 
 		if (_inven[i].item != nullptr)
@@ -127,31 +137,49 @@ void inventory::render()
 	//펜던트
 	ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
 
-	//장비창 관련 렌더
+	//장비창
 	if (_state == INVEN_STATE::NOTE)
 	{
+		//장비 변경
+		//플레이어 불값false
+		ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+		//플레이어 불값true
+		//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+
 		for (int i = 0; i < GEARSPACE; i++)
 		{
 			//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-			ImageManager::GetInstance()->FindImage("invenSpace")->SetSize(Vector2(65, 65));
 			ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_gear[i].rc.left - 5, _gear[i].rc.top - 5));
 			_gear[i].img->Render(Vector2(_gear[i].rc.GetCenter().x - 26, _gear[i].rc.GetCenter().y - 25));
 
 			if (_gear[i].item != nullptr)
 			{
 				_gear[i].item->getImg()->Render(Vector2(_gear[i].rc.GetCenter().x - _gear[i].item->getImg()->GetWidth() / 2, _gear[i].rc.GetCenter().y - _gear[i].item->getImg()->GetHeight() / 2));
-				D2DRenderer::GetInstance()->RenderText(_gear[4].rc.right - _gear[i].number.length() * 20, _gear[4].rc.bottom - 20, to_wstring(_gear[4].count), 20, D2DRenderer::DefaultBrush::Black);
+				D2DRenderer::GetInstance()->RenderText(_gear[i].rc.right - _gear[i].number.length() * 20, _gear[i].rc.bottom - 20, to_wstring(_gear[i].count), 20, D2DRenderer::DefaultBrush::Black);
 			}
 
 			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
 		}
 	}
 
-	//장비 변경
-	//플레이어 불값false
-	ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
-	//플레이어 불값true
-	//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+	//쇼케이스
+	if (_state == INVEN_STATE::SHOP)
+	{
+		ImageManager::GetInstance()->FindImage("showcase")->Render(Vector2(800, 160));
+
+		for (int i = 0; i < SHOPSPACE; i++)
+		{
+			//D2DRenderer::GetInstance()->DrawRectangle(_shop[i].rc, D2DRenderer::DefaultBrush::White, 1.f);
+
+			if (_shop[i].item != nullptr)
+			{
+				_shop[i].item->getImg()->Render(Vector2(_shop[i].rc.GetCenter().x - _shop[i].item->getImg()->GetWidth() / 2, _shop[i].rc.GetCenter().y - _shop[i].item->getImg()->GetHeight() / 2));
+				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.right - _shop[i].countNum.length() * 20, _shop[i].rc.bottom - 20, to_wstring(_shop[i].count), 20, D2DRenderer::DefaultBrush::White);
+			}		
+
+			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_shop[i].rc.left - 5, _shop[i].rc.top - 5));
+		}		
+	}
 
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
@@ -162,9 +190,13 @@ void inventory::render()
 		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
 	}
 
+	//선택테두리
+	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+
 	//미러
 	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
 	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
+
 
 	//아이템을 팔겠다면
 	if (_isSale)
@@ -182,8 +214,6 @@ void inventory::render()
 		}
 	}
 
-	//선택테두리
-	if (!_isSwap && _mirror != MIRROR_STATE::ACTIVE) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 }
 
 void inventory::update()
@@ -193,8 +223,9 @@ void inventory::update()
 
 	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	if (_mirror != MIRROR_STATE::ACTIVE || (!_isSelect && _isSale))
+	//if ()
 	{
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
@@ -210,18 +241,42 @@ void inventory::update()
 						if (_select > INVENSPACE - 1) _select = 4;
 						else _select = _select / 5 - 1;
 					}
+
+					if (_state == INVEN_STATE::SHOP)
+					{
+						if (_select / 10 == 0) _select = 0;
+						else _select = 1;
+					}
 				}
 			}
 			else
 			{
 				if (_state == INVEN_STATE::NOTE)
 				{
+					_select++;
+
 					if (_select == 0) _select = 5;
 					else
 					{
 						_isSwap = false;
 						if (_select >= 5) _select = 0;
 						else _select *= 5;
+					}
+				}
+
+				if (_state == INVEN_STATE::SHOP)
+				{
+					_select += 2;
+					if (_select == 4)
+					{
+						_isSwap = false;
+						_select = 0;
+					}
+
+					if (_select == 5)
+					{
+						_isSwap = false;
+						_select = 15;
 					}
 				}
 			}
@@ -235,11 +290,26 @@ void inventory::update()
 
 				if (_select % 5 == 4 || _select < 0)
 				{
-					_isSwap = true;
 					if (_state == INVEN_STATE::NOTE)
 					{
+						_isSwap = true;
 						if (_select < 0) _select = 5;
 						else _select = _select / 5 + 1;
+					}
+
+					if (_state == INVEN_STATE::SHOP)
+					{
+						if (_select < 0)
+						{
+							_isSwap = true;
+							_select = 2;
+						}
+
+						if (_select == 14)
+						{
+							_isSwap = true;
+							_select = 3;
+						}
 					}
 				}
 			}
@@ -254,6 +324,17 @@ void inventory::update()
 						_isSwap = false;
 						if (_select == 4) _select = 21;
 						else _select = _select * 5 + 4;
+					}
+				}
+
+				if (_state == INVEN_STATE::SHOP)
+				{
+					_select -= 2;
+					if (_select < 0)
+					{
+						_isSwap = false;
+						if (_select == -2) _select = 4;
+						if (_select == -1) _select = 19;
 					}
 				}
 			}
@@ -279,10 +360,15 @@ void inventory::update()
 
 			else
 			{
+				_select--;
 				if (_state == INVEN_STATE::NOTE)
 				{
-					_select -= 1;
 					if (_select < 0) _select = 4;
+				}
+
+				if (_state == INVEN_STATE::SHOP)
+				{
+					if (_select < 0) _select = 1;
 				}
 			}
 		}
@@ -308,10 +394,15 @@ void inventory::update()
 
 			else
 			{
+				_select++;
 				if (_state == INVEN_STATE::NOTE)
 				{
-					_select += 1;
 					if (_select > 4) _select = 0;
+				}
+
+				if (_state == INVEN_STATE::SHOP)
+				{
+					if (_select > 3) _select = 2;
 				}
 			}
 		}
@@ -388,11 +479,13 @@ void inventory::moveItem()
 
 		if (!_isSwap)
 		{
+			if (_select == 21) return;
+
 			//미러를 선택했다면
 			if (_select == 20 && _selectItem.item == nullptr)
 			{
 				_isSelect = true;
-				_isSale = true; 
+				_isSale = true;
 				_mirrorBallFrameX = 0;
 				_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
@@ -410,7 +503,7 @@ void inventory::moveItem()
 				//인벤 카운트가 0 이하가 되면 비워버린다
 				if (_inven[_select].count <= 0) _inven[_select].item = nullptr;
 			}
-		}		
+		}
 
 		//선택한 장비창이 비어있지 않다면
 		else if (_gear[_select].item != nullptr && _isSwap && _state == INVEN_STATE::NOTE)
@@ -424,12 +517,24 @@ void inventory::moveItem()
 			//장비창 카운트가 0 이하가 되면 비워버린다
 			if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
 		}
+
+		//선택한 쇼케이스가 비어있지 않다면
+		else if (_shop[_select].item != nullptr && _isSwap && _state == INVEN_STATE::SHOP)
+		{
+			_isSelect = true;
+			_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+			_selectItem.item = _shop[_select].item;
+			_selectItem.count++;
+			_shop[_select].count--;
+		}
 	}
 
 	if (_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
 		if (!_isSwap)
 		{
+			if (_select == 21) return;
+
 			//선택한 인벤이 비어있으면
 			if (_inven[_select].item == nullptr)
 			{				
@@ -513,37 +618,37 @@ void inventory::moveItem()
 					//변화가 있으면
 					else
 					{
-						//인벤 카운트가 한계치를 넘으면
-						if (_inven[_select].count + _selectItem.count > _inven[_select].item->getLimit())
-						{
-							_selectItem.count = (_inven[_select].count + _selectItem.count) - _inven[_select].item->getLimit();
-							_inven[_select].count = _inven[_select].item->getLimit();
-						}
+					//인벤 카운트가 한계치를 넘으면
+					if (_inven[_select].count + _selectItem.count > _inven[_select].item->getLimit())
+					{
+						_selectItem.count = (_inven[_select].count + _selectItem.count) - _inven[_select].item->getLimit();
+						_inven[_select].count = _inven[_select].item->getLimit();
+					}
 
-						//넘지 않는다면
-						else
-						{
-							_inven[_select].count = _inven[_select].count + _selectItem.count;
-							_selectItem.count = 0;
-						}
+					//넘지 않는다면
+					else
+					{
+						_inven[_select].count = _inven[_select].count + _selectItem.count;
+						_selectItem.count = 0;
+					}
 
-						//선택 아이템 카운트가 0 이하가 되면 비워라
-						if (_selectItem.count <= 0)
-						{
-							_selectItem.item = nullptr;
-							_isSelect = false;
-						}
+					//선택 아이템 카운트가 0 이하가 되면 비워라
+					if (_selectItem.count <= 0)
+					{
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
 					}
 				}
 			}
 		}
-		
+
 		if (_isSwap)
 		{
 			//장비창에 옮기기(포션칸에 포션을 옮긴다고 한다면)
 			if (_state == INVEN_STATE::NOTE)
 			{
-				if (_select == 4) 
+				if (_select == 4)
 				{
 					if (_selectItem.item->getIndex() > 1000)
 					{
@@ -559,7 +664,7 @@ void inventory::moveItem()
 						//비어있지 않으면
 						else
 						{
-							//장비창에서 그대로 포션을 챙기고 있는 상태
+							//장비창에서 그대로 아이템을 챙기고 있는 상태
 							if (_selectNumber == _select)
 							{
 								_selectItem.count++;
@@ -577,13 +682,13 @@ void inventory::moveItem()
 								}
 							}
 
-							//인벤에서 가져온 포션이라면
+							//인벤에서 가져온 아이템이라면
 							else
 							{
 								_selectItem.count--;
 								_gear[_select].count++;
 
-								//포션 한계치를 넘으면
+								//아이템 한계치를 넘으면
 								if (_gear[_select].count + _selectItem.count > _gear[_select].item->getLimit())
 								{
 									_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
@@ -602,7 +707,62 @@ void inventory::moveItem()
 					}
 				}
 			}
-		}			
+
+			if (_state == INVEN_STATE::SHOP)
+			{
+				//쇼케이스가 비어있으면
+				if (_shop[_select].item == nullptr)
+				{
+					_shop[_select].item = _selectItem.item;
+					_shop[_select].count = _selectItem.count;
+					_selectItem.item = nullptr;
+					_isSelect = false;
+				}
+
+				//비어있지 않으면
+				else
+				{
+					//쇼케이스에서 그대로 아이템을 챙기고 있는 상태
+					if (_selectNumber == _select)
+					{
+						_selectItem.count++;
+						_shop[_select].count--;
+
+						//쇼케이스에 있는 아이템을 모두 들었다면
+						if (_shop[_select].count <= 0) _shop[_select].item = nullptr;
+
+						//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
+						if (_selectItem.count > _selectItem.item->getLimit())
+						{
+							_shop[_select].item = _selectItem.item;
+							_shop[_select].count = _selectItem.count;
+						}
+					}
+
+					//인벤에서 가져온 포션이라면
+					else
+					{
+						_selectItem.count--;
+						_shop[_select].count++;
+
+						//포션 한계치를 넘으면
+						if (_shop[_select].count + _selectItem.count > _shop[_select].item->getLimit())
+						{
+							_selectItem.count = (_shop[_select].count + _selectItem.count) - _shop[_select].item->getLimit();
+							_shop[_select].count = _shop[_select].item->getLimit();
+						}
+
+						//다 내려놨다면
+						if (_selectItem.count <= 0)
+						{
+							_selectItem.count = 0;
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 //===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
@@ -615,7 +775,7 @@ void inventory::useMirror()
 	{
 		//미러 칸에 머무르고 있으면
 		_count++;
-		if (_count == 15 && _mirror != MIRROR_STATE::STAY && _mirror != MIRROR_STATE::ACTIVE)
+		if (_count == 15 && _mirror != MIRROR_STATE::ACTIVE)
 		{
 			_mirror = MIRROR_STATE::STAY;
 			_mirrorFrameX = 0;
@@ -623,12 +783,12 @@ void inventory::useMirror()
 		}
 	}
 
-	else
+	else if (_select != 20 && _mirror != MIRROR_STATE::ACTIVE)
 	{
 		_mirror = MIRROR_STATE::STOP;
 		_count = 0;
 		_mirrorFrameX = 0;
-		_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
+		_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");		
 	}
 }
 //===========================================↑↑미러 사용하기↑↑===========================================//
