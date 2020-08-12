@@ -64,13 +64,13 @@ public:
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
 	float getShadowY() { return _playerShadowY; }
-	float getAttackRc() { return _playerAttackX, _playerAttackY, _playerAttackW, _playerAttackH; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
 	bool getAttackRcbool() { return _attackRcbool; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
+	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	Image* getImage() { return _playerImg; }
 	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
