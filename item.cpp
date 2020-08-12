@@ -48,7 +48,6 @@ void item::update()
 
 void item::fieldUpdate()
 {
-	cout << _shake << endl;
 	if (_shake > 5)
 	{
 		_isShake = false;
@@ -61,11 +60,11 @@ void item::fieldUpdate()
 
 	if (_isShake)
 	{
-		_shake += 0.5f;
+		_shake += 0.2f;
 	}
 	else
 	{
-		_shake -= 0.5f;
+		_shake -= 0.2f;
 	}
 
 	_y += _shake;
