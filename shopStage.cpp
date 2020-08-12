@@ -11,7 +11,7 @@ HRESULT shopStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
-	_player->init(WINSIZEX / 2 + 110, 400);
+	_player->init(WINSIZEX / 2 + 113, 445);
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();

@@ -46,12 +46,12 @@ void player::render()
 		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBed"))
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.5f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.7f);
+		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.63f);
 	}
 	else
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.5f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.2f);
+		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.17f);
 	}
 	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))

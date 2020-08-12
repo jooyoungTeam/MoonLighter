@@ -1525,8 +1525,8 @@ void playerBedState::update(player & player)
 	//애니메이션이 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerBed")->isPlay())
 	{
-		player.setShadowX(515);
-		player.setShadowY(550);
+		player.setShadowX(player.getShadowX() + 11);
+		player.setShadowY(player.getShadowY() + 50);
 		player.setX(player.getShadowX());
 		player.setY(player.getShadowY()- 50);
 
