@@ -13,6 +13,7 @@ struct tagBullet
 	int count;
 	int index;
 	int delay;
+	bool colAni;
 };
 
 
@@ -21,6 +22,7 @@ class bullet : public gameNode
 private:
 	vector<tagBullet> _vBullet;
 	vector<tagBullet>::iterator _viBullet;
+	tagBullet _bullet;
 
 
 public:
@@ -31,5 +33,8 @@ public:
 
 	virtual void fire(float x, float y, float angle, float speed);
 	virtual void remove(int arr);
+
+	vector<tagBullet> getVBullet() { return _vBullet; }
+
 };
 

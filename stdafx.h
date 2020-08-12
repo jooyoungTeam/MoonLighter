@@ -35,7 +35,7 @@ enum class Pivot : int
 #include "D2DRenderer.h"
 #include "imageManager.h"
 #include "timeManager.h"
-//#include "effectManager.h"
+#include "effectManager.h"
 #include "soundManager.h"
 #include "sceneManager.h"
 #include "keyAniManager.h"

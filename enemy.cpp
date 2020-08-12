@@ -87,7 +87,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_attackAngle = 0;
 	_middleBarCut = 0;
 	_barAlpha = 0;
-	_hitBoolCount = 0;
+	_isHitCount = 0;
 
 	vector<POINT> tempV;
 	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50, tempV, false);
@@ -97,6 +97,12 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 
 void enemy::release()
 {
+	SAFE_DELETE(_aStar);
+	SAFE_DELETE(_idle);
+	SAFE_DELETE(_move);
+	SAFE_DELETE(_attack);
+	SAFE_DELETE(_hit);
+	SAFE_DELETE(_dead);
 }
 
 void enemy::update()
@@ -155,6 +161,8 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("bulletCollision", L"image/enemy/bullet_collision.png", 5, 1);
 	ImageManager::GetInstance()->AddFrameImage("bullet", L"image/enemy/enemy_bullet.png", 6, 1);
 	ImageManager::GetInstance()->AddFrameImage("pot", L"image/enemy/pot.png", 11, 4);
+	EFFECTMANAGER->addEffect("bulletCollision", "bulletCollision", 90, 18, 18, 18, 1.0f, 0.2f, 10.0f, 1.5f);
+
 
 	//°ñ·½
 	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
@@ -212,12 +220,6 @@ void enemy::ani()
 
 
 	//ÆÌ
-	int bulletCol[] = { 0,1,2,3,4 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bulletCollision", "bulletCollision", bulletCol, 5, 13, false);
-
-	int bullet[] = { 0,1,2,3,4,5 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bullet", "bullet", bullet, 6, 13, true);
-
 	int leftPot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; 
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "potLeft", "pot", leftPot, 11, 7, true);
 	int rightPot[] = { 11,12,13,14,15,16,17,18,19,20,21 };
@@ -233,43 +235,27 @@ void enemy::ani()
 	//°ñ·½
 	int goLeftAttack[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttack", "golemAttack", goLeftAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttackRed", "golemAttackRed", goLeftAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftAttackWhite", "golemAttackWhite", goLeftAttack, 13, 13, false);
 
 	int goRightAttack[] = { 13,14,15,16,17,18,19,20,21,22,23,24,25 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttack", "golemAttack", goRightAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttackRed", "golemAttackRed", goRightAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightAttackWhite", "golemAttackWhite", goRightAttack, 13, 13, false);
 
 	int goUpAttack[] = { 26,27,28,29,30,31,32,33,34,35,36,37,38 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttack", "golemAttack", goUpAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttackRed", "golemAttackRed", goUpAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpAttackWhite", "golemAttackWhite", goUpAttack, 13, 13, false);
 
 	int goDownAttack[] = {39,40,41,42,43,44,45,46,47,48,49,50,51 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttack", "golemAttack", goDownAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttackRed", "golemAttackRed", goDownAttack, 13, 13, false);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownAttackWhite", "golemAttackWhite", goDownAttack, 13, 13, false);
 
 	int goLeft[] = { 0,1,2,3,4,5,6,7 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeft", "golem", goLeft, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftRed", "golemRed", goLeft, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemLeftWhite", "golemWhite", goLeft, 8, 13, true);
 
 	int goRight[] = { 8,9,10,11,12,13,14,15 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRight", "golem", goRight, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightRed", "golemRed", goRight, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemRightWhite", "golemWhite", goRight, 8, 13, true);
 
 	int goUp[] = { 16,17,18,19,20,21,22,23 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUp", "golem", goUp, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpRed", "golemRed", goUp, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemUpWhite", "golemWhite", goUp, 8, 13, true);
 
 	int goDown[] = { 24,25,26,27,28,29,30,31 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDown", "golem", goDown, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownRed", "golemRed", goDown, 8, 13, true);
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "golemDownWhite", "golemWhite", goDown, 8, 13, true);
 
 
 
@@ -423,10 +409,6 @@ void enemy::setBar()
 	}
 }
 
-void enemy::enemyHit()
-{
-}
-
 void enemy::checkBoolCount()
 {
 	if (_curHP <= 0)
@@ -436,7 +418,7 @@ void enemy::checkBoolCount()
 	}
 	if (_isHit)
 	{
-		_hitBoolCount++;
+		_isHitCount++;
 		enemyHit();
 		_barAlpha -= 0.02;
 		if (_saveHP >= _bar.width)
@@ -444,10 +426,10 @@ void enemy::checkBoolCount()
 			_saveHP--;
 		}
 	}
-	if (_hitBoolCount > 20)
+	if (_isHitCount > 20)
 	{
 		_isHit = false;
-		_hitBoolCount = 0;
+		_isHitCount = 0;
 	}
 	if (!_isHit)
 	{

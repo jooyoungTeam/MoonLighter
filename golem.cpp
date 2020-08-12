@@ -139,17 +139,20 @@ void golem::direcitonChange()
 
 void golem::dead()
 {
+	_golemCount++;
 	if (_onceAni)
 	{
-		_img = ImageManager::GetInstance()->FindImage("redSlimeDead");
-		_motion = KEYANIMANAGER->findAnimation(_index, "redSlimeDead");
-		_motion->start();
+		_img = ImageManager::GetInstance()->FindImage("golemRed");
+		//_motion = KEYANIMANAGER->findAnimation(_index, "golemRed");
 		_onceAni = false;
 	}
-	if (!KEYANIMANAGER->findAnimation(_index, "redSlimeDead")->isPlay())
+	hitMove();
+	if (_golemCount > 20)
 	{
-		_realDead = true;
+		_realDead = true; 
+		_golemCount = 0;
 	}
+	
 }
 
 void golem::enemyHit()

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "inventory.h"
+#include "UI.h"
 
 HRESULT inventory::init()
 {
-	_mirrorImg = ImageManager::GetInstance()->AddImage("bagMirror", L"image/UI/bagMirror.png");
+	ImageManager::GetInstance()->AddImage("bagMirror", L"image/UI/bagMirror.png");
 	ImageManager::GetInstance()->AddFrameImage("mirror_stay", L"image/UI/mirror_stay.png", 11, 1);
 	ImageManager::GetInstance()->AddFrameImage("mirror_active", L"image/UI/mirror_active.png", 14, 1);
-	
-	ImageManager::GetInstance()->AddImage("inven", L"image/UI/note.png");
+	ImageManager::GetInstance()->AddImage("inven", L"Image/UI/inventory.png");
 	ImageManager::GetInstance()->AddImage("invenSpace", L"image/UI/invenSpace.png");
 	ImageManager::GetInstance()->AddImage("select", L"image/UI/invenslot.png");
 	ImageManager::GetInstance()->AddImage("pendant", L"image/UI/pendant.png");
@@ -19,8 +19,12 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddImage("inven_weapon_2", L"Image/UI/Inven_weapon_2.png");
 	ImageManager::GetInstance()->AddImage("empty_potion", L"Image/UI/empty_potion.png");
 	ImageManager::GetInstance()->AddImage("inven_select", L"Image/UI/inven_select.png");
-	ImageManager::GetInstance()->AddFrameImage("mirror_empty", L"Image/UI/mirror_empty.png", 10, 1);
-	ImageManager::GetInstance()->AddFrameImage("mirror_sale", L"Image/UI/mirror_sale.png", 8, 1);
+	ImageManager::GetInstance()->AddFrameImage("mirror_ball", L"Image/UI/mirror_empty.png", 10, 1);
+	ImageManager::GetInstance()->AddFrameImage("mirror_sale", L"Image/UI/inven_sale.png", 29, 1);
+	ImageManager::GetInstance()->AddFrameImage("inven_sale", L"Image/UI/mirror_sale.png", 8, 1);
+
+	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
+	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
@@ -88,6 +92,10 @@ HRESULT inventory::init()
 	//미러 상태
 	_mirror = MIRROR_STATE::STOP;
 
+	_mirrorFrameX = 0;
+	_mirrorBallFrameX = 0;
+	_saleFrameX = 0;
+
 	_select = 0;
 	_isSwap = false;
 	_isSale = false;
@@ -98,7 +106,7 @@ HRESULT inventory::init()
 
 void inventory::render()
 {
-	//노트
+	//인벤
 	ImageManager::GetInstance()->FindImage("inven")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 
 	//인벤토리 관련 렌더
@@ -113,8 +121,6 @@ void inventory::render()
 			_inven[i].item->getImg()->Render(Vector2(_inven[i].rc.GetCenter().x - _inven[i].item->getImg()->GetWidth() / 2, _inven[i].rc.GetCenter().y - _inven[i].item->getImg()->GetHeight() / 2));
 			D2DRenderer::GetInstance()->RenderText(_inven[i].rc.right - _inven[i].number.length() * 20, _inven[i].rc.bottom - 20, to_wstring(_inven[i].count), 20, D2DRenderer::DefaultBrush::Black);
 		}
-
-		if (i == _select && !_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[i].rc.left - 7, _inven[i].rc.top - 7));
 	}
 
 	//펜던트
@@ -146,9 +152,6 @@ void inventory::render()
 	//플레이어 불값true
 	//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
 
-	//미러 안 공
-	ImageManager::GetInstance()->FindImage("mirror_empty")->FrameRender(Vector2(_inven[20].rc.GetCenter().x - 5, _inven[20].rc.GetCenter().y), _mirrorBallFrameX, 0);
-
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
 	{
@@ -163,7 +166,23 @@ void inventory::render()
 	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
 
 	//아이템을 팔겠다면
-	if (_isSale) ImageManager::GetInstance()->FindImage("mirror_sale")->FrameRender(Vector2(_selectItem.rc.GetCenter().x, _selectItem.rc.GetCenter().y), _saleFrameX, 0);
+	if (_isSale)
+	{	
+		if (_isSelect)
+		{
+			//미러 안
+			_saleImg->FrameRender(Vector2(_inven[20].rc.GetCenter().x - 5, _inven[20].rc.GetCenter().y), _mirrorBallFrameX, 0);
+			ImageManager::GetInstance()->FindImage("inven_sale")->FrameRender(Vector2(_selectItem.rc.GetCenter().x, _selectItem.rc.GetCenter().y), _saleFrameX, 0);
+		}
+
+		else
+		{
+			_saleImg->FrameRender(Vector2(_inven[_select].rc.GetCenter().x - 3, _inven[_select].rc.GetCenter().y - 3), _mirrorBallFrameX, 0);
+		}
+	}
+
+	//선택테두리
+	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 }
 
 void inventory::update()
@@ -273,8 +292,7 @@ void inventory::update()
 			{
 				_select += 5;
 
-				if (_select == 21) _select = 20;
-				if (_select == 22) _select = 21;
+				if (_select == 21 || _select == 22) _select -=1;
 				if (_select > 22) _select -= 20;
 			}
 
@@ -367,13 +385,16 @@ void inventory::moveItem()
 		if (!_isSwap)
 		{
 			//미러를 선택했다면
-			if (_select == 20)
+			if (_select == 20 && _selectItem.item == nullptr)
 			{
 				_isSelect = true;
-				_isSale = true;
+				_isSale = true; 
+				_mirrorBallFrameX = 0;
+				_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 			}
 
+			//선택한 인벤창이 비어있지 않다면
 			if (_inven[_select].item != nullptr)
 			{
 				_isSelect = true;
@@ -387,6 +408,7 @@ void inventory::moveItem()
 			}
 		}		
 
+		//선택한 장비창이 비어있지 않다면
 		else if (_gear[_select].item != nullptr && _isSwap && _state == INVEN_STATE::NOTE)
 		{
 			_isSelect = true;
@@ -406,14 +428,29 @@ void inventory::moveItem()
 		{
 			//선택한 인벤이 비어있으면
 			if (_inven[_select].item == nullptr)
-			{
-				if (_isSale) return;
+			{				
+				if (_isSale) _isSale = false;
 
-				_inven[_select].item = _selectItem.item;
-				_inven[_select].count = _selectItem.count;
-				_selectItem.count = 0;
-				_selectItem.item = nullptr;
-				_isSelect = false;
+				//판매하겠다면
+				if (_select == 20)
+				{
+					_mirror = MIRROR_STATE::ACTIVE;
+					_mirrorFrameX = 0;
+					_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_active");
+					_inven[_select].item = nullptr;
+					_selectItem.item = nullptr;
+					_isSelect = false;
+				}
+
+				else
+				{
+					_inven[_select].item = _selectItem.item;
+					_inven[_select].count = _selectItem.count;
+					_selectItem.count = 0;
+					_selectItem.item = nullptr;
+					_isSelect = false;
+				}
+				
 			}
 
 			//비어있지 않으면
@@ -421,9 +458,10 @@ void inventory::moveItem()
 			{
 				if (_isSale)
 				{
+					_mirrorBallFrameX = 0;
+					_saleImg = ImageManager::GetInstance()->FindImage("mirror_sale");
 					_inven[_select].item = nullptr;
 					_isSelect = false;
-					_isSale = false;
 					return;
 				}
 
@@ -570,19 +608,11 @@ void inventory::useMirror()
 	{
 		//미러 칸에 머무르고 있으면
 		_count++;
-		if (_count == 15 && _mirror != MIRROR_STATE::STAY)
+		if (_count == 15 && _mirror != MIRROR_STATE::STAY && _mirror != MIRROR_STATE::ACTIVE)
 		{
 			_mirror = MIRROR_STATE::STAY;
 			_mirrorFrameX = 0;
 			_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_stay");
-		}
-
-		//미러를 활성화 시킨다면
-		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
-		{
-			_mirror = MIRROR_STATE::ACTIVE;
-			_mirrorFrameX = 0;
-			_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_active");
 		}
 	}
 
@@ -600,12 +630,12 @@ void inventory::useMirror()
 //===========================================↓↓프레임 돌리기↓↓===========================================//
 void inventory::draw()
 {
-	//미러 프레임 돌아간다~
+	
 	if (_frameCount % 5 == 0)
 	{
+		//미러 프레임 돌아간다~
 		_mirrorFrameX++;
-
-		if (_mirrorImg != nullptr && _mirrorFrameX > _mirrorImg->GetMaxFrameX() - 1)
+		if (_mirrorImg != nullptr && _mirrorFrameX >= _mirrorImg->GetMaxFrameX())
 		{
 			if (_mirror == MIRROR_STATE::ACTIVE)
 			{
@@ -618,18 +648,21 @@ void inventory::draw()
 			{
 				_mirrorFrameX = 3;
 			}
-		}
-
-		_mirrorBallFrameX++;
-		if (_mirrorBallFrameX > ImageManager::GetInstance()->FindImage("mirror_empty")->GetMaxFrameX() - 1);
-		{
-			_mirrorBallFrameX = 0;
-		}
+		}	
 
 		if (_isSale)
 		{
+			//미러 안 공
+			_mirrorBallFrameX++;
+			if (_mirrorBallFrameX >= _saleImg->GetMaxFrameX())
+			{
+				_mirrorBallFrameX = 0;
+				if(!_isSelect) _isSale = false;				
+			}
+
+			//아이템 파는 select공
 			_saleFrameX++;
-			if (_saleFrameX > ImageManager::GetInstance()->FindImage("mirror_sale")->GetMaxFrameX() - 1)
+			if (_saleFrameX >= ImageManager::GetInstance()->FindImage("inven_sale")->GetMaxFrameX())
 			{
 				_saleFrameX = 0;
 			}
