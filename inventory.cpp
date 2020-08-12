@@ -96,6 +96,7 @@ HRESULT inventory::init()
 	_mirrorBallFrameX = 0;
 	_saleFrameX = 0;
 
+	_gold = 0;
 	_select = 0;
 	_isSwap = false;
 	_isSale = false;
@@ -182,7 +183,7 @@ void inventory::render()
 	}
 
 	//선택테두리
-	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+	if (!_isSwap && _mirror != MIRROR_STATE::ACTIVE) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 }
 
 void inventory::update()
@@ -193,122 +194,125 @@ void inventory::update()
 	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	if (KEYMANAGER->isOnceKeyDown('D'))
+	if (_mirror != MIRROR_STATE::ACTIVE || (!_isSelect && _isSale))
 	{
-		if (!_isSwap)
+		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
-			_select++;
-
-			if (_select % 5 == 0 || _select > INVENSPACE - 1)
+			if (!_isSwap)
 			{
-				_isSwap = true;
+				_select++;
+
+				if (_select % 5 == 0 || _select > INVENSPACE - 1)
+				{
+					_isSwap = true;
+					if (_state == INVEN_STATE::NOTE)
+					{
+						if (_select > INVENSPACE - 1) _select = 4;
+						else _select = _select / 5 - 1;
+					}
+				}
+			}
+			else
+			{
 				if (_state == INVEN_STATE::NOTE)
 				{
-					if (_select > INVENSPACE - 1) _select = 4;
-					else _select = _select / 5 - 1;
+					if (_select == 0) _select = 5;
+					else
+					{
+						_isSwap = false;
+						if (_select >= 5) _select = 0;
+						else _select *= 5;
+					}
 				}
 			}
 		}
-		else
+
+		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
-			if (_state == INVEN_STATE::NOTE)
+			if (!_isSwap)
 			{
-				if (_select == 0) _select = 5;
+				_select--;
+
+				if (_select % 5 == 4 || _select < 0)
+				{
+					_isSwap = true;
+					if (_state == INVEN_STATE::NOTE)
+					{
+						if (_select < 0) _select = 5;
+						else _select = _select / 5 + 1;
+					}
+				}
+			}
+
+			else
+			{
+				if (_state == INVEN_STATE::NOTE)
+				{
+					if (_select == 5) _select = 0;
+					else if (_select <= 4)
+					{
+						_isSwap = false;
+						if (_select == 4) _select = 21;
+						else _select = _select * 5 + 4;
+					}
+				}
+			}
+		}
+
+		if (KEYMANAGER->isOnceKeyDown('W'))
+		{
+			if (!_isSwap)
+			{
+				if (_select < 5)
+				{
+					_select += 15;
+					if (_select == 15) _select = 20;
+					if (_select == 17) _select = 21;
+				}
+
 				else
 				{
-					_isSwap = false;
-					if (_select >= 5) _select = 0;
-					else _select *= 5;
+					_select -= 5;
+					if (_select == 16) _select = 17;
 				}
 			}
-		}
-	}
 
-	if (KEYMANAGER->isOnceKeyDown('A'))
-	{
-		if (!_isSwap)
-		{
-			_select--;
-
-			if (_select % 5 == 4 || _select < 0)
+			else
 			{
-				_isSwap = true;
 				if (_state == INVEN_STATE::NOTE)
 				{
-					if (_select < 0) _select = 5;
-					else _select = _select / 5 + 1;
+					_select -= 1;
+					if (_select < 0) _select = 4;
 				}
 			}
 		}
 
-		else
+		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
-			if (_state == INVEN_STATE::NOTE)
+			if (!_isSwap)
 			{
-				if (_select == 5) _select = 0;
-				else if (_select <= 4)
+				if (_select < 20)
 				{
-					_isSwap = false;
-					if (_select == 4) _select = 21;
-					else _select = _select * 5 + 4;
+					_select += 5;
+
+					if (_select == 21 || _select == 22) _select -= 1;
+					if (_select > 22) _select -= 20;
+				}
+
+				else
+				{
+					if (_select == 21) _select -= 19;
+					else _select -= 20;
 				}
 			}
-		}
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('W'))
-	{
-		if (!_isSwap)
-		{
-			if (_select < 5)
-			{
-				_select += 15;
-				if (_select == 15) _select = 20;
-				if (_select == 17) _select = 21;
-			}
 
 			else
 			{
-				_select -= 5;
-				if (_select == 16) _select = 17;
-			}
-		}
-
-		else
-		{
-			if (_state == INVEN_STATE::NOTE)
-			{
-				_select -= 1;
-				if (_select < 0) _select = 4;
-			}
-		}
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('S'))
-	{
-		if (!_isSwap)
-		{
-			if (_select < 20)
-			{
-				_select += 5;
-
-				if (_select == 21 || _select == 22) _select -=1;
-				if (_select > 22) _select -= 20;
-			}
-
-			else
-			{
-				if (_select == 21) _select -= 19;
-				else _select -= 20;
-			}
-		}
-
-		else
-		{
-			if (_state == INVEN_STATE::NOTE)
-			{
-				_select += 1;
-				if (_select > 4) _select = 0;
+				if (_state == INVEN_STATE::NOTE)
+				{
+					_select += 1;
+					if (_select > 4) _select = 0;
+				}
 			}
 		}
 	}
@@ -431,12 +435,13 @@ void inventory::moveItem()
 			{				
 				if (_isSale) _isSale = false;
 
-				//판매하겠다면
+				//인벤에서 아이템을 가져와 판매하겠다면
 				if (_select == 20)
 				{
 					_mirror = MIRROR_STATE::ACTIVE;
 					_mirrorFrameX = 0;
 					_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_active");
+					_gold += _selectItem.item->getPrice() * _selectItem.count;
 					_inven[_select].item = nullptr;
 					_selectItem.item = nullptr;
 					_isSelect = false;
@@ -456,10 +461,12 @@ void inventory::moveItem()
 			//비어있지 않으면
 			else
 			{
+				//인벤에서 아이템을 선택해 판매하겠다면
 				if (_isSale)
 				{
 					_mirrorBallFrameX = 0;
 					_saleImg = ImageManager::GetInstance()->FindImage("mirror_sale");
+					_gold += _inven[_select].item->getPrice() * _inven[_select].count;
 					_inven[_select].item = nullptr;
 					_isSelect = false;
 					return;

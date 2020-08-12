@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UI.h"
+#include "inventory.h"
 
 HRESULT UI::init()
 {
@@ -33,6 +34,8 @@ void UI::render()
 
 	_pendant->Render(Vector2(_portal.left - 30, _portal.top - 15));
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
+
+	D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(_inven->getGold()), 20, D2DRenderer::DefaultBrush::Black);
 
 	if (_scene == CURRENT_SCENE::INVENTORY)
 	{
