@@ -23,7 +23,7 @@ void bullet::update()
 			_viBullet->index++;
 			_viBullet->delay = 0;
 		}
-		if (_viBullet->index > 4)
+		if (_viBullet->index > 5)
 		{
 			_viBullet->index = 0;
 		}
