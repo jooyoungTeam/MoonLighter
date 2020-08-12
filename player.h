@@ -24,6 +24,7 @@ private:
 	arrow*				_arrow;
 	int					_index;								//플레이어 인덱스 0
 	int					_arrowCount;						//화살한발만 쏘게
+	int					_bedCount;							//아이들상태 오래되면 침대상태로
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
 	float				_playerAttackX, _playerAttackY;		//플레이어 공격위치
@@ -63,6 +64,7 @@ public:
 
 public:
 	int getIndex() { return _index; }
+	int getBedCount() { return _bedCount; }
 	float getX() { return _playerX; }
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
@@ -79,6 +81,7 @@ public:
 	playerState* getCurrectState() { return _CurrentState; }
 	DIRECTION getDirection() { return _playerDirection; }
 
+	void setBedCount(int bedCount) { _bedCount = bedCount; }
 	void setX(float playerX) { _playerX = playerX; }
 	void setY(float playerY) { _playerY = playerY; }
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
@@ -96,20 +99,20 @@ public:
 	}
 
 public:
-	playerState* getIdleState()		{ return _idle; }
-	playerState* getWalkState()		{ return _walk; }
-	playerState* getRollState()		{ return _roll; }
-	playerState* getDieState()		{ return _die; }
-	playerState* getShieldState()	{ return _shield; }
-	playerState* getIdleSwimState() { return _idleSwim; }
-	playerState* getSwimState()		{ return _swim; }
-	playerState* getBowState()		{ return _bow; }
-	playerState* getSwordState()	{ return _sword; }
-	playerState* getBroomState()	{ return _broom; }
-	playerState* getBedState()		{ return _bed; }
-	playerState* getTeleport()		{ return _teleport; }
-	playerState* getTeleportIn()	{ return _teleportIn; }
-	playerState* getTeleportOut()	{ return _teleportOut; }
+	playerState* getIdleState()			{ return _idle; }
+	playerState* getWalkState()			{ return _walk; }
+	playerState* getRollState()			{ return _roll; }
+	playerState* getDieState()			{ return _die; }
+	playerState* getShieldState()		{ return _shield; }
+	playerState* getIdleSwimState()		{ return _idleSwim; }
+	playerState* getSwimState()			{ return _swim; }
+	playerState* getBowState()			{ return _bow; }
+	playerState* getSwordState()		{ return _sword; }
+	playerState* getBroomState()		{ return _broom; }
+	playerState* getBedState()			{ return _bed; }
+	playerState* getTeleportState()		{ return _teleport; }
+	playerState* getTeleportInState()	{ return _teleportIn; }
+	playerState* getTeleportOutState()	{ return _teleportOut; }
 };
 
 

@@ -48,7 +48,7 @@ class playerIdleState : public playerState
 {
 private:
 	bool _transForm;
-	int _idleCount;				//아이들상태 오래되면
+
 public:
 	HRESULT init();
 	virtual void update(player& player) override;
@@ -57,8 +57,6 @@ public:
 class playerWalkState : public playerState
 {
 private:
-	bool _rollCount;
-	int _rollCount2;
 public:
 	virtual void update(player& player) override;
 };
@@ -100,9 +98,6 @@ class playerbowState : public playerState
 private:
 	arrow* _arrow;
 public:
-	virtual HRESULT init();
-	virtual void render();
-	virtual void release();
 	virtual void update(player& player) override;
 };
 

@@ -34,7 +34,7 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	//ui->render();
+	//_ui->render();
 	if (_isInven) INVENTORY->render();
 }
 
@@ -57,7 +57,7 @@ void stageManager::update()
 	{
 		_isInven = false;
 		_ui->setUIScene(CURRENT_SCENE::TEMP);
-		INVENTORY->setSale(false);
+		INVENTORY->closeInven();
 	}
 
 	if (!_isInven && KEYMANAGER->isOnceKeyDown('O'))
@@ -66,8 +66,6 @@ void stageManager::update()
 		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
 		INVENTORY->setState(INVEN_STATE::SHOP);
 	}
-
-
 
 	if (_isInven) INVENTORY->update();
 

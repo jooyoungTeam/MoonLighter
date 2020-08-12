@@ -53,6 +53,8 @@ HRESULT shopNPC::init()
 	_aStar->init(WINSIZEX / 50, 1400 / 50, _centerX / 50, _centerY / 50 - 3, _goToPoint.x, _goToPoint.y, _vUnMove, true);
 	_item->init(ITEMTYPE::CRYSTAL_ENERGY, _centerX, _centerY - 50);
 
+	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(_img->GetFrameSize().x, _img->GetFrameSize().y), Pivot::Center);
+
 	return S_OK;
 }
 
@@ -147,6 +149,9 @@ void shopNPC::updadte()
 
 		break;
 	}
+
+
+	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(_img->GetFrameSize().x, _img->GetFrameSize().y), Pivot::Center);
 }
 
 void shopNPC::render()

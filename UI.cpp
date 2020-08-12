@@ -99,4 +99,5 @@ void UI::release()
 
 void UI::setUIHp(int playerHp)
 {
+	_frameY = 0;
 }

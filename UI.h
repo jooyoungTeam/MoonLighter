@@ -4,7 +4,7 @@
 enum class CURRENT_SCENE
 {
 	TEMP,						//UI를 띄우지 않는 상태
-	INVENTORY_OPEN,					//인벤토리 열었을 때
+	INVENTORY_OPEN,				//인벤토리 열었을 때
 	SHOP_SALE					//상점에 물건 등록할 때
 };
 
@@ -22,7 +22,7 @@ private:
 
 	Image* _currentWeapon;					//현재 들고 있는 웨폰
 	Image* _subWeapon;						//두 번째 칸 웨폰
-	Image* _HpBarImg;							//체력바
+	Image* _HpBarImg;						//체력바
 
 	FloatRect _weapon;						//무기 위치
 	FloatRect _portal;						//펜던트 위치
@@ -52,6 +52,7 @@ public:
 
 public:
 	void setUIScene(CURRENT_SCENE scene) { _scene = scene; }				//현재 UI 씬 정해주기
+	void setHit(BOOL hit = FALSE) { _isHit = hit; }							//테스트용 hit 값 정해주기
 
 public:
 	//플레이어 참조용
