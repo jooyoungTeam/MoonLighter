@@ -97,11 +97,13 @@ void button::setButton()
 	_button[BUTTON_TERRAIN].name = L"  TERRAIN";
 	_button[BUTTON_TERRAIN].state = BUTTON_ALWAYS;
 
-
 	_button[BUTTON_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 430, 100, 80, 30);
 	_button[BUTTON_OBJECT].name = L"   OBJECT";
 	_button[BUTTON_OBJECT].state = BUTTON_ALWAYS;
 
+	_button[BUTTON_COLLISION].rc = RectMakeCenter(WINSIZEX / 2 + 430, 50, 80, 30);
+	_button[BUTTON_COLLISION].name = L"COLLISION";
+	_button[BUTTON_COLLISION].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_SAVE].rc = RectMakeCenter(WINSIZEX / 2 + 530, 100, 80, 30);
 	_button[BUTTON_SAVE].name = L"    SAVE";
