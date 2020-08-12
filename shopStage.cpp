@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "shopStage.h"
-#include "inventory.h"
 
 HRESULT shopStage::init()
 {
@@ -32,8 +31,16 @@ void shopStage::render()
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	_player->render();
 
+
+
 	if(_enterNPC)
 		_shopNPC->render();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (_display[i].it != NULL)
+			_display[i].it->cameraRender();
+	}
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
@@ -45,14 +52,25 @@ void shopStage::update()
 {
 	_player->update();
 
+	if(INVENTORY->getState() == INVEN_STATE::SHOP)
+		disPlayUpdate();
 	
+	buyItem();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (_display[i].it != NULL)
+		{
+			_display[i].it->fieldUpdate();
+		}
+	}
 
 	if(_enterNPC)
 		_shopNPC->updadte();
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
-
+	
 	doorUpdate();
 }
 
@@ -63,15 +81,23 @@ void shopStage::release()
 
 void shopStage::disPlaySet()
 {
-	_display[0].init(Vector2(0, 0), NULL, 0, 0, false);
-	_display[1].init(Vector2(0, 0), NULL, 0, 0, false);
-	_display[2].init(Vector2(0, 0), NULL, 0, 0, false);
-	_display[3].init(Vector2(0, 0), NULL, 0, 0, false);
+	_display[0].init(Vector2(555, 870), NULL, 0, 0, false);
+	_display[1].init(Vector2(555, 930), NULL, 0, 0, false);
+	_display[2].init(Vector2(620, 870), NULL, 0, 0, false);
+	_display[3].init(Vector2(620, 930), NULL, 0, 0, false);
 }
 
 void shopStage::disPlayUpdate()
 {
+	for (int i = 0; i < 4; ++i)
+	{
+		_display[i].count = INVENTORY->getShowCase()[i].count;
+		_display[i].it = INVENTORY->getShowCase()[i].item;
+		_display[i].settingPrice = INVENTORY->getShowCase()[i].price;
 
+		if (_display[i].it != NULL)
+			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
+	}
 }
 
 void shopStage::doorUpdate()
@@ -119,5 +145,38 @@ void shopStage::doorUpdate()
 			_doorFrameTimer = 0;
 		}
 		break;
+	}
+}
+
+void shopStage::buyItem()
+{
+	if (_display[_shopNPC->getRndItem()].it != NULL)
+	{
+		switch (_shopNPC->getRndItem())
+		{
+		case 0:
+			_shopNPC->setRightPrice(_display[0].it->getPrice());
+			_shopNPC->setSettingPrice(_display[0].settingPrice);
+			_shopNPC->setItem(_display[0].it);
+			break;
+
+		case 1:
+			_shopNPC->setRightPrice(_display[1].it->getPrice());
+			_shopNPC->setSettingPrice(_display[1].settingPrice);
+			_shopNPC->setItem(_display[1].it);
+			break;
+
+		case 2:
+			_shopNPC->setRightPrice(_display[2].it->getPrice());
+			_shopNPC->setSettingPrice(_display[2].settingPrice);
+			_shopNPC->setItem(_display[2].it);
+			break;
+
+		case 3:
+			_shopNPC->setRightPrice(_display[3].it->getPrice());
+			_shopNPC->setSettingPrice(_display[3].settingPrice);
+			_shopNPC->setItem(_display[3].it);
+			break;
+		}
 	}
 }

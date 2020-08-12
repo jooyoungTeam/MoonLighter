@@ -21,7 +21,8 @@ HRESULT item::init(ITEMTYPE type, float x, float y)
 	_type = type;
 	_x = x;
 	_y = y;
-	_Shake = 0;
+	_shake = 0;
+	_isShake = false;
 
 	sort();
 
@@ -47,17 +48,26 @@ void item::update()
 
 void item::fieldUpdate()
 {
-	if (_Shake > 5)
+	if (_shake > 5)
 	{
-		_Shake--;
+		_isShake = false;
 	}
 
-	if (_Shake < -5)
+	if (_shake < -5)
 	{
-		_Shake++;
+		_isShake = true;
 	}
 
-	_y += _Shake;
+	if (_isShake)
+	{
+		_shake += 0.2f;
+	}
+	else
+	{
+		_shake -= 0.2f;
+	}
+
+	_y += _shake;
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
@@ -81,7 +91,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("slime_red");
 			_itemIndex = 101;
 			_limitCount = 10;
-			_price = 6;
+			_price = 600;
 			break;
 
 		//Ç³ºÎÇÑ Á©¸®(ÆÄ¶û)
@@ -89,7 +99,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("slime_blue");
 			_itemIndex = 102;
 			_limitCount = 10;
-			_price = 6;
+			_price = 600;
 			break;
 
 		//Ç³ºÎÇÑ Á©¸®(³ë¶û)
@@ -97,7 +107,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("slime_yellow");
 			_itemIndex = 103;
 			_limitCount = 10;
-			_price = 6;
+			_price = 600;
 			break;
 
 		//Ãµ
@@ -105,7 +115,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("fabric");
 			_itemIndex = 201;
 			_limitCount = 10;
-			_price = 300;
+			_price = 3000;
 			break;
 
 		//µ¢±¼
@@ -113,7 +123,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("vine");
 			_itemIndex = 202;
 			_limitCount = 10;
-			_price = 2;
+			_price = 200;
 			break;
 
 		//»Ñ¸®
@@ -121,7 +131,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("wood");
 			_itemIndex = 203;
 			_limitCount = 5;
-			_price = 5;
+			_price = 500;
 			break;
 
 		//ÁÖ¹° ÀÜÇØ
@@ -130,7 +140,7 @@ void item::sort()
 			_itemIndex = 204;
 			_limitCount = 10;
 			_limitCount = 5;
-			_price = 150;
+			_price = 1500;
 			break;
 
 		//ºÎ·¯Áø °Ë
@@ -138,7 +148,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("broken_sword");
 			_itemIndex = 301;
 			_limitCount = 5;
-			_price = 180;
+			_price = 1800;
 			break;
 
 		//¼öÁ¤È­µÈ ¿¡³ÊÁö
@@ -146,7 +156,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("crystal_energy");
 			_itemIndex = 302;
 			_limitCount = 5;
-			_price = 100;
+			_price = 1000;
 			break;
 
 		//´ÜÁ¶µÈ °­Ã¶
@@ -162,7 +172,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("golem_core");
 			_itemIndex = 304;
 			_limitCount = 5;
-			_price = 120;
+			_price = 1200;
 			break;
 
 		//°ñ·½¿ÕÀÇ ¿¡³ÊÁö
@@ -170,7 +180,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("golemKing_Energy");
 			_itemIndex = 901;
 			_limitCount = 1;
-			_price = 300;
+			_price = 3000;
 			break;
 
 		//°ñ·½¿ÕÀÇ ±â·Ï
@@ -178,7 +188,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("golemKing_record");
 			_itemIndex = 902;
 			_limitCount = 1;
-			_price = 300;
+			_price = 3000;
 			break;
 
 		//Æ÷¼Ç(¼Ò)
@@ -186,7 +196,7 @@ void item::sort()
 			_img = ImageManager::GetInstance()->FindImage("potion_S");
 			_itemIndex = 1001;
 			_limitCount = 5;
-			_price = 150;
+			_price = 1500;
 			break;
 	}
 }

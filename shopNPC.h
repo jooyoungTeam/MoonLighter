@@ -99,8 +99,11 @@ public:
 
 public:
 	//============================ Get ===========================
+	npcActionState getNPCActionState() { return _npcActionState; }
+	npcEmotionState getNPCEmotionState() { return _npcEmotionState; }
 	RECT getNPCRect() { return _rc; }
 	int  getSelectPrice() { return _selectPrice; }
+	int  getRndItem() { return _rndChoiceItem; }
 
 public:
 	//============================ Set ===========================
