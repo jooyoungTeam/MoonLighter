@@ -11,9 +11,9 @@ class inventory;
 enum doorState
 {
 	DOOR_CLOSE,				// 닫힌 상태
+	DOOR_OPEN,				// 열린 상태
 	DOOR_OPENING,			// 열리는 상태
 	DOOR_CLOSING,			// 닫히는 상태
-	DOOR_DELAY				// 딜레이 상태
 };
 
 struct tagDisplayStand
@@ -49,7 +49,7 @@ private:
 
 	// =============== 문 =================
 	doorState _doorState;			// 문 상태
-	RECT  _doorRC;					// 문 렉트
+	FloatRect  _doorRC;					// 문 렉트
 	int	  _doorFrameTimer;			// 문 프레임 타이머
 	int   _doorIndex;				// 문 인덱스
 

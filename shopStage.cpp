@@ -15,7 +15,8 @@ HRESULT shopStage::init()
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();
-		
+	
+	_doorRC = RectMakePivot(Vector2(WINSIZEX / 2 + 10, 1100), Vector2(50, 100), Pivot::Center);
 
 	disPlaySet();
 
@@ -46,6 +47,7 @@ void shopStage::render()
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 65, 1162, 1.15f, 1.0f);
 	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 10, 1109, _doorIndex, 0 ,1.2f,1.f);
+	CAMERAMANAGER->rectangle(_doorRC, D2D1::ColorF::Red, 1.f, 2.f);
 }
 
 void shopStage::update()
@@ -102,12 +104,22 @@ void shopStage::disPlayUpdate()
 
 void shopStage::doorUpdate()
 {
+	if(KEYMANAGER->isOnceKeyDown('E'))
+		_enterNPC = true;
+
 	switch (_doorState)
 	{
 	case DOOR_CLOSE:
-		if (KEYMANAGER->isOnceKeyDown('E'))
+		RECT temp;
+		if (IntersectRect(&temp, &_doorRC.GetRect(), &_shopNPC->getNPCRect().GetRect()))
 		{
 			_doorState = DOOR_OPENING;
+		}
+		break;
+	case DOOR_OPEN:
+		if (!IntersectRect(&temp, &_doorRC.GetRect(), &_shopNPC->getNPCRect().GetRect()))
+		{
+			_doorState = DOOR_CLOSING;
 		}
 		break;
 	case DOOR_OPENING:
@@ -117,7 +129,7 @@ void shopStage::doorUpdate()
 			_doorIndex++;
 
 			if (_doorIndex == 4)
-				_doorState = DOOR_DELAY;
+				_doorState = DOOR_OPEN;
 
 			_doorFrameTimer = 0;
 		}
@@ -132,16 +144,6 @@ void shopStage::doorUpdate()
 			if (_doorIndex == 0)
 				_doorState = DOOR_CLOSE;
 
-			_doorFrameTimer = 0;
-		}
-		break;
-	case DOOR_DELAY:
-		_enterNPC = true;
-		_doorFrameTimer++;
-
-		if (_doorFrameTimer > 130)
-		{
-			_doorState = DOOR_CLOSING;
 			_doorFrameTimer = 0;
 		}
 		break;

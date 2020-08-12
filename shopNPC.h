@@ -51,7 +51,7 @@ private:
 	npcState			_npcState;			// NPC의 상태
 	npcEmotionState     _npcEmotionState;	// NPC의 기분상태
 	vector<POINT>		_vUnMove;			// 못가는 곳
-	RECT				_rc;				// NPC 렉트
+	FloatRect			_rc;				// NPC 렉트
 
 	POINT				_goToPoint;			// 가야 할곳
 	POINT				_itemWayPoint[4];	// 아이템 고르는 좌표
@@ -101,7 +101,7 @@ public:
 	//============================ Get ===========================
 	npcActionState getNPCActionState() { return _npcActionState; }
 	npcEmotionState getNPCEmotionState() { return _npcEmotionState; }
-	RECT getNPCRect() { return _rc; }
+	FloatRect getNPCRect() { return _rc; }
 	int  getSelectPrice() { return _selectPrice; }
 	int  getRndItem() { return _rndChoiceItem; }
 	bool getIsBuy() { return _isBuy; }
