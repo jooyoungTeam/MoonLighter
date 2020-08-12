@@ -47,7 +47,6 @@ private:
 	int _select;						//현재 인벤 번호
 	int _selectNumber;					//선택했을 때의 인벤 번호
 	int _count;							//미러 딜레이
-	//bool _isOpen;						//아이템 열었는지
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
 
@@ -81,11 +80,9 @@ public:
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
-	//bool getOpen() { return _isOpen; }						//인벤 열었다는 불 값 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:
-	//void setOpen(BOOL open = FALSE) { _isOpen = open; }		//인벤 열었다는 불 값 설정하기
 	void setSale(BOOL sale = FALSE) { _isSale = sale; }		//판매하는 불 값 설정하기
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 
