@@ -1534,3 +1534,21 @@ void playerBedState::update(player & player)
 		player.setCurrentState(player.getIdleState());
 	}
 }
+
+//텔레포트 상태
+void playerTeleportState::update(player & player)
+{
+
+}
+
+//텔레포트(던전) 들어가기 상태
+void playerTeleportInState::update(player & player)
+{
+
+}
+
+//텔레포트(탈출) 상태
+void playerTeleportOutState::update(player & player)
+{
+
+}

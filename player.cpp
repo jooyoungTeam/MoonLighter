@@ -16,6 +16,9 @@ HRESULT player::init(float x, float y)
 	_sword = new playerSwordState();
 	_broom = new playerBroomState();
 	_bed = new playerBedState();
+	_teleport = new playerTeleportState();
+	_teleportIn = new playerTeleportInState();
+	_teleportOut = new playerTeleportOutState();
 	_arrow = new arrow;
 	_arrow->init();
 	_index = 0;

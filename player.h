@@ -46,6 +46,9 @@ private:
 	playerState*	    _sword;
 	playerState*	    _broom;
 	playerState*		_bed;
+	playerState*		_teleport;
+	playerState*		_teleportIn;
+	playerState*		_teleportOut;
 
 public:
 	virtual HRESULT init(float x, float y);
@@ -104,6 +107,9 @@ public:
 	playerState* getSwordState()	{ return _sword; }
 	playerState* getBroomState()	{ return _broom; }
 	playerState* getBedState()		{ return _bed; }
+	playerState* getTeleport()		{ return _teleport; }
+	playerState* getTeleportIn()	{ return _teleportIn; }
+	playerState* getTeleportOut()	{ return _teleportOut; }
 };
 
 
