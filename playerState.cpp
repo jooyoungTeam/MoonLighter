@@ -93,29 +93,32 @@ void playerIdleState::update(player & player)
 
 	//플레이어 쉴드
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	if (KEYMANAGER->isOnceKeyDown('K'))
+	if (!player.getWeaponChange())
 	{
-		if (player.getDirection() == DIRECTION::RIGHT)
+		if (KEYMANAGER->isOnceKeyDown('K'))
 		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightShield"), ImageManager::GetInstance()->FindImage("playerRightShield"));
-			player.setCurrentState(player.getShieldState());
+			if (player.getDirection() == DIRECTION::RIGHT)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightShield"), ImageManager::GetInstance()->FindImage("playerRightShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::LEFT)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftShield"), ImageManager::GetInstance()->FindImage("playerLeftShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::DOWN)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownShield"), ImageManager::GetInstance()->FindImage("playerDownShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::UP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpShield"), ImageManager::GetInstance()->FindImage("playerUpShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			player.setBedCount(player.getBedCount() == 0);
 		}
-		if (player.getDirection() == DIRECTION::LEFT)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftShield"), ImageManager::GetInstance()->FindImage("playerLeftShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		if (player.getDirection() == DIRECTION::DOWN)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownShield"), ImageManager::GetInstance()->FindImage("playerDownShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		if (player.getDirection() == DIRECTION::UP)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpShield"), ImageManager::GetInstance()->FindImage("playerUpShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		player.setBedCount(player.getBedCount() == 0);
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
@@ -584,27 +587,30 @@ void playerWalkState::update(player & player)
 
 	//플레이어 쉴드
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	if (KEYMANAGER->isOnceKeyDown('K'))
+	if (!player.getWeaponChange())
 	{
-		if (player.getDirection() == DIRECTION::RIGHT)
+		if (KEYMANAGER->isOnceKeyDown('K'))
 		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightShield"), ImageManager::GetInstance()->FindImage("playerRightShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		if (player.getDirection() == DIRECTION::LEFT)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftShield"), ImageManager::GetInstance()->FindImage("playerLeftShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		if (player.getDirection() == DIRECTION::DOWN)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownShield"), ImageManager::GetInstance()->FindImage("playerDownShield"));
-			player.setCurrentState(player.getShieldState());
-		}
-		if (player.getDirection() == DIRECTION::UP)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpShield"), ImageManager::GetInstance()->FindImage("playerUpShield"));
-			player.setCurrentState(player.getShieldState());
+			if (player.getDirection() == DIRECTION::RIGHT)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightShield"), ImageManager::GetInstance()->FindImage("playerRightShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::LEFT)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftShield"), ImageManager::GetInstance()->FindImage("playerLeftShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::DOWN)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownShield"), ImageManager::GetInstance()->FindImage("playerDownShield"));
+				player.setCurrentState(player.getShieldState());
+			}
+			if (player.getDirection() == DIRECTION::UP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpShield"), ImageManager::GetInstance()->FindImage("playerUpShield"));
+				player.setCurrentState(player.getShieldState());
+			}
 		}
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -1273,23 +1279,6 @@ void playerSwimState::update(player & player)
 		}
 		player.setBedCount(player.getBedCount() == 0);
 	}
-}
-
-HRESULT playerbowState::init()
-{
-	//_arrow  = new arrow;
-	//_arrow->init();
-	return S_OK;
-}
-
-void playerbowState::render()
-{
-	//_arrow->render();
-}
-
-void playerbowState::release()
-{
-	//_arrow->release();
 }
 
 //bow 상태

@@ -98,9 +98,6 @@ class playerbowState : public playerState
 private:
 	arrow* _arrow;
 public:
-	virtual HRESULT init();
-	virtual void render();
-	virtual void release();
 	virtual void update(player& player) override;
 };
 
