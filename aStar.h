@@ -92,10 +92,10 @@ public:
 	void setTiles();
 	// 갈 수 있는 길을 찾아서 담을 함수
 	vector<astarTile*> addOpenList(astarTile* currentTile);
-	// 빠른 경로 찾는 함수
+	// 빠른 경로 찾는 함수dsa
 	void pathFinder(astarTile* currentTile);
 	// 목표 변경 함수
-	void changeWayPoint() { _changePoint = true; 	_moveIndex = 0; }
+	void changeWayPoint() { _vShortestList.clear(); _changePoint = true; _end = false; }
 
 public:
 	// ================== Get ========================
