@@ -2,46 +2,46 @@
 #include "singletonBase.h"
 #include "item.h"
 
-#define INVENSPACE 22					//인벤칸수(왼쪽)
-#define GEARSPACE 6						//장비칸수(오른쪽)
-#define SHOPSPACE 4						//상점칸수
+#define INVENSPACE 22				//인벤칸수(왼쪽)
+#define GEARSPACE 6					//장비칸수(오른쪽)
+#define SHOPSPACE 4					//상점칸수
 
 enum class INVEN_STATE
 {
-	TEMP, NOTE, SHOP
+	TEMP, NOTE, SHOP				//인벤을 띄우지 않음, 수첩 인벤 띄움, 샵 인벤 띄움
 };
 
 enum class MIRROR_STATE
 {
-	STOP, STAY, ACTIVE
+	STOP, STAY, ACTIVE				//미러가 멈춰있음, 미러에 머물러 있음, 미러를 사용함
 };
 
-struct tagInven
+struct tagInven						//인벤토리(왼쪽)
 {
-	FloatRect rc;
-	item* item;
-	int count;
-	int price;
-	wstring number;
+	FloatRect rc;					//인벤 칸 렉트
+	item* item;						//인벤에 담는 아이템 클래스
+	int count;						//아이템 개수
+	int price;						//아이템 가격(설정가)
+	wstring number;					//아이템 개수 표시 string
 };
 
-struct tagGear
+struct tagGear						//장비창(오른쪽)
 {
-	Image* img;
-	FloatRect rc;
-	item* item;
-	int count;
-	wstring number;
+	Image* img;						//장비창에 띄우는 이미지
+	FloatRect rc;					//장비 칸 렉트
+	item* item;						//장비창에 담는 아이템 클래스
+	int count;						//아이템 개수
+	wstring number;					//아이템 개수 표시 string
 };
 
-struct tagShop
+struct tagShop						//상점(오른쪽)
 {
-	FloatRect rc;
-	item* item;
-	int count;
-	int price;
-	wstring countNum;
-	wstring priceNum;
+	FloatRect rc;					//아이템 담는 렉트
+	item* item;						//쇼케이스에 담는 아이템 클래스
+	int count;						//아이템 개수
+	int price;						//아이템 설정가
+	wstring countNum;				//아이탬 개수 표시 string
+	wstring priceNum;				//아이템 설정가 표시 string
 };
 
 class player;
@@ -56,21 +56,22 @@ private:
 	Image* _mirrorImg;					//거울이미지
 	Image* _saleImg;					//판매이미지
 	int _select;						//현재 인벤 번호
-	int _selectNumber;					//선택했을 때의 인벤 번호
-	int _count;							//미러 딜레이
+	int _selectNumber;					//선택한 칸 번호(인벤)
+	int _selectGearNumber;				//선택한 칸 번호(장비칸)
+	int _selectShopNumber;				//선택한 칸 번호(샵)
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
 
 	tagGear _gear[GEARSPACE];			//장비칸
 	tagShop _shop[SHOPSPACE];			//상점칸
 	bool _isSwap;						//넘어가기
-	//bool _isInven;						//인벤 열렸는지
 
 	MIRROR_STATE _mirror;				//미러 상태
 	int _frameCount;					//미러프레임용
 	int _mirrorFrameX;					//미러 프레임X
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
+	int _count;							//미러 딜레이
 
 	int _gold;							//소지금
 
@@ -87,25 +88,24 @@ public:
 
 	void putItem(item* item);								//인벤에 아이템 넣기
 	void selectInvenItem();									//아이템 선택하기
-	void moveInvenItem();									//인벤에서 아이템 옮기기
-	void setInvenItem();									//장비나 쇼케이스로 아이템 옮기기
+	void moveInvenItem();									//아이템 옮기기
+	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
-	//bool getInven() { return _isInven; }					//인벤 열렸는지
 	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
+	tagShop* getShowCase() { return _shop; }				//상점배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:
-	//void setInven(BOOL inven = FALSE) { _isInven = inven; }	//인벤 열고 닫는 불 값 설정하기
 	void setSale(BOOL sale = FALSE) { _isSale = sale; }		//판매하는 불 값 설정하기
+	void setSelect(BOOL select = FALSE) { _isSelect = select; }
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 
 public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
 	
-	tagShop* getShowCase() { return _shop; }
 };
