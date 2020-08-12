@@ -46,7 +46,9 @@ void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
 	if (_playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBroom")
-		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBed"))
+		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBed")
+		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportIn")
+		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportOut"))
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.63f);
