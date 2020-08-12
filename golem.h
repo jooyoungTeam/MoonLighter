@@ -7,6 +7,8 @@ class golem : public enemy
 private:
 	GOLEMDIR _golemDir;
 	GOLEMDIR _oldDir;
+	FloatRect _shadowRc;//그림자 렉트
+	float _shadowX, _shadowY;//그림자 중점
 	int _count;
 	int _golemCount;
 
@@ -22,5 +24,6 @@ public:
 	void direcitonChange();
 	virtual void dead();
 	virtual void enemyHit();
+	virtual void setShadow();
 };
 

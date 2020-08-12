@@ -56,12 +56,18 @@ void tile::render()
 
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tiles[index].terrainFrameX, _tiles[index].terrainFrameY);
 				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
+
+
+				if (_tiles[index].isColTile && _button->getType() == BUTTON_COLLISION)
+					CAMERAMANAGER->fillRectangle(_tiles[index].rc, D2D1::ColorF::Red,0.5f);
 			}
 
 			if (_tiles[index].isDrag)
 			{
 				CAMERAMANAGER->rectangle(_tiles[index].rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 			}
+
+
 		}
 	}
 
@@ -70,9 +76,11 @@ void tile::render()
 	{
 		if (_object[i]->isFrameRender)
 		{
-			CAMERAMANAGER->zOrderFrameRender(_object[i]->img, (_object[i]->rc.left + _object[i]->rc.right) * 0.5f, (_object[i]->rc.top + _object[i]->rc.bottom) * 0.5f, _object[i]->rc.bottom, _object[i]->frameX, 0);
+			CAMERAMANAGER->zOrderFrameRender(_object[i]->img, (_object[i]->rc.left + _object[i]->rc.right) * 0.5f, (_object[i]->rc.top + _object[i]->rc.bottom) * 0.5f, _object[i]->rc.bottom, _object[i]->frameX, 0, 1, 1);
 			_object[i]->count++;
-			if (_object[i]->count % 10 == 0)
+			_object[i]->isFrameRender = true ? _frameCount = 5 : _frameCount = 10;
+
+			if (_object[i]->count % _frameCount == 0)
 			{
 				_object[i]->count = 0;
 				_object[i]->frameX++;
@@ -86,7 +94,7 @@ void tile::render()
 		}
 		else
 		{
-			CAMERAMANAGER->zOrderRender(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, _object[i]->rc.bottom, 1);
+			CAMERAMANAGER->zOrderRender(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, _object[i]->rc.bottom, 1, 1);
 		}
 		//CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
 		CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
@@ -133,6 +141,14 @@ void tile::render()
 			else if (_currentSampleObject == OBJ_PLANT)
 			{
 				ImageManager::GetInstance()->FindImage("objectPlant")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+			}
+			else if (_currentSampleObject == OBJ_NPC)
+			{
+				ImageManager::GetInstance()->FindImage("objectNPC")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+			}
+			else if (_currentSampleObject == OBJ_SPA)
+			{
+				ImageManager::GetInstance()->FindImage("objectSpa")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
 			}
 		}
 
@@ -268,6 +284,7 @@ void tile::drag()
 	{
 		_drag.isDraw = false;
 
+
 		if (_button->getType() == BUTTON_ERASE_OBJECT)
 		{
 			for (int i = 0; i < _object.size(); i++)
@@ -291,106 +308,23 @@ void tile::drag()
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
 
-				if (_button->getType() == BUTTON_ERASE_TERRAIN)
+				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
 					_tiles[i].terrainFrameX = _currentTile.x;
 					_tiles[i].terrainFrameY = _currentTile.y;
 					_tiles[i].terrain = TR_NONE;
 				}
+				else if (_button->getType() == BUTTON_COLLISION)
+				{
+					_tiles[i].isColTile = true;
+					_tiles[i].terrain = TR_WALL;
+				}
 
-				if (_currentTile.x == 6 && _currentTile.y == 2)
-					_vDragTile.push_back(i);
+
 			}
 			_tiles[i].isDrag = false;
 		}
 
-		if (_vDragTile.size() > 0)
-		{
-			float tempWidth = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.right - _tiles[_vDragTile[0]].rc.left;
-			float tempHeight = _tiles[_vDragTile[_vDragTile.size() - 1]].rc.bottom - _tiles[_vDragTile[0]].rc.top;
-
-			_dragNumX = tempWidth / TILESIZE;
-			_dragNumY = tempHeight / TILESIZE;
-
-			for (int i = 0; i < _vDragTile.size(); i++)
-			{
-				if (_button->getType() == BUTTON_TERRAIN)
-				{
-					// 첫번째
-					if (i == 0)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 0;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 윗줄
-					if (i > 0 && i < _dragNumX - 1)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 7;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 오른쪽 위
-					if (i == _dragNumX - 1)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 6;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 왼쪽 밑
-					if (i == _vDragTile.size() - _dragNumX)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 2;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 밑줄
-					if (i > _vDragTile.size() - _dragNumX && i < _vDragTile.size() - 1)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 3;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 마지막
-					if (i == _vDragTile.size() - 1)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 4;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-
-					// 왼쪽 줄
-					if (i % _dragNumX == 0)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 1;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-					// 오른쪽 줄
-					if (i % _dragNumX == _dragNumX - 1)
-					{
-						_tiles[_vDragTile[i]].terrainFrameX = 5;
-						_tiles[_vDragTile[i]].terrainFrameY = 0;
-						_tiles[i].terrain = terrainSelect(4, 0);
-						continue;
-					}
-
-
-					_tiles[_vDragTile[i]].terrainFrameX = 8;
-					_tiles[_vDragTile[i]].terrainFrameY = 0;
-					_tiles[_vDragTile[i]].terrain = terrainSelect(_currentTile.x, _currentTile.y);
-				}
-
-			}
-			_vDragTile.clear();
-		}
 	}
 
 }
@@ -542,6 +476,7 @@ void tile::setMap()
 							tempObject->rc.left = _tiles[index].rc.left;
 							tempObject->rc.top = _tiles[index].rc.top;
 							tempObject->frameX = 0;
+							tempObject->type = _currentObject->type;
 							if (tempObject->isFrameRender)
 							{
 								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetFrameSize().x;
@@ -554,11 +489,6 @@ void tile::setMap()
 							}
 							_object.push_back(tempObject);
 
-							if(KEYMANAGER->isStayKeyDown(VK_LCONTROL))
-							{
-								
-							}
-
 							_isSelectObject = false;
 						}
 					}
@@ -566,7 +496,7 @@ void tile::setMap()
 					{
 						_tiles[index].terrain = TR_NONE;
 					}
-				
+
 					//else if (_button->getType() == BUTTON_CLEAR)
 					//{
 					//	_tiles[i].objFrameX = NULL;
@@ -614,14 +544,22 @@ void tile::imageLoad()
 	//ImageManager::GetInstance()
 
 	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
 	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
 	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
 	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
 	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
+	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
+	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
 
 	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
 	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 4, 1);
 	ImageManager::GetInstance()->AddFrameImage("plant_fountain1", L"Object/plant_fountain1.png", 9, 1);
+
+	ImageManager::GetInstance()->AddFrameImage("npc_1", L"Object/npc_1.png", 17, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_2", L"Object/npc_2.png", 54, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
 
 }
 
@@ -733,7 +671,7 @@ void tile::saveTownMap()
 
 			file = CreateFile("townMap.map", GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
+			
 			WriteFile(file, _townTiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 
 			CloseHandle(file);
@@ -777,6 +715,7 @@ void tile::selectObject()
 	{
 		if (PtInRect(&_sampleObject[i].rc, _ptMouse))
 		{
+			_currentObject->type = _currentSampleObject;
 			_isSelectObject = true;
 			if (_currentSampleObject == OBJ_HOUSE)
 			{
@@ -790,7 +729,6 @@ void tile::selectObject()
 
 			else if (_currentSampleObject == OBJ_ARCHITECTURE)
 			{
-
 				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("build_Well");
 				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("buildBoard");
 				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_fountain");
@@ -812,8 +750,22 @@ void tile::selectObject()
 				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1");
 				if (i == 1)		    _currentObject->img = ImageManager::GetInstance()->FindImage("plant_fountain1");
 				if (i == 2)		    _currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree2");
-
 				_currentObject->isFrameRender = true;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_NPC)
+			{
+				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("npc_1");
+				if (i == 1)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_2");
+				if (i == 2)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_3");
+				if (i == 3)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_4");
+				_currentObject->isFrameRender = true;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_SPA)
+			{
+				if (i == 0 || i == 1 || i == 2 || i == 3)			_currentObject->img = ImageManager::GetInstance()->FindImage("spa");
+				_currentObject->isFrameRender = false;
 				break;
 			}
 		}
@@ -859,6 +811,7 @@ void tile::sampleOnOff()
 	}
 }
 
+
 TERRAIN tile::terrainSelect(int frameX, int frameY)
 {
 	for (int i = 0; i < 9; i++)
@@ -871,8 +824,13 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 		if (frameX == i && frameY == 1) return TR_GRASS;
 
 		// 세번째 줄
-		if (frameX == 6 && frameY == 2) return TR_WALL;
-		else if (frameX == i && frameY == 2) return TR_GRASS;
+		if (frameX == i && frameY == 2) return TR_GRASS;
+
+		// 네번째 줄
+		if (frameX == i && frameY == 3) return TR_GRASS;
+
+		// 다섯번째 줄
+		if (frameX == i && frameY == 4) return TR_GRASS;
 	}
 
 	return TR_NONE;

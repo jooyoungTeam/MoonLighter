@@ -9,7 +9,7 @@
 #define TILESIZEY (TILESIZE * TILEY)
 
 #define SAMPLETILEX 9
-#define SAMPLETILEY 3
+#define SAMPLETILEY 5
 
 
 #define ATTR_UNMOVE		0x00000001
@@ -23,7 +23,7 @@ enum TERRAIN
 
 enum OBJECT
 {
-	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT,
+	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT, OBJ_NPC, OBJ_SPA,
 	OBJ_NONE,
 };
 
@@ -42,6 +42,7 @@ struct tagTile
 	bool    isDrag;
 	int     idX;
 	int     idY;
+	bool    isColTile;
 	string  str;
 };
 
@@ -55,6 +56,7 @@ struct tagSampleObject
 
 struct tagObject
 {
+	OBJECT   type;
 	RECT     rc;
 	Image*   img;
 	bool     isFrameRender;

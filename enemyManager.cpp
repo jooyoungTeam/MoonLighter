@@ -117,7 +117,12 @@ void enemyManager::setEnemy()
 {
 	int i = 1;
 
-	enemy* redS1;
+	enemy* boss1;
+	boss1 = new boss;
+	boss1->playerCheck(_x, _y, _rc);
+	boss1->init(i, 500, 200, 250, 300, ENEMY_BOSS);
+	_vEnemy.push_back(boss1);
+	/*enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
 	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
@@ -168,7 +173,7 @@ void enemyManager::setEnemy()
 	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
-
+*/
 
 }
 
@@ -202,6 +207,7 @@ void enemyManager::potBullet()
 
 void enemyManager::playerCol()
 {
+	RECT temp;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		if (_vEnemy[i]->getState() != _vEnemy[i]->getDead())
@@ -221,6 +227,8 @@ void enemyManager::playerCol()
 					}
 				}
 			}
+			
+			//if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect(), &_player.))
 		}
 	}
 

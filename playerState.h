@@ -1,6 +1,6 @@
 #pragma once
 #include "arrow.h"
-
+#define MOVESPPED 5
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class player;
@@ -15,6 +15,10 @@ class playerSwimState;
 class playerbowState;
 class playerSwordState;
 class playerbroomState;
+class playerBedState;
+class playerTeleportState;
+class playerTeleportInState;
+class playerTeleportOutState;
 
 class playerState
 {
@@ -34,12 +38,17 @@ public:
 	static playerbowState* bow;
 	static playerSwordState* sword;
 	static playerbroomState* broom;
+	static playerBedState* bed;
+	static playerTeleportState* teleport;
+	static playerTeleportInState* teleportIn;
+	static playerTeleportOutState* teleportOut;
 };
 
 class playerIdleState : public playerState
 {
 private:
 	bool _transForm;
+
 public:
 	HRESULT init();
 	virtual void update(player& player) override;
@@ -48,8 +57,6 @@ public:
 class playerWalkState : public playerState
 {
 private:
-	bool _rollCount;
-	int _rollCount2;
 public:
 	virtual void update(player& player) override;
 };
@@ -104,6 +111,30 @@ public:
 };
 
 class playerBroomState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerBedState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportInState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportOutState : public playerState
 {
 public:
 	virtual void update(player& player) override;

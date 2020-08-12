@@ -17,8 +17,10 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 
 	_x = x;
 	_y = y;
+	_z = _y + _width;
 	_width = width;
 	_height = height;
+
 	_type = type;
 	_maxHP = _curHP = 100;
 	_speed = 0;
@@ -28,6 +30,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_bar.y = _y - (_height / 2) - 15;
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
+	
 	_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 
 	switch (_type)
@@ -64,16 +67,19 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 		_motion->start();
 		break;
 	case ENEMY_BOSS:
-		_bar.x = _x - _width;
+		_x = x + 200;
+		_y = y + 200;
 		_motion = KEYANIMANAGER->findAnimation(_index, "boss");
 		_img = ImageManager::GetInstance()->FindImage("boss");
 		_motion->start();
+		set();
 		break;
 	}
 
 	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
 	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
 	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+	_shadow = ImageManager::GetInstance()->FindImage("shadow");
 
 	_state = _idle;
 
@@ -107,18 +113,23 @@ void enemy::release()
 
 void enemy::update()
 {
-	_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
+	if (_type != ENEMY_BOSS)
+	{
+		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
+	}
 	_state->update(*this,  _type);
 	enemyWay();
 	KEYANIMANAGER->update();
 	checkBoolCount();
 	setGauge(_curHP, _maxHP);
 	setBar();
+	_z = _y + _width / 2;
 	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
 	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_saveHP, 5), Pivot::LeftTop));
 	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_bar.width, 5.f), Pivot::LeftTop));
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
+	setShadow();
 }
 
 void enemy::render()
@@ -129,6 +140,8 @@ void enemy::render()
 	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
+	//FloatRect rc = (RectMakePivot(Vector2(_x, _z), Vector2(10, 10), Pivot::Center));
+	//D2DRenderer::GetInstance()->FillRectangle(_rc, D2D1::ColorF::Brown, 0.5f);
 	
 }
 
@@ -187,6 +200,9 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
+	ImageManager::GetInstance()->AddImage("bossLong", L"image/enemy/long.png");
+
+	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 
 
 
@@ -262,6 +278,8 @@ void enemy::ani()
 	//º¸½º
 	int BossUp[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "BossUp", "BossUp", BossUp, 32, 13, false);
+	int BossDown[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "BossDown", "BossUp", BossDown, 32, 13, false);
 
 	int dead1[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHit", "bossHit", dead1, 41, 13, false);
@@ -282,15 +300,17 @@ void enemy::ani()
 	int attackIdle[] = { 0,1 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttackIdle", "bossAttackIdle", attackIdle, 2, 5, true);
 
-	int hand[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHand", "bossHand", hand, 19, 13, false);
+	/*int hand[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHand", "bossHand", hand, 19, 13, false);*/
 
-	int FistShoot[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
-		16, 15,14,13, 13, 44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59, 59, 58,57,56,55,
-		54,53,52,51,50,49,48,47,46,45,44,
-	22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly", "bossHandFly", FistShoot, 76, 8, false);
+	int shoot1[] = { 0,1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,16,15,14,13,13,14,15,16,16,15,14,13,13 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly1", "bossHandFly", shoot1, 30, 8, false);
+	
+	int shoot2[] = { 44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59, 54,55,56,57,58,59, 59, 58,57,56,55,54,53,52,51,50,49,/*48,47,46,45,44*/ };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly2", "bossHandFly", shoot2, 33, 7, false);
 
+	int shoot3[] = { 48,47,46,45,44,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly3", "bossHandFly", shoot3, 44, 7, false);
 
 }
 
@@ -443,6 +463,7 @@ void enemy::checkBoolCount()
 		_isHit = false;
 	}
 }
+
 
 void enemy::setGauge(float curHP, float maxHP)
 {

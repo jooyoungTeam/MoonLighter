@@ -36,6 +36,7 @@ protected:
 	animation* _motion;	//애니메이션
 	
 	Image* _img;		//에너미 이미지
+	Image* _shadow;		//그림자 이미지
 	Image* _backBar;	//체력바 이미지
 	Image* _middleBar;
 	Image* _frontBar;
@@ -50,10 +51,10 @@ protected:
 	int _rndX;			//astar 랜덤 값 준거
 	int _rndY;			//이것또한..
 	int _hitCount;		//맞을때 반짝
-	int _isHitCount;
+	int _isHitCount;	//isHit의 카운트임
 
 
-	float _x, _y;		//에너미 중심
+	float _x, _y, _z;		//에너미 중심
 	float _width, _height;//크기
 	float _pX, _pY;		//플레이어 중심	
 	float _angle;		//골렘 앵글
@@ -91,6 +92,7 @@ public:
 	void setBar();				//에너미마다 체력바 위치 정해줌
 	virtual void enemyHit() {}	//골렘 힛으로 바꿔주는거
 	void checkBoolCount();		//불값이랑 카운트 체크용
+	virtual void setShadow() {}	//골렘 그림자 캐릭터마다 위치 다르게 해주려고 
 
 	void setGauge(float curHP, float maxHP);	//체력바
 

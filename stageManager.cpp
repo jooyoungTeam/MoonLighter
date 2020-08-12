@@ -5,7 +5,7 @@
 #include "shopStage.h"
 #include "dungeonStage.h"
 #include "townStage.h"
-
+#include "bossStage.h"
 HRESULT stageManager::init()
 {
 	_ui = new UI;
@@ -22,6 +22,7 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("¼¥¾À", new shopStage);
 	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
 	SCENEMANAGER->addScene("¸¶À»¾À", new townStage);
+	SCENEMANAGER->addScene("º¸½º¾À", new bossStage);
 
 
 
@@ -117,6 +118,11 @@ void stageManager::update()
 	{
 		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("¼¥¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
+	{
+		KEYANIMANAGER->release();
+		SCENEMANAGER->changeScene("º¸½º¾À");
 	}
 }
 
