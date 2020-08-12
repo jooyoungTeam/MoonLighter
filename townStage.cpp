@@ -7,7 +7,7 @@ HRESULT townStage::init()
 	loadMap();
 
 	_player = new player;
-	_player->init();
+	_player->init(500,500);
 	return S_OK;
 }
 

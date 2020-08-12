@@ -11,7 +11,7 @@ HRESULT shopStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
-	_player->init();
+	_player->init(WINSIZEX / 2 + 110, 400);
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();
@@ -81,10 +81,10 @@ void shopStage::release()
 
 void shopStage::disPlaySet()
 {
-	_display[0].init(Vector2(555, 870), NULL, 0, 0, false);
-	_display[1].init(Vector2(555, 930), NULL, 0, 0, false);
-	_display[2].init(Vector2(620, 870), NULL, 0, 0, false);
-	_display[3].init(Vector2(620, 930), NULL, 0, 0, false);
+	_display[0].init(Vector2(565, 870), NULL, 0, 0, false);
+	_display[1].init(Vector2(565, 930), NULL, 0, 0, false);
+	_display[2].init(Vector2(630, 870), NULL, 0, 0, false);
+	_display[3].init(Vector2(630, 930), NULL, 0, 0, false);
 }
 
 void shopStage::disPlayUpdate()
@@ -157,26 +157,28 @@ void shopStage::buyItem()
 		case 0:
 			_shopNPC->setRightPrice(_display[0].it->getPrice());
 			_shopNPC->setSettingPrice(_display[0].settingPrice);
-			_shopNPC->setItem(_display[0].it);
 			break;
 
 		case 1:
 			_shopNPC->setRightPrice(_display[1].it->getPrice());
 			_shopNPC->setSettingPrice(_display[1].settingPrice);
-			_shopNPC->setItem(_display[1].it);
 			break;
 
 		case 2:
 			_shopNPC->setRightPrice(_display[2].it->getPrice());
 			_shopNPC->setSettingPrice(_display[2].settingPrice);
-			_shopNPC->setItem(_display[2].it);
 			break;
 
 		case 3:
 			_shopNPC->setRightPrice(_display[3].it->getPrice());
 			_shopNPC->setSettingPrice(_display[3].settingPrice);
-			_shopNPC->setItem(_display[3].it);
 			break;
 		}
+	}
+
+	if (_shopNPC->getIsBuy())
+	{
+		_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
+		_display[_shopNPC->getRndItem()].it = NULL;
 	}
 }

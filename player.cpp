@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "player.h"
 
-HRESULT player::init()
+HRESULT player::init(float x, float y)
 {
 	animationLoad();
 
@@ -19,8 +19,8 @@ HRESULT player::init()
 	_arrow = new arrow;
 	_arrow->init();
 	_index = 0;
-	_playerShadowX = 500;
-	_playerShadowY = 500;
+	_playerShadowX = x;
+	_playerShadowY = y;
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;

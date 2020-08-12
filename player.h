@@ -48,7 +48,7 @@ private:
 	playerState*		_bed;
 
 public:
-	virtual HRESULT init();
+	virtual HRESULT init(float x, float y);
 	void render();
 	void update();
 	void release();
