@@ -1,6 +1,6 @@
 #pragma once
 #include "arrow.h"
-
+#define MOVESPPED 5
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class player;
@@ -15,6 +15,7 @@ class playerSwimState;
 class playerbowState;
 class playerSwordState;
 class playerbroomState;
+class playerBedState;
 
 class playerState
 {
@@ -34,12 +35,14 @@ public:
 	static playerbowState* bow;
 	static playerSwordState* sword;
 	static playerbroomState* broom;
+	static playerBedState* bed;
 };
 
 class playerIdleState : public playerState
 {
 private:
 	bool _transForm;
+	int _idleCount;				//아이들상태 오래되면
 public:
 	HRESULT init();
 	virtual void update(player& player) override;
@@ -104,6 +107,12 @@ public:
 };
 
 class playerBroomState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerBedState : public playerState
 {
 public:
 	virtual void update(player& player) override;

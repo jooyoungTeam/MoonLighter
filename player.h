@@ -45,6 +45,7 @@ private:
 	playerState*	    _bow;
 	playerState*	    _sword;
 	playerState*	    _broom;
+	playerState*		_bed;
 
 public:
 	virtual HRESULT init();
@@ -102,6 +103,7 @@ public:
 	playerState* getBowState()		{ return _bow; }
 	playerState* getSwordState()	{ return _sword; }
 	playerState* getBroomState()	{ return _broom; }
+	playerState* getBedState()		{ return _bed; }
 };
 
 
