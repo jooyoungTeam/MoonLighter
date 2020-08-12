@@ -2,8 +2,8 @@
 #include "singletonBase.h"
 #include "item.h"
 
-#define INVENSPACE 22				//인벤칸수(왼쪽)
-#define GEARSPACE 6					//장비칸수(오른쪽)
+#define INVENSPACE 22				//인벤칸수
+#define GEARSPACE 6					//장비칸수
 #define SHOPSPACE 4					//상점칸수
 
 enum class INVEN_STATE
@@ -16,7 +16,7 @@ enum class MIRROR_STATE
 	STOP, STAY, ACTIVE				//미러가 멈춰있음, 미러에 머물러 있음, 미러를 사용함
 };
 
-struct tagInven						//인벤토리(왼쪽)
+struct tagInven						//인벤토리
 {
 	FloatRect rc;					//인벤 칸 렉트
 	item* item;						//인벤에 담는 아이템 클래스
@@ -25,16 +25,15 @@ struct tagInven						//인벤토리(왼쪽)
 	wstring number;					//아이템 개수 표시 string
 };
 
-struct tagGear						//장비창(오른쪽)
+struct tagGear						//장비창
 {
-	Image* img;						//장비창에 띄우는 이미지
 	FloatRect rc;					//장비 칸 렉트
 	item* item;						//장비창에 담는 아이템 클래스
 	int count;						//아이템 개수
 	wstring number;					//아이템 개수 표시 string
 };
 
-struct tagShop						//상점(오른쪽)
+struct tagShop						//상점
 {
 	FloatRect rc;					//아이템 담는 렉트
 	item* item;						//쇼케이스에 담는 아이템 클래스
@@ -45,6 +44,7 @@ struct tagShop						//상점(오른쪽)
 };
 
 class player;
+class UI;
 
 class inventory : public singletonBase<inventory>
 {
@@ -76,6 +76,7 @@ private:
 	int _gold;							//소지금
 
 	player* _player;
+	UI* _ui;
 
 public:
 	inventory() {}
@@ -96,16 +97,15 @@ public:
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
 	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
-	tagShop* getShowCase() { return _shop; }				//상점배열 가져가기
+	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:
-	void setSale(BOOL sale = FALSE) { _isSale = sale; }		//판매하는 불 값 설정하기
-	void setSelect(BOOL select = FALSE) { _isSelect = select; }
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 
 public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
-	
+	//UI 참조용
+	void getUIMemoryAddressLink(UI* ui) { _ui = ui; }
 };

@@ -24,9 +24,6 @@ HRESULT inventory::init()
 	ImageManager::GetInstance()->AddFrameImage("inven_sale", L"Image/UI/mirror_sale.png", 8, 1);
 	ImageManager::GetInstance()->AddImage("showcase", L"Image/UI/showcase.png");
 
-	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
-	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
-
 	//인벤창
 	for (int i = 0; i < INVENSPACE; i++)
 	{
@@ -92,11 +89,14 @@ HRESULT inventory::init()
 	for (int i = 0; i < SHOPSPACE; i++)
 	{
 		if (i < 2)
-		_shop[i].rc = RectMakePivot(Vector2(950 + i, 220 + i * 285), Vector2(60, 60), Pivot::Center);
+		_shop[i].rc = RectMakePivot(Vector2(950, 217 + i * 284), Vector2(60, 60), Pivot::Center);
 
 		else
-		_shop[i].rc = RectMakePivot(Vector2(1252, 505 + i * 285 - 856), Vector2(60, 60), Pivot::Center);
+		_shop[i].rc = RectMakePivot(Vector2(1252, 505 + i * 284 - 856), Vector2(60, 60), Pivot::Center);
 	}
+
+	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
+	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 
 	//인벤 상태
 	_state = INVEN_STATE::TEMP;
@@ -150,7 +150,6 @@ void inventory::render()
 		{
 			//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 			ImageManager::GetInstance()->FindImage("invenSpace")->Render(Vector2(_gear[i].rc.left - 5, _gear[i].rc.top - 5));
-			_gear[i].img->Render(Vector2(_gear[i].rc.GetCenter().x - 26, _gear[i].rc.GetCenter().y - 25));
 
 			if (_gear[i].item != nullptr)
 			{
@@ -160,6 +159,13 @@ void inventory::render()
 
 			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[i].rc.left - 7, _gear[i].rc.top - 7));
 		}
+
+		ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[0].rc.GetCenter().x - 26, _gear[0].rc.GetCenter().y - 25));
+		ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[5].rc.GetCenter().x - 26, _gear[5].rc.GetCenter().y - 25));
+		ImageManager::GetInstance()->FindImage("empty_helmet")->Render(Vector2(_gear[1].rc.GetCenter().x - 26, _gear[1].rc.GetCenter().y - 25));
+		ImageManager::GetInstance()->FindImage("empty_top")->Render(Vector2(_gear[2].rc.GetCenter().x - 26, _gear[2].rc.GetCenter().y - 25));
+		ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
+		if (_gear[4].item == nullptr) ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
 	}
 
 	//쇼케이스
@@ -181,6 +187,30 @@ void inventory::render()
 		}		
 	}
 
+	//선택테두리
+	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+
+	//미러
+	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
+	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
+
+	//아이템을 팔겠다면
+	if (_isSale)
+	{	
+		if (_isSelect)
+		{
+			//인벤에서 팔기
+			_saleImg->FrameRender(Vector2(_inven[20].rc.GetCenter().x - 5, _inven[20].rc.GetCenter().y), _mirrorBallFrameX, 0);
+			ImageManager::GetInstance()->FindImage("inven_sale")->FrameRender(Vector2(_selectItem.rc.GetCenter().x, _selectItem.rc.GetCenter().y), _saleFrameX, 0);
+		}
+
+		else
+		{
+			//미러 안
+			_saleImg->FrameRender(Vector2(_inven[_select].rc.GetCenter().x - 3, _inven[_select].rc.GetCenter().y - 3), _mirrorBallFrameX, 0);
+		}
+	}
+
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
 	{
@@ -189,31 +219,6 @@ void inventory::render()
 		_selectItem.item->getImg()->Render(Vector2(_selectItem.rc.GetCenter().x - _selectItem.item->getImg()->GetWidth() / 2, _selectItem.rc.GetCenter().y - _selectItem.item->getImg()->GetHeight() / 2));
 		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
 	}
-
-	//선택테두리
-	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
-
-	//미러
-	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
-	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
-
-
-	//아이템을 팔겠다면
-	if (_isSale)
-	{	
-		if (_isSelect)
-		{
-			//미러 안
-			_saleImg->FrameRender(Vector2(_inven[20].rc.GetCenter().x - 5, _inven[20].rc.GetCenter().y), _mirrorBallFrameX, 0);
-			ImageManager::GetInstance()->FindImage("inven_sale")->FrameRender(Vector2(_selectItem.rc.GetCenter().x, _selectItem.rc.GetCenter().y), _saleFrameX, 0);
-		}
-
-		else
-		{
-			_saleImg->FrameRender(Vector2(_inven[_select].rc.GetCenter().x - 3, _inven[_select].rc.GetCenter().y - 3), _mirrorBallFrameX, 0);
-		}
-	}
-
 }
 
 void inventory::update()
@@ -410,25 +415,7 @@ void inventory::update()
 
 	selectInvenItem();
 	moveInvenItem();
-	useMirror();
-
-	for (int i = 0; i < GEARSPACE; i++)
-	{
-		if (_gear[i].item == nullptr)
-		{
-			_gear[0].img = ImageManager::GetInstance()->FindImage("empty_weapon");
-			_gear[5].img = ImageManager::GetInstance()->FindImage("empty_weapon");
-			_gear[1].img = ImageManager::GetInstance()->FindImage("empty_helmet");
-			_gear[2].img = ImageManager::GetInstance()->FindImage("empty_top");
-			_gear[3].img = ImageManager::GetInstance()->FindImage("empty_shoes");
-			_gear[4].img = ImageManager::GetInstance()->FindImage("empty_potion");
-		}
-
-		else
-		{
-			_gear[i].img = nullptr;
-		}
-	}	
+	useMirror();	
 }
 
 void inventory::release()

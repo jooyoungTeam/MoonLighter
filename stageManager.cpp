@@ -34,7 +34,7 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	//ui->render();
+	//_ui->render();
 	if (_isInven) INVENTORY->render();
 }
 
