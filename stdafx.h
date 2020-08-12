@@ -41,6 +41,8 @@ enum class Pivot : int
 #include "keyAniManager.h"
 #include "txtData.h"
 #include "aStarManager.h"
+#include "inventory.h"
+
 using namespace TTYONE_UTIL;
 
 //MS VS버전이 올라가면서 기존의 문자열 함수의 안정성을 올리기위해
@@ -65,6 +67,7 @@ using namespace TTYONE_UTIL;
 #define SCENEMANAGER sceneManager::getSingleton()
 #define CAMERAMANAGER cameraManager::getSingleton()
 #define ASTARMANAGER aStarManager::getSingleton()
+#define INVENTORY	inventory::getSingleton()
 //#define KEYANIMANAGER keyAniManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
 

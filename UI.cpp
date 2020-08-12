@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "UI.h"
-#include "inventory.h"
 
 HRESULT UI::init()
 {
@@ -58,18 +57,18 @@ void UI::render()
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
 
 	//소지금
-	D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(_inven->getGold()), 20, D2DRenderer::DefaultBrush::Black);
+	D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
 
 	//장비창 포션 자리가 비어있지 않다면
-	if (_inven->getPotion().item != nullptr)
+	if (INVENTORY->getPotion().item != nullptr)
 	{
 		//포션과 개수 렌더
-		_inven->getPotion().item->getImg()->Render(Vector2(1550, 60));
-		D2DRenderer::GetInstance()->RenderText(1567, 67, to_wstring(_inven->getPotion().count), 20);
+		INVENTORY->getPotion().item->getImg()->Render(Vector2(1550, 60));
+		D2DRenderer::GetInstance()->RenderText(1567, 67, to_wstring(INVENTORY->getPotion().count), 20);
 	}
 
 	//인벤토리 열면 수첩 렌더
-	if (_scene == CURRENT_SCENE::INVENTORY)
+	if (_scene == CURRENT_SCENE::INVENTORY_OPEN)
 	{
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 	}

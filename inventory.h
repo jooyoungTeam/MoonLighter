@@ -1,5 +1,5 @@
 #pragma once
-#include "gameNode.h"
+#include "singletonBase.h"
 #include "item.h"
 
 #define INVENSPACE 22					//인벤칸수(왼쪽)
@@ -46,7 +46,7 @@ struct tagShop
 class player;
 class UI;
 
-class inventory : public gameNode
+class inventory : public singletonBase<inventory>
 {
 private:
 	INVEN_STATE _state;					//노트를 열었는지 상자를 열었는지

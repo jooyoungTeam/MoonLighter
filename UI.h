@@ -4,12 +4,11 @@
 enum class CURRENT_SCENE
 {
 	TEMP,						//UI를 띄우지 않는 상태
-	INVENTORY,					//인벤토리 열었을 때
+	INVENTORY_OPEN,					//인벤토리 열었을 때
 	SHOP_SALE					//상점에 물건 등록할 때
 };
 
 class player;
-class inventory;
 
 class UI : public gameNode
 {
@@ -36,7 +35,6 @@ private:
 	bool _isHit;							//플레이어 맞았니(나중에 플레이어한테서 가져올 예정)
 
 	player* _player;
-	inventory* _inven;
 
 public:
 	UI() {}
@@ -58,7 +56,5 @@ public:
 public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
-	//인벤토리 참조용
-	void getInvenMemoryAddressLink(inventory* inven) { _inven = inven; }
 };
 

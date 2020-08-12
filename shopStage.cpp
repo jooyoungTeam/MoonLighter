@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "shopStage.h"
+#include "inventory.h"
 
 HRESULT shopStage::init()
 {
@@ -15,11 +16,8 @@ HRESULT shopStage::init()
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();
-	
-	_im = new itemManager;
-	_im->init();
+		
 
-	//_im->setItem()
 	disPlaySet();
 
 	_doorFrameTimer = 0;
@@ -33,7 +31,6 @@ void shopStage::render()
 	CAMERAMANAGER->render(_backGround, _backGround->GetWidth() / 2, 200, 1.15f, 1.0f);
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	_player->render();
-	_im->render();
 
 	if(_enterNPC)
 		_shopNPC->render();
@@ -47,7 +44,8 @@ void shopStage::render()
 void shopStage::update()
 {
 	_player->update();
-	_im->update();
+
+	
 
 	if(_enterNPC)
 		_shopNPC->updadte();

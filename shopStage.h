@@ -6,6 +6,8 @@
 #include "itemManager.h"
 #include "item.h"
 
+class inventory;
+
 enum doorState
 {
 	DOOR_CLOSE,				// 닫힌 상태
@@ -42,7 +44,7 @@ private:
 	player* _player;				// 플레이어
 
 	// =========== 아이템 & 인벤 ===========
-	itemManager* _im;				// 아이템 매니저
+	inventory* _inventory;				// 아이템 매니저
 	tagDisplayStand _display[4];	// 진열대
 
 	// =============== 문 =================
@@ -76,6 +78,6 @@ public:
 
 public:
 	//============================ Set ===========================
-
+	void setMemoryAddressLinkInven(inventory* inven) { _inventory = inven; }
 };
 

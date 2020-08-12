@@ -35,6 +35,7 @@ HRESULT gameNode::init(bool managerInit)
 		CAMERAMANAGER->init();
 		TXTDATA->init();
 		ASTARMANAGER->init();
+		INVENTORY->init();
 	}
 
 
@@ -73,6 +74,9 @@ void gameNode::release()
 
 		ASTARMANAGER->release();
 		ASTARMANAGER->releaseSingleton();
+
+		INVENTORY->release();
+		INVENTORY->releaseSingleton();
 	}
 	
 	ReleaseDC(_hWnd, _hdc);
