@@ -9,8 +9,9 @@ HRESULT dungeonStage::init()
 	_tile->imageLoad();
 
 	_player = new player;
-	_player->init();
+	_player->init(500, 500);
 	_enemy = new enemyManager;
+	_enemy->setPlayerLink(_player);
 	_enemy->init();
 
 

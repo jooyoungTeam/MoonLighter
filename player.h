@@ -15,7 +15,9 @@ class player : public gameNode
 private:
 	FloatRect			_playerRc;							//플레이어 렉트
 	FloatRect			_playerAttackRc;					//플레이어 공격렉트
+	FloatRect			_playerShadowRc;					//플레이어 그림자렉트
 	Image*				_playerImg;							//플레이어 이미지
+	Image*				_playerShadowImg;					//플레이어 그림자 이미지
 	playerState*		_CurrentState;						//현재 클래스 상태
 	animation*			_playerMotion;						//플레이어 애니메이션
 	DIRECTION			_playerDirection;					//플레이어 방향
@@ -43,9 +45,10 @@ private:
 	playerState*	    _bow;
 	playerState*	    _sword;
 	playerState*	    _broom;
+	playerState*		_bed;
 
 public:
-	virtual HRESULT init();
+	virtual HRESULT init(float x, float y);
 	void render();
 	void update();
 	void release();
@@ -61,6 +64,7 @@ public:
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
 	float getShadowY() { return _playerShadowY; }
+	float getAttackRc() { return _playerAttackX, _playerAttackY, _playerAttackW, _playerAttackH; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
@@ -99,6 +103,7 @@ public:
 	playerState* getBowState()		{ return _bow; }
 	playerState* getSwordState()	{ return _sword; }
 	playerState* getBroomState()	{ return _broom; }
+	playerState* getBedState()		{ return _bed; }
 };
 
 

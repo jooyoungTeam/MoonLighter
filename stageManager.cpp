@@ -11,8 +11,7 @@ HRESULT stageManager::init()
 	_ui = new UI;
 	_ui->init();
 
-	_inven = new inventory;
-	_inven->init();
+	INVENTORY->init();
 	_isInven = false;
 
 	_itemMg = new itemManager;
@@ -24,6 +23,8 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
 	SCENEMANAGER->addScene("¸¶À»¾À", new townStage);
 
+
+
 	SCENEMANAGER->changeScene("Å¸ÀÌÆ²¾À");
 
 	return S_OK;
@@ -32,27 +33,68 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	if (_isInven) _inven->render();
+	//ui->render();
+	if (_isInven) INVENTORY->render();
 }
 
 
 void stageManager::update()
 {
-	if(!_isInven) SCENEMANAGER->update();
+	FloatRect _test;
+	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
+
+	if (!_isInven) SCENEMANAGER->update();
 
 	if (!_isInven && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		_isInven = true;
-		_inven->setState(INVEN_STATE::NOTE);
+		_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
+		INVENTORY->setState(INVEN_STATE::NOTE);
 	}
 
 	if (_isInven && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		_isInven = false;
-		_inven->setSale(false);
+		_ui->setUIScene(CURRENT_SCENE::TEMP);
+		INVENTORY->setSale(false);
 	}
 
-	if (_isInven) _inven->update();
+	if (!_isInven && KEYMANAGER->isOnceKeyDown('O'))
+	{
+		_isInven = true;
+		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
+		INVENTORY->setState(INVEN_STATE::SHOP);
+	}
+
+
+
+	if (_isInven) INVENTORY->update();
+
+	if (KEYMANAGER->isOnceKeyDown('Y'))
+	{
+		_itemMg->setItem(ITEMTYPE::SLIME_RED, 200 + RND->getInt(50), 200 + RND->getInt(50));
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('U'))
+	{
+		_itemMg->setItem(ITEMTYPE::BROKEN_SWORD, 200 + RND->getInt(50), 200 + RND->getInt(50));
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		_itemMg->setItem(ITEMTYPE::POTION_S, 200 + RND->getInt(50), 200 + RND->getInt(50));
+	}
+
+	_itemMg->update();
+
+	for (int i = 0; i < _itemMg->getVItem().size(); ++i)
+	{
+		if (_test.left - _itemMg->getVItem()[i]->getRc().left < 30 && _test.top - _itemMg->getVItem()[i]->getRc().top < 30)
+		{
+			INVENTORY->putItem(_itemMg->getVItem()[i]);
+			_itemMg->erase(i);
+		}
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{

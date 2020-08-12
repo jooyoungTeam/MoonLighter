@@ -7,9 +7,9 @@
 class dungeonStage : public gameNode
 {
 private:
+	player*       _player;
 	enemyManager* _enemy;
 	tile*         _tile;
-	player*       _player;
 	tagTile       _dungeonTiles[TILEX * TILEY];
 	DWORD         _dungeonAttribute[TILEX * TILEY];
 

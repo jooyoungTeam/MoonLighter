@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "enemyManager.h"
+#include "player.h"
+
 
 enemyManager::enemyManager()
 {
@@ -11,9 +13,9 @@ enemyManager::~enemyManager()
 
 HRESULT enemyManager::init()
 {
-	_x = 600;
-	_y = 300;
-	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
+	_x = _player->getX();
+	_y = _player->getY();
+	_rc = _player->getPlayerRc();
 	_bulletDelay = 0;
 	setEnemy();
 
@@ -21,7 +23,6 @@ HRESULT enemyManager::init()
 	_bullet->init();
 	
 	_test = false;
-	
 
 
 	return S_OK;
@@ -34,6 +35,8 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
+	_x = _player->getX();
+	_y = _player->getY();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -54,7 +57,7 @@ void enemyManager::update()
 			}
 		}
 	}
-	if (!_test)
+	/*if (!_test)
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_UP))
 		{
@@ -75,12 +78,13 @@ void enemyManager::update()
 
 
 	}
-
+*/
 	if (_bulletDelay > 90)
 	{
 		potBullet();
 	}
 	playerCol();
+	bulletCol();
 	_bullet->update();
 	//cout << _testCount << endl;
 
@@ -92,7 +96,7 @@ void enemyManager::update()
 		}
 	}
 
-
+	EFFECTMANAGER->update();
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 }
 
@@ -105,13 +109,20 @@ void enemyManager::render()
 	_bullet->render();
 
 	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
+	ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
+	EFFECTMANAGER->render();
 }
 
 void enemyManager::setEnemy()
 {
 	int i = 1;
 
-	enemy* redS1;
+	enemy* boss1;
+	boss1 = new boss;
+	boss1->playerCheck(_x, _y, _rc);
+	boss1->init(i, 500, 200, 250, 300, ENEMY_BOSS);
+	_vEnemy.push_back(boss1);
+	/*enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
 	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
@@ -162,7 +173,7 @@ void enemyManager::setEnemy()
 	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
-
+*/
 
 }
 
@@ -196,6 +207,7 @@ void enemyManager::potBullet()
 
 void enemyManager::playerCol()
 {
+	RECT temp;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		if (_vEnemy[i]->getState() != _vEnemy[i]->getDead())
@@ -215,17 +227,30 @@ void enemyManager::playerCol()
 					}
 				}
 			}
+			
+			//if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect(), &_player.))
 		}
 	}
+
 }
 
 void enemyManager::bulletCol()
 {
+	RECT temp;
+	for (int i = 0; i < _bullet->getVBullet().size(); ++i)
+	{
+		if (IntersectRect(&temp, &_rc.GetRect(), &_bullet->getVBullet()[i].rc.GetRect()))
+		{
+			ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
+			EFFECTMANAGER->play("bulletCollision", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
+			_bullet->remove(i);
+		}
+	}
 }
 
 void enemyManager::enemyDead(int arr)
 {
-	
+	_vEnemy[arr]->release();
 	_vEnemy.erase(_vEnemy.begin() + arr);
 	
 }

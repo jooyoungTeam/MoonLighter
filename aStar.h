@@ -44,77 +44,70 @@ struct astarTile
 class aStar : public gameNode
 {
 	//전체 타일을 담을 벡터
-	vector<astarTile*>			_vTotalList;
+	vector<astarTile*>			 _vTotalList;
 	vector<astarTile*>::iterator _viTotalList;
 
 	//갈 수 있는 타일을 담을 벡터
-	vector<astarTile*>			_vOpenList;
+	vector<astarTile*>			 _vOpenList;
 	vector<astarTile*>::iterator _viOpenList;
 
-	vector<astarTile*>			_vCloseList;
+	vector<astarTile*>			 _vCloseList;
 	vector<astarTile*>::iterator _viCloseList;
 
-	vector<astarTile*>			_vOldCloseList;
-	vector<astarTile*>::iterator _vOldiCloseList;
+	vector<astarTile*>			 _vShortestList;	// 최단 경로
+	vector<astarTile*>::iterator _viShortestList; 
 
-	vector<POINT>				_vUnMoveTile;
+	vector<POINT>				 _vUnMoveTile;		// 못가는 타일
 
-	astarTile* _startTile;		//시작 타일
-	astarTile* _endTile;			//끝 타일
-	astarTile* _currentTile;		//현재 타일(노드)
+	astarTile* _startTile;		// 시작 타일
+	astarTile* _endTile;		// 끝 타일
+	astarTile* _currentTile;	// 현재 타일(노드)
 
-	int _totalTileX;
-	int _totalTileY;
+	int _totalTileX;			// 총 타일 X 개수
+	int _totalTileY;			// 총 타일 Y 개수
+	int _aStarTimer;			// a* 리셋 타이머
+	int _playerTileX;			// 플레이어의 시작 X 좌표 (시작 오브젝트)
+	int _playerTileY;			// 플레이어의 시작 Y 좌표 (시작 오브젝트)
+	int _enemyTileX;			// 적의 X 좌표 (목적지 오브젝트)
+	int _enemyTileY;			// 적의 Y 좌표 (목적지 오브젝트) 
+	int _moveIndex;				// 따라갈 타일의 인덱스
+	int _rndX;					// 겹치지 않기 위한 난수
+	int _rndY;					// 겹치지 않기 위한 난수
 
-	int _count;
-	int _aStarTimer;
-	int _index;
-
-	bool _start;
-	bool _end;
-
-	int _playerTileX;
-	int _playerTileY;
-
-	int _enemyTileX;
-	int _enemyTileY;
-
-	int _moveIndex;
-
-	int _rndX;
-	int _rndY;
-
-	bool _isNPC;
-	bool _changePoint;
+	bool _end;					// a* 탐색 완료 여부			
+	bool _isNPC;				// NPC인지 몬스터인지
+	bool _changePoint;			// 목표 변경여부
 public:
 	aStar();
 	~aStar();
 
-	// 다 아는 그거
+public:
+	// (총 타일X 개수, 총 타일Y 개수, 시작 타일X, 시작 타일Y, 목적지 타일X, 목적지 타일Y, 벽이나 오브젝트 등 못움직이는 좌표, NPC여부)
 	HRESULT init(int totalTileX, int totalTileY, int playerX, int playerY, int enemyX, int enemyY, vector<POINT> unMoveTile, bool npc);
-
-	//타일 셋팅 함수
-	void setTiles();
-
-	//갈 수 있는 길을 찾아서 담을 함수
-	vector<astarTile*> addOpenList(astarTile* currentTile);
-
-	//빠른 경로 찾는 함수
-	void pathFinder(astarTile* currentTile);
-
 	void release();
-
-	vector<astarTile*> getVClose() { return _vCloseList; }
-	vector<astarTile*> getVOldClose() { return _vOldCloseList; }
-	int getRndX() { return _rndX; }
-	int getRndY() { return _rndY; }
-
-	int getMoveIndex() { return _moveIndex; }
-	void setMoveIndex(int moveIndex) { _moveIndex = moveIndex; }
-
 	void update(int playerTileX, int playerTileY, int enemyTileX, int enemyTileY);
 	void render();
 
-	void changeWayPoint() { _changePoint = true; 	_moveIndex = 0; }
+	// 타일 셋팅 함수
+	void setTiles();
+	// 갈 수 있는 길을 찾아서 담을 함수
+	vector<astarTile*> addOpenList(astarTile* currentTile);
+	// 빠른 경로 찾는 함수dsa
+	void pathFinder(astarTile* currentTile);
+	// 목표 변경 함수
+	void changeWayPoint() { _vShortestList.clear(); _changePoint = true; _end = false; }
+
+public:
+	// ================== Get ========================
+	vector<astarTile*> getVClose() { return _vCloseList; }
+	vector<astarTile*> getVShortest() { return _vShortestList; }
+	int getRndX() { return _rndX; }
+	int getRndY() { return _rndY; }
+	int getMoveIndex() { return _moveIndex; }
+
+public:
+	// ================== Set ========================
+	void setMoveIndex(int moveIndex) { _moveIndex = moveIndex; }
+
 };
 

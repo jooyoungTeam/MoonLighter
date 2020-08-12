@@ -9,8 +9,7 @@ HRESULT townStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, (_mapImg->GetSize().x) - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	//loadMap();
 	_player = new player;
-	_player->init();
-
+	_player->init(500,500);
 	return S_OK;
 }
 

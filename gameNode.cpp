@@ -28,13 +28,14 @@ HRESULT gameNode::init(bool managerInit)
 	//	SetTimer(_hWnd, 1, 10, NULL);
 		KEYMANAGER->init();
 		TIMEMANAGER->init();
-		//EFFECTMANAGER->init();
+		EFFECTMANAGER->init();
 		SOUNDMANAGER->init();
 		SCENEMANAGER->init();
 		KEYANIMANAGER->init();
 		CAMERAMANAGER->init();
 		TXTDATA->init();
 		ASTARMANAGER->init();
+		INVENTORY->init();
 	}
 
 
@@ -56,8 +57,8 @@ void gameNode::release()
 		TIMEMANAGER->release();
 		TIMEMANAGER->releaseSingleton();
 
-		//EFFECTMANAGER->release();
-		//EFFECTMANAGER->releaseSingleton();
+		EFFECTMANAGER->release();
+		EFFECTMANAGER->releaseSingleton();
 
 		SOUNDMANAGER->release();
 		SOUNDMANAGER->releaseSingleton();
@@ -73,6 +74,9 @@ void gameNode::release()
 
 		ASTARMANAGER->release();
 		ASTARMANAGER->releaseSingleton();
+
+		INVENTORY->release();
+		INVENTORY->releaseSingleton();
 	}
 	
 	ReleaseDC(_hWnd, _hdc);

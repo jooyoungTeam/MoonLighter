@@ -5,6 +5,8 @@
 void golem::render()
 {
 	_aStar->render();
+	_shadow->Render(Vector2(_shadowRc.left, _shadowRc.top));
+	_shadow->SetAlpha(0.4f);
 	_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
@@ -139,17 +141,20 @@ void golem::direcitonChange()
 
 void golem::dead()
 {
+	_golemCount++;
 	if (_onceAni)
 	{
-		_img = ImageManager::GetInstance()->FindImage("redSlimeDead");
-		_motion = KEYANIMANAGER->findAnimation(_index, "redSlimeDead");
-		_motion->start();
+		_img = ImageManager::GetInstance()->FindImage("golemRed");
+		//_motion = KEYANIMANAGER->findAnimation(_index, "golemRed");
 		_onceAni = false;
 	}
-	if (!KEYANIMANAGER->findAnimation(_index, "redSlimeDead")->isPlay())
+	hitMove();
+	if (_golemCount > 20)
 	{
-		_realDead = true;
+		_realDead = true; 
+		_golemCount = 0;
 	}
+	
 }
 
 void golem::enemyHit()
@@ -185,6 +190,14 @@ void golem::enemyHit()
 		}
 
 	}
+
+}
+
+void golem::setShadow()
+{
+	_shadowX = _x - 10;
+	_shadowY = _y + _width / 2;
+	_shadowRc = RectMakePivot(Vector2(_shadowX, _shadowY), Vector2(_width - 10, 20.f), Pivot::Center);
 
 }
 

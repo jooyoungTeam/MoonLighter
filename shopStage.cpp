@@ -11,10 +11,13 @@ HRESULT shopStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
-	_player->init();
+	_player->init(WINSIZEX / 2 + 113, 445);
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();
+		
+
+	disPlaySet();
 
 	_doorFrameTimer = 0;
 	_doorIndex = 0;
@@ -26,11 +29,18 @@ void shopStage::render()
 {
 	CAMERAMANAGER->render(_backGround, _backGround->GetWidth() / 2, 200, 1.15f, 1.0f);
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
-
 	_player->render();
+
+
 
 	if(_enterNPC)
 		_shopNPC->render();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (_display[i].it != NULL)
+			_display[i].it->cameraRender();
+	}
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
@@ -42,21 +52,52 @@ void shopStage::update()
 {
 	_player->update();
 
+	if(INVENTORY->getState() == INVEN_STATE::SHOP)
+		disPlayUpdate();
+	
+	buyItem();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (_display[i].it != NULL)
+		{
+			_display[i].it->fieldUpdate();
+		}
+	}
+
 	if(_enterNPC)
 		_shopNPC->updadte();
-
-	//cout << "x: " << _player->getX() << endl;
-	//cout << "y: " << _player->getY() << endl;
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
-
+	
 	doorUpdate();
 }
 
 void shopStage::release()
 {
 
+}
+
+void shopStage::disPlaySet()
+{
+	_display[0].init(Vector2(565, 870), NULL, 0, 0, false);
+	_display[1].init(Vector2(565, 930), NULL, 0, 0, false);
+	_display[2].init(Vector2(630, 870), NULL, 0, 0, false);
+	_display[3].init(Vector2(630, 930), NULL, 0, 0, false);
+}
+
+void shopStage::disPlayUpdate()
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		_display[i].count = INVENTORY->getShowCase()[i].count;
+		_display[i].it = INVENTORY->getShowCase()[i].item;
+		_display[i].settingPrice = INVENTORY->getShowCase()[i].price;
+
+		if (_display[i].it != NULL)
+			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
+	}
 }
 
 void shopStage::doorUpdate()
@@ -104,5 +145,40 @@ void shopStage::doorUpdate()
 			_doorFrameTimer = 0;
 		}
 		break;
+	}
+}
+
+void shopStage::buyItem()
+{
+	if (_display[_shopNPC->getRndItem()].it != NULL)
+	{
+		switch (_shopNPC->getRndItem())
+		{
+		case 0:
+			_shopNPC->setRightPrice(_display[0].it->getPrice());
+			_shopNPC->setSettingPrice(_display[0].settingPrice);
+			break;
+
+		case 1:
+			_shopNPC->setRightPrice(_display[1].it->getPrice());
+			_shopNPC->setSettingPrice(_display[1].settingPrice);
+			break;
+
+		case 2:
+			_shopNPC->setRightPrice(_display[2].it->getPrice());
+			_shopNPC->setSettingPrice(_display[2].settingPrice);
+			break;
+
+		case 3:
+			_shopNPC->setRightPrice(_display[3].it->getPrice());
+			_shopNPC->setSettingPrice(_display[3].settingPrice);
+			break;
+		}
+	}
+
+	if (_shopNPC->getIsBuy())
+	{
+		_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
+		_display[_shopNPC->getRndItem()].it = NULL;
 	}
 }
