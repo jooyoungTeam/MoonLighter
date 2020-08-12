@@ -8,7 +8,7 @@
 
 enum class INVEN_STATE
 {
-	NOTE, SHOP
+	TEMP, NOTE, SHOP
 };
 
 enum class MIRROR_STATE
@@ -21,6 +21,7 @@ struct tagInven
 	FloatRect rc;
 	item* item;
 	int count;
+	int price;
 	wstring number;
 };
 
@@ -44,7 +45,6 @@ struct tagShop
 };
 
 class player;
-class UI;
 
 class inventory : public singletonBase<inventory>
 {
@@ -64,6 +64,7 @@ private:
 	tagGear _gear[GEARSPACE];			//장비칸
 	tagShop _shop[SHOPSPACE];			//상점칸
 	bool _isSwap;						//넘어가기
+	//bool _isInven;						//인벤 열렸는지
 
 	MIRROR_STATE _mirror;				//미러 상태
 	int _frameCount;					//미러프레임용
@@ -74,7 +75,6 @@ private:
 	int _gold;							//소지금
 
 	player* _player;
-	UI* _ui;
 
 public:
 	inventory() {}
@@ -86,24 +86,26 @@ public:
 	void release();
 
 	void putItem(item* item);								//인벤에 아이템 넣기
-	void moveItem();										//인벤에서 아이템 옮기기
+	void selectInvenItem();									//아이템 선택하기
+	void moveInvenItem();									//인벤에서 아이템 옮기기
+	void setInvenItem();									//장비나 쇼케이스로 아이템 옮기기
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
+	//bool getInven() { return _isInven; }					//인벤 열렸는지
 	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 
 public:
+	//void setInven(BOOL inven = FALSE) { _isInven = inven; }	//인벤 열고 닫는 불 값 설정하기
 	void setSale(BOOL sale = FALSE) { _isSale = sale; }		//판매하는 불 값 설정하기
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 
 public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
-	//UI 참조용
-	void getUIMemoryAddressLink(UI* ui) { _ui = ui; }
 	
 	tagShop* getShowCase() { return _shop; }
 };

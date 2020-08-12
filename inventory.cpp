@@ -225,7 +225,7 @@ void inventory::update()
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	//if ()
+	//움직임
 	{
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
@@ -408,8 +408,40 @@ void inventory::update()
 		}
 	}
 
-	moveItem();
+	selectInvenItem();
+	moveInvenItem();
+	setInvenItem();
 	useMirror();
+
+	if (_state == INVEN_STATE::TEMP)
+	{
+		cout << "enflek" << endl;
+		
+		_isSelect = false;
+		_isSale = false;
+		_selectItem.item = nullptr;
+
+		if (!_isSwap)
+		{
+			_inven[_selectNumber].item = _selectItem.item;
+			_inven[_selectNumber].count = _selectItem.count;
+		}
+
+		else
+		{
+			if (_state == INVEN_STATE::NOTE)
+			{
+				_gear[_selectNumber].item = _selectItem.item;
+				_gear[_selectNumber].count = _selectItem.count;
+			}
+
+			if (_state == INVEN_STATE::SHOP)
+			{
+				_shop[_selectNumber].item = _selectItem.item;
+				_shop[_selectNumber].count = _selectItem.count;
+			}
+		}		
+	}
 
 	for (int i = 0; i < GEARSPACE; i++)
 	{
@@ -469,8 +501,8 @@ void inventory::putItem(item* item)
 //===========================================↑↑아이템 인벤에 넣기↑↑===========================================//
 
 
-//===========================================↓↓아이템 인벤에서 옮기기↓↓===========================================//
-void inventory::moveItem()
+//===========================================↓↓아이템 선택하기↓↓===========================================//
+void inventory::selectInvenItem()
 {
 	if (!_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
@@ -526,9 +558,17 @@ void inventory::moveItem()
 			_selectItem.item = _shop[_select].item;
 			_selectItem.count++;
 			_shop[_select].count--;
+
+			if (_shop[_select].count <= 0) _shop[_select].item = nullptr;
 		}
 	}
+}
+//===========================================↑↑아이템 선택하기↑↑===========================================//
 
+
+//===========================================↓↓아이템 인벤에서 옮기기↓↓===========================================//
+void inventory::moveInvenItem()
+{
 	if (_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
 		if (!_isSwap)
@@ -645,76 +685,28 @@ void inventory::moveItem()
 
 		if (_isSwap)
 		{
-			//장비창에 옮기기(포션칸에 포션을 옮긴다고 한다면)
-			if (_state == INVEN_STATE::NOTE)
+			setInvenItem();
+		}
+	}
+}
+//===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
+
+
+//===========================================↓↓아이템 다른 칸으로 옮기기↓↓===========================================//
+void inventory::setInvenItem()
+{
+	//장비창에 옮기기
+	if (_state == INVEN_STATE::NOTE)
+	{
+		if (_select == 4)
+		{
+			if (_selectItem.item->getIndex() > 1000)
 			{
-				if (_select == 4)
+				//포션칸이 비어있으면
+				if (_gear[_select].item == nullptr)
 				{
-					if (_selectItem.item->getIndex() > 1000)
-					{
-						//포션칸이 비어있으면
-						if (_gear[_select].item == nullptr)
-						{
-							_gear[_select].item = _selectItem.item;
-							_gear[_select].count = _selectItem.count;
-							_selectItem.item = nullptr;
-							_isSelect = false;
-						}
-
-						//비어있지 않으면
-						else
-						{
-							//장비창에서 그대로 아이템을 챙기고 있는 상태
-							if (_selectNumber == _select)
-							{
-								_selectItem.count++;
-								_gear[_select].count--;
-
-								//장비창에 있는 아이템을 모두 들었다면
-								if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
-
-								//장비창에 있는 포션을 다 챙겨서 내가 다 들어버리면
-								//다시 돌려놓기
-								if (_selectItem.count > _selectItem.item->getLimit())
-								{
-									_gear[_select].item = _selectItem.item;
-									_gear[_select].count = _selectItem.count;
-								}
-							}
-
-							//인벤에서 가져온 아이템이라면
-							else
-							{
-								_selectItem.count--;
-								_gear[_select].count++;
-
-								//아이템 한계치를 넘으면
-								if (_gear[_select].count + _selectItem.count > _gear[_select].item->getLimit())
-								{
-									_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
-									_gear[_select].count = _gear[_select].item->getLimit();
-								}
-
-								//다 내려놨다면
-								if (_selectItem.count <= 0)
-								{
-									_selectItem.count = 0;
-									_selectItem.item = nullptr;
-									_isSelect = false;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			if (_state == INVEN_STATE::SHOP)
-			{
-				//쇼케이스가 비어있으면
-				if (_shop[_select].item == nullptr)
-				{
-					_shop[_select].item = _selectItem.item;
-					_shop[_select].count = _selectItem.count;
+					_gear[_select].item = _selectItem.item;
+					_gear[_select].count = _selectItem.count;
 					_selectItem.item = nullptr;
 					_isSelect = false;
 				}
@@ -722,34 +714,35 @@ void inventory::moveItem()
 				//비어있지 않으면
 				else
 				{
-					//쇼케이스에서 그대로 아이템을 챙기고 있는 상태
+					//장비창에서 그대로 아이템을 챙기고 있는 상태
 					if (_selectNumber == _select)
 					{
 						_selectItem.count++;
-						_shop[_select].count--;
+						_gear[_select].count--;
 
-						//쇼케이스에 있는 아이템을 모두 들었다면
-						if (_shop[_select].count <= 0) _shop[_select].item = nullptr;
+						//장비창에 있는 아이템을 모두 들었다면
+						if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
 
-						//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
+						//장비창에 있는 포션을 다 챙겨서 내가 다 들어버리면
+						//다시 돌려놓기
 						if (_selectItem.count > _selectItem.item->getLimit())
 						{
-							_shop[_select].item = _selectItem.item;
-							_shop[_select].count = _selectItem.count;
+							_gear[_select].item = _selectItem.item;
+							_gear[_select].count = _selectItem.count;
 						}
 					}
 
-					//인벤에서 가져온 포션이라면
+					//인벤에서 가져온 아이템이라면
 					else
 					{
 						_selectItem.count--;
-						_shop[_select].count++;
+						_gear[_select].count++;
 
-						//포션 한계치를 넘으면
-						if (_shop[_select].count + _selectItem.count > _shop[_select].item->getLimit())
+						//아이템 한계치를 넘으면
+						if (_gear[_select].count + _selectItem.count > _gear[_select].item->getLimit())
 						{
-							_selectItem.count = (_shop[_select].count + _selectItem.count) - _shop[_select].item->getLimit();
-							_shop[_select].count = _shop[_select].item->getLimit();
+							_selectItem.count = (_gear[_select].count + _selectItem.count) - _gear[_select].item->getLimit();
+							_gear[_select].count = _gear[_select].item->getLimit();
 						}
 
 						//다 내려놨다면
@@ -764,8 +757,80 @@ void inventory::moveItem()
 			}
 		}
 	}
+
+	//쇼케이스에 옮기기
+	if (_state == INVEN_STATE::SHOP)
+	{
+		//쇼케이스가 비어있으면
+		if (_shop[_select].item == nullptr)
+		{
+			_shop[_select].item = _selectItem.item;
+			_shop[_select].count = _selectItem.count;
+			_selectItem.item = nullptr;
+			_isSelect = false;
+		}
+
+		//비어있지 않으면
+		else
+		{
+			//쇼케이스에서 그대로 아이템을 챙기고 있는 상태
+			if (_selectNumber == _select)
+			{
+				_selectItem.count++;
+				_shop[_select].count--;
+
+				//쇼케이스에 있는 아이템을 모두 들었다면
+				if (_shop[_select].count <= 0) _shop[_select].item = nullptr;
+
+				//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
+				if (_selectItem.count > _selectItem.item->getLimit())
+				{
+					_shop[_select].item = _selectItem.item;
+					_shop[_select].count = _selectItem.count;
+				}
+			}
+
+			//다른 칸에서 가져온 아이템이라면
+			else
+			{
+				//아이템을 가지고 왔던 인벤 창이 비어있다면
+				if (_shop[_selectNumber].item == nullptr)
+				{
+					_shop[_selectNumber].item = _shop[_select].item;
+					_shop[_selectNumber].count = _shop[_select].count;
+					_shop[_selectNumber].price = _shop[_select].price;
+					_shop[_select].item = _selectItem.item;
+					_shop[_select].count = _selectItem.count;
+					_shop[_select].price = _selectItem.price;
+					_selectItem.item = nullptr;
+					_isSelect = false;
+				}
+
+				else
+				{
+					_selectItem.count--;
+					_shop[_select].count++;
+
+					//아이템 한계치를 넘으면
+					if (_shop[_select].count + _selectItem.count > _shop[_select].item->getLimit())
+					{
+						_selectItem.count = (_shop[_select].count + _selectItem.count) - _shop[_select].item->getLimit();
+						_shop[_select].count = _shop[_select].item->getLimit();
+					}
+
+					//다 내려놨다면
+					if (_selectItem.count <= 0)
+					{
+						_selectItem.count = 0;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
+				}
+			}
+		}
+	}
 }
-//===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
+//===========================================↑↑아이템 다른 칸으로 옮기기↑↑===========================================//
 
 
 //===========================================↓↓미러 사용하기↓↓===========================================//
