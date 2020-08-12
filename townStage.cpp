@@ -13,6 +13,7 @@ HRESULT townStage::init()
 
 void townStage::update()
 {
+	_player->update();
 }
 
 void townStage::render()
