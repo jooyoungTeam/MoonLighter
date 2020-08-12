@@ -38,6 +38,11 @@ void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 		_attackDistance = 400;
 		_attackDelayCount = 50;
 	}
+	if (enemyType == ENEMY_BOSS)
+	{
+		_attackDistance = 400;
+		_attackDelayCount = 100;
+	}
 
 	if (enemy.getAttackDelay() > _attackDelayCount)
 	{
@@ -69,12 +74,11 @@ void enemyAttackState::update(enemy & enemy, ENEMYTYPE enemyType)
 			enemy.setIsAttack(false);
 		}
 	}
-	
-	
 }
 
 void enemyHitState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
+	enemy.enemyHit();
 }
 
 void enemyDeadState::update(enemy & enemy, ENEMYTYPE enemyType)

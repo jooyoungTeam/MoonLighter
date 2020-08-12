@@ -5,6 +5,8 @@
 void golem::render()
 {
 	_aStar->render();
+	_shadow->Render(Vector2(_shadowRc.left, _shadowRc.top));
+	_shadow->SetAlpha(0.4f);
 	_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
@@ -188,6 +190,14 @@ void golem::enemyHit()
 		}
 
 	}
+
+}
+
+void golem::setShadow()
+{
+	_shadowX = _x - 10;
+	_shadowY = _y + _width / 2;
+	_shadowRc = RectMakePivot(Vector2(_shadowX, _shadowY), Vector2(_width - 10, 20.f), Pivot::Center);
 
 }
 
