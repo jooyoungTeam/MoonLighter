@@ -5,7 +5,7 @@ class bossStage : public gameNode
 {
 private:
 	Image*  _mapImg;
-	player  _player;
+	player*  _player;
 
 public:
 

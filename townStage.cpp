@@ -5,7 +5,6 @@ HRESULT townStage::init()
 {
 	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
 
-	_mapImg->SetSize(Vector2(3500, 2870));
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, (_mapImg->GetSize().x) - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	//loadMap();
 	_player = new player;
@@ -23,7 +22,6 @@ void townStage::render()
 {
 	//renderMap();
 
-	_mapImg->SetSize(Vector2(3500, 2870));
 	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	_player->render();
 }
