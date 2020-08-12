@@ -5,7 +5,7 @@
 #include "shopStage.h"
 #include "dungeonStage.h"
 #include "townStage.h"
-
+#include "bossStage.h"
 HRESULT stageManager::init()
 {
 	_ui = new UI;
@@ -22,6 +22,7 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("¼¥¾À", new shopStage);
 	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
 	SCENEMANAGER->addScene("¸¶À»¾À", new townStage);
+	SCENEMANAGER->addScene("º¸½º¾À", new bossStage);
 
 
 
@@ -33,7 +34,7 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	//ui->render();
+	//_ui->render();
 	if (_isInven) INVENTORY->render();
 }
 
@@ -56,7 +57,7 @@ void stageManager::update()
 	{
 		_isInven = false;
 		_ui->setUIScene(CURRENT_SCENE::TEMP);
-		INVENTORY->setSale(false);
+		INVENTORY->closeInven();
 	}
 
 	if (!_isInven && KEYMANAGER->isOnceKeyDown('O'))
@@ -65,8 +66,6 @@ void stageManager::update()
 		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
 		INVENTORY->setState(INVEN_STATE::SHOP);
 	}
-
-
 
 	if (_isInven) INVENTORY->update();
 
@@ -117,6 +116,11 @@ void stageManager::update()
 	{
 		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("¼¥¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
+	{
+		KEYANIMANAGER->release();
+		SCENEMANAGER->changeScene("º¸½º¾À");
 	}
 }
 

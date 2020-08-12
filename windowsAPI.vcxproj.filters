@@ -237,6 +237,9 @@
     <ClInclude Include="shopNPCManager.h">
       <Filter>playGround\송용은</Filter>
     </ClInclude>
+    <ClInclude Include="bossStage.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -391,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="shopNPCManager.cpp">
       <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStage.cpp">
+      <Filter>playGround\stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

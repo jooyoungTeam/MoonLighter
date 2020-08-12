@@ -16,6 +16,9 @@ class playerbowState;
 class playerSwordState;
 class playerbroomState;
 class playerBedState;
+class playerTeleportState;
+class playerTeleportInState;
+class playerTeleportOutState;
 
 class playerState
 {
@@ -36,13 +39,16 @@ public:
 	static playerSwordState* sword;
 	static playerbroomState* broom;
 	static playerBedState* bed;
+	static playerTeleportState* teleport;
+	static playerTeleportInState* teleportIn;
+	static playerTeleportOutState* teleportOut;
 };
 
 class playerIdleState : public playerState
 {
 private:
 	bool _transForm;
-	int _idleCount;				//아이들상태 오래되면
+
 public:
 	HRESULT init();
 	virtual void update(player& player) override;
@@ -51,8 +57,6 @@ public:
 class playerWalkState : public playerState
 {
 private:
-	bool _rollCount;
-	int _rollCount2;
 public:
 	virtual void update(player& player) override;
 };
@@ -94,9 +98,6 @@ class playerbowState : public playerState
 private:
 	arrow* _arrow;
 public:
-	virtual HRESULT init();
-	virtual void render();
-	virtual void release();
 	virtual void update(player& player) override;
 };
 
@@ -113,6 +114,24 @@ public:
 };
 
 class playerBedState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportInState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTeleportOutState : public playerState
 {
 public:
 	virtual void update(player& player) override;

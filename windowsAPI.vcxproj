@@ -152,6 +152,7 @@
     <ClInclude Include="aStar.h" />
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="boss.h" />
+    <ClInclude Include="bossStage.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossStage.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
