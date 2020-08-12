@@ -50,7 +50,7 @@ protected:
 	int _rndX;			//astar 랜덤 값 준거
 	int _rndY;			//이것또한..
 	int _hitCount;		//맞을때 반짝
-	int _hitBoolCount;
+	int _isHitCount;
 
 
 	float _x, _y;		//에너미 중심
@@ -86,10 +86,10 @@ public:
 	virtual void set() {}		//상속받아서 초기화 할 곳
 	virtual void enemyWay();	//방향 결정
 	virtual void move();		//astar
-	virtual void hitMove();
+	virtual void hitMove();		//힛상태이면 반대로 움직이게
 	virtual void directionCheck() {}//골렘 방향 돌려주는거
 	void setBar();				//에너미마다 체력바 위치 정해줌
-	virtual void enemyHit();
+	virtual void enemyHit() {}	//골렘 힛으로 바꿔주는거
 	void checkBoolCount();		//불값이랑 카운트 체크용
 
 	void setGauge(float curHP, float maxHP);	//체력바

@@ -8,9 +8,10 @@ private:
 	GOLEMDIR _golemDir;
 	GOLEMDIR _oldDir;
 	int _count;
+	int _golemCount;
 
 public:
-	golem() {}
+	golem() { _golemCount = 0; }
 	~golem() {}
 
 	virtual void render();

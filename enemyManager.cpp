@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "enemyManager.h"
 
+
 enemyManager::enemyManager()
 {
 }
@@ -21,7 +22,6 @@ HRESULT enemyManager::init()
 	_bullet->init();
 	
 	_test = false;
-	
 
 
 	return S_OK;
@@ -81,6 +81,7 @@ void enemyManager::update()
 		potBullet();
 	}
 	playerCol();
+	bulletCol();
 	_bullet->update();
 	//cout << _testCount << endl;
 
@@ -92,7 +93,7 @@ void enemyManager::update()
 		}
 	}
 
-
+	EFFECTMANAGER->update();
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 }
 
@@ -105,37 +106,39 @@ void enemyManager::render()
 	_bullet->render();
 
 	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
+	ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
+	EFFECTMANAGER->render();
 }
 
 void enemyManager::setEnemy()
 {
 	int i = 1;
 
-	enemy* redS1;
-	redS1 = new redSlime;
-	redS1->playerCheck(_x, _y, _rc);
-	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
-	_vEnemy.push_back(redS1);
+	//enemy* redS1;
+	//redS1 = new redSlime;
+	//redS1->playerCheck(_x, _y, _rc);
+	//redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
+	//_vEnemy.push_back(redS1);
 
-	i++;
+	//i++;
 
-	enemy* gol1;
-	gol1 = new golem;
-	gol1->playerCheck(_x, _y, _rc);
-	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol1);
+	//enemy* gol1;
+	//gol1 = new golem;
+	//gol1->playerCheck(_x, _y, _rc);
+	//gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol1);
 
-	
-	i++;
+	//
+	//i++;
 
-	enemy* pot1;
-	pot1 = new pot;
-	pot1->playerCheck(_x, _y, _rc);
-	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
-	_vEnemy.push_back(pot1);
+	//enemy* pot1;
+	//pot1 = new pot;
+	//pot1->playerCheck(_x, _y, _rc);
+	//pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
+	//_vEnemy.push_back(pot1);
 
-	
-	i++;
+	//
+	//i++;
 
 
 	enemy* pot2;
@@ -145,22 +148,22 @@ void enemyManager::setEnemy()
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
 
-	
-	i++;
+	//
+	//i++;
 
-	enemy* yelS1;
-	yelS1 = new anotherSlime;
-	yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	_vEnemy.push_back(yelS1);
+	//enemy* yelS1;
+	//yelS1 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	//yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	//_vEnemy.push_back(yelS1);
 
-	i++;
+	//i++;
 
-	enemy* bleS1;
-	bleS1 = new anotherSlime;
-	bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	_vEnemy.push_back(bleS1);
+	//enemy* bleS1;
+	//bleS1 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	//bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	//_vEnemy.push_back(bleS1);
 
 
 
@@ -217,15 +220,26 @@ void enemyManager::playerCol()
 			}
 		}
 	}
+
 }
 
 void enemyManager::bulletCol()
 {
+	RECT temp;
+	for (int i = 0; i < _bullet->getVBullet().size(); ++i)
+	{
+		if (IntersectRect(&temp, &_rc.GetRect(), &_bullet->getVBullet()[i].rc.GetRect()))
+		{
+			ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
+			EFFECTMANAGER->play("bulletCollision", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
+			_bullet->remove(i);
+		}
+	}
 }
 
 void enemyManager::enemyDead(int arr)
 {
-	
+	_vEnemy[arr]->release();
 	_vEnemy.erase(_vEnemy.begin() + arr);
 	
 }
