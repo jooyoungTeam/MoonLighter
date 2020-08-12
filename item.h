@@ -1,6 +1,8 @@
 #pragma once
 #include "gameNode.h"
 
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+
 enum class ITEMTYPE
 {
 	SLIME_RED, SLIME_BLUE, SLIME_YELLOW,
@@ -17,11 +19,12 @@ private:
 	FloatRect _rc;
 	Image* _img;
 	float _x, _y;
-	float _Shake;
+	float _shake;
 	int _itemIndex;
 	int _limitCount;
 	int _price;
 
+	bool _isShake;
 public:
 	item() {}
 	~item() {}

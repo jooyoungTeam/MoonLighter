@@ -72,12 +72,14 @@ public:
 	void disPlayUpdate();			// 진열대 업데이트
 	void doorUpdate();				// 문 업데이트
 
+	void buyItem();					// 아이템 구매
+
 public:
 	//============================ Get ===========================
 
 
 public:
 	//============================ Set ===========================
-	void setMemoryAddressLinkInven(inventory* inven) { _inventory = inven; }
+
 };
 
