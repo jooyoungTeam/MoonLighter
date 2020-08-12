@@ -163,10 +163,11 @@ void shopNPC::render()
 		CAMERAMANAGER->frameRender(_emotionImg, _thinkBoxX + 18, _thinkBoxY + 17, _emotionIndexX, 0 , 1.4f,1.f);
 	}
 
-	if (_item->getImg() != NULL)
+	if (_npcActionState == NPC_BUY)
 	{
 		_item->cameraRender();
 	}
+
 }
 
 void shopNPC::frameUpdate()
@@ -369,13 +370,13 @@ void shopNPC::directionCheck()
 	int DegAngle = _angle * 180 / PI; // 라디안 디그리(각도)로 변환
 
 	// 오른쪽 방향
-	if ((DegAngle <= 46 && DegAngle >= 0) || (DegAngle <= 360 && DegAngle > 315))
+	if ((DegAngle <= 45 && DegAngle >= 0) || (DegAngle <= 360 && DegAngle > 315))
 	{
 		_indexY = 2;
 	}
 
 	// 위쪽 방향
-	else if ((DegAngle <= 135 && DegAngle > 46))
+	else if ((DegAngle <= 135 && DegAngle > 45))
 	{
 		_indexY = 3;
 	}

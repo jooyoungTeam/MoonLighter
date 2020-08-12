@@ -47,8 +47,8 @@ void stageManager::update()
 	if (!_isInven && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		_isInven = true;
-		_ui->setUIScene(CURRENT_SCENE::INVENTORY);
-		_inven->setState(INVEN_STATE::NOTE);
+		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
+		_inven->setState(INVEN_STATE::SHOP);
 	}
 
 	if (_isInven && KEYMANAGER->isOnceKeyDown('I'))

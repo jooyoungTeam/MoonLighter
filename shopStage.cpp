@@ -20,6 +20,7 @@ HRESULT shopStage::init()
 	_im->init();
 
 	//_im->setItem()
+	disPlaySet();
 
 	_doorFrameTimer = 0;
 	_doorIndex = 0;
@@ -50,9 +51,6 @@ void shopStage::update()
 
 	if(_enterNPC)
 		_shopNPC->updadte();
-
-	//cout << "x: " << _player->getX() << endl;
-	//cout << "y: " << _player->getY() << endl;
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
@@ -67,10 +65,15 @@ void shopStage::release()
 
 void shopStage::disPlaySet()
 {
+	_display[0].init(Vector2(0, 0), NULL, 0, 0, false);
+	_display[1].init(Vector2(0, 0), NULL, 0, 0, false);
+	_display[2].init(Vector2(0, 0), NULL, 0, 0, false);
+	_display[3].init(Vector2(0, 0), NULL, 0, 0, false);
 }
 
 void shopStage::disPlayUpdate()
 {
+
 }
 
 void shopStage::doorUpdate()

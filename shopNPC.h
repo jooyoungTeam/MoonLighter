@@ -106,6 +106,6 @@ public:
 	//============================ Set ===========================
 	void setSettingPrice(int price) { _settingPrice = price; }
 	void setRightPrice(int price) { _rightPrice = price; }
-
+	void setItem(item* item) { _item = item; }
 };
 

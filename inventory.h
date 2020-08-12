@@ -104,4 +104,6 @@ public:
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
 	//UI ÂüÁ¶¿ë
 	void getUIMemoryAddressLink(UI* ui) { _ui = ui; }
+	
+	tagShop* getShowCase() { return _shop; }
 };

@@ -23,6 +23,15 @@ struct tagDisplayStand
 	int	  count;			// 아이템 개수
 
 	bool  isActive;			// 진열대에 아이템이 있냐?
+
+	void init(Vector2 mPos, item* mIt, int mPrice, int mCount, bool mIsActive)
+	{
+		pos = mPos;
+		it = mIt;
+		settingPrice = mPrice;
+		count = mCount;
+		isActive = mIsActive;
+	}
 };
 
 class shopStage : public gameNode
