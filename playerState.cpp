@@ -706,26 +706,26 @@ void playerRollState::update(player & player)
 	//위로 구르기 
 	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll"))
 	{
-		player.setShadowY(player.getShadowY() - 5);
-		player.setY(player.getY() - 5);
+		player.setShadowY(player.getShadowY() - 7);
+		player.setY(player.getY() - 7);
 	}
 	//아래로 구르기
 	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll"))
 	{
-		player.setShadowY(player.getShadowY() + 5);
-		player.setY(player.getY() + 5);
+		player.setShadowY(player.getShadowY() + 7);
+		player.setY(player.getY() + 7);
 	}
 	//왼쪽으로 구르기
 	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftRoll"))
 	{
-		player.setShadowX(player.getShadowX() - 5);
-		player.setX(player.getX() - 5);
+		player.setShadowX(player.getShadowX() - 7);
+		player.setX(player.getX() - 7);
 	}
 	//오른쪽으로 구르기
 	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightRoll"))
 	{
-		player.setShadowX(player.getShadowX() + 5);
-		player.setX(player.getX() + 5);
+		player.setShadowX(player.getShadowX() + 7);
+		player.setX(player.getX() + 7);
 	}
 
 	//애니메이션 재생이 끝나면 
