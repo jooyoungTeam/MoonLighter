@@ -11,7 +11,7 @@ HRESULT shopStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
-	_player->init(WINSIZEX / 2 + 113, 445);
+	_player->init(WINSIZEX / 2 + 184, 445.5f);
 
 	_shopNPC = new shopNPC;
 	_shopNPC->init();
@@ -28,7 +28,7 @@ HRESULT shopStage::init()
 
 void shopStage::render()
 {
-	CAMERAMANAGER->render(_backGround, _backGround->GetWidth() / 2, 200, 1.15f, 1.0f);
+	CAMERAMANAGER->render(_backGround, 0, 0, 1.f, 1.0f);
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	_player->render();
 
@@ -42,9 +42,9 @@ void shopStage::render()
 	}
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
-	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 - 55, 613, 1.15f, 1.0f);    
-	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 65, 1162, 1.15f, 1.0f);
-	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 10, 1109, _doorIndex, 0 ,1.2f,1.f);
+	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 17, 613, 1.15f, 1.0f);    
+	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2  + 2, 1162, 1.15f, 1.0f);
+	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);
 	CAMERAMANAGER->rectangle(_doorRC, D2D1::ColorF::Red, 1.f, 2.f);
 }
 
@@ -91,9 +91,6 @@ void shopStage::disPlaySet()
 
 void shopStage::disPlayUpdate()
 {
-	if(INVENTORY->getShowCase()[0].item != NULL)
-		cout << INVENTORY->getShowCase()[0].item->getIndex() << endl;
-
 	for (int i = 0; i < 4; ++i)
 	{
 		_display[i].count = INVENTORY->getShowCase()[i].count;
@@ -102,6 +99,13 @@ void shopStage::disPlayUpdate()
 
 		if (_display[i].it != NULL)
 		{
+			if (_shopNPC->getIsBuy())
+			{
+				_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
+				_display[_shopNPC->getRndItem()].it = NULL;
+				break;
+			}
+
 			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
 			_display[i].it->setShakeY(_display[i].pos.y);
 		}
@@ -184,9 +188,9 @@ void shopStage::buyItem()
 		}
 	}
 
-	if (_shopNPC->getIsBuy())
+	/*if (_shopNPC->getIsBuy())
 	{
 		_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
 		_display[_shopNPC->getRndItem()].it = NULL;
-	}
+	}*/
 }
