@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "inventory.h"
 #include "UI.h"
+#include "player.h"
+#include "itemManager.h"
 
 HRESULT inventory::init()
 {
@@ -485,18 +487,22 @@ void inventory::selectInvenItem()
 			//선택한 인벤창이 비어있지 않다면
 			if (_inven[_select].item != nullptr)
 			{
+				_isSelect = true;
+				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+				
+				item* select;
+				select = new item;
+				select = _inven[_select].item;
+
+				_selectItem.item = select;
+				_selectItem.count++;
+				_inven[_select].count--;	
+
 				//인벤 카운트가 0 이하가 되면 비워버린다
 				if (_inven[_select].count <= 0)
 				{
 					_inven[_select].item = nullptr;
-					return;
 				}
-
-				_isSelect = true;
-				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-				_selectItem.item = _inven[_select].item;
-				_selectItem.count++;
-				_inven[_select].count--;				
 			}
 		}
 
@@ -511,7 +517,12 @@ void inventory::selectInvenItem()
 
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-				_selectItem.item = _gear[_select].item;
+
+				item* select;
+				select = new item;
+				select = _gear[_select].item;
+
+				_selectItem.item = select;
 				_selectItem.count++;
 				_gear[_select].count--;
 
@@ -522,23 +533,25 @@ void inventory::selectInvenItem()
 			//선택한 쇼케이스가 비어있지 않다면
 			if (_shop[_select].item != nullptr && _state == INVEN_STATE::SHOP)
 			{
-				if (_shop[_select].count <= 0)
-				{
-					_shop[_select].item = nullptr;
-					return;
-				}
-
 				_selectNumber = -1;
 				_selectGearNumber = -1;
 				_selectShopNumber = _select;
 
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-				_selectItem.item = _shop[_select].item;
+
+				item* select;
+				select = new item;
+				select = _shop[_select].item;
+
+				_selectItem.item = select;
 				_selectItem.count++;
 				_shop[_select].count--;
 
-				
+				if (_shop[_select].count <= 0)
+				{
+					_shop[_select].item = nullptr;
+				}
 			}
 		}		
 	}
@@ -561,7 +574,7 @@ void inventory::moveInvenItem()
 				if (_isSale) _isSale = false;
 
 				//인벤에서 아이템을 가져와 판매하겠다면
-				if (_select == 20)
+				if (_select == 20 && _selectNumber != 20)
 				{
 					_mirror = MIRROR_STATE::ACTIVE;
 					_mirrorFrameX = 0;
@@ -633,12 +646,14 @@ void inventory::moveInvenItem()
 					//선택했을 때의 인벤 칸에서 변화가 없으면
 					if (_selectNumber == _select)
 					{
+						_selectItem.count++;
+						_inven[_select].count--;
+
 						//인벤 카운트가 0이 되면 비워라
 						if (_inven[_select].count <= 0)
 						{
 							_inven[_select].count = 0;
 							_inven[_select].item = nullptr;
-							return;
 						}
 
 						//선택 카운트가 최대라는 건 인벤에서 다 가져왔다는 뜻이니까
@@ -649,15 +664,7 @@ void inventory::moveInvenItem()
 							_inven[_select].count = _selectItem.count;
 							_selectItem.item = nullptr;
 							_isSelect = false;
-							return;
-						}
-
-						else
-						{
-							_selectItem.count++;
-							_inven[_select].count--;
-						}
-						
+						}						
 					}
 
 					//변화가 있으면
@@ -775,12 +782,14 @@ void inventory::moveInvenItem()
 						//쇼케이스에서 그대로 아이템을 챙기고 있는 상태
 						if (_selectShopNumber == _select)
 						{
+							_selectItem.count++;
+							_shop[_select].count--;
+
 							//쇼케이스에 있는 아이템을 모두 들었다면
 							if (_shop[_select].count <= 0)
 							{
 								_shop[_select].count = 0;
-								_shop[_select].item = NULL;
-								return;
+								_shop[_select].item = nullptr;
 							}
 
 							//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
@@ -788,13 +797,6 @@ void inventory::moveInvenItem()
 							{
 								_shop[_select].item = _selectItem.item;
 								_shop[_select].count = _selectItem.count;
-								return;
-							}
-
-							else
-							{
-								_selectItem.count++;
-								_shop[_select].count--;
 							}
 						}
 
@@ -818,7 +820,6 @@ void inventory::moveInvenItem()
 							//다 내려놨다면
 							if (_selectItem.count <= 0)
 							{
-								_selectItem.count = 0;
 								_selectItem.item = nullptr;
 								_isSelect = false;
 							}
@@ -855,13 +856,6 @@ void inventory::moveInvenItem()
 						}
 					}
 				}
-
-
-				//for (int i = 0; i < SHOPSPACE; i++)
-				{
-					cout << _select << ": " << _shop[_select].item->getIndex() << endl;
-				}
-
 			}
 		}
 	}
