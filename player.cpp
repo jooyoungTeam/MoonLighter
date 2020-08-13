@@ -168,6 +168,22 @@ void player::animationLoad()
 	int playerArrow[] = { 0 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerArrow", "playerArrow", playerArrow, 1, 0, false);
 
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowUpCharge", L"image/player/bowChargeState.png", 1, 4);
+	int bowUpCharge[] = { 0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowUpCharge", "bowUpCharge", bowUpCharge, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowDownCharge", L"image/player/bowChargeState.png", 1, 4);
+	int bowDownCharge[] = { 1 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowDownCharge", "bowDownCharge", bowDownCharge, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowRightCharge", L"image/player/bowChargeState.png", 1, 4);
+	int bowRightCharge[] = { 2 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowRightCharge", "bowRightCharge", bowRightCharge, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowLeftCharge", L"image/player/bowChargeState.png", 1, 4);
+	int bowLeftCharge[] = { 3 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowLeftCharge", "bowLeftCharge", bowLeftCharge, 1, 0, false);
+
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
 	int playerUpSword1[] = { 0, 1, 2, 3, 4, 5 };

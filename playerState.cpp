@@ -171,7 +171,48 @@ void playerIdleState::update(player & player)
 	//È°
 	if (player.getWeaponChange())
 	{
+		if(player.getBowBool())
+		{
+			player.setbowChargeCount(player.getbowChargeCount() + 1);
+		}
+		if(!player.getBowBool())
+		{
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+		}
+
+		//È° ¹Ù·Î ½ò¼öµµÀÖ°í ²Ú´©¸£¸é ÃæÀüµÊ
 		if (KEYMANAGER->isOnceKeyDown('J'))
+		{
+			player.setBowBool(true);
+		}
+
+		if (player.getbowChargeCount() >= 30)
+		{
+			if (KEYMANAGER->isStayKeyDown('J'))
+			{
+				if (player.getDirection() == DIRECTION::UP)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowUpCharge"), ImageManager::GetInstance()->FindImage("bowUpCharge"));
+				}
+				if (player.getDirection() == DIRECTION::DOWN)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowDownCharge"), ImageManager::GetInstance()->FindImage("bowDownCharge"));
+				}
+				if (player.getDirection() == DIRECTION::LEFT)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowLeftCharge"), ImageManager::GetInstance()->FindImage("bowLeftCharge"));
+				}
+				if (player.getDirection() == DIRECTION::RIGHT)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowRightCharge"), ImageManager::GetInstance()->FindImage("bowRightCharge"));
+				}
+				player.setBedCount(player.getBedCount() == 0);
+			}
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+			player.setBowBool(false);
+		}
+
+		if (KEYMANAGER->isOnceKeyUp('J'))
 		{
 			if (player.getDirection() == DIRECTION::UP)
 			{
@@ -194,6 +235,8 @@ void playerIdleState::update(player & player)
 				player.setCurrentState(player.getBowState());
 			}
 			player.setBedCount(player.getBedCount() == 0);
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+			player.setBowBool(false);
 		}
 	}
 
@@ -705,7 +748,48 @@ void playerWalkState::update(player & player)
 	//È°
 	if (player.getWeaponChange())
 	{
+		if (player.getBowBool())
+		{
+			player.setbowChargeCount(player.getbowChargeCount() + 1);
+		}
+		if (!player.getBowBool())
+		{
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+		}
+
+		//È° ¹Ù·Î ½ò¼öµµÀÖ°í ²Ú´©¸£¸é ÃæÀüµÊ
 		if (KEYMANAGER->isOnceKeyDown('J'))
+		{
+			player.setBowBool(true);
+		}
+
+		if (player.getbowChargeCount() >= 30)
+		{
+			if (KEYMANAGER->isStayKeyDown('J'))
+			{
+				if (player.getDirection() == DIRECTION::UP)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowUpCharge"), ImageManager::GetInstance()->FindImage("bowUpCharge"));
+				}
+				if (player.getDirection() == DIRECTION::DOWN)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowDownCharge"), ImageManager::GetInstance()->FindImage("bowDownCharge"));
+				}
+				if (player.getDirection() == DIRECTION::LEFT)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowLeftCharge"), ImageManager::GetInstance()->FindImage("bowLeftCharge"));
+				}
+				if (player.getDirection() == DIRECTION::RIGHT)
+				{
+					player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "bowRightCharge"), ImageManager::GetInstance()->FindImage("bowRightCharge"));
+				}
+				player.setBedCount(player.getBedCount() == 0);
+			}
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+			player.setBowBool(false);
+		}
+
+		if (KEYMANAGER->isOnceKeyUp('J'))
 		{
 			if (player.getDirection() == DIRECTION::UP)
 			{
@@ -727,6 +811,9 @@ void playerWalkState::update(player & player)
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightBow"), ImageManager::GetInstance()->FindImage("playerRightBow"));
 				player.setCurrentState(player.getBowState());
 			}
+			player.setBedCount(player.getBedCount() == 0);
+			player.setbowChargeCount(player.getbowChargeCount() == 0);
+			player.setBowBool(false);
 		}
 	}
 
