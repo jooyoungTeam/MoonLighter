@@ -152,12 +152,6 @@ void inventory::render()
 	//장비창
 	if (_state == INVEN_STATE::NOTE)
 	{
-		//장비 변경
-		//플레이어 불값false
-		ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
-		//플레이어 불값true
-		//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
-
 		for (int i = 0; i < GEARSPACE; i++)
 		{
 			//D2DRenderer::GetInstance()->DrawRectangle(_gear[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
@@ -178,6 +172,12 @@ void inventory::render()
 		ImageManager::GetInstance()->FindImage("empty_top")->Render(Vector2(_gear[2].rc.GetCenter().x - 26, _gear[2].rc.GetCenter().y - 25));
 		ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
 		if (_gear[4].item == nullptr) ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
+
+		//장비 변경
+		//플레이어 불값false
+		ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+		//플레이어 불값true
+		//ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));	
 	}
 
 	//쇼케이스
@@ -195,7 +195,7 @@ void inventory::render()
 				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.right - _shop[i].countNum.length() * 20, _shop[i].rc.bottom - 20, to_wstring(_shop[i].count), 20, D2DRenderer::DefaultBrush::White);
 			}		
 
-			if (i == _select && _isSwap)
+			if (i == _select && _isSwap && !_isSetPrice)
 			{
 				if (i % 2 == 0)
 				{
@@ -234,10 +234,15 @@ void inventory::render()
 		}
 	}
 
+	//가격설정칸
 	for (int i = 0; i < PRICESPACE; i++)
 	{
-		if(_isSetPrice)
-		D2DRenderer::GetInstance()->DrawRectangle(_price[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+		float line;
+		if (i == _select) line = 3.f;
+		else line = 1.f;
+
+		if (_isSetPrice) D2DRenderer::GetInstance()->DrawRectangle(_price[i].rc, D2DRenderer::DefaultBrush::Green, line);	
+		D2DRenderer::GetInstance()->RenderText(_price[i].rc.GetCenter().x, _price[i].rc.GetCenter().y, to_wstring(_price[i].price), 10, D2DRenderer::DefaultBrush::Black);
 	}
 
 	//내가 선택한 아이템
@@ -301,17 +306,26 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					_select += 4;
-					if (_select == 8)
+					if (!_isSetPrice)
 					{
-						_isSwap = false;
-						_select = 0;
+						_select += 4;
+						if (_select == 8)
+						{
+							_isSwap = false;
+							_select = 0;
+						}
+
+						if (_select == 11)
+						{
+							_isSwap = false;
+							_select = 15;
+						}
 					}
 
-					if (_select == 11)
+					else
 					{
-						_isSwap = false;
-						_select = 15;
+						_select++;
+						if (_select == 7) _select = 0;
 					}
 				}
 			}
@@ -333,7 +347,7 @@ void inventory::update()
 					}
 
 					if (_state == INVEN_STATE::SHOP)
-					{
+					{						
 						if (_select < 0)
 						{
 							_isSwap = true;
@@ -344,7 +358,7 @@ void inventory::update()
 						{
 							_isSwap = true;
 							_select = 6;
-						}
+						}						
 					}
 				}
 			}
@@ -364,12 +378,21 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					_select -= 4;
-					if (_select < 0)
+					if (!_isSetPrice)
 					{
-						_isSwap = false;
-						if (_select == -4 || _select == -3) _select = 4;
-						if (_select == -1 || _select == -2) _select = 19;
+						_select -= 4;
+						if (_select < 0)
+						{
+							_isSwap = false;
+							if (_select == -4 || _select == -3) _select = 4;
+							if (_select == -1 || _select == -2) _select = 19;
+						}
+					}					
+
+					else
+					{
+						_select--;
+						if (_select == -1) _select = 6;
 					}
 				}
 			}
@@ -394,16 +417,26 @@ void inventory::update()
 			}
 
 			else
-			{
-				_select--;
+			{				
 				if (_state == INVEN_STATE::NOTE)
 				{
+					_select--;
 					if (_select < 0) _select = 4;
 				}
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select < 0) _select = 3;
+					if (!_isSetPrice)
+					{
+						_select--;
+						if (_select < 0) _select = 3;
+					}
+					
+					else
+					{
+						_price[_select].price++;
+						if (_price[_select].price > 9) _price[_select].price = 0;
+					}
 				}
 			}
 		}
@@ -429,15 +462,26 @@ void inventory::update()
 
 			else
 			{
-				_select++;
+				
 				if (_state == INVEN_STATE::NOTE)
 				{
+					_select++;
 					if (_select > 4) _select = 0;
 				}
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select > 7) _select = 4;
+					if (!_isSetPrice)
+					{
+						_select++;
+						if (_select > 7) _select = 4;
+					}		
+
+					else
+					{
+						_price[_select].price--;
+						if (_price[_select].price < 0) _price[_select].price = 9;
+					}
 				}
 			}
 		}
@@ -447,7 +491,7 @@ void inventory::update()
 	{
 		for (int i = 0; i < PRICESPACE; i++)
 		{
-			_price[i].rc = RectMakePivot(Vector2(_shop[_select].rc.GetCenter().x + i * 20 - 60, _shop[_select].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
+			_price[i].rc = RectMakePivot(Vector2(_shop[_selectShopNumber].rc.GetCenter().x + i * 20 - 60, _shop[_selectShopNumber].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
 		}
 	}
 
@@ -558,13 +602,13 @@ void inventory::selectInvenItem()
 
 			if (_state == INVEN_STATE::SHOP)
 			{
+				_selectNumber = -1;
+				_selectGearNumber = -1;
+				_selectShopNumber = _select;
+
 				//선택한 쇼케이스가 비어있지 않다면
 				if (_shop[_select].item != nullptr)
 				{
-					_selectNumber = -1;
-					_selectGearNumber = -1;
-					_selectShopNumber = _select;
-
 					_isSelect = true;
 					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 					_selectItem.item = _shop[_select].item;

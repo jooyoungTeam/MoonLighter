@@ -79,6 +79,7 @@ private:
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
 	int _count;							//미러 딜레이
+	int _totalPrice;					//쇼케이스 전체 금액
 	int _gold;							//소지금
 
 	bool _isSelect;						//아이템 선택하는 불 값
