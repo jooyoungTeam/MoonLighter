@@ -25,13 +25,12 @@ struct tagAttack1
 	Image* img;
 	Image* hole;
 };
-//struct tagAttackRect
-//{
-//	FloatRect rc;
-//	bool attackDir;
-//	float x, y;
-//	float speed;
-//};
+struct tagAttackRect
+{
+	FloatRect rc;
+	float x, y;
+	float speed;
+};
 class boss : public enemy	
 {
 private:
@@ -39,9 +38,12 @@ private:
 	tagAttack1 _attack1;
 	tagAttack1 _attack2;
 	tagAttack1 _attack3;
-//	tagAttackRect _attack2Rc[10];
+	tagAttackRect _attack3Rc[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 	BOSS_PATTERN _bossPattern;
+
+	float _handAngle1;
+	float _handAngle2;
 	bool _isBossAttack;
 	bool _isBossAttackEnd;
 	bool _isHandCol;

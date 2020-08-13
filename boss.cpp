@@ -8,20 +8,20 @@ void boss::set()
 	ZeroMemory(&_attack1, sizeof(tagAttack1));
 	ZeroMemory(&_attack2, sizeof(tagAttack1));
 	ZeroMemory(&_attack3, sizeof(tagAttack1));
-	//ZeroMemory(&_attack2Rc, sizeof(tagAttackRect));
+	ZeroMemory(&_attack3Rc, sizeof(tagAttackRect));
 	_attack1.x = _pX;
 	_attack1.y = -40;
 	_attack1.speed = 8.f;
 	_attack1.img = ImageManager::GetInstance()->FindImage("bossHand");
 	_attack2.angle = 40.f;
 	_attack2.index = 5;
-	_leftTop.x = 1420;
+	_leftTop.x = 1400;
 	_leftTop.y = 515;
-	_rightTop.x = 1440;
+	_rightTop.x = 1460;
 	_rightTop.y = 510;
-	_leftBottom.x = 846;
+	_leftBottom.x = 826;
 	_leftBottom.y = 1185;
-	_rightBottom.x = 866;
+	_rightBottom.x = 886;
 	_rightBottom.y = 1185;
 	_attack2.img = ImageManager::GetInstance()->FindImage("bossLong");
 	_attack2.hole = ImageManager::GetInstance()->FindImage("bossLong2");
@@ -31,23 +31,23 @@ void boss::render()
 {
 	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
 
-	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 1.6f);
+	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
-	_attack1.img->SetScale(1.6f);
+	_attack1.img->SetScale(2.5f);
 	CAMERAMANAGER->frameRender(_attack2.img, _attack2.x, _attack2.y, 0, 0);
 	_attack2.img->SetAngle(_attack2.angle);
-	_attack2.img->SetScale(1.6f);
+	_attack2.img->SetScale(2.5f);
 	//D2DRenderer::GetInstance()->DrawRotationFillRectangle(_attack2.attackRc, D2D1::ColorF::Black, _attack2.angle);
 	CAMERAMANAGER->line(_leftTop, _rightTop, D2D1::ColorF::Black, 2.0f);
 	CAMERAMANAGER->line(_rightTop, _rightBottom, D2D1::ColorF::Black, 2.0f);
 	CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
 	CAMERAMANAGER->line(_leftBottom, _leftTop, D2D1::ColorF::Black, 2.0f);
 	
-	//for (int i = 0; i < 10; +\+i)
-	//{
-	//	//D2DRenderer::GetInstance()->FillRectangle(_attack2Rc[i].rc, D2D1::ColorF::Black, 0.7f);
-	//	CAMERAMANAGER->fillRectangle(_attack2.attackRc, D2D1::ColorF::Red, 1.0f);
-	//}
+	for (int i = 0; i < 13; ++i)
+	{
+		//D2DRenderer::GetInstance()->FillRectangle(_attack2Rc[i].rc, D2D1::ColorF::Black, 0.7f);
+		CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Red, 1.0f);
+	}
 	//_attack1.img->FrameRender(Vector2(_attack1.x, _attack1.y), _attack1.index, 0);
 	//_attack1.img->SetScale(1.5f);
 	//_attack2.img->FrameRender(Vector2(_attack2.x, _attack2.y), _attack2.index, 0);
@@ -61,13 +61,14 @@ void boss::attack()
 	if (!_attack3.isBottom)
 	{
 
-		attack3();
+		attack3_1();
 	}
 	else
 	{
-		attack2_1();
+		attack2();
 		attack2Angle();
 	}
+	cout << "x: " << _ptMouse.x + CAMERAMANAGER->getLeft() << "y: " << _ptMouse.y + CAMERAMANAGER->getTop() << endl;
 }
 
 void boss::dead()
@@ -372,30 +373,42 @@ void boss::attack2_1()
 	}
 	if (!_attack2.isBottom)
 	{
-		_attack2.angle--;
+		_attack2.angle = 360 - getAngle((_leftTop.x + _rightTop.x) / 2, (_leftTop.y + _rightTop.y) / 2, (_leftBottom.x + _rightBottom.x) / 2, (_leftBottom.y + _rightBottom.y) / 2) * 180 / PI - 90;
+		//_attack2.angle--;
 		_leftBottom.x+=14.5;
 		_rightBottom.x+=14.5;
-		_leftTop.x+=0.5;
-		_rightTop.x+=0.5;
-		if (_attack2.angle <= -60.f)
+		//_leftTop.x+=0.5;
+		//_rightTop.x+=0.5;
+
+		if (_leftBottom.x > 2000)
 		{
 			_attack2.isBottom = true;
 		}
+		/*if (_attack2.angle <= -60.f)
+		{
+			_attack2.isBottom = true;
+		}*/
 	}
 	if (_attack2.isBottom)
 	{
-		_attack2.angle++;
+		_attack2.angle = 360 - getAngle((_leftTop.x + _rightTop.x) / 2, (_leftTop.y + _rightTop.y) / 2, (_leftBottom.x + _rightBottom.x) / 2, (_leftBottom.y + _rightBottom.y) / 2) * 180 / PI - 90;
+		//_attack2.angle++;
 		_leftBottom.x -= 14.5;
 		_rightBottom.x -= 14.5;
-		_leftTop.x -= 0.5;
-		_rightTop.x-=0.5;
+		//_leftTop.x -= 0.5;
+		//_rightTop.x-=0.5;
+		
+		/*if (_attack2.angle >= 40.f)
 		{
-			if (_attack2.angle >= 40.f)
-			{
-				_attack2.isBottom = false;
-				_attack2.count++;
-			}
+			_attack2.isBottom = false;W
+			_attack2.count++;
+		}*/
+
+		if (_leftBottom.x < 846)
+		{
+			_attack2.isBottom = false;
 		}
+		
 	}
 	if (_attack2.count > 3)
 	{
@@ -416,6 +429,21 @@ void boss::attack2_1()
 
 void boss::attack3_1()
 {
+	_attack3Rc[0].x = 959;
+	_attack3Rc[0].y = 788;
+	_attack3Rc[0].rc = RectMakePivot(Vector2(_attack3Rc[0].x, _attack3Rc[0].y), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[1].rc = RectMakePivot(Vector2(1011, 886), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[2].rc = RectMakePivot(Vector2(1084, 978), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[3].rc = RectMakePivot(Vector2(1161, 1072), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[4].rc = RectMakePivot(Vector2(1287, 1128), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[5].rc = RectMakePivot(Vector2(1405, 1159), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[6].rc = RectMakePivot(Vector2(1577, 1171), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[7].rc = RectMakePivot(Vector2(1697,1159), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[8].rc = RectMakePivot(Vector2(1820, 1142), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[9].rc = RectMakePivot(Vector2(1929, 1110), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[10].rc = RectMakePivot(Vector2(2021, 1054), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[11].rc = RectMakePivot(Vector2(2104, 932), Vector2(80, 80), Pivot::Center);
+	_attack3Rc[12].rc = RectMakePivot(Vector2(2153, 793), Vector2(80, 80), Pivot::Center);
 }
 
 void boss::attack2Angle()
