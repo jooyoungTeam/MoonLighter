@@ -42,7 +42,7 @@ void dungeonStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		_enemy->update();
+		//_enemy->update();
 
 	}
 	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);

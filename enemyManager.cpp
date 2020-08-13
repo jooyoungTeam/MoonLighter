@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "enemyManager.h"
 #include "player.h"
+#include "boss.h"
 
 
 enemyManager::enemyManager()
@@ -35,8 +36,9 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
-	_x = _player->getShadowX();
-	_y = _player->getShadowY();
+	_x = _player->getX();
+	_y = _player->getY();
+	_rc = _player->getPlayerRc();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -97,7 +99,6 @@ void enemyManager::update()
 	}
 
 	EFFECTMANAGER->update();
-	_rc = RectMakePivot(Vector2(_player->getShadowX(), _player->getShadowY()), Vector2(50, 50), Pivot::Center);
 }
 
 void enemyManager::render()
@@ -108,7 +109,8 @@ void enemyManager::render()
 	}
 	_bullet->render();
 
-	D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
+	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
+	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 	ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
 	EFFECTMANAGER->render();
 }
@@ -123,7 +125,7 @@ void enemyManager::setEnemy()
 	boss1->init(i, 1360, 300, 250, 300, ENEMY_BOSS);
 	_vEnemy.push_back(boss1);
 
-	i++;
+	/*i++;
 	enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
@@ -137,7 +139,7 @@ void enemyManager::setEnemy()
 	gol1->playerCheck(_x, _y, _rc);
 	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
-
+*/
 	
 	//i++;
 
@@ -230,7 +232,26 @@ void enemyManager::playerCol()
 				}
 			}
 			
-			//if (IntersectRect(&temp, &_enemy->getEnemyAttackRect().GetRect(), &_player->getAttackRc()))
+			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
+			{
+				_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
+				_vEnemy[i]->setHP();
+				_vEnemy[i]->setIsHit(true);
+				_vEnemy[i]->setBarAlpha(1.0);
+				_player->setAttackRc(0, 0, 0, 0);
+				//_vEnemy[i]->setState(_vEnemy[i]->getHit());
+				if (_vEnemy[i]->getCurHP() <= 0)
+				{
+					_vEnemy[i]->setOnceAni(true);
+				}
+			}
+
+			//if (IntersectRect(&temp, &dynamic_cast<boss*>(_vEnemy[i])->getBAttack2()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
+			//{
+			//	cout << "¸Â´Â´ç" << endl;
+			//}
+
+			
 		}
 	}
 

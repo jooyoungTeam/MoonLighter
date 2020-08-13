@@ -41,9 +41,10 @@ void bullet::render()
 {
 	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
 	{
+		CAMERAMANAGER->frameRender(_viBullet->img, _viBullet->x, _viBullet->y, _viBullet->index, 0);
 		_viBullet->img->SetScale(1.5);
-		_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
-		D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
+		//_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
+		//D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
 	}
 }
 
