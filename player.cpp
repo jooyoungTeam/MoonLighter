@@ -54,12 +54,12 @@ void player::render()
 		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportOut"))
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.63f);
+		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
 	}
 	else
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.17f);
+		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
 	}
 	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))
