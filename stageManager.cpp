@@ -16,6 +16,10 @@ HRESULT stageManager::init()
 
 	_itemMg = new itemManager;
 
+	_ui->getPlayerMemoryAddressLink(_player);
+	INVENTORY->getPlayerMemoryAddressLink(_player);
+	INVENTORY->getItemMgAddressLink(_itemMg);
+
 	SCENEMANAGER->addScene("타이틀씬", new title);
 
 	SCENEMANAGER->addScene("타일씬", new tile);
