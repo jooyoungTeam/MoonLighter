@@ -35,7 +35,7 @@ void stageManager::render()
 {
 	SCENEMANAGER->render();
 	//_ui->render();
-	if (_isInven) INVENTORY->render();
+	if (INVENTORY->getIsInven()) INVENTORY->render();
 }
 
 
@@ -46,28 +46,28 @@ void stageManager::update()
 
 	SCENEMANAGER->update();
 
-	if (!_isInven && KEYMANAGER->isOnceKeyDown('I'))
+	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		INVENTORY->setIsInven(true);
 		_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
 		INVENTORY->setState(INVEN_STATE::NOTE);
 	}
 
-	if (_isInven && KEYMANAGER->isOnceKeyDown('I'))
+	if (INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		INVENTORY->setIsInven(false);
 		_ui->setUIScene(CURRENT_SCENE::TEMP);
 		INVENTORY->closeInven();
 	}
 
-	if (!_isInven && KEYMANAGER->isOnceKeyDown('O'))
+	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
 	{
 		INVENTORY->setIsInven(true);
 		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
 		INVENTORY->setState(INVEN_STATE::SHOP);
 	}
 
-	if (_isInven) INVENTORY->update();
+	if (INVENTORY->getIsInven()) INVENTORY->update();
 
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
