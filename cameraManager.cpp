@@ -3,6 +3,7 @@
 
 HRESULT cameraManager::init()
 {
+	_fade.fadeRect = RectMake(0, 0, WINSIZEX, WINSIZEY);
 	return S_OK;
 }
 
@@ -136,6 +137,64 @@ void cameraManager::zOrderALLRender()
 	zOrderClear();
 }
 
+void cameraManager::fadeInOut(FADETYPE fade)
+{
+	_fade.fadeType = fade;
+	_fade.fadeStart = true;
+	if (_fade.fadeType == FADETYPE::FADEIN)
+		_fade.fadeAlpha = 0;
+	else
+		_fade.fadeAlpha = 1;
+}
+
+void cameraManager::shakeCamera(int shakePower, int shakeTime)
+{
+	_shake.shakePower = shakePower;
+	_shake.shakeTime = shakeTime;
+	_shake.isShakeCamera = true;
+}
+
+
+void cameraManager::cameraUpdate()
+{
+	if (_shake.isShakeCamera)
+	{
+		_shake.shakeCount++;
+		if (_shake.shakeCount % _shake.shakeTime == 0)
+		{
+			_shake.shakeCount = 0;
+			_shake.isShakeCamera = false;
+		}
+	}
+	if (_fade.fadeStart)
+	{
+		_fade.fadeTime++;
+		if (_fade.fadeTime % 5 == 0)
+		{
+			_fade.fadeTime = 0;
+			if (_fade.fadeType == FADETYPE::FADEIN)
+			{
+				_fade.fadeAlpha += 0.07f;
+				//if (_fade.fadeAlpha >= 1)
+				//	_fade.fadeStart = false;
+			}
+			else
+			{
+				_fade.fadeAlpha -= 0.07f;
+				if (_fade.fadeAlpha <= 0)
+					_fade.fadeStart = false;
+			}
+		}
+	}
+}
+
+void cameraManager::fadeRender()
+{
+	if (_fade.fadeStart)
+		D2DRenderer::GetInstance()->FillRectangle(_fade.fadeRect, D2D1::ColorF::Black, _fade.fadeAlpha);
+
+}
+
 
 void cameraManager::rectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth)
 {
@@ -230,18 +289,71 @@ void cameraManager::frameRender(Image * img, float destX, float destY, int frame
 
 void cameraManager::setX(float relativeX)
 {
-	relativeX = min(_maxX, relativeX);
-	relativeX = max(_minX, relativeX);
-	_x = floor(relativeX);
-	_left = _x - (_width * 0.5f);
+	if (_shake.isShakeCamera)
+	{
+		int rnd = RND->getInt(2) == 1 ? -1 : 1;
+		float newX = relativeX + rnd * _shake.shakePower;
+		newX = min(_maxX, newX);
+		newX = max(_minX, newX);
+		if (newX == _minX)
+		{
+			if (rnd * _shake.shakePower <= 0)
+				newX -= rnd * _shake.shakePower;
+			else
+				newX += rnd * _shake.shakePower;
+		}
+		else if (newX == _maxX)
+		{
+			if (rnd * _shake.shakePower <= 0)
+				newX -= rnd * _shake.shakePower;
+			else
+				newX += rnd * _shake.shakePower;
+		}
+		_x = floor(newX);
+		_left = _x - (_width * 0.5f);
+	}
+	else
+	{
+		relativeX = min(_maxX, relativeX);
+		relativeX = max(_minX, relativeX);
+		_x = floor(relativeX);
+		_left = _x - (_width * 0.5f);
+	}
 }
 
 void cameraManager::setY(float relativeY)
 {
-	relativeY = min(_maxY, relativeY);
-	relativeY = max(_minY, relativeY);
-	_y = floor(relativeY);
-	_top = _y - (_height * 0.5f);
+	if (_shake.isShakeCamera)
+	{
+		int rnd = RND->getInt(2) == 1 ? -1 : 1;
+		float newY = relativeY + rnd * _shake.shakePower;
+		newY = min(_maxY, newY);
+		newY = max(_minY, newY);
+		if (newY == _minY)
+		{
+			if (rnd * _shake.shakePower <= 0)
+				newY -= rnd * _shake.shakePower;
+			else
+				newY += rnd * _shake.shakePower;
+		}
+		else if (newY == _maxY)
+		{
+			if (rnd * _shake.shakePower <= 0)
+				newY -= rnd * _shake.shakePower;
+			else
+				newY += rnd * _shake.shakePower;
+		}
+		_y = floor(newY);
+		_top = _y - (_height * 0.5f);
+	}
+	else
+	{
+
+		relativeY = min(_maxY, relativeY);
+		relativeY = max(_minY, relativeY);
+		_y = floor(relativeY);
+		_top = _y - (_height * 0.5f);
+	}
 }
 
 void cameraManager::setXY(float x, float y)

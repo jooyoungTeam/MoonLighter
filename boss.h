@@ -11,6 +11,8 @@ struct tagAttack1
 	FloatRect attackRc;
 	float x, y;
 	float speed;
+	float width, height;
+	float angle;
 	bool isBottom;
 	bool onceImage;
 	int xRandom;
@@ -27,6 +29,7 @@ private:
 	//vector<tagAttack1> _vAttack1;
 
 	tagAttack1 _attack1;
+	tagAttack1 _attack2;
 	BOSS_PATTERN _bossPattern;
 	bool _isBossAttack;
 	bool _isBossAttackEnd;
@@ -43,5 +46,6 @@ public:
 	void attack1();
 	void attack2();
 	void attack1_1();
+	void attack2_1();
 };
 
