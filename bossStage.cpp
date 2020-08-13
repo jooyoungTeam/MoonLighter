@@ -8,7 +8,7 @@ HRESULT bossStage::init()
 
 	_enemy = new enemyManager;
 	_player = new player;
-	_player->init(1500,1000);
+	_player->init(1500,800);
 	_enemy->setPlayerLink(_player);
 
 	_enemy->init();

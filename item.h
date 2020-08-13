@@ -39,7 +39,7 @@ public:
 	void fieldUpdate();		// 필드용 업데이트
 	void release();
 	
-	void sort();
+	void sort();			//아이템 종류에 따른 정보 정리
 
 
 public:

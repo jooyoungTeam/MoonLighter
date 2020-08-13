@@ -90,11 +90,21 @@ HRESULT inventory::init()
 	//쇼케이스
 	for (int i = 0; i < SHOPSPACE; i++)
 	{
-		if (i < 2)
-		_shop[i].rc = RectMakePivot(Vector2(950, 217 + i * 284), Vector2(60, 60), Pivot::Center);
+		if (i % 2 == 0)
+		{
+			if (i < 4)
+			_shop[i].rc = RectMakePivot(Vector2(950, 217 + i * 142), Vector2(60, 60), Pivot::Center);
+			if (i >= 4)
+			_shop[i].rc = RectMakePivot(Vector2(1252, 434 + i * 142 - 785), Vector2(60, 60), Pivot::Center);
+		}
 
 		else
-		_shop[i].rc = RectMakePivot(Vector2(1252, 505 + i * 284 - 856), Vector2(60, 60), Pivot::Center);
+		{
+			if (i < 4)
+			_shop[i].rc = RectMakePivot(Vector2(950, 175 + i * 142), Vector2(180, 60), Pivot::Center);
+			if (i >= 4)
+			_shop[i].rc = RectMakePivot(Vector2(1252, 392 + i * 142 - 785), Vector2(180, 60), Pivot::Center);
+		}	
 	}
 
 	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
@@ -177,7 +187,7 @@ void inventory::render()
 
 		for (int i = 0; i < SHOPSPACE; i++)
 		{
-			//D2DRenderer::GetInstance()->DrawRectangle(_shop[i].rc, D2DRenderer::DefaultBrush::White, 1.f);
+			D2DRenderer::GetInstance()->DrawRectangle(_shop[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 
 			if (_shop[i].item != nullptr)
 			{
@@ -185,7 +195,18 @@ void inventory::render()
 				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.right - _shop[i].countNum.length() * 20, _shop[i].rc.bottom - 20, to_wstring(_shop[i].count), 20, D2DRenderer::DefaultBrush::White);
 			}		
 
-			if (i == _select && _isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_shop[i].rc.left - 5, _shop[i].rc.top - 5));
+			if (i == _select && _isSwap)
+			{
+				if (i % 2 == 0)
+				{
+					ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_shop[i].rc.left - 5, _shop[i].rc.top - 5));
+				}
+
+				else
+				{
+					//ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_shop[i].rc.GetCenter().x - 35, _shop[i].rc.GetCenter().y - 35));
+				}
+			}
 		}		
 	}
 
@@ -213,10 +234,16 @@ void inventory::render()
 		}
 	}
 
+	for (int i = 0; i < PRICESPACE; i++)
+	{
+		if(_isSetPrice)
+		D2DRenderer::GetInstance()->DrawRectangle(_price[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+	}
+
 	//내가 선택한 아이템
 	if (_selectItem.item != nullptr)
 	{
-		D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
+		//D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
 		ImageManager::GetInstance()->FindImage("inven_select")->Render(Vector2(_selectItem.rc.left, _selectItem.rc.top));
 		_selectItem.item->getImg()->Render(Vector2(_selectItem.rc.GetCenter().x - _selectItem.item->getImg()->GetWidth() / 2, _selectItem.rc.GetCenter().y - _selectItem.item->getImg()->GetHeight() / 2));
 		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
@@ -233,6 +260,7 @@ void inventory::update()
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
 	//움직임
+	//if(!_isSetPrice)
 	{
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
@@ -252,7 +280,7 @@ void inventory::update()
 					if (_state == INVEN_STATE::SHOP)
 					{
 						if (_select / 10 == 0) _select = 0;
-						else _select = 1;
+						else _select = 3;
 					}
 				}
 			}
@@ -273,14 +301,14 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					_select += 2;
-					if (_select == 4)
+					_select += 4;
+					if (_select == 8)
 					{
 						_isSwap = false;
 						_select = 0;
 					}
 
-					if (_select == 5)
+					if (_select == 11)
 					{
 						_isSwap = false;
 						_select = 15;
@@ -309,13 +337,13 @@ void inventory::update()
 						if (_select < 0)
 						{
 							_isSwap = true;
-							_select = 2;
+							_select = 4;
 						}
 
 						if (_select == 14)
 						{
 							_isSwap = true;
-							_select = 3;
+							_select = 6;
 						}
 					}
 				}
@@ -336,12 +364,12 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					_select -= 2;
+					_select -= 4;
 					if (_select < 0)
 					{
 						_isSwap = false;
-						if (_select == -2) _select = 4;
-						if (_select == -1) _select = 19;
+						if (_select == -4 || _select == -3) _select = 4;
+						if (_select == -1 || _select == -2) _select = 19;
 					}
 				}
 			}
@@ -375,7 +403,7 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select < 0) _select = 1;
+					if (_select < 0) _select = 3;
 				}
 			}
 		}
@@ -409,9 +437,17 @@ void inventory::update()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select > 3) _select = 2;
+					if (_select > 7) _select = 4;
 				}
 			}
+		}
+	}
+
+	if (_isSetPrice)
+	{
+		for (int i = 0; i < PRICESPACE; i++)
+		{
+			_price[i].rc = RectMakePivot(Vector2(_shop[_select].rc.GetCenter().x + i * 20 - 60, _shop[_select].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
 		}
 	}
 
@@ -520,24 +556,39 @@ void inventory::selectInvenItem()
 				if (_gear[_select].count <= 0) _gear[_select].item = nullptr;
 			}
 
-			//선택한 쇼케이스가 비어있지 않다면
-			if (_shop[_select].item != nullptr && _state == INVEN_STATE::SHOP)
+			if (_state == INVEN_STATE::SHOP)
 			{
-				_selectNumber = -1;
-				_selectGearNumber = -1;
-				_selectShopNumber = _select;
-
-				_isSelect = true;
-				_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-				_selectItem.item = _shop[_select].item;
-				_selectItem.count++;
-				_shop[_select].count--;
-
-				if (_shop[_select].count <= 0)
+				//선택한 쇼케이스가 비어있지 않다면
+				if (_shop[_select].item != nullptr)
 				{
-					_shop[_select].item = nullptr;
+					_selectNumber = -1;
+					_selectGearNumber = -1;
+					_selectShopNumber = _select;
+
+					_isSelect = true;
+					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+					_selectItem.item = _shop[_select].item;
+					_selectItem.count++;
+					_shop[_select].count--;
+
+					if (_shop[_select].count <= 0)
+					{
+						_shop[_select].item = nullptr;
+					}
 				}
-			}
+
+				//비어있다면
+				else
+				{
+					//그중에서도 가격설정칸이면
+					if (_select % 2 != 0 && !_isSetPrice)
+					{
+						if (_selectItem.item != nullptr) return;
+						_isSelect = true;
+						_isSetPrice = true;
+					}
+				}				
+			}			
 		}		
 	}
 }
@@ -555,34 +606,42 @@ void inventory::moveInvenItem()
 
 			//선택한 인벤이 비어있으면
 			if (_inven[_select].item == nullptr)
-			{				
-				if (_isSale) _isSale = false;
-
-				//인벤에서 아이템을 가져와 판매하겠다면
-				if (_select == 20 && _selectNumber != 20)
+			{
+				if (_selectItem.item != nullptr)
 				{
-					_mirror = MIRROR_STATE::ACTIVE;
-					_mirrorFrameX = 0;
-					_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_active");
-					_gold += _selectItem.item->getPrice() * _selectItem.count;
-					_inven[_select].item = nullptr;
-					_selectItem.item = nullptr;
-					_isSelect = false;
+					//인벤에서 아이템을 가져와 판매하겠다면
+					if (_select == 20 && _selectNumber != 20)
+					{
+						_mirror = MIRROR_STATE::ACTIVE;
+						_mirrorFrameX = 0;
+						_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_active");
+						_gold += _selectItem.item->getPrice() * _selectItem.count;
+						_inven[_select].item = nullptr;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
+
+					else
+					{
+						if (_inven[_select].item != nullptr) delete(_inven[_select].item);
+
+						item* select;
+						select = new item;
+						select->init(_selectItem.item->getType());
+
+						_inven[_select].item = select;
+						_inven[_select].count = _selectItem.count;
+						_selectItem.count = 0;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}
 				}
 
 				else
 				{
-					item* select;
-					select = new item;
-					select->init(_selectItem.item->getType());
-
-					_inven[_select].item = select;
-					_inven[_select].count = _selectItem.count;
-					_selectItem.count = 0;
-					_selectItem.item = nullptr;
 					_isSelect = false;
+					_isSale = false;
 				}
-				
 			}
 
 			//비어있지 않으면
@@ -686,6 +745,8 @@ void inventory::moveInvenItem()
 
 		if (_isSwap)
 		{
+			if (_isSale) return;
+
 			//장비창에 옮기기
 			if (_state == INVEN_STATE::NOTE)
 			{
@@ -698,6 +759,8 @@ void inventory::moveInvenItem()
 						//장비칸이 비어있으면
 						if (_gear[_select].item == nullptr)
 						{
+							if (_gear[_select].item != nullptr) delete(_gear[_select].item);
+
 							item* select;
 							select = new item;
 							select->init(_selectItem.item->getType());
@@ -760,14 +823,28 @@ void inventory::moveInvenItem()
 				//쇼케이스가 비어있으면
 				if (_shop[_select].item == nullptr)
 				{
-					item* select;
-					select = new item;
-					select->init(_selectItem.item->getType());
+					//아이템 가격 설정
+					if (_select % 2 != 0 && _isSetPrice)
+					{
+						if (_selectItem.item != nullptr) return;
+						_isSelect = false;
+						_isSetPrice = false;
+					}
 
-					_shop[_select].item = select;
-					_shop[_select].count = _selectItem.count;
-					_selectItem.item = nullptr;
-					_isSelect = false;					
+					//아이템 배치
+					if (_select % 2 == 0)
+					{
+						if (_shop[_select].item != nullptr) delete(_shop[_select].item);
+
+						item* select;
+						select = new item;
+						select->init(_selectItem.item->getType());
+
+						_shop[_select].item = select;
+						_shop[_select].count = _selectItem.count;
+						_selectItem.item = nullptr;
+						_isSelect = false;
+					}								
 				}
 
 				//비어있지 않으면
@@ -998,9 +1075,4 @@ void inventory::draw()
 
 		_frameCount = 0;
 	}	
-}
-
-void inventory::displayItem()
-{
-	
 }
