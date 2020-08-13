@@ -49,7 +49,7 @@ void arrow::render()
 	}
 }
 
-void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection)
+void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage)
 {
 	tagArrow arrow;
 	ZeroMemory(&arrow, sizeof(tagArrow));
@@ -61,6 +61,7 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection)
 	arrow.y = arrow.shootY = y;
 
 	arrow.arrowDirection = arrowDirection;
+	arrow.arrowDamage = damage;
 
 	arrow.rc = RectMakePivot(Vector2(arrow.x, arrow.y), Vector2(30, 30), Pivot::Center);
 	_vArrow.push_back(arrow);

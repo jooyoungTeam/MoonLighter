@@ -31,6 +31,14 @@ HRESULT item::init(ITEMTYPE type, float x, float y)
 	return S_OK;
 }
 
+HRESULT item::init(ITEMTYPE type)
+{
+	_type = type;
+
+	sort();
+	return S_OK;
+}
+
 void item::render()
 {
 	_img->Render(Vector2(_rc.left, _rc.top));

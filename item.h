@@ -32,6 +32,7 @@ public:
 	~item() {}
 
 	HRESULT init(ITEMTYPE type, float x, float y);
+	HRESULT init(ITEMTYPE type);
 	void render();			// 인벤토리용 랜더
 	void cameraRender();    // 필드용 랜더
 	void update();			// 인벤토리용 업데이트
@@ -42,6 +43,7 @@ public:
 
 
 public:
+	ITEMTYPE getType() { return _type; }					//아이템 타입 가져가기
 	FloatRect getRc() { return _rc; }						//아이템 렉트 가져가기
 	Image* getImg() { return _img; }						//아이템 이미지 가져가기
 	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기

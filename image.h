@@ -42,9 +42,11 @@ private:
 	Image operator = (const Image& image) {}
 public:
 	void Render(const Vector2& position);
+	void Render(const Vector2& position, float scale);
 	void TopRender(const Vector2& position);
 	void aniRender(const Vector2& position, animation* ani, float scale);
 	void FrameRender(const Vector2& position, const int frameX, const int frameY);
+	void FrameRender(const Vector2& position, const int frameX, const int frameY, float scale);
 
 	void ResetRenderOption();
 

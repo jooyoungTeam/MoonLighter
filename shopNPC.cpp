@@ -146,7 +146,8 @@ void shopNPC::updadte()
 
 		break;
 	case NPC_AWAY:
-
+		frameUpdate();
+		move();
 		break;
 	}
 
@@ -252,6 +253,8 @@ void shopNPC::move()
 			else if (_npcActionState == NPC_BUY)
 			{
 				_npcActionState = NPC_AWAY;
+				_goToPoint = _eixtPoint;
+				_aStar->changeWayPoint();
 			}
 			else if (_npcActionState == NPC_AWAY)
 			{
@@ -354,6 +357,7 @@ void shopNPC::unMoveSet()
 	temp.x = 13;
 	temp.y = 17;
 	_vUnMove.push_back(temp);
+
 }
 
 void shopNPC::wayPointSet()
@@ -377,6 +381,10 @@ void shopNPC::wayPointSet()
 	// 계산대
 	_counterPoint.x = 17;
 	_counterPoint.y = 18;
+
+	// 출입문
+	_eixtPoint.x = 16;
+	_eixtPoint.y = 23;
 }
 
 void shopNPC::directionCheck()
