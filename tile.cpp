@@ -23,8 +23,8 @@ HRESULT tile::init()
 	}
 
 	{
-		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(200, 200), Pivot::LeftTop);
-		_miniMapMove = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(64, 36), Pivot::LeftTop);
+		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(TILESIZEX * 0.05f, TILESIZEY * 0.05f), Pivot::LeftTop);
+		_miniMapMove = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
 	}
 
 	{
@@ -104,7 +104,7 @@ void tile::render()
 			CAMERAMANAGER->zOrderRender(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, _object[i]->rc.bottom, 1, _object[i]->scale);
 		}
 		//CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
-		CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
+		//CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 	}
 	CAMERAMANAGER->zOrderALLRender();
 
@@ -188,14 +188,13 @@ void tile::render()
 		_currentObject->img->SetAlpha(0.5f);
 		if (_currentObject->isFrameRender)
 		{
-			_currentObject->rc = RectMake(_ptMouse.x, _ptMouse.y, _currentObject->img->GetFrameSize().x *_currentObject->scale, _currentObject->img->GetFrameSize().y * _currentObject->scale);
+			_currentObject->rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject->img->GetFrameSize().x *_currentObject->scale, _currentObject->img->GetFrameSize().y * _currentObject->scale);
 			_currentObject->img->FrameRender(Vector2((_currentObject->rc.left + _currentObject->rc.right) * 0.5f, (_currentObject->rc.top + _currentObject->rc.bottom) * 0.5f), 1, 0,_currentObject->scale);
 		}
 		else
 		{
-
-			_currentObject->rc = RectMake(_ptMouse.x, _ptMouse.y, _currentObject->img->GetWidth() *_currentObject->scale, _currentObject->img->GetHeight() *_currentObject->scale);
-			_currentObject->img->Render(Vector2(_ptMouse.x, _ptMouse.y),_currentObject->scale);
+			_currentObject->rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject->img->GetWidth() * _currentObject->scale, _currentObject->img->GetHeight() * _currentObject->scale);
+			_currentObject->img->Render(Vector2(_currentObject->rc.left, _currentObject->rc.top),_currentObject->scale);
 		}
 
 
@@ -205,7 +204,6 @@ void tile::render()
 	}
 
 	_player->render();
-
 
 	// ÆÈ·¹Æ® ²°´ÙÄ×´ÙÇÏ´Â ·ºÆ®
 	ImageManager::GetInstance()->FindImage("sampleUIOnOff")->Render(Vector2(_sampleTileOnOff.left, _sampleTileOnOff.top));
@@ -450,7 +448,7 @@ void tile::setMap()
 				}
 			}
 		}
-
+		
 		for (int i = 0; i < 19; i++)
 		{
 			for (int j = 0; j < 33; j++)
@@ -478,21 +476,21 @@ void tile::setMap()
 					{
 						if (_isSelectObject)
 						{
+							int w = (_currentObject->rc.right - _currentObject->rc.left)/2;
+							int h = (_currentObject->rc.bottom - _currentObject->rc.top)/2;
 							tagObject* tempObject = new tagObject;
 							tempObject->img = _currentObject->img;
 							tempObject->isFrameRender = _currentObject->isFrameRender;
-							tempObject->rc.left = _tiles[index].rc.left;
-							tempObject->rc.top = _tiles[index].rc.top;
+							tempObject->rc.left = pt.x - w;
+							tempObject->rc.top = pt.y - h;
 							tempObject->frameX = 0;
 							tempObject->type = _currentObject->type;
 							tempObject->scale = _currentObject->scale;
 
 							if (tempObject->isFrameRender)
 							{
-
 								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetFrameSize().x * tempObject->scale;
 								tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetFrameSize().y * tempObject->scale;
-
 							}
 							else
 							{
@@ -508,14 +506,6 @@ void tile::setMap()
 					{
 						_tiles[index].terrain = TR_NONE;
 					}
-
-					//else if (_button->getType() == BUTTON_CLEAR)
-					//{
-					//	_tiles[i].objFrameX = NULL;
-					//	_tiles[i].objFrameY = NULL;
-					//	_tiles[i].object = OBJ_NONE;
-					//}
-
 
 					break;
 				}
@@ -562,6 +552,7 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
 	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
 	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
+	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
 	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
 
 	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
@@ -741,7 +732,11 @@ void tile::selectObject()
 					_currentObject->scale = 1.7f;
 				}
 				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("build_Bottom2");
-				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_Shop");
+				else if (i == 2)
+				{
+					_currentObject->img = ImageManager::GetInstance()->FindImage("build_Shop");
+					_currentObject->scale = 1.2f;
+				}
 				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_Enchant");
 
 				break;
@@ -755,7 +750,7 @@ void tile::selectObject()
 				else if (i == 2)
 				{
 					_currentObject->img = ImageManager::GetInstance()->FindImage("build_fountain");
-					_currentObject->scale = 2.0f;
+					_currentObject->scale = 5.0f;
 				}
 				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("bench");
 
@@ -774,13 +769,27 @@ void tile::selectObject()
 			else if (_currentSampleObject == OBJ_PLANT)
 			{
 				_currentObject->isFrameRender = true;
-				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1");
+				if (i == 0)
+				{
+					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1"); 
+					_currentObject->scale = 1.5f;
+				}
 				if (i == 1)
 				{
 					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_fountain1");
 					_currentObject->scale = 2.5f;
 				}
-				if (i == 2)		    _currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree2");
+				if (i == 2)
+				{
+					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree2");
+					_currentObject->scale = 1.5f;
+				}
+				if (i == 3)
+				{
+					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_flower");
+					_currentObject->isFrameRender = false;
+					_currentObject->scale = 2.3f;
+				}
 
 				break;
 			}
@@ -819,11 +828,11 @@ void tile::mapMove()
 	//if (KEYMANAGER->isStayKeyDown('A'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 5);
 	//if (KEYMANAGER->isStayKeyDown('D'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 5);
 
-	//CAMERAMANAGER->setXY(_playerX)
+	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 
-	float x = CAMERAMANAGER->getLeft() * 0.04f;
-	float y = CAMERAMANAGER->getTop() * 0.04f;
-	_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(64, 36), Pivot::LeftTop);
+	float x = CAMERAMANAGER->getLeft() * 0.05f;
+	float y = CAMERAMANAGER->getTop() * 0.05f;
+	_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
 }
 
 void tile::sampleOnOff()
