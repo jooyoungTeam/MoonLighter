@@ -32,8 +32,6 @@ void shopStage::render()
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 	_player->render();
 
-
-
 	if(_enterNPC)
 		_shopNPC->render();
 
@@ -57,20 +55,20 @@ void shopStage::update()
 		_player->update();
 		if (_enterNPC)
 			_shopNPC->updadte();
+
+		for (int i = 0; i < 4; ++i)
+		{
+			if (_display[i].it != NULL)
+			{
+				_display[i].it->fieldUpdate();
+			}
+		}
 	}
 
 	if(INVENTORY->getState() == INVEN_STATE::SHOP)
 		disPlayUpdate();
 	
 	buyItem();
-
-	for (int i = 0; i < 4; ++i)
-	{
-		if (_display[i].it != NULL)
-		{
-			_display[i].it->fieldUpdate();
-		}
-	}
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
@@ -103,7 +101,10 @@ void shopStage::disPlayUpdate()
 		_display[i].settingPrice = INVENTORY->getShowCase()[i].price;
 
 		if (_display[i].it != NULL)
+		{
 			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
+			_display[i].it->setShakeY(_display[i].pos.y);
+		}
 	}
 }
 

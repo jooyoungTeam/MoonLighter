@@ -48,23 +48,26 @@ void item::update()
 
 void item::fieldUpdate()
 {
-	if (_shake > 5)
+	cout << _shake << endl;
+	if (_y > _shakeMaxY)
 	{
 		_isShake = false;
+		_shake = 0;
 	}
 
-	if (_shake < -5)
+	if (_y < _shakeMinY)
 	{
 		_isShake = true;
+		//_shake = 0;
 	}
 
 	if (_isShake)
 	{
-		_shake += 0.2f;
+		_shake += 0.01f;
 	}
 	else
 	{
-		_shake -= 0.2f;
+		_shake -= 0.01f;
 	}
 
 	_y += _shake;
