@@ -10,24 +10,31 @@ void boss::set()
 	_attack1.y = -40;
 	_attack1.speed = 8.f;
 	_attack1.img = ImageManager::GetInstance()->FindImage("bossHand");
-	_attack2._angle = 30.f;
+	_attack2.angle = 40.f;
+	_attack2.index = 5;
 	_attack2.img = ImageManager::GetInstance()->FindImage("bossLong");
 }
 
 void boss::render()
 {
-	_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
-	_attack1.img->FrameRender(Vector2(_attack1.x, _attack1.y), _attack1.index, 0);
-	_attack1.img->SetScale(1.25f);
-	D2DRenderer::GetInstance()->FillRectangle(_attack2.rc, D2D1::ColorF::Black, 0.7f);
-	_attack2.img->FrameRender(Vector2(_attack2.x, _attack2.y), _attack2.index, 0);
-	_attack2.img->SetScale(1.25f);
-	_attack2.img->SetAngle(_attack2._angle);
+	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
+	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 1.6f);
+	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
+	_attack1.img->SetScale(1.6f);
+	CAMERAMANAGER->frameRender(_attack2.img, _attack2.x, _attack2.y, _attack2.index, 0);
+	_attack2.img->SetAngle(_attack2.angle);
+	_attack2.img->SetScale(1.6f);
+	//_attack1.img->FrameRender(Vector2(_attack1.x, _attack1.y), _attack1.index, 0);
+	//_attack1.img->SetScale(1.5f);
+	//_attack2.img->FrameRender(Vector2(_attack2.x, _attack2.y), _attack2.index, 0);
+	//_attack2.img->SetScale(1.5f);
+	//_attack2.img->SetAngle(_attack2.angle);
+	//D2DRenderer::GetInstance()->FillRectangle(_attack2.rc, D2D1::ColorF::Black, 0.7f);
 }
 
 void boss::attack()
 {
-	attack2();
+	attack1();
 }
 
 void boss::dead()
@@ -186,7 +193,8 @@ void boss::attack2()
 			_isBossAttack = false;
 		}
 	}
-	if (_isBossAttackEnd)
+	if (_attack2.index >= 5)
+	
 	{
 
 		if (!KEYANIMANAGER->findAnimation(_index, "bossHandFly3")->isPlay())
@@ -194,7 +202,7 @@ void boss::attack2()
 			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
-			_state = _idle;
+			//_state = _idle;
 			_isBossAttackEnd = false;
 			_isAttack = false;
 			_attackDelay = 0;
@@ -260,16 +268,55 @@ void boss::attack1_1()
 
 void boss::attack2_1()
 {
-	_attack2.x = _x - 140;
-	_attack2.y = _y + 30;
+	_attack2.aniDelayCount++;
+	if (_attack2.aniDelayCount >4)
+	{
+		_attack2.index--;
+		_attack2.aniDelayCount = 0;
+	}
+	_attack2.x = _x - 120;
+	_attack2.y = _y;
 	_attack2.width = 10;
 	_attack2.height = 10;
 	_attack2.rc = RectMakePivot(Vector2(_attack2.x, _attack2.y), Vector2(_attack2.width, _attack2.height), Pivot::LeftTop);
-	//if (!_attack2.isBottom)
-	//{
-	//	_attack2.
-	//}
 
-
+	if (_attack2.index <= 0)
+	{
+		_attack2.index = 0;
+	}
+	if (!_attack2.isBottom)
+	{
+		cout << _attack2.angle << endl;
+		_attack2.angle--;
+		if (_attack2.angle <= -60.f)
+		{
+			_attack2.isBottom = true;
+		}
+	}
+	if (_attack2.isBottom)
+	{
+		_attack2.angle++;
+		{
+			if (_attack2.angle >= 40.f)
+			{
+				_attack2.isBottom = false;
+				_attack2.count++;
+			}
+		}
+	}
+	if (_attack2.count > 3)
+	{
+		if (_attack2.aniDelayCount > 4)
+		{
+			_attack2.index++;
+			_attack2.aniDelayCount = 0;
+		}
+		if (_attack2.index >= 5)
+		{
+			_attack2.index = 5;
+			_attack2.count = 0;
+		}
+	}
+	
 }
 

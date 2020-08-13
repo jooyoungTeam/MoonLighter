@@ -41,6 +41,7 @@ public:
 	void bulletCol();
 	void enemyDead(int arr);
 
+	enemy* getEnemy() { return _enemy; }
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
 };

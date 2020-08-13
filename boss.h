@@ -12,7 +12,7 @@ struct tagAttack1
 	float x, y;
 	float speed;
 	float width, height;
-	float _angle;
+	float angle;
 	bool isBottom;
 	bool onceImage;
 	int xRandom;

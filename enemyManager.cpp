@@ -35,8 +35,8 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
-	_x = _player->getX();
-	_y = _player->getY();
+	_x = _player->getShadowX();
+	_y = _player->getShadowY();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -97,7 +97,7 @@ void enemyManager::update()
 	}
 
 	EFFECTMANAGER->update();
-	_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
+	_rc = RectMakePivot(Vector2(_player->getShadowX(), _player->getShadowY()), Vector2(50, 50), Pivot::Center);
 }
 
 void enemyManager::render()
@@ -120,9 +120,11 @@ void enemyManager::setEnemy()
 	enemy* boss1;
 	boss1 = new boss;
 	boss1->playerCheck(_x, _y, _rc);
-	boss1->init(i, 500, 200, 250, 300, ENEMY_BOSS);
+	boss1->init(i, 1360, 300, 250, 300, ENEMY_BOSS);
 	_vEnemy.push_back(boss1);
-	/*enemy* redS1;
+
+	i++;
+	enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
 	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
@@ -137,43 +139,43 @@ void enemyManager::setEnemy()
 	_vEnemy.push_back(gol1);
 
 	
-	i++;
+	//i++;
 
-	enemy* pot1;
-	pot1 = new pot;
-	pot1->playerCheck(_x, _y, _rc);
-	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
-	_vEnemy.push_back(pot1);
+	//enemy* pot1;
+	//pot1 = new pot;
+	//pot1->playerCheck(_x, _y, _rc);
+	//pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
+	//_vEnemy.push_back(pot1);
 
-	
-	i++;
+	//
+	//i++;
 
 
-	enemy* pot2;
-	pot2 = new pot;
-	pot2->playerCheck(_x, _y, _rc);
-	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
-	pot2->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(pot2);
+	//enemy* pot2;
+	//pot2 = new pot;
+	//pot2->playerCheck(_x, _y, _rc);
+	//pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
+	//pot2->setPotDirection(POT_RIGHT);
+	//_vEnemy.push_back(pot2);
 
-	
-	i++;
+	//
+	//i++;
 
-	enemy* yelS1;
-	yelS1 = new anotherSlime;
-	yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	_vEnemy.push_back(yelS1);
+	//enemy* yelS1;
+	//yelS1 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	//yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	//_vEnemy.push_back(yelS1);
 
-	i++;
+	//i++;
 
-	enemy* bleS1;
-	bleS1 = new anotherSlime;
-	bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	_vEnemy.push_back(bleS1);
+	//enemy* bleS1;
+	//bleS1 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	//bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	//_vEnemy.push_back(bleS1);
 
-*/
+
 
 }
 

@@ -10,12 +10,12 @@ HRESULT dungeonStage::init()
 
 	_player = new player;
 	_player->init(500, 500);
-	_enemy = new enemyManager;
-	_enemy->setPlayerLink(_player);
-	_enemy->init();
+	//_enemy = new enemyManager;
+	//_enemy->setPlayerLink(_player);
+	//_enemy->init();
 
 
-	loadDungeonMap();
+	//loadDungeonMap();
 	
 
 
@@ -27,7 +27,7 @@ void dungeonStage::render()
 	renderDungeonMap();
 	//CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("dungeonBackground"), 0, 0);
 	_player->render();
-	_enemy->render();
+	//_enemy->render();
 
 	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 }
@@ -35,7 +35,10 @@ void dungeonStage::render()
 void dungeonStage::update()
 {
 	_player->update();
-	_enemy->update();
+	//_enemy->update();
+
+	//CAMERAMANAGER->setX();
+	//CAMERAMANAGER->
 	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 
 }
