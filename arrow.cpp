@@ -39,8 +39,9 @@ void arrow::render()
 			_vArrow[i].arrowImage->SetAngle(180);
 			break;
 		}
-		_vArrow[i].arrowImage->FrameRender(Vector2(_vArrow[i].x, _vArrow[i].y), 0, 0);
+		//_vArrow[i].arrowImage->FrameRender(Vector2(_vArrow[i].x, _vArrow[i].y), 0, 0);
 
+		CAMERAMANAGER->frameRender(_vArrow[i].arrowImage, _vArrow[i].x, _vArrow[i].y, 0, 0);
 		if (KEYMANAGER->isToggleKey('V'))
 		{
 			CAMERAMANAGER->rectangle(_vArrow[i].rc, D2D1::ColorF::Red, 1.0f);

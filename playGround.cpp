@@ -36,8 +36,27 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
+	
+	if (KEYMANAGER->isOnceKeyDown(VK_F9))
+	{
+		CAMERAMANAGER->shakeCamera(5, 50);
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F12))
+	{
+		CAMERAMANAGER->fadeInOut(FADETYPE::FADEIN);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F11))
+	{
+		CAMERAMANAGER->fadeInOut(FADETYPE::FADEOUT);
+	}
+
+
 	cursor();
 	_stageManager->update();
+
+
+	CAMERAMANAGER->cameraUpdate();
 }
 
 //그리기 전용
@@ -52,10 +71,7 @@ void playGround::render()
 		TIMEMANAGER->render();
 
 
-
-
-
-
+		CAMERAMANAGER->fadeRender();
 		// 마지막 렌더
 		int w = _ptMouse.x + (ImageManager::GetInstance()->FindImage("커서")->GetFrameSize().x) * 0.5f;
 		int h = _ptMouse.y + (ImageManager::GetInstance()->FindImage("커서")->GetHeight()) * 0.5f;

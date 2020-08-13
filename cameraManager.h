@@ -2,11 +2,34 @@
 #include "singletonBase.h"
 #include "image.h"
 
+enum class FADETYPE
+{
+	FADEIN,
+	FADEOUT,
+};
+
 enum class renderType
 {
 	RENDER,
 	FRAME_RENDER,
 	ANI_RENDER,
+};
+
+struct tagFade
+{
+	int      fadeTime;
+	float    fadeAlpha;
+	bool     fadeStart;
+	FADETYPE fadeType;
+	RECT     fadeRect;
+};
+
+struct tagShake
+{
+	bool isShakeCamera;
+	int  shakePower;
+	int  shakeTime;
+	int  shakeCount;
 };
 
 struct tagZoder
@@ -35,7 +58,8 @@ private:
 	vector<tagZoder> _vZorder;
 	bool			 _isRect;
 
-
+	tagFade  _fade;
+	tagShake _shake;
 public:
 	cameraManager() {}
 	~cameraManager() {}
@@ -59,6 +83,10 @@ public:
 	// 랜더 함수 (랜더 부분에 넣을 것)
 	void zOrderALLRender();
 
+	void fadeInOut(FADETYPE fade);
+	void shakeCamera(int shakePower, int shakeTime);
+	void cameraUpdate();
+	void fadeRender();
 	int zOrderSize() { return _vZorder.size(); }
 
 public:

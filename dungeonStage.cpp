@@ -39,6 +39,12 @@ void dungeonStage::update()
 
 	//CAMERAMANAGER->setX();
 	//CAMERAMANAGER->
+	if (!INVENTORY->getIsInven())
+	{
+		_player->update();
+		_enemy->update();
+
+	}
 	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(50, 50), Pivot::Center);
 
 }

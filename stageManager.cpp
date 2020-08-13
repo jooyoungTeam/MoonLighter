@@ -35,7 +35,7 @@ void stageManager::render()
 {
 	SCENEMANAGER->render();
 	//_ui->render();
-	if (_isInven) INVENTORY->render();
+	if (INVENTORY->getIsInven()) INVENTORY->render();
 }
 
 
@@ -44,30 +44,30 @@ void stageManager::update()
 	FloatRect _test;
 	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
 
-	if (!_isInven) SCENEMANAGER->update();
+	SCENEMANAGER->update();
 
-	if (!_isInven && KEYMANAGER->isOnceKeyDown('I'))
+	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
-		_isInven = true;
+		INVENTORY->setIsInven(true);
 		_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
 		INVENTORY->setState(INVEN_STATE::NOTE);
 	}
 
-	if (_isInven && KEYMANAGER->isOnceKeyDown('I'))
+	if (INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
-		_isInven = false;
+		INVENTORY->setIsInven(false);
 		_ui->setUIScene(CURRENT_SCENE::TEMP);
 		INVENTORY->closeInven();
 	}
 
-	if (!_isInven && KEYMANAGER->isOnceKeyDown('O'))
+	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
 	{
-		_isInven = true;
+		INVENTORY->setIsInven(true);
 		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
 		INVENTORY->setState(INVEN_STATE::SHOP);
 	}
 
-	if (_isInven) INVENTORY->update();
+	if (INVENTORY->getIsInven()) INVENTORY->update();
 
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
