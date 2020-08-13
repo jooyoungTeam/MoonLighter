@@ -57,6 +57,7 @@ private:
 	POINT				_itemWayPoint[4];	// ¾ÆÀÌÅÛ °í¸£´Â ÁÂÇ¥
 	POINT				_counterPoint;		// Ä«¿îÅÍ ÁÂÇ¥
 	POINT				_aroundPoint[4];	// ¹èÈ¸ ÁÂÇ¥
+	POINT				_eixtPoint;			// ÃâÀÔ¹® ÁÂÇ¥
 
 	float				_centerX;			// ÁßÁ¡ x
 	float				_centerY;			// ÁßÁ¡ y
