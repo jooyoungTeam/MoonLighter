@@ -2,8 +2,8 @@
 
 #define TILESIZE 50
 
-#define TILEX 40
-#define TILEY 30
+#define TILEX 60
+#define TILEY 49
 
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
@@ -60,6 +60,7 @@ struct tagObject
 	RECT     rc;
 	Image*   img;
 	bool     isFrameRender;
+	float    scale;
 	int      frameX;
 	int      count;
 };

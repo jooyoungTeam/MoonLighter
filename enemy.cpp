@@ -137,13 +137,14 @@ void enemy::render()
 	_aStar->render();
 	//_img->aniRender(Vector2(_x, _y), _motion, _scale);
 	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, _scale);
-
+	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
+	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
+	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
 	/*D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);*/
 	//FloatRect rc = (RectMakePivot(Vector2(_x, _z), Vector2(10, 10), Pivot::Center));
 	//D2DRenderer::GetInstance()->FillRectangle(_rc, D2D1::ColorF::Brown, 0.5f);
-	//CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 	
 }
 
@@ -203,6 +204,7 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
 	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
 	ImageManager::GetInstance()->AddFrameImage("bossLong", L"image/enemy/long.png", 6, 1);
+
 
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 
@@ -302,17 +304,18 @@ void enemy::ani()
 	int attackIdle[] = { 0,1 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttackIdle", "bossAttackIdle", attackIdle, 2, 5, true);
 
-	/*int hand[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHand", "bossHand", hand, 19, 13, false);*/
 
 	int shoot1[] = { 0,1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,16,15,14,13,13,14,15,16,16,15,14,13,13 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly1", "bossHandFly", shoot1, 30, 8, false);
 	
-	int shoot2[] = { 44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59, 54,55,56,57,58,59, 59, 58,57,56,55,54,53,52,51,50,49,/*48,47,46,45,44*/ };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly2", "bossHandFly", shoot2, 33, 7, false);
+	int shoot2[] = { 44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59, 54,55,56,57,58,59,54,55,56,57,58,59, 54,55,56,57,58,59, 59, 58,57,56,55,54,53,52,51,50,49,/*48,47,46,45,44*/ };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly2", "bossHandFly", shoot2, 45, 7, false);
 
 	int shoot3[] = { 48,47,46,45,44,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly3", "bossHandFly", shoot3, 44, 7, false);
+
+	int attack3[]{ 0,1,2,3,4,5,6,7,8,8,7,6,5,4,3,2,1,0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttack3", "bossHandFly", attack3, 18, 7, false);
 
 }
 

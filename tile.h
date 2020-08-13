@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tileNode.h"
 #include "button.h"
+#include "player.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class tile : public gameNode
@@ -53,15 +54,19 @@ private:
 
 	// ----------- 충돌 처리 타일로 바꿔줄 렉트
 
-
-
 	int           _frameCount;
-
 	int           _saveTime;
 	int			  _dragNumX;
 	int			  _dragNumY;
-
 	int           _nowIndex;
+
+
+	// ----------- 임시 변수 ------------ //
+	int           _tileX;
+	int           _tileY;
+	Image*        _mapImg;
+	player*       _player;
+	// ----------- 임시 변수 ------------ //
 public:
 	tile() {}
 	~tile() {}

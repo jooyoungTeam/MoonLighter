@@ -80,7 +80,6 @@ public:
 	virtual void update();
 	virtual void render();
 	void playerCheck(float x, float y, FloatRect rc); //나중에 여기에 렉트 추가해
-	void ani();					//이미지 애니 다 넣은곳
 	virtual void attack() {}	//에너미 공격 넣을 곳
 	virtual void enemyMove() {}	// 움직임 넣을 곳
 	virtual void dead() {}		//에너미 죽는거
@@ -89,10 +88,11 @@ public:
 	virtual void move();		//astar
 	virtual void hitMove();		//힛상태이면 반대로 움직이게
 	virtual void directionCheck() {}//골렘 방향 돌려주는거
-	void setBar();				//에너미마다 체력바 위치 정해줌
 	virtual void enemyHit() {}	//골렘 힛으로 바꿔주는거
-	void checkBoolCount();		//불값이랑 카운트 체크용
 	virtual void setShadow() {}	//골렘 그림자 캐릭터마다 위치 다르게 해주려고 
+	void setBar();				//에너미마다 체력바 위치 정해줌
+	void ani();					//이미지 애니 다 넣은곳
+	void checkBoolCount();		//불값이랑 카운트 체크용
 
 	void setGauge(float curHP, float maxHP);	//체력바
 
@@ -135,6 +135,7 @@ public:
 	bool getIsCol() { return _isCol; }
 	bool getRealDead() { return _realDead; }
 	bool getIsHit() { return _isHit; }
+	
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }
