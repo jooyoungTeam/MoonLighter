@@ -4,7 +4,8 @@
 
 #define INVENSPACE 22				//인벤칸수
 #define GEARSPACE 6					//장비칸수
-#define SHOPSPACE 4					//상점칸수
+#define SHOPSPACE 8					//상점칸수
+#define PRICESPACE 7				//가격설정
 
 enum class INVEN_STATE
 {
@@ -43,6 +44,13 @@ struct tagShop						//상점
 	wstring priceNum;				//아이템 설정가 표시 string
 };
 
+struct tagSetPrice					//가격 설정 창
+{
+	FloatRect rc;					//
+	int price;
+	wstring priceNum;
+};
+
 class player;
 class UI;
 class itemManager;
@@ -51,32 +59,33 @@ class inventory : public singletonBase<inventory>
 {
 private:
 	INVEN_STATE _state;					//노트를 열었는지 상자를 열었는지
+	MIRROR_STATE _mirror;				//미러 상태
 
 	tagInven _inven[INVENSPACE];		//인벤
 	tagInven _selectItem;				//선택한 아이템
+	tagGear _gear[GEARSPACE];			//장비칸
+	tagShop _shop[SHOPSPACE];			//상점칸
+	tagSetPrice _price[PRICESPACE];		//가격설정칸
+
 	Image* _mirrorImg;					//거울이미지
 	Image* _saleImg;					//판매이미지
+
 	int _select;						//현재 인벤 번호
 	int _selectNumber;					//선택한 칸 번호(인벤)
 	int _selectGearNumber;				//선택한 칸 번호(장비칸)
 	int _selectShopNumber;				//선택한 칸 번호(샵)
-	bool _isSelect;						//아이템 선택하는 불 값
-	bool _isSale;						//아이템 판매하는 불 값
-	bool _isInven;
-
-	tagGear _gear[GEARSPACE];			//장비칸
-	tagShop _shop[SHOPSPACE];			//상점칸
-	bool _isSwap;						//넘어가기
-
-	MIRROR_STATE _mirror;				//미러 상태
 	int _frameCount;					//미러프레임용
 	int _mirrorFrameX;					//미러 프레임X
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
 	int _count;							//미러 딜레이
-
 	int _gold;							//소지금
-	vector<item*> _vItem;				//아이템 벡터
+
+	bool _isSelect;						//아이템 선택하는 불 값
+	bool _isSale;						//아이템 판매하는 불 값
+	bool _isSwap;						//배열 넘어가기
+	bool _isInven;						//인벤토리 열었니?
+	bool _isSetPrice;					//가격 설정할 거니
 
 	player* _player;
 	UI* _ui;
@@ -97,7 +106,6 @@ public:
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
-	void displayItem();										//아이템 벡터에 담기
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
@@ -108,7 +116,7 @@ public:
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
-	void setIsInven(bool arg) { _isInven = arg; }
+	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
 
 public:
 	//플레이어 참조용
