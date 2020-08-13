@@ -76,6 +76,7 @@ private:
 	int _count;							//미러 딜레이
 
 	int _gold;							//소지금
+	vector<item*> _vItem;				//아이템 벡터
 
 	player* _player;
 	UI* _ui;
@@ -96,6 +97,7 @@ public:
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
+	void displayItem();										//아이템 벡터에 담기
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기

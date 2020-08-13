@@ -489,12 +489,7 @@ void inventory::selectInvenItem()
 			{
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-				
-				item* select;
-				select = new item;
-				select = _inven[_select].item;
-
-				_selectItem.item = select;
+				_selectItem.item = _inven[_select].item;
 				_selectItem.count++;
 				_inven[_select].count--;	
 
@@ -517,12 +512,7 @@ void inventory::selectInvenItem()
 
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-
-				item* select;
-				select = new item;
-				select = _gear[_select].item;
-
-				_selectItem.item = select;
+				_selectItem.item = _gear[_select].item;
 				_selectItem.count++;
 				_gear[_select].count--;
 
@@ -539,12 +529,7 @@ void inventory::selectInvenItem()
 
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-
-				item* select;
-				select = new item;
-				select = _shop[_select].item;
-
-				_selectItem.item = select;
+				_selectItem.item = _shop[_select].item;
 				_selectItem.count++;
 				_shop[_select].count--;
 
@@ -587,7 +572,11 @@ void inventory::moveInvenItem()
 
 				else
 				{
-					_inven[_select].item = _selectItem.item;
+					item* select;
+					select = new item;
+					select->init(_selectItem.item->getType());
+
+					_inven[_select].item = select;
 					_inven[_select].count = _selectItem.count;
 					_selectItem.count = 0;
 					_selectItem.item = nullptr;
@@ -709,7 +698,11 @@ void inventory::moveInvenItem()
 						//장비칸이 비어있으면
 						if (_gear[_select].item == nullptr)
 						{
-							_gear[_select].item = _selectItem.item;
+							item* select;
+							select = new item;
+							select->init(_selectItem.item->getType());
+
+							_gear[_select].item = select;
 							_gear[_select].count = _selectItem.count;
 							_selectItem.item = nullptr;
 							_isSelect = false;
@@ -767,10 +760,14 @@ void inventory::moveInvenItem()
 				//쇼케이스가 비어있으면
 				if (_shop[_select].item == nullptr)
 				{
-					_shop[_select].item = _selectItem.item;
+					item* select;
+					select = new item;
+					select->init(_selectItem.item->getType());
+
+					_shop[_select].item = select;
 					_shop[_select].count = _selectItem.count;
 					_selectItem.item = nullptr;
-					_isSelect = false;
+					_isSelect = false;					
 				}
 
 				//비어있지 않으면
@@ -1001,4 +998,9 @@ void inventory::draw()
 
 		_frameCount = 0;
 	}	
+}
+
+void inventory::displayItem()
+{
+	
 }
