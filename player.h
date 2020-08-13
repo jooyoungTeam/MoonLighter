@@ -2,12 +2,18 @@
 #include "gameNode.h"
 #include "playerState.h"
 
+class enemyManager;
+
 enum class DIRECTION
 {
 	UP,
 	DOWN,
 	LEFT,
 	RIGHT,
+	LEFTTOP,
+	RIGHTTOP,
+	LEFTBOTTOM,
+	RIGHTBOTTOM,
 };
 
 class player : public gameNode
@@ -22,14 +28,17 @@ private:
 	animation*			_playerMotion;						//플레이어 애니메이션
 	DIRECTION			_playerDirection;					//플레이어 방향
 	arrow*				_arrow;
+	enemyManager*		_enemyLink;							//에너미 상호참조용
 	int					_index;								//플레이어 인덱스 0
 	int					_arrowCount;						//화살한발만 쏘게
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
+	int					_count;								//횟수1번으로 정하는 카운트
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
 	float				_playerAttackX, _playerAttackY;		//플레이어 공격위치
 	float				_playerAttackW, _playerAttackH;		//플레이어 공격범위
-
+	float				_playerCurrentHp;					//플레이어 체력
+	float				_SwordDamage;						//플레이어 검 공격력
 	bool				_swordAttack;						//플레이어 검 공격하는중
 	bool				_swordAttackCombo;					//플레이어 검 콤보공격
 	bool				_weaponChange;						//플레이어 무기 변경
@@ -65,10 +74,13 @@ public:
 public:
 	int getIndex() { return _index; }
 	int getBedCount() { return _bedCount; }
+	int getCount() { return _count; }
 	float getX() { return _playerX; }
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
 	float getShadowY() { return _playerShadowY; }
+	float getplayerCurrentHp() { return _playerCurrentHp; }
+	float getSwordDamage() { return _SwordDamage; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
@@ -82,10 +94,12 @@ public:
 	DIRECTION getDirection() { return _playerDirection; }
 
 	void setBedCount(int bedCount) { _bedCount = bedCount; }
+	void setCount(int count) { _count = count; }
 	void setX(float playerX) { _playerX = playerX; }
 	void setY(float playerY) { _playerY = playerY; }
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
+	void setPlayerCurrentHp(float playerCurrentHp) { _playerCurrentHp = playerCurrentHp; }
 	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
 	void setSwrodAttackCombo(bool swordAttackCombo) { _swordAttackCombo = swordAttackCombo; }
 	void setWeaponChange(bool weaponChange) { _weaponChange = weaponChange; }
@@ -97,6 +111,8 @@ public:
 	{
 		_playerAttackX = playerAttackX, _playerAttackY = playerAttackY, _playerAttackW = playerAttackW, _playerAttackH = playerAttackH;
 	}
+
+	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
 
 public:
 	playerState* getIdleState()			{ return _idle; }

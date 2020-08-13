@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "enemyManager.h"
 
 HRESULT player::init(float x, float y)
 {
@@ -27,12 +28,14 @@ HRESULT player::init(float x, float y)
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
+	_playerCurrentHp = 150;
+	_SwordDamage = 30;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 
-	_CurrentState = _bed;
+	_CurrentState = _idle;
 
 	_playerShadowImg = ImageManager::GetInstance()->FindImage("playerShadow");
 	_playerImg = ImageManager::GetInstance()->FindImage("playerBed");
@@ -288,7 +291,7 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP);
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40);
 		}
 	}
 	if (_playerDirection == DIRECTION::DOWN)
@@ -296,7 +299,7 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN);
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40);
 		}
 	}
 	if (_playerDirection == DIRECTION::LEFT)
@@ -304,7 +307,7 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT);
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40);
 		}
 	}
 	if (_playerDirection == DIRECTION::RIGHT)
@@ -312,7 +315,7 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT);
+			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40);
 		}
 	}
 	//애니메이션 끝나면 다시 카운트 초기화

@@ -265,7 +265,6 @@ void playerWalkState::update(player & player)
 		}
 
 		//만약 아래키 누르면 위쪽Idle 모습으로 변함
- 
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
@@ -288,8 +287,26 @@ void playerWalkState::update(player & player)
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
-
 			player.setCurrentState(player.getRollState());
+
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			if (player.getDirection() == DIRECTION::RIGHTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (player.getDirection() == DIRECTION::LEFTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+				player.setCurrentState(player.getRollState());
+			}
 		}
 
 		isMove = true;
@@ -325,12 +342,30 @@ void playerWalkState::update(player & player)
 			player.setCurrentState(player.getWalkState());
 		}
 
-
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
 			player.setCurrentState(player.getRollState());
+
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setDirection(DIRECTION::LEFTBOTTOM);
+			}
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setDirection(DIRECTION::RIGHTBOTTOM);
+			}
+			if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (player.getDirection() == DIRECTION::LEFTBOTTOM)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+				player.setCurrentState(player.getRollState());
+			}
 		}
 
 		isMove = true;
@@ -470,6 +505,7 @@ void playerWalkState::update(player & player)
 	//아래키 떼면
 	if (KEYMANAGER->isOnceKeyUp('S'))
 	{
+		isbool = false;
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 		
@@ -734,6 +770,34 @@ void playerRollState::update(player & player)
 		player.setX(player.getX() + 7);
 	}
 
+	//오른쪽위 구르기
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll") && player.getDirection() == DIRECTION::RIGHTTOP)
+	{
+		player.setShadowX(player.getShadowX() + 5);
+		player.setX(player.getX() + 5);
+	}
+
+	//왼쪽위 구르기
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll") && player.getDirection() == DIRECTION::LEFTTOP)
+	{
+		player.setShadowX(player.getShadowX() - 5);
+		player.setX(player.getX() - 5);
+	}
+
+	//오른쪽아래 구르기
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll") && player.getDirection() == DIRECTION::LEFTBOTTOM)
+	{
+		player.setShadowX(player.getShadowX() - 5);
+		player.setX(player.getX() - 5);
+	}
+
+	//왼쪽아래 구르기
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
+	{
+		player.setShadowX(player.getShadowX() + 5);
+		player.setX(player.getX() + 5);
+	}
+
 	//애니메이션 재생이 끝나면 
 	if(!KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll")->isPlay() 
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll")->isPlay()
@@ -765,15 +829,16 @@ void playerRollState::update(player & player)
 			player.setCurrentState(player.getWalkState());
 		}
 		//아무키도 누르지 않고있으면 Idle 상태로 전환
-		else 
+		else
 		{
-			if (player.getDirection() == DIRECTION::UP)
+			cout << "여기 안오나?" << endl;
+			if (player.getDirection() == DIRECTION::UP || KEYMANAGER->isOnceKeyUp('W'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
 				player.setCurrentState(player.getIdleState());
 			}
 
-			if (player.getDirection() == DIRECTION::DOWN)
+			if (player.getDirection() == DIRECTION::DOWN || KEYMANAGER->isOnceKeyUp('S'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 				player.setCurrentState(player.getIdleState());
