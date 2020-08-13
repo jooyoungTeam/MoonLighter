@@ -13,6 +13,7 @@ HRESULT playerIdleState::init()
 //Idle 상태
 void playerIdleState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	player.setBedCount(player.getBedCount() + 1);
 	//아이들 상태 오래 지속되면 빗자루질함
 	if (player.getBedCount() >= 300)
@@ -745,6 +746,7 @@ void playerWalkState::update(player & player)
 //roll(구르기) 상태
 void playerRollState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//위로 구르기 
 	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpRoll"))
 	{
@@ -804,6 +806,7 @@ void playerRollState::update(player & player)
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftRoll")->isPlay()
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightRoll")->isPlay())
 	{
+		player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 		//위쪽키를 누르면 다시 이동하게
 		if (GetAsyncKeyState('W') & 0x8000)
 		{
@@ -831,7 +834,7 @@ void playerRollState::update(player & player)
 		//아무키도 누르지 않고있으면 Idle 상태로 전환
 		else
 		{
-			cout << "여기 안오나?" << endl;
+			player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 			if (player.getDirection() == DIRECTION::UP || KEYMANAGER->isOnceKeyUp('W'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
@@ -862,6 +865,7 @@ void playerRollState::update(player & player)
 //die 상태
 void playerDieState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//아무키도 안누르면 Idle 상태로 전환
 	if (KEYMANAGER->isOnceKeyUp('0'))
 	{
@@ -883,6 +887,7 @@ void playerDieState::update(player & player)
 //shield 상태
 void playerShieldState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//플레이어 쉴드
 	if (KEYMANAGER->isStayKeyDown('K'));
 	{
@@ -1064,6 +1069,7 @@ void playerShieldState::update(player & player)
 //idleSwim 상태
 void playerIdleSwimState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//위
 	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
@@ -1101,6 +1107,7 @@ void playerIdleSwimState::update(player & player)
 //swim 상태
 void playerSwimState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//위 
 	if (player.getDirection() == DIRECTION::UP)
 	{
@@ -1349,6 +1356,7 @@ void playerSwimState::update(player & player)
 //bow 상태
 void playerbowState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//만약 애니메이션 재생 끝나면
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpBow")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownBow")->isPlay()
 		&& !KEYANIMANAGER->findAnimation(player.getIndex(), "playerLeftBow")->isPlay() && !KEYANIMANAGER->findAnimation(player.getIndex(), "playerRightBow")->isPlay())
@@ -1419,6 +1427,7 @@ void playerbowState::update(player & player)
 //sword 상태
 void playerSwordState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//1타 공격
 	if (!player.getSwordAttackCombo())
 	{
@@ -1548,6 +1557,7 @@ void playerSwordState::update(player & player)
 //빗자루질 
 void playerBroomState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//위
 	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
@@ -1577,6 +1587,7 @@ void playerBroomState::update(player & player)
 //침대 상태
 void playerBedState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//애니메이션이 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerBed")->isPlay())
 	{
@@ -1593,6 +1604,7 @@ void playerBedState::update(player & player)
 //텔레포트 상태
 void playerTeleportState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//애니메이션 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerTeleport")->isPlay())
 	{
@@ -1604,6 +1616,7 @@ void playerTeleportState::update(player & player)
 //텔레포트(던전) 들어가기 상태
 void playerTeleportInState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//애니메이션 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerTeleportIn")->isPlay())
 	{
@@ -1615,6 +1628,7 @@ void playerTeleportInState::update(player & player)
 //텔레포트(탈출) 상태
 void playerTeleportOutState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 0, 0);
 	//애니메이션 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation(player.getIndex(), "playerTeleportOut")->isPlay())
 	{

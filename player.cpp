@@ -27,12 +27,13 @@ HRESULT player::init(float x, float y)
 	_playerShadowY = y;
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
+	_playerRcW = _playerRcH = 70;
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
 	_playerCurrentHp = 150;
 	_SwordDamage = 30;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
-	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
+	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 
 	_CurrentState = _idle;
@@ -79,7 +80,7 @@ void player::update()
 	_arrow->update();
 	arrowShoot();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
-	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(70, 70), Pivot::Center);
+	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 }
 
