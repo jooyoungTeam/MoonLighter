@@ -45,6 +45,7 @@ struct tagShop						//상점
 
 class player;
 class UI;
+class itemManager;
 
 class inventory : public singletonBase<inventory>
 {
@@ -78,6 +79,7 @@ private:
 
 	player* _player;
 	UI* _ui;
+	itemManager* _itemMg;
 
 public:
 	inventory() {}
@@ -111,4 +113,6 @@ public:
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
 	//UI 참조용
 	void getUIMemoryAddressLink(UI* ui) { _ui = ui; }
+	//아이템 매니저 참조용
+	void getItemMgAddressLink(itemManager* item) { _itemMg = item; }
 };
