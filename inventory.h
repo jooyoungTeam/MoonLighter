@@ -61,6 +61,7 @@ private:
 	int _selectShopNumber;				//선택한 칸 번호(샵)
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
+	bool _isInven;
 
 	tagGear _gear[GEARSPACE];			//장비칸
 	tagShop _shop[SHOPSPACE];			//상점칸
@@ -99,9 +100,11 @@ public:
 	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
+	bool getIsInven() { return _isInven; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
+	void setIsInven(bool arg) { _isInven = arg; }
 
 public:
 	//플레이어 참조용

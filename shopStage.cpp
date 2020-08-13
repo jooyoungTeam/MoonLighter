@@ -54,6 +54,9 @@ void shopStage::update()
 {
 	_player->update();
 
+
+	cout << (int)INVENTORY->getState() << endl;
+
 	if(INVENTORY->getState() == INVEN_STATE::SHOP)
 		disPlayUpdate();
 	
@@ -91,6 +94,9 @@ void shopStage::disPlaySet()
 
 void shopStage::disPlayUpdate()
 {
+	if(INVENTORY->getShowCase()[0].item != NULL)
+		cout << INVENTORY->getShowCase()[0].item->getIndex() << endl;
+
 	for (int i = 0; i < 4; ++i)
 	{
 		_display[i].count = INVENTORY->getShowCase()[i].count;
