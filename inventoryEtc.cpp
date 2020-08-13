@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "inventory.h"
 
-
 //===========================================↓↓인벤에서 돌아다니기↓↓===========================================//
 void inventory::moveInven()
 {
@@ -172,29 +171,10 @@ void inventory::moveInven()
 
 				else
 				{
-					if (_select == 1)
-					{
-						_firstPrice[_selectPrice].price++;
-						if (_firstPrice[_selectPrice].price > 9) _firstPrice[_selectPrice].price = 0;
-					}
-
-					else if (_select == 3)
-					{
-						_secondPrice[_selectPrice].price++;
-						if (_secondPrice[_selectPrice].price > 9) _secondPrice[_selectPrice].price = 0;
-					}
-
-					else if (_select == 5)
-					{
-						_thirdPrice[_selectPrice].price++;
-						if (_thirdPrice[_selectPrice].price > 9) _thirdPrice[_selectPrice].price = 0;
-					}
-
-					else if (_select == 7)
-					{
-						_fourthPrice[_selectPrice].price++;
-						if (_fourthPrice[_selectPrice].price > 9) _fourthPrice[_selectPrice].price = 0;
-					}
+					setCount(_firstPrice, L"up");
+					setCount(_secondPrice, L"up");
+					setCount(_thirdPrice, L"up");
+					setCount(_fourthPrice, L"up");
 				}
 			}
 		}
@@ -237,29 +217,10 @@ void inventory::moveInven()
 
 				else
 				{
-					if (_select == 1)
-					{
-						_firstPrice[_selectPrice].price--;
-						if (_firstPrice[_selectPrice].price < 0) _firstPrice[_selectPrice].price = 9;
-					}
-
-					else if (_select == 3)
-					{
-						_secondPrice[_selectPrice].price--;
-						if (_secondPrice[_selectPrice].price < 0) _secondPrice[_selectPrice].price = 9;
-					}
-
-					else if (_select == 5)
-					{
-						_thirdPrice[_selectPrice].price--;
-						if (_thirdPrice[_selectPrice].price < 0) _thirdPrice[_selectPrice].price = 9;
-					}
-
-					else if (_select == 7)
-					{
-						_fourthPrice[_selectPrice].price--;
-						if (_fourthPrice[_selectPrice].price < 0) _fourthPrice[_selectPrice].price = 9;
-					}
+					setCount(_firstPrice, L"down");
+					setCount(_secondPrice, L"down");
+					setCount(_thirdPrice, L"down");
+					setCount(_fourthPrice, L"down");
 				}
 			}
 		}
@@ -301,122 +262,6 @@ void inventory::putItem(item* item)
 	}
 }
 //===========================================↑↑아이템 인벤에 넣기↑↑===========================================//
-
-
-//===========================================↓↓가격 설정하기↓↓===========================================//
-void inventory::setPrice()
-{
-	for (int i = 0; i < PRICESPACE; i++)
-	{
-		_firstPrice[i].rc = RectMakePivot(Vector2(_shop[1].rc.GetCenter().x + i * 20 - 40, _shop[1].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-		_shop[1].totalPrice = _firstPrice[0].price * 10000 + _firstPrice[1].price * 1000 + _firstPrice[2].price * 100 + _firstPrice[3].price * 10 + _firstPrice[4].price;
-
-		_secondPrice[i].rc = RectMakePivot(Vector2(_shop[3].rc.GetCenter().x + i * 20 - 40, _shop[3].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-		_shop[3].totalPrice = _secondPrice[0].price * 10000 + _secondPrice[1].price * 1000 + _secondPrice[2].price * 100 + _secondPrice[3].price * 10 + _secondPrice[4].price;
-
-		_thirdPrice[i].rc = RectMakePivot(Vector2(_shop[5].rc.GetCenter().x + i * 20 - 40, _shop[5].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-		_shop[5].totalPrice = _thirdPrice[0].price * 10000 + _thirdPrice[1].price * 1000 + _thirdPrice[2].price * 100 + _thirdPrice[3].price * 10 + _thirdPrice[4].price;
-
-		_fourthPrice[i].rc = RectMakePivot(Vector2(_shop[7].rc.GetCenter().x + i * 20 - 40, _shop[7].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-		_shop[7].totalPrice = _fourthPrice[0].price * 10000 + _fourthPrice[1].price * 1000 + _fourthPrice[2].price * 100 + _fourthPrice[3].price * 10 + _fourthPrice[4].price;
-	}
-}
-//===========================================↑↑가격 설정하기↑↑===========================================//
-
-
-//===========================================↓↓인벤 닫기↓↓===========================================//
-void inventory::closeInven()
-{
-	if (_isSelect)
-	{
-		//인벤에서 아이템을 선택하고 있는 상태였다면
-		if (_selectNumber >= 0)
-		{
-			if (_inven[_selectNumber].item == nullptr)
-			{
-				_inven[_selectNumber].item = _selectItem.item;
-				_inven[_selectNumber].count = _selectItem.count;
-				_inven[_selectNumber].price = _selectItem.price;
-				_selectItem.item = nullptr;
-			}
-
-			else
-			{
-				_inven[_selectNumber].count += _selectItem.count;
-				_selectItem.item = nullptr;
-			}
-		}
-
-		//장비창에서 아이템을 선택하고 있는 상태였다면
-		if (_selectGearNumber >= 0)
-		{
-			if (_gear[_selectGearNumber].item == nullptr)
-			{
-				_gear[_selectGearNumber].item = _selectItem.item;
-				_gear[_selectGearNumber].count = _selectItem.count;
-				_selectItem.item = nullptr;
-			}
-
-			else
-			{
-				_gear[_selectGearNumber].count += _selectItem.count;
-				_selectItem.item = nullptr;
-			}
-		}
-
-		//쇼케이스에서 아이템을 선택하고 있는 상태였다면
-		if (_selectShopNumber >= 0)
-		{
-			if (_shop[_selectShopNumber].item == nullptr)
-			{
-				_shop[_selectShopNumber].item = _selectItem.item;
-				_shop[_selectShopNumber].count = _selectItem.count;
-				_shop[_selectShopNumber].price = _selectItem.price;
-				_selectItem.item = nullptr;
-			}
-
-			else
-			{
-				_shop[_selectShopNumber].count += _selectItem.count;
-				_selectItem.item = nullptr;
-			}
-		}
-	}
-
-	_isSelect = false;
-	_isSale = false;
-	_isSwap = false;
-	_state = INVEN_STATE::TEMP;
-	_mirror = MIRROR_STATE::STOP;
-	_select = 0;
-}
-//===========================================↑↑인벤 닫기↑↑===========================================//
-
-
-//===========================================↓↓미러 사용하기↓↓===========================================//
-void inventory::useMirror()
-{
-	if (_select == 20)
-	{
-		//미러 칸에 머무르고 있으면
-		_count++;
-		if (_count == 15 && _mirror != MIRROR_STATE::ACTIVE)
-		{
-			_mirror = MIRROR_STATE::STAY;
-			_mirrorFrameX = 0;
-			_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_stay");
-		}
-	}
-
-	else if (_select != 20 && _mirror != MIRROR_STATE::ACTIVE)
-	{
-		_mirror = MIRROR_STATE::STOP;
-		_count = 0;
-		_mirrorFrameX = 0;
-		_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
-	}
-}
-//===========================================↑↑미러 사용하기↑↑===========================================//
 
 
 //===========================================↓↓인벤 상태에 따른 렌더↓↓===========================================//
@@ -482,7 +327,7 @@ void inventory::renderInven()
 
 			//가격 적어두기
 			if (i % 2 != 0)
-			D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i].totalPrice), 20, D2DRenderer::DefaultBrush::White);
+			D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
 
 			//선택 커서 띄어두기
 			if (i == _select && _isSwap && !_isSetPrice)
@@ -508,20 +353,148 @@ void inventory::renderInven()
 
 			//if (_isSetPrice) 
 			D2DRenderer::GetInstance()->DrawRectangle(_firstPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
-			D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].price), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
 
 			D2DRenderer::GetInstance()->DrawRectangle(_secondPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
-			D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].price), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
 
 			D2DRenderer::GetInstance()->DrawRectangle(_thirdPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
-			D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].price), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
 
 			D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
-			D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].price), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
 		}
 	}
 }
 //===========================================↑↑인벤 상태에 따른 렌더↑↑===========================================//
+
+
+//===========================================↓↓가격 설정하기↓↓===========================================//
+void inventory::setCount(tagSetPrice price[PRICESPACE], wstring direction)
+{
+	if (direction == L"up")
+	{
+		price[_selectPrice].count++;
+		if (price[_selectPrice].count > 9) price[_selectPrice].count = 0;
+	}
+
+	if (direction == L"down")
+	{
+		price[_selectPrice].count--;
+		if (price[_selectPrice].count < 0) price[_selectPrice].count = 9;
+	}
+}
+//===========================================↑↑가격 설정하기↑↑===========================================//
+
+
+//===========================================↓↓가격 계산하기↓↓===========================================//
+void inventory::setPrice(tagSetPrice setPrice[PRICESPACE], int s)
+{
+	for (int i = 0; i < PRICESPACE; i++)
+	{
+		setPrice[i].rc = RectMakePivot(Vector2(_shop[s + 1].rc.GetCenter().x + i * 20 - 40, _shop[s + 1].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
+		_shop[s].price = setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10 + setPrice[4].count;
+		//_shop[s].item->getIndex() 
+		_shop[s].totalPrice = _shop[s].count * _shop[s].price;
+	}
+}
+//===========================================↑↑가격 계산하기↑↑===========================================//
+
+
+//===========================================↓↓인벤 닫기↓↓===========================================//
+void inventory::closeInven()
+{
+	if (_isSelect)
+	{
+		//인벤에서 아이템을 선택하고 있는 상태였다면
+		if (_selectNumber >= 0)
+		{
+			if (_inven[_selectNumber].item == nullptr)
+			{
+				_inven[_selectNumber].item = _selectItem.item;
+				_inven[_selectNumber].count = _selectItem.count;
+				_inven[_selectNumber].price = _selectItem.price;
+				_selectItem.item = nullptr;
+			}
+
+			else
+			{
+				_inven[_selectNumber].count += _selectItem.count;
+				_selectItem.item = nullptr;
+			}
+		}
+
+		//장비창에서 아이템을 선택하고 있는 상태였다면
+		if (_selectGearNumber >= 0)
+		{
+			if (_gear[_selectGearNumber].item == nullptr)
+			{
+				_gear[_selectGearNumber].item = _selectItem.item;
+				_gear[_selectGearNumber].count = _selectItem.count;
+				_selectItem.item = nullptr;
+			}
+
+			else
+			{
+				_gear[_selectGearNumber].count += _selectItem.count;
+				_selectItem.item = nullptr;
+			}
+		}
+
+		//쇼케이스에서 아이템을 선택하고 있는 상태였다면
+		if (_selectShopNumber >= 0)
+		{
+			if (_shop[_selectShopNumber].item == nullptr)
+			{
+				_shop[_selectShopNumber].item = _selectItem.item;
+				_shop[_selectShopNumber].count = _selectItem.count;
+				_shop[_selectShopNumber].price = _selectItem.price;
+				_selectItem.item = nullptr;
+			}
+
+			else
+			{
+				_shop[_selectShopNumber].count += _selectItem.count;
+				_selectItem.item = nullptr;
+			}
+		}
+	}
+
+	_isSwap = false;
+	_isSale = false;
+	_isSelect = false;
+	_isSetPrice = false;
+	_state = INVEN_STATE::TEMP;
+	_mirror = MIRROR_STATE::STOP;
+	_select = 0;
+}
+//===========================================↑↑인벤 닫기↑↑===========================================//
+
+
+//===========================================↓↓미러 사용하기↓↓===========================================//
+void inventory::useMirror()
+{
+	if (_select == 20)
+	{
+		//미러 칸에 머무르고 있으면
+		_count++;
+		if (_count == 15 && _mirror != MIRROR_STATE::ACTIVE)
+		{
+			_mirror = MIRROR_STATE::STAY;
+			_mirrorFrameX = 0;
+			_mirrorImg = ImageManager::GetInstance()->FindImage("mirror_stay");
+		}
+	}
+
+	else if (_select != 20 && _mirror != MIRROR_STATE::ACTIVE)
+	{
+		_mirror = MIRROR_STATE::STOP;
+		_count = 0;
+		_mirrorFrameX = 0;
+		_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
+	}
+}
+//===========================================↑↑미러 사용하기↑↑===========================================//
 
 
 //===========================================↓↓프레임 돌리기↓↓===========================================//

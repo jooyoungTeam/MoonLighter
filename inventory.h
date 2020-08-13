@@ -41,18 +41,17 @@ struct tagShop						//상점
 	wstring countNum;				//아이템 개수 표시 string
 	int count;						//아이템 개수
 	int price;						//아이템 설정가
-	int totalPrice;					//쇼케이스 전체 금액
+	int totalPrice;					//아이템의 전체 금액
 };
 
 struct tagSetPrice					//가격 설정 창
 {
 	FloatRect rc;					//가격 변경 렉트
-	int price;						//입력되는 숫자
+	int count;						//입력되는 숫자
 };
 
 class player;
 class UI;
-class itemManager;
 
 class inventory : public singletonBase<inventory>
 {
@@ -92,7 +91,6 @@ private:
 
 	player* _player;
 	UI* _ui;
-	itemManager* _itemMg;
 
 public:
 	inventory() {}
@@ -107,10 +105,11 @@ public:
 	void putItem(item* item);								//인벤에 아이템 넣기
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
-	void setPrice();										//가격 설정하기
+	void renderInven();										//인벤 상태에 따른 렌더 조정
+	void setCount(tagSetPrice price[PRICESPACE], wstring direction);//가격 설정하기
+	void setPrice(tagSetPrice price[PRICESPACE], int s);	//가격 계산하기
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
-	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void draw();											//이미지 프레임 돌리기
 
 public:

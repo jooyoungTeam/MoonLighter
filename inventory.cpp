@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "inventory.h"
 #include "UI.h"
+#include "player.h"
 
 HRESULT inventory::init()
 {
@@ -83,10 +84,8 @@ HRESULT inventory::init()
 			_shop[i].rc = RectMakePivot(Vector2(950, 175 + i * 142), Vector2(180, 60), Pivot::Center);
 			if (i >= 4)
 			_shop[i].rc = RectMakePivot(Vector2(1252, 392 + i * 142 - 785), Vector2(180, 60), Pivot::Center);
-
-			_shop[i].totalPrice = 0;
 		}	
-
+		_shop[i].totalPrice = 0;
 		_shop[i].countNum = to_wstring(_shop[i].count);
 	}
 
@@ -169,7 +168,11 @@ void inventory::update()
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	setPrice();				//가격 정하기
+	setPrice(_firstPrice, 0);				//가격 정하기
+	setPrice(_secondPrice, 2);
+	setPrice(_thirdPrice, 4);
+	setPrice(_fourthPrice, 6);
+
 	moveInven();			//인벤에서 돌아다니기
 	selectItem();			//아이템 선택하기
 	moveItem();				//아이템 인벤에서 옮기기
