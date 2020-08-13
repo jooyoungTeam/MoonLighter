@@ -398,6 +398,9 @@
     <ClCompile Include="bossStage.cpp">
       <Filter>playGround\stage</Filter>
     </ClCompile>
+    <ClCompile Include="inventoryEtc.cpp">
+      <Filter>playGround\김지아</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc">

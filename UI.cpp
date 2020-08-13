@@ -3,15 +3,6 @@
 
 HRESULT UI::init()
 {
-	ImageManager::GetInstance()->AddImage("UI_base", L"Image/UI/UI_base.png");
-	ImageManager::GetInstance()->AddImage("UI_weapon_1", L"Image/UI/UI_weapon_1.png");
-	ImageManager::GetInstance()->AddImage("UI_weapon_2", L"Image/UI/UI_weapon_2.png");
-	ImageManager::GetInstance()->AddImage("UI_pendant", L"image/UI/UI_pendant.png");
-	ImageManager::GetInstance()->AddImage("UI_pendant_ring", L"Image/UI/UI_pendant_ring.png");
-	ImageManager::GetInstance()->AddImage("UI_front", L"Image/UI/UI_front.png");
-	ImageManager::GetInstance()->AddImage("note", L"image/UI/note.png");
-	ImageManager::GetInstance()->AddFrameImage("HPbar", L"Image/UI/HPbar.png", 1, 5);
-
 	_firstWeapon = ImageManager::GetInstance()->FindImage("UI_weapon_1");
 	_secondWeapon = ImageManager::GetInstance()->FindImage("UI_weapon_2");
 	_pendant = ImageManager::GetInstance()->FindImage("UI_pendant");
@@ -43,10 +34,10 @@ void UI::render()
 
 	//무기 자리 렉트
 	D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
-	//플레이어 웨폰false
-	_firstWeapon->Render(Vector2(0, 0));
-	//플레이어 웨폰 true
-	//_secondWeapon->Render(Vector2(0, 0));
+	
+	//플레이어가 무기를 바꾸면
+	if (!_player->getWeaponChange()) _firstWeapon->Render(Vector2(0, 0));
+	if (_player->getWeaponChange()) _secondWeapon->Render(Vector2(0, 0));
 
 	//펜던트 자리 렉트
 	D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);

@@ -3,21 +3,6 @@
 
 HRESULT item::init(ITEMTYPE type, float x, float y)
 {
-	ImageManager::GetInstance()->AddImage("slime_red", L"Image/Item/slime_jelly.png");
-	ImageManager::GetInstance()->AddImage("slime_blue", L"Image/Item/slime_jelly_blue.png");
-	ImageManager::GetInstance()->AddImage("slime_yellow", L"Image/Item/slime_jelly_yellow.png");
-	ImageManager::GetInstance()->AddImage("fabric", L"Image/Item/fabric.png");
-	ImageManager::GetInstance()->AddImage("vine", L"Image/Item/Vine.png");
-	ImageManager::GetInstance()->AddImage("wood", L"Image/Item/Treated_Wood.png");
-	ImageManager::GetInstance()->AddImage("golem_pieces", L"Image/Item/golem_pieces.png");
-	ImageManager::GetInstance()->AddImage("golem_core", L"Image/Item/Golem_Core.png");
-	ImageManager::GetInstance()->AddImage("broken_sword", L"Image/Item/Broken_Sword.png");
-	ImageManager::GetInstance()->AddImage("crystal_energy", L"Image/Item/Crystal_Energy.png");
-	ImageManager::GetInstance()->AddImage("reinforced_steel", L"Image/Item/Reinforced_Steel_G.png");
-	ImageManager::GetInstance()->AddImage("golemKing_Energy", L"Image/Item/Energy_Crystal.png");
-	ImageManager::GetInstance()->AddImage("golemKing_record", L"Image/Item/Golem_King_design.png");
-	ImageManager::GetInstance()->AddImage("potion_S", L"Image/Item/Potion_S.png");
-
 	_type = type;
 	_x = x;
 	_y = y;
@@ -34,6 +19,8 @@ HRESULT item::init(ITEMTYPE type, float x, float y)
 HRESULT item::init(ITEMTYPE type)
 {
 	_type = type;
+	_shake = 0;
+	_isShake = false;
 
 	sort();
 	return S_OK;
@@ -56,7 +43,7 @@ void item::update()
 
 void item::fieldUpdate()
 {
-	cout << _shake << endl;
+	//cout << _shake << endl;
 	if (_y > _shakeMaxY)
 	{
 		_isShake = false;

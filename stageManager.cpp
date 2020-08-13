@@ -10,15 +10,13 @@ HRESULT stageManager::init()
 {
 	_ui = new UI;
 	_ui->init();
-
-	INVENTORY->init();
-	_isInven = false;
-
 	_itemMg = new itemManager;
+	INVENTORY->init();
+
+	_player = new player;
 
 	_ui->getPlayerMemoryAddressLink(_player);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
-	INVENTORY->getItemMgAddressLink(_itemMg);
 
 	SCENEMANAGER->addScene("≈∏¿Ã∆≤æ¿", new title);
 

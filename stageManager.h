@@ -13,8 +13,6 @@ private:
 	itemManager* _itemMg;
 	player* _player;
 
-	bool _isInven;
-
 public:
 	stageManager() {}
 	~stageManager() {}
