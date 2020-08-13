@@ -52,10 +52,12 @@ void shopStage::render()
 
 void shopStage::update()
 {
-	_player->update();
-
-
-	cout << (int)INVENTORY->getState() << endl;
+	if (!INVENTORY->getIsInven())
+	{
+		_player->update();
+		if (_enterNPC)
+			_shopNPC->updadte();
+	}
 
 	if(INVENTORY->getState() == INVEN_STATE::SHOP)
 		disPlayUpdate();
@@ -69,9 +71,6 @@ void shopStage::update()
 			_display[i].it->fieldUpdate();
 		}
 	}
-
-	if(_enterNPC)
-		_shopNPC->updadte();
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());

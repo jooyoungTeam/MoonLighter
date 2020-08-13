@@ -14,7 +14,10 @@ HRESULT townStage::init()
 
 void townStage::update()
 {
-	_player->update();
+	if (!INVENTORY->getIsInven())
+	{
+		_player->update();
+	}
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
 
