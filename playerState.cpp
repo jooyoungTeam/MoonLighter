@@ -250,6 +250,7 @@ void playerIdleState::update(player & player)
 //walk 상태
 void playerWalkState::update(player & player)
 {
+	player.setPlayerRc(player.getX(), player.getY(), 70, 70);
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//위
 	bool isMove = false;
@@ -262,7 +263,33 @@ void playerWalkState::update(player & player)
 		if (player.getDirection() != DIRECTION::UP)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+			player.setCurrentState(player.getWalkState());
 			player.setDirection(DIRECTION::UP);
+
+		/*	if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				cout << "여긴 언제옴" << endl;
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				cout << "여긴 또 언제옴" << endl;
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			if (player.getDirection() == DIRECTION::RIGHTTOP)
+			{
+				cout << "왼쪽" << endl;
+				x = 1;
+			}
+			if (player.getDirection() == DIRECTION::LEFTTOP)
+			{
+				cout << "오른쪽" << endl;
+				x = -1;
+			}*/
 		}
 
 		//만약 아래키 누르면 위쪽Idle 모습으로 변함
