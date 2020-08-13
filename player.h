@@ -34,6 +34,7 @@ private:
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
 	int					_count;								//횟수1번으로 정하는 카운트
 	float			    _playerX, _playerY;					//플레이어 중점
+	float				_playerRcW, _playerRcH;				//플레이어 RC 크기
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
 	float				_playerAttackX, _playerAttackY;		//플레이어 공격위치
 	float				_playerAttackW, _playerAttackH;		//플레이어 공격범위
@@ -110,6 +111,10 @@ public:
 	void setAttackRc(float playerAttackX, float playerAttackY, float playerAttackW, float playerAttackH)
 	{
 		_playerAttackX = playerAttackX, _playerAttackY = playerAttackY, _playerAttackW = playerAttackW, _playerAttackH = playerAttackH;
+	}
+	void setPlayerRc(float playerRcX, float playerRcY, float playerRcW, float playerRcH)
+	{
+		_playerX = playerRcX, _playerY = playerRcY, _playerRcW = playerRcW, _playerRcH = playerRcH;
 	}
 
 	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
