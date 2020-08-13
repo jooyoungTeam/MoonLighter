@@ -19,6 +19,8 @@ private:
 	FloatRect _rc;
 	Image* _img;
 	float _x, _y;
+	float _shakeMaxY;
+	float _shakeMinY;
 	float _shake;
 	int _itemIndex;
 	int _limitCount;
@@ -50,5 +52,6 @@ public:
 
 	// ================== NPC =================
 	void setItemPos(float x, float y) { _x = x; _y = y; }	// NPC 머리위에 아이템 띄우기 위해 위치 재조정 Setter
+	void setShakeY(float y) { _shakeMaxY = y + 5; _shakeMinY = y; }
 };
 
