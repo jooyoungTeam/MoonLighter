@@ -127,6 +127,7 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("inven", L"Image/UI/inventory.png");
 	ImageManager::GetInstance()->AddImage("invenSpace", L"image/UI/invenSpace.png");
 	ImageManager::GetInstance()->AddImage("select", L"image/UI/invenslot.png");
+	ImageManager::GetInstance()->AddImage("selectShowcase", L"image/UI/showcaseSlot.png");
 	ImageManager::GetInstance()->AddImage("pendant", L"image/UI/pendant.png");
 	ImageManager::GetInstance()->AddImage("empty_weapon", L"image/UI/empty_sword.png");
 	ImageManager::GetInstance()->AddImage("empty_helmet", L"image/UI/empty_helmet.png");

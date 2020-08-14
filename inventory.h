@@ -80,14 +80,18 @@ private:
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
 	int _count;							//미러 딜레이
-	int _selectPrice;					//가격 선택
 	int _gold;							//소지금
+	int _selectCount;
+	int _firstCount;					//가격 선택
+	int _secondCount;
+	int _thirdCount;
+	int _fourthCount;
 
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
 	bool _isSwap;						//배열 넘어가기
-	bool _isInven;						//인벤토리 열었니?
 	bool _isSetPrice;					//가격 설정할 거니
+	bool _isInven;						//인벤토리 열었니?
 
 	player* _player;
 	UI* _ui;
@@ -106,8 +110,10 @@ public:
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
 	void renderInven();										//인벤 상태에 따른 렌더 조정
-	void setCount(tagSetPrice price[PRICESPACE], wstring direction);//가격 설정하기
-	void setPrice(tagSetPrice price[PRICESPACE], int s);	//가격 계산하기
+	//가격 설정하기
+	void setCount(tagSetPrice price[PRICESPACE], int selectCount, wstring direction);
+	//가격 계산하기
+	void setPrice(tagSetPrice price[PRICESPACE], int select);
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기

@@ -103,7 +103,7 @@ HRESULT inventory::init()
 
 	_gold = 0;
 	_select = 0;
-	_selectPrice = 0;
+	_firstCount = _secondCount = _thirdCount = _fourthCount = 4;
 
 	_isSwap = false;
 	_isSale = false;
@@ -156,7 +156,10 @@ void inventory::render()
 	}
 
 	//선택테두리
-	if (!_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+	if (!_isSwap)
+	{
+		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+	}
 }
 
 void inventory::update()
@@ -272,7 +275,10 @@ void inventory::selectItem()
 					if (_select % 2 != 0 && !_isSetPrice)
 					{
 						if (_selectItem.item != nullptr) return;
-						_selectPrice = 4;
+						_firstCount = 4;
+						_secondCount = 4;
+						_thirdCount = 4;
+						_fourthCount = 4;
 						_isSelect = true;
 						_isSetPrice = true;
 					}
