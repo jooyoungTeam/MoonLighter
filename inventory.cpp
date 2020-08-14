@@ -539,7 +539,7 @@ void inventory::moveItem()
 						_shop[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
 
-						//저장되어있지 않은 인덱스라면 막기
+						//설정했었던 아이템 가격 불러오기
 						for (int i = 0; i < _vPrice.size(); ++i)
 						{
 							if (_vPrice.size() < 0) continue;
@@ -548,10 +548,11 @@ void inventory::moveItem()
 							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
 							//if (_vPrice[i].index == _shop[_select].item->getIndex())
 							//{
-							//	if (_select == 0) testPrice(_firstPrice);
-							//	if (_select == 2) testPrice(_secondPrice);
-							//	if (_select == 4) testPrice(_thirdPrice);
-							//	if (_select == 6) testPrice(_fourthPrice);
+							//	//cout << _vPrice[i].index << ", " << _shop[_select].item->getIndex() << endl;
+							//	if (_select == 0) loadPrice(_firstPrice);
+							//	if (_select == 2) loadPrice(_secondPrice);
+							//	if (_select == 4) loadPrice(_thirdPrice);
+							//	if (_select == 6) loadPrice(_fourthPrice);
 							//}
 						}
 					}	
@@ -665,8 +666,6 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
-							_selectItem.item = nullptr;
-							_isSelect = false;
 						}
 
 						//쇼케이스에서 가져옴
@@ -678,9 +677,26 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
-							_selectItem.item = nullptr;
-							_isSelect = false;
 						}
+
+						//설정했었던 아이템 가격 불러오기
+						for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
+
+							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
+							if (_vPrice[i].index == _shop[_select].item->getIndex())
+							{
+								if (_select == 0) loadPrice(_firstPrice);
+								if (_select == 2) loadPrice(_secondPrice);
+								if (_select == 4) loadPrice(_thirdPrice);
+								if (_select == 6) loadPrice(_fourthPrice);
+							}
+						}
+
+						_selectItem.item = nullptr;
+						_isSelect = false;
 					}
 				}
 			}

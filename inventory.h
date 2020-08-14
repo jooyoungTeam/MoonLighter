@@ -122,7 +122,7 @@ public:
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
 	void savePrice(int select);								//가격 저장하기
-	void testPrice(tagSetPrice p[PRICESPACE]);
+	void loadPrice(tagSetPrice p[PRICESPACE]);
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기

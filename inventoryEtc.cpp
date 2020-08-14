@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "inventory.h"
+#include "player.h"
 
 //===========================================↓↓인벤에서 돌아다니기↓↓===========================================//
 void inventory::moveInven()
@@ -415,11 +416,11 @@ void inventory::setPrice(tagSetPrice setPrice[PRICESPACE], int select)
 //===========================================↓↓가격 저장하기↓↓===========================================//
 void inventory::savePrice(int select)
 {
+	if (_vPrice.size() < 0) return;
+
 	//쇼케이스에 있는 아이템 인덱스 정보가 있으면 먼저 지우고
 	for (int i = 0; i < _vPrice.size(); i++)
 	{
-		if (_vPrice.size() < 0) continue;
-
 		if (_vPrice[i].index == _shop[select].item->getIndex())
 			_vPrice.erase(_vPrice.begin() + i);
 	}
@@ -430,22 +431,25 @@ void inventory::savePrice(int select)
 	save.price = _shop[select].price;
 	
 	_vPrice.push_back(save);	
+	//cout << _vPrice.size() << endl;
 }
 //===========================================↑↑가격 저장하기↑↑===========================================//
 
 
 
-void inventory::testPrice(tagSetPrice setPrice[PRICESPACE])
+void inventory::loadPrice(tagSetPrice setPrice[PRICESPACE])
 {
 	for (int i = 0; i < _vPrice.size(); ++i)
 	{
-
-
-		/*setPrice[0].count = _vPrice[i].price / 10000;
-		setPrice[1].count = (_vPrice[i].price - setPrice[0].count * 10000) / 1000;
-		setPrice[2].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000) / 100;
-		setPrice[3].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100) / 10;
-		setPrice[4].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10);*/
+		//인덱스가 같은 가격만 불러오기
+		if (_vPrice[i].index == _shop[_select].item->getIndex())
+		{
+			setPrice[0].count = _vPrice[i].price / 10000;
+			setPrice[1].count = (_vPrice[i].price - (setPrice[0].count * 10000)) / 1000;
+			setPrice[2].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000)) / 100;
+			setPrice[3].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100)) / 10;
+			setPrice[4].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10));
+		}	
 	}
 }
 

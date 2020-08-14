@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UI.h"
+#include "player.h"
 
 HRESULT UI::init()
 {
