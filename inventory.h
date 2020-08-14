@@ -131,6 +131,15 @@ public:
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
+	void resetShowCase(int index) 
+	{ 
+		_shop[index].count = 0;
+		_shop[index].countNum = L"";
+		_shop[index].item = NULL;
+		_shop[index].originalPrice = 0;
+		_shop[index].price = 0;
+		_shop[index].totalPrice = 0;
+	}
 
 public:
 	//플레이어 참조용

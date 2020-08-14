@@ -85,8 +85,7 @@ void shopStage::update()
 		_cellerFrameTimer = 0;
 	}
 
-	if(INVENTORY->getState() == INVEN_STATE::SHOP)
-		disPlayUpdate();
+	disPlayUpdate();
 	
 	buyItem();
 	
@@ -113,9 +112,9 @@ void shopStage::disPlayUpdate()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		_display[i].count = INVENTORY->getShowCase()[i].count;
-		_display[i].it = INVENTORY->getShowCase()[i].item;
-		_display[i].settingPrice = INVENTORY->getShowCase()[i].price;
+		_display[i].count = INVENTORY->getShowCase()[i*2].count;
+		_display[i].it = INVENTORY->getShowCase()[i*2].item;
+		_display[i].settingPrice = INVENTORY->getShowCase()[i*2].price;
 
 		if (_display[i].it != NULL)
 		{
@@ -226,6 +225,7 @@ void shopStage::buyItem()
 
 			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it);
 			_display[_npcM->getVnpc()[i]->getRndItem()].it = NULL;
+			//INVENTORY.setS
 		}
 	}
 }
