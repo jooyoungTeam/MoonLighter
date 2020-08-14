@@ -45,5 +45,7 @@ public:
 	void IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage);
 	void arrowMove();
 	void playerRemoveArrow(int index);
+
+	vector<tagArrow> getVArrow()	{ return _vArrow; }
 };
 
