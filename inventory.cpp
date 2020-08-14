@@ -547,19 +547,40 @@ void inventory::moveItem()
 					}	
 
 					//아이템 가격 설정 끄기
-					if (_select % 2 != 0 && _isSetPrice)
+					if (_select % 2 != 0)
 					{
-						if (_selectItem.item != nullptr) return;
+						//아이템을 들고 왔다면						
+						if (_selectItem.item != nullptr)
+						{
+							if (_selectNumber >= 0)
+							{
+								if (_inven[_selectNumber].item == nullptr) _inven[_selectNumber].item = _selectItem.item;
+								_inven[_selectNumber].count += _selectItem.count;
+							}
 
-						//쇼케이스에 아이템이 있으면 가격 저장
-						//if (_shop[_select - 1].item != nullptr) savePrice(_select - 1);
-						//
-						////쇼케이스 아이템이 빈 칸이면 카운트 초기화
-						//if (_shop[_select - 1].item == nullptr)
-						//{
+							if (_selectShopNumber >= 0)
+							{
+								if (_shop[_selectShopNumber].item == nullptr) _shop[_selectShopNumber].item = _selectItem.item;
+								_shop[_selectShopNumber].count += _selectItem.count;
+							}
+							_isSelect = false;
+							_selectItem.item = nullptr;
+							return;
+						}		
+						
+						//가격 설정하던 중이면
+						if (_isSetPrice)
+						{
+							//쇼케이스에 아이템이 있으면 가격 저장
+							//if (_shop[_select - 1].item != nullptr) savePrice(_select - 1);
+							//
+							////쇼케이스 아이템이 빈 칸이면 카운트 초기화
+							//if (_shop[_select - 1].item == nullptr)
+							//{
 
-						//}
-						_isSetPrice = false;
+							//}
+							_isSetPrice = false;
+						}						
 					}
 					_isSelect = false;
 				}
