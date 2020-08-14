@@ -125,8 +125,6 @@ void shopStage::disPlayUpdate()
 				_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
 
 			_display[i].isActive = true;
-
-			cout << _display[i].isActive << endl;
 			_display[i].it->setShakeY(_display[i].pos.y);
 		}
 	}
