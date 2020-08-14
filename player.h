@@ -101,6 +101,7 @@ public:
 	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
 	DIRECTION getDirection() { return _playerDirection; }
+	arrow* getArrow() { return _arrow; }
 
 	void setBedCount(int bedCount) { _bedCount = bedCount; }
 	void setBowChargeCount(int bowChargeCount) { _bowChargeCount = bowChargeCount; }
