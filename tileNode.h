@@ -59,6 +59,7 @@ struct tagObject
 	OBJECT   type;
 	RECT     rc;
 	Image*   img;
+	bool     isActive;
 	bool     isFrameRender;
 	float    scale;
 	int      frameX;

@@ -32,7 +32,6 @@ HRESULT tile::init()
 		_leftRightButton[1] = RectMakeCenter(WINSIZEX - 220, 230, 70, 70);
 	}
 
-	_currentObject = new tagObject;
 
 	_button = new button;
 	_button->init();
@@ -77,31 +76,31 @@ void tile::render()
 	}
 
 
-	for (int i = 0; i < _object.size(); i++) // 오브젝트들 렌더
+	for (int i = 0; i < 100; i++) // 오브젝트들 렌더
 	{
-		if (_object[i]->isFrameRender)
+		if (!_object[i].isActive) continue;
+		if (_object[i].isFrameRender)
 		{
-			CAMERAMANAGER->zOrderFrameRender(_object[i]->img, (_object[i]->rc.left + _object[i]->rc.right) * 0.5f, (_object[i]->rc.top + _object[i]->rc.bottom) * 0.5f,
-				_object[i]->rc.bottom, _object[i]->frameX, 0, _object[i]->scale, 1);
+			CAMERAMANAGER->zOrderFrameRender(_object[i].img, (_object[i].rc.left + _object[i].rc.right) * 0.5f, (_object[i].rc.top + _object[i].rc.bottom) * 0.5f,
+				_object[i].rc.bottom, _object[i].frameX, 0, _object[i].scale, 1);
 
-
-			_object[i]->count++;
-			_object[i]->isFrameRender = true ? _frameCount = 5 : _frameCount = 10;
-			if (_object[i]->count % _frameCount == 0)
+			_object[i].count++;
+			_object[i].isFrameRender = true ? _frameCount = 5 : _frameCount = 10;
+			if (_object[i].count % _frameCount == 0)
 			{
-				_object[i]->count = 0;
-				_object[i]->frameX++;
+				_object[i].count = 0;
+				_object[i].frameX++;
 
-				if (_object[i]->img->GetMaxFrameX() <= _object[i]->frameX)
+				if (_object[i].img->GetMaxFrameX() <= _object[i].frameX)
 				{
-					_object[i]->frameX = 0;
+					_object[i].frameX = 0;
 				}
 			}
 
 		}
 		else
 		{
-			CAMERAMANAGER->zOrderRender(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, _object[i]->rc.bottom, 1, _object[i]->scale);
+			CAMERAMANAGER->zOrderRender(_object[i].img, _object[i].rc.left, _object[i].rc.top, _object[i].rc.bottom, 1, _object[i].scale);
 		}
 		//CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
 		//CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
@@ -175,9 +174,6 @@ void tile::render()
 		CAMERAMANAGER->rectangle(_drag.rc, D2D1::ColorF::SteelBlue, 1, 1);
 		CAMERAMANAGER->fillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
-	wstring str;
-	str.assign(_tiles[_nowIndex].str.begin(), _tiles[_nowIndex].str.end());
-	D2DRenderer::GetInstance()->RenderText(_ptMouse.x, _ptMouse.y - 15, str, 15, D2DRenderer::DefaultBrush::White);
 
 	// 미니맵
 	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
@@ -185,21 +181,21 @@ void tile::render()
 
 	if (_isSelectObject)
 	{
-		_currentObject->img->SetAlpha(0.5f);
-		if (_currentObject->isFrameRender)
+		_currentObject.img->SetAlpha(0.5f);
+		if (_currentObject.isFrameRender)
 		{
-			_currentObject->rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject->img->GetFrameSize().x *_currentObject->scale, _currentObject->img->GetFrameSize().y * _currentObject->scale);
-			_currentObject->img->FrameRender(Vector2((_currentObject->rc.left + _currentObject->rc.right) * 0.5f, (_currentObject->rc.top + _currentObject->rc.bottom) * 0.5f), 1, 0,_currentObject->scale);
+			_currentObject.rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject.img->GetFrameSize().x *_currentObject.scale, _currentObject.img->GetFrameSize().y * _currentObject.scale);
+			_currentObject.img->FrameRender(Vector2((_currentObject.rc.left + _currentObject.rc.right) * 0.5f, (_currentObject.rc.top + _currentObject.rc.bottom) * 0.5f), 1, 0,_currentObject.scale);
 		}
 		else
 		{
-			_currentObject->rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject->img->GetWidth() * _currentObject->scale, _currentObject->img->GetHeight() * _currentObject->scale);
-			_currentObject->img->Render(Vector2(_currentObject->rc.left, _currentObject->rc.top),_currentObject->scale);
+			_currentObject.rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, _currentObject.img->GetWidth() * _currentObject.scale, _currentObject.img->GetHeight() * _currentObject.scale);
+			_currentObject.img->Render(Vector2(_currentObject.rc.left, _currentObject.rc.top),_currentObject.scale);
 		}
 
 
 
-		D2DRenderer::GetInstance()->FillRectangle(_currentObject->rc, D2D1::ColorF::LimeGreen, 0.4f);
+		D2DRenderer::GetInstance()->FillRectangle(_currentObject.rc, D2D1::ColorF::LimeGreen, 0.4f);
 
 	}
 
@@ -291,9 +287,10 @@ void tile::drag()
 
 		if (_button->getType() == BUTTON_ERASE_OBJECT)
 		{
-			for (int i = 0; i < _object.size(); i++)
+			for (int i = 0; i < 100; i++)
 			{
-				if (isCollision(_drag.rc, _object[i]->rc))
+				if (!_object[i].isActive) continue;
+				if (isCollision(_drag.rc, _object[i].rc))
 				{
 					eraseObject(i);
 				}
@@ -439,9 +436,10 @@ void tile::setMap()
 
 		if (_button->getType() == BUTTON_ERASE_OBJECT)
 		{
-			for (int i = 0; i < _object.size(); i++)
+			for (int i = 0; i < 100; i++)
 			{
-				if (PtInRect(&_object[i]->rc, pt))
+				if (!_object[i].isActive) continue;
+				if (PtInRect(&_object[i].rc, pt))
 				{
 					eraseObject(i);
 					break;
@@ -476,28 +474,26 @@ void tile::setMap()
 					{
 						if (_isSelectObject)
 						{
-							int w = (_currentObject->rc.right - _currentObject->rc.left)/2;
-							int h = (_currentObject->rc.bottom - _currentObject->rc.top)/2;
-							tagObject* tempObject = new tagObject;
-							tempObject->img = _currentObject->img;
-							tempObject->isFrameRender = _currentObject->isFrameRender;
-							tempObject->rc.left = pt.x - w;
-							tempObject->rc.top = pt.y - h;
-							tempObject->frameX = 0;
-							tempObject->type = _currentObject->type;
-							tempObject->scale = _currentObject->scale;
+							int w = (_currentObject.rc.right - _currentObject.rc.left)/2;
+							int h = (_currentObject.rc.bottom - _currentObject.rc.top)/2;
+							tagObject tempObject = _currentObject;
+							tempObject.rc.left = pt.x - w;
+							tempObject.rc.top = pt.y - h;
+							tempObject.frameX = 0;
+							tempObject.isActive = true;
 
-							if (tempObject->isFrameRender)
+							if (tempObject.isFrameRender)
 							{
-								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetFrameSize().x * tempObject->scale;
-								tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetFrameSize().y * tempObject->scale;
+								tempObject.rc.right = tempObject.rc.left + tempObject.img->GetFrameSize().x * tempObject.scale;
+								tempObject.rc.bottom = tempObject.rc.top + tempObject.img->GetFrameSize().y * tempObject.scale;
 							}
 							else
 							{
-								tempObject->rc.right = tempObject->rc.left + tempObject->img->GetWidth() * tempObject->scale;
-								tempObject->rc.bottom = tempObject->rc.top + tempObject->img->GetHeight() * tempObject->scale;
+								tempObject.rc.right = tempObject.rc.left + tempObject.img->GetWidth() * tempObject.scale;
+								tempObject.rc.bottom = tempObject.rc.top + tempObject.img->GetHeight() * tempObject.scale;
 							}
-							_object.push_back(tempObject);
+							_object[_objectOrder] = tempObject;
+							_objectOrder++;
 
 							_isSelectObject = false;
 						}
@@ -592,7 +588,7 @@ void tile::loadDungeonMap()
 
 void tile::loadTownMap()
 {
-	if (_button->getType() == BUTTON_LOAD_DUNGEON)
+	if (_button->getType() == BUTTON_LOAD_TOWN)
 	{
 		HANDLE file;
 		DWORD read;
@@ -600,42 +596,20 @@ void tile::loadTownMap()
 		file = CreateFile("townMap.map", GENERIC_READ, NULL, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-		ReadFile(file, _townTiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, _object, sizeof(tagObject) * 100, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
 
-		memset(_townAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
-		for (int i = 0; i < TILEX * TILEY; ++i)
-		{
-			if (_townTiles[i].terrain == TR_WALL) _townAttribute[i] |= ATTR_UNMOVE;
-		}
+
+		//memset(_townAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
+		//for (int i = 0; i < TILEX * TILEY; ++i)
+		//{
+		//	if (_townTiles[i].terrain == TR_WALL) _townAttribute[i] |= ATTR_UNMOVE;
+		//}
 
 		CloseHandle(file);
+
+		_button->setType(BUTTON_TERRAIN);
 	}
-}
-
-void tile::renderTownMap()
-{
-	for (int i = 0; i < 19; i++)
-	{
-		for (int j = 0; j < 33; j++)
-		{
-			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
-			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
-
-			int index = (i + cullY) * TILEX + (j + cullX);
-
-			if (_townTiles[index].terrain != TR_NONE)
-			{
-				Vector2 vec((_townTiles[index].rc.left + _townTiles[index].rc.right) * 0.5f, (_townTiles[index].rc.top + _townTiles[index].rc.bottom) * 0.5f);
-
-				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _townTiles[index].terrainFrameX, _townTiles[index].terrainFrameY);
-
-				CAMERAMANAGER->rectangle(_townTiles[index].rc, D2D1::ColorF::Black, 1.0f);
-			}
-
-
-		}
-	}
-
 }
 
 void tile::saveDungeonMap()
@@ -676,7 +650,8 @@ void tile::saveTownMap()
 			file = CreateFile("townMap.map", GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-			WriteFile(file, _townTiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+			WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+			WriteFile(file, _object, sizeof(tagObject) * 100, &write, NULL);
 
 			CloseHandle(file);
 
@@ -685,6 +660,32 @@ void tile::saveTownMap()
 		}
 	}
 }
+void tile::renderTownMap()
+{
+	for (int i = 0; i < 19; i++)
+	{
+		for (int j = 0; j < 33; j++)
+		{
+			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+
+			int index = (i + cullY) * TILEX + (j + cullX);
+
+			if (_townTiles[index].terrain != TR_NONE)
+			{
+				Vector2 vec((_townTiles[index].rc.left + _townTiles[index].rc.right) * 0.5f, (_townTiles[index].rc.top + _townTiles[index].rc.bottom) * 0.5f);
+
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _townTiles[index].terrainFrameX, _townTiles[index].terrainFrameY);
+
+				CAMERAMANAGER->rectangle(_townTiles[index].rc, D2D1::ColorF::Black, 1.0f);
+			}
+
+
+		}
+	}
+
+}
+
 
 void tile::renderDungeonMap()
 {
@@ -719,94 +720,94 @@ void tile::selectObject()
 	{
 		if (PtInRect(&_sampleObject[i].rc, _ptMouse))
 		{
-			_currentObject->scale = 1;
-			_currentObject->type = _currentSampleObject;
+			_currentObject.scale = 1;
+			_currentObject.type = _currentSampleObject;
 			_isSelectObject = true;
 			if (_currentSampleObject == OBJ_HOUSE)
 			{
-				_currentObject->isFrameRender = false;
+				_currentObject.isFrameRender = false;
 				if (i == 0)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("Object_build_Bottom1");
-					_currentObject->isFrameRender = true;
-					_currentObject->scale = 1.7f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("Object_build_Bottom1");
+					_currentObject.isFrameRender = true;
+					_currentObject.scale = 1.7f;
 				}
-				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("build_Bottom2");
+				else if (i == 1)	_currentObject.img = ImageManager::GetInstance()->FindImage("build_Bottom2");
 				else if (i == 2)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("build_Shop");
-					_currentObject->scale = 1.2f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("build_Shop");
+					_currentObject.scale = 1.2f;
 				}
-				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("build_Enchant");
+				else if (i == 3)    _currentObject.img = ImageManager::GetInstance()->FindImage("build_Enchant");
 
 				break;
 			}
 
 			else if (_currentSampleObject == OBJ_ARCHITECTURE)
 			{
-				_currentObject->isFrameRender = false;
-				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("build_Well");
-				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("buildBoard");
+				_currentObject.isFrameRender = false;
+				if (i == 0)			_currentObject.img = ImageManager::GetInstance()->FindImage("build_Well");
+				else if (i == 1)	_currentObject.img = ImageManager::GetInstance()->FindImage("buildBoard");
 				else if (i == 2)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("build_fountain");
-					_currentObject->scale = 5.0f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("build_fountain");
+					_currentObject.scale = 5.0f;
 				}
-				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("bench");
+				else if (i == 3)    _currentObject.img = ImageManager::GetInstance()->FindImage("bench");
 
 				break;
 			}
 			else if (_currentSampleObject == OBJ_DOOR)
 			{
-				_currentObject->isFrameRender = false;
-				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("object_door1");
-				else if (i == 1)	_currentObject->img = ImageManager::GetInstance()->FindImage("object_door2");
-				else if (i == 2)    _currentObject->img = ImageManager::GetInstance()->FindImage("object_door3");
-				else if (i == 3)    _currentObject->img = ImageManager::GetInstance()->FindImage("object_door4");
+				_currentObject.isFrameRender = false;
+				if (i == 0)			_currentObject.img = ImageManager::GetInstance()->FindImage("object_door1");
+				else if (i == 1)	_currentObject.img = ImageManager::GetInstance()->FindImage("object_door2");
+				else if (i == 2)    _currentObject.img = ImageManager::GetInstance()->FindImage("object_door3");
+				else if (i == 3)    _currentObject.img = ImageManager::GetInstance()->FindImage("object_door4");
 
 				break;
 			}
 			else if (_currentSampleObject == OBJ_PLANT)
 			{
-				_currentObject->isFrameRender = true;
+				_currentObject.isFrameRender = true;
 				if (i == 0)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree1"); 
-					_currentObject->scale = 1.5f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("plant_tree1"); 
+					_currentObject.scale = 1.5f;
 				}
 				if (i == 1)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_fountain1");
-					_currentObject->scale = 2.5f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("plant_fountain1");
+					_currentObject.scale = 2.5f;
 				}
 				if (i == 2)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_tree2");
-					_currentObject->scale = 1.5f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("plant_tree2");
+					_currentObject.scale = 1.5f;
 				}
 				if (i == 3)
 				{
-					_currentObject->img = ImageManager::GetInstance()->FindImage("plant_flower");
-					_currentObject->isFrameRender = false;
-					_currentObject->scale = 2.3f;
+					_currentObject.img = ImageManager::GetInstance()->FindImage("plant_flower");
+					_currentObject.isFrameRender = false;
+					_currentObject.scale = 2.3f;
 				}
 
 				break;
 			}
 			else if (_currentSampleObject == OBJ_NPC)
 			{
-				_currentObject->isFrameRender = true;
-				if (i == 0)			_currentObject->img = ImageManager::GetInstance()->FindImage("npc_1");
-				if (i == 1)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_2");
-				if (i == 2)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_3");
-				if (i == 3)		    _currentObject->img = ImageManager::GetInstance()->FindImage("npc_4");
+				_currentObject.isFrameRender = true;
+				if (i == 0)			_currentObject.img = ImageManager::GetInstance()->FindImage("npc_1");
+				if (i == 1)		    _currentObject.img = ImageManager::GetInstance()->FindImage("npc_2");
+				if (i == 2)		    _currentObject.img = ImageManager::GetInstance()->FindImage("npc_3");
+				if (i == 3)		    _currentObject.img = ImageManager::GetInstance()->FindImage("npc_4");
 
 				break;
 			}
 			else if (_currentSampleObject == OBJ_SPA)
 			{
-				_currentObject->isFrameRender = false;
-				if (i == 0 || i == 1 || i == 2 || i == 3)			_currentObject->img = ImageManager::GetInstance()->FindImage("spa");
+				_currentObject.isFrameRender = false;
+				if (i == 0 || i == 1 || i == 2 || i == 3)			_currentObject.img = ImageManager::GetInstance()->FindImage("spa");
 
 				break;
 			}
@@ -818,7 +819,7 @@ void tile::selectObject()
 
 void tile::eraseObject(int arrNum)
 {
-	_object.erase(_object.begin() + arrNum);
+	_object[arrNum].isActive = false;
 }
 
 void tile::mapMove()
