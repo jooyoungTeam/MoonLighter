@@ -315,11 +315,11 @@ void aStar::render()
 		CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Red, 5.f);
 	}
 
-	for (int i = 0; i < _vTotalList.size(); ++i)
+	/*for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		RECT temp;
 		temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
 
 		CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Blue, 5.f);
-	}
+	}*/
 }

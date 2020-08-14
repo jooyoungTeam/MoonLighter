@@ -22,6 +22,7 @@ struct tagDisplayStand
 
 	item* it;				// 아이템
 	int	  settingPrice;		// 플레이어 세팅 가격
+	int   rightPrice;		// 알맞은 가격
 	int	  count;			// 아이템 개수
 
 	bool  isActive;			// 진열대에 아이템이 있냐?

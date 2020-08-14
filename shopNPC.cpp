@@ -39,7 +39,7 @@ HRESULT shopNPC::init(npcType type)
 		_settingPrice = 0;
 		_rndChoiceItem = RND->getInt(4);
 		_npcActionState = NPC_ENTER;
-		_npcEmotionState = NPC_CHOOSE;
+		_npcEmotionState = NPC_EMOTION_NULL;
 		_npcType = type;
 		_isBuy = false;
 	}
@@ -52,7 +52,6 @@ HRESULT shopNPC::init(npcType type)
 	}
 
 	_aStar->init(WINSIZEX / 50, 1400 / 50, _centerX / 50, _centerY / 50 - 3, _goToPoint.x, _goToPoint.y, _vUnMove, true);
-	_item->init(ITEMTYPE::CRYSTAL_ENERGY, _centerX, _centerY - 50);
 
 	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(_img->GetFrameSize().x, _img->GetFrameSize().y), Pivot::Center);
 
@@ -70,6 +69,8 @@ void shopNPC::updadte()
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
 	_item->setItemPos(_centerX, _centerY - 50);
 	_item->update();
+
+	//cout << _item->getIndex() << endl;
 
 	_thinkBoxX = _centerX;
 	_thinkBoxY = _centerY - 80;
@@ -106,7 +107,6 @@ void shopNPC::updadte()
 
 	case NPC_CHECKITEM:
 		emotionFrameUpdate();
-		cout << _rndChoiceItem << endl;
 		if (_rndChoiceItem == 0 || _rndChoiceItem == 2)
 		{
 			_indexX = 0;
@@ -123,31 +123,52 @@ void shopNPC::updadte()
 		if (_delayTimer > 100)
 		{
 			comparePrice();
-		}
-
-		if (_delayTimer > 300)
-		{
 			// 구매했으면 BUY 상태로 바꿔라
 			if (_isBuy)
 			{
 				_goToPoint = _counterPoint;
 				_aStar->changeWayPoint();
 				_npcActionState = NPC_BUY;
-				break;
+				_delayTimer = 0;
 			}
-
 			// 아니면 다시 쇼핑
-			if (_checkItemCount < 4)
-				chooseItem();
+			else
+			{
+				if (_delayTimer > 300)
+				{
+					if (_checkItemCount < 4)
+						chooseItem();
 
-			_npcActionState = NPC_SHOPPING;
-			_delayTimer = 0;
-		}
+					_npcActionState = NPC_SHOPPING;
+					_npcEmotionState = NPC_EMOTION_NULL;
+					_delayTimer = 0;
+				}
+			}
+		}		
 		break;
 	case NPC_BUY:
-		frameUpdate();
-		move();
-
+		_delayTimer++;
+		emotionFrameUpdate();
+		_isBuy = false;
+		if (_delayTimer < 200)
+		{
+			if (_rndChoiceItem == 0 || _rndChoiceItem == 2)
+			{
+				_indexX = 0;
+				_indexY = 0;
+			}
+			else if (_rndChoiceItem == 1 || _rndChoiceItem == 3)
+			{
+				_indexX = 0;
+				_indexY = 3;
+			}
+		}
+		if (_delayTimer > 200)
+		{
+			_npcEmotionState = NPC_EMOTION_NULL;
+			frameUpdate();
+			move();
+		}
 		break;
 	case NPC_AWAY:
 		frameUpdate();
@@ -165,16 +186,16 @@ void shopNPC::render()
 
 	CAMERAMANAGER->zOrderFrameRender(_img, _centerX, _centerY, _rc.bottom, _indexX, _indexY, 1.2f, 1.f);
 	//CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Green, 1.f, 2.f);
-	if (_npcActionState == NPC_CHECKITEM)
+
+	if (_npcEmotionState != NPC_EMOTION_NULL)
 	{
 		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("thinkBox"), _thinkBoxX, _thinkBoxY, _rc.bottom + _thinkBoxY, 1.f, 1.4f);
 		CAMERAMANAGER->zOrderFrameRender(_emotionImg, _thinkBoxX + 18, _thinkBoxY + 17, _rc.bottom + _thinkBoxY + 17, _emotionIndexX, 0 , 1.4f,1.f);
 	}
 
-	if (_npcActionState == NPC_BUY)
-	{
+	if(_npcActionState == NPC_BUY && _item->getImg() != NULL)
 		_item->cameraRender();
-	}
+	
 
 }
 
@@ -276,6 +297,8 @@ void shopNPC::comparePrice()
 	// 아이템 적정가와 플레이어 셋팅가격 차이 구하기
 	int tempPrice;
 	tempPrice = _settingPrice - _rightPrice;
+
+	cout << tempPrice << endl;
 
 	// tempPrice의 크기에 따른 처리
 
