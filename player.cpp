@@ -61,6 +61,7 @@ void player::render()
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
+		//D2DRenderer::GetInstance()->FillRectangle(_playerRc , D2D1::ColorF::Tomato, 1.0f);
 	}
 	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))
@@ -184,6 +185,22 @@ void player::animationLoad()
 	int bowLeftCharge[] = { 3 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowLeftCharge", "bowLeftCharge", bowLeftCharge, 1, 0, false);
 
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowUpChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
+	int bowUpChargeWhite[] = { 0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowUpChargeWhite", "bowUpChargeWhite", bowUpChargeWhite, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowDownChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
+	int bowDownChargeWhite[] = { 1 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowDownChargeWhite", "bowDownChargeWhite", bowDownChargeWhite, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowRightChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
+	int bowRightChargeWhite[] = { 2 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowRightChargeWhite", "bowRightChargeWhite", bowRightChargeWhite, 1, 0, false);
+
+	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowLeftChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
+	int bowLeftChargeWhite[] = { 3 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowLeftChargeWhite", "bowLeftChargeWhite", bowLeftChargeWhite, 1, 0, false);
+
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
 	int playerUpSword1[] = { 0, 1, 2, 3, 4, 5 };
@@ -302,13 +319,24 @@ void player::animationLoad()
 //활나가는 방향
 void player::arrowShoot()
 {
+	cout << _bowChargeState << endl;
+
 	if (_playerDirection == DIRECTION::UP)
 	{
 		//애니메이션 시작하면서 Count가 0이여야 한발씩 나감
 		if (KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40);
+
+			if (_bowChargeState)
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 80);
+				_bowChargeState = false;
+			}
+			else
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40);
+			}
 		}
 	}
 	if (_playerDirection == DIRECTION::DOWN)
@@ -316,7 +344,15 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40);
+			if (_bowChargeState)
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80);
+				_bowChargeState = false;
+			}
+			else
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40);
+			}
 		}
 	}
 	if (_playerDirection == DIRECTION::LEFT)
@@ -324,7 +360,15 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40);
+			if (_bowChargeState)
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 80);
+				_bowChargeState = false;
+			}
+			else
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40);
+			}
 		}
 	}
 	if (_playerDirection == DIRECTION::RIGHT)
@@ -332,7 +376,15 @@ void player::arrowShoot()
 		if (KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
-			_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40);
+			if (_bowChargeState)
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80);
+				_bowChargeState = false;
+			}
+			else
+			{
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40);
+			}
 		}
 	}
 	//애니메이션 끝나면 다시 카운트 초기화

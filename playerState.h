@@ -47,8 +47,8 @@ public:
 class playerIdleState : public playerState
 {
 private:
-	bool _transForm;
-
+	bool	_transForm;
+	bool   _alphaChange;
 public:
 	HRESULT init();
 	virtual void update(player& player) override;
