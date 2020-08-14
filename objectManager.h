@@ -3,7 +3,7 @@
 class objectManager : public gameNode
 {
 private:
-
+	
 public:
 	objectManager() {}
 	~objectManager() {}
