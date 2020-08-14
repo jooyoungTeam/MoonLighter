@@ -255,11 +255,11 @@ void inventory::selectItem()
 				_selectNumber = -1;
 				_selectGearNumber = -1;
 				_selectShopNumber = _select;
-				_isSelect = true;
 
 				//선택한 쇼케이스가 비어있지 않다면
 				if (_shop[_select].item != nullptr)
 				{
+					_isSelect = true;
 					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 					_selectItem.item = _shop[_select].item;
 					_selectItem.count++;
@@ -288,6 +288,7 @@ void inventory::selectItem()
 					{
 						if (_selectItem.item != nullptr) return;
 						_selectCount = 4;
+						_isSelect = true;
 						_isSetPrice = true;
 					}
 				}				
