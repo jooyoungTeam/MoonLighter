@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "shopNPC.h"
 
-HRESULT shopNPC::init()
+HRESULT shopNPC::init(npcType type)
 {
 	// 이미지
 	{
@@ -22,7 +22,7 @@ HRESULT shopNPC::init()
 
 	// 변수 초기화
 	{
-		_centerX = 795;
+		_centerX = 870;
 		_centerY = 1180;
 		_indexX = 0;
 		_indexY = 3;
@@ -40,6 +40,7 @@ HRESULT shopNPC::init()
 		_rndChoiceItem = RND->getInt(4);
 		_npcActionState = NPC_ENTER;
 		_npcEmotionState = NPC_CHOOSE;
+		_npcType = type;
 		_isBuy = false;
 	}
 
@@ -90,8 +91,11 @@ void shopNPC::updadte()
 			_aStar->changeWayPoint();
 		}
 		break;
+
 	case NPC_IDLE:
-		
+		frameUpdate();
+		move();
+
 		break;
 
 	case NPC_SHOPPING:
@@ -152,19 +156,19 @@ void shopNPC::updadte()
 	}
 
 
-	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(_img->GetFrameSize().x, _img->GetFrameSize().y), Pivot::Center);
+	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(50, 50), Pivot::Center);
 }
 
 void shopNPC::render()
 {
 	_aStar->render();
 
-	CAMERAMANAGER->frameRender(_img, _centerX, _centerY, _indexX, _indexY, 1.2f, 1.f);
-
+	CAMERAMANAGER->zOrderFrameRender(_img, _centerX, _centerY, _rc.bottom, _indexX, _indexY, 1.2f, 1.f);
+	//CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Green, 1.f, 2.f);
 	if (_npcActionState == NPC_CHECKITEM)
 	{
-		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("thinkBox"), _thinkBoxX, _thinkBoxY, 1.4f, 1.f);
-		CAMERAMANAGER->frameRender(_emotionImg, _thinkBoxX + 18, _thinkBoxY + 17, _emotionIndexX, 0 , 1.4f,1.f);
+		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("thinkBox"), _thinkBoxX, _thinkBoxY, _rc.bottom + _thinkBoxY, 1.f, 1.4f);
+		CAMERAMANAGER->zOrderFrameRender(_emotionImg, _thinkBoxX + 18, _thinkBoxY + 17, _rc.bottom + _thinkBoxY + 17, _emotionIndexX, 0 , 1.4f,1.f);
 	}
 
 	if (_npcActionState == NPC_BUY)
@@ -241,7 +245,7 @@ void shopNPC::move()
 				_aStar->setMoveIndex(_aStar->getMoveIndex() - 1);
 		}
 
-		if (getDistance(_centerX, _centerY, _aStar->getVShortest()[0]->center.x, _aStar->getVShortest()[0]->center.y) < 3)
+		if (getDistance(_centerX, _centerY, _aStar->getVShortest()[0]->center.x, _aStar->getVShortest()[0]->center.y) < 1)
 		{
 			if (_npcActionState == NPC_SHOPPING)
 			{
@@ -252,13 +256,14 @@ void shopNPC::move()
 			}
 			else if (_npcActionState == NPC_BUY)
 			{
+				_isCount = true;
 				_npcActionState = NPC_AWAY;
 				_goToPoint = _eixtPoint;
 				_aStar->changeWayPoint();
 			}
 			else if (_npcActionState == NPC_AWAY)
 			{
-
+				_isAway = true;
 			}
 		}
 	}
@@ -310,30 +315,6 @@ void shopNPC::unMoveSet()
 {
 	POINT temp;
 
-	temp.x = 10;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 10;
-	temp.y = 18;
-	_vUnMove.push_back(temp);
-
-	temp.x = 10;
-	temp.y = 17;
-	_vUnMove.push_back(temp);
-
-	temp.x = 11;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 11;
-	temp.y = 18;
-	_vUnMove.push_back(temp);
-
-	temp.x = 11;
-	temp.y = 17;
-	_vUnMove.push_back(temp);
-
 	temp.x = 12;
 	temp.y = 19;
 	_vUnMove.push_back(temp);
@@ -358,33 +339,53 @@ void shopNPC::unMoveSet()
 	temp.y = 17;
 	_vUnMove.push_back(temp);
 
+	temp.x = 14;
+	temp.y = 19;
+	_vUnMove.push_back(temp);
+
+	temp.x = 14;
+	temp.y = 18;
+	_vUnMove.push_back(temp);
+
+	temp.x = 14;
+	temp.y = 17;
+	_vUnMove.push_back(temp);
 }
 
 void shopNPC::wayPointSet()
 {
 	// 왼쪽 첫번째 아이템
-	_itemWayPoint[0].x = 11;
+	_itemWayPoint[0].x = 12;
 	_itemWayPoint[0].y = 16;
 
 	// 왼쪽 두번째 아이템
-	_itemWayPoint[1].x = 11;
+	_itemWayPoint[1].x = 12;
 	_itemWayPoint[1].y = 20;
 
 	// 오른쪽 첫번째아이템
-	_itemWayPoint[2].x = 12;
+	_itemWayPoint[2].x = 14;
 	_itemWayPoint[2].y = 16;
 
 	// 오른쪽 두번째 아이템
-	_itemWayPoint[3].x = 12;
+	_itemWayPoint[3].x = 14;
 	_itemWayPoint[3].y = 20;
 
 	// 계산대
-	_counterPoint.x = 17;
+	_counterPoint.x = 19;
 	_counterPoint.y = 18;
 
 	// 출입문
-	_eixtPoint.x = 16;
+	_eixtPoint.x = 17;
 	_eixtPoint.y = 23;
+
+	_aroundPoint[0].x = 20;
+	_aroundPoint[0].y = 21;
+
+	_aroundPoint[1].x = 18;
+	_aroundPoint[1].y = 21;
+	
+	_aroundPoint[2].x = 19;
+	_aroundPoint[2].y = 22;
 }
 
 void shopNPC::directionCheck()
@@ -452,4 +453,24 @@ void shopNPC::chooseItem()
 	}
 
 	_aStar->changeWayPoint();
+}
+
+void shopNPC::choosePt()
+{
+	_rndChoicePt = RND->getInt(3);
+
+	switch (_rndChoicePt)
+	{
+	case 0:
+		_goToPoint = _aroundPoint[0];
+		break;
+		
+	case 1:
+		_goToPoint = _aroundPoint[1];
+		break;
+
+	case 2:
+		_goToPoint = _aroundPoint[2];
+		break;
+	}
 }

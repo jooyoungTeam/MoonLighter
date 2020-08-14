@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "player.h"
-#include "shopNPC.h"
+#include "shopNPCManager.h"
 #include "tile.h"
 #include "itemManager.h"
 #include "item.h"
@@ -41,7 +41,10 @@ class shopStage : public gameNode
 private:
 	// =============== 기본 ===============
 	Image* _backGround;				// 배경 이미지
+	Image* _celler;					// 판매원 이미지
 	player* _player;				// 플레이어
+	float _cellerFrameTimer;
+	int	  _cellerIndex;
 
 	// =========== 아이템 & 인벤 ===========
 	inventory* _inventory;				// 아이템 매니저
@@ -54,8 +57,9 @@ private:
 	int   _doorIndex;				// 문 인덱스
 
 	// ============== NPC =================
-	shopNPC* _shopNPC;				// NPC
+	shopNPCManager* _npcM;			// NPC 매니저
 	bool  _enterNPC;				// NPC 들어오는지 확인
+
 
 public:
 	shopStage() {}
