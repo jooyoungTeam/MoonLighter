@@ -405,6 +405,8 @@ void inventory::setPrice(tagSetPrice setPrice[PRICESPACE], int select)
 
 	_shop[select].price = setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10 + setPrice[4].count;
 	_shop[select].totalPrice = _shop[select].count * _shop[select].price;
+
+	if (_shop[select].item == nullptr) return;
 	_shop[select].originalPrice = _shop[select].count * _shop[select].item->getPrice();
 }
 //===========================================↑↑가격 계산하기↑↑===========================================//
