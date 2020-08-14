@@ -179,10 +179,26 @@ void inventory::update()
 		setPrice(_fourthPrice, 6);
 	}
 
+
 	moveInven();					//인벤에서 돌아다니기
 	selectItem();					//아이템 선택하기
 	moveItem();						//아이템 인벤에서 옮기기
 	useMirror();					//미러상태
+	////설정했었던 아이템 가격 불러오기
+	//for (int i = 0; i < _vPrice.size(); ++i)
+	//{
+	//	if (_vPrice.size() < 0) continue;
+	//	if (_shop[_select].item == nullptr) continue;
+
+	//	//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+	//	//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
+	//	//빈 자리에 넣는 건 저장이 되는데,
+	//	//아이템을 바꿔 넣거나, 되돌려 넣을 때 0으로 뜸
+	//	if (_select == 0) loadPrice(_firstPrice);
+	//	if (_select == 2) loadPrice(_secondPrice);
+	//	if (_select == 4) loadPrice(_thirdPrice);
+	//	if (_select == 6) loadPrice(_fourthPrice);
+	//}
 }
 
 void inventory::release()
@@ -545,22 +561,18 @@ void inventory::moveItem()
 							if (_vPrice.size() < 0) continue;
 
 							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
-							//if (_vPrice[i].index == _shop[_select].item->getIndex())
-							//{
-							//	//cout << _vPrice[i].index << ", " << _shop[_select].item->getIndex() << endl;
-							//	if (_select == 0) loadPrice(_firstPrice);
-							//	if (_select == 2) loadPrice(_secondPrice);
-							//	if (_select == 4) loadPrice(_thirdPrice);
-							//	if (_select == 6) loadPrice(_fourthPrice);
-							//}
+							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+							if (_select == 0) loadPrice(_firstPrice, _select);
+							if (_select == 2) loadPrice(_secondPrice, _select);
+							if (_select == 4) loadPrice(_thirdPrice, _select);
+							if (_select == 6) loadPrice(_fourthPrice, _select);
 						}
 					}	
 
 					//가격 설정하는 창이면
 					if (_select % 2 != 0)
 					{
-						//아이템을 들고 왔다면						
+						//아이템을 들고 왔다면
 						if (_selectItem.item != nullptr)
 						{
 							if (_selectNumber >= 0)
@@ -574,9 +586,30 @@ void inventory::moveItem()
 								if (_shop[_selectShopNumber].item == nullptr) _shop[_selectShopNumber].item = _selectItem.item;
 								_shop[_selectShopNumber].count += _selectItem.count;
 							}
-							_isSelect = false;
 							_selectItem.item = nullptr;
-							return;
+							_isSelect = false;
+
+							//설정했었던 아이템 가격 불러오기
+							for (int i = 0; i < _vPrice.size(); ++i)
+							{
+								if (_vPrice.size() < 0) continue;
+
+								//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+								//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+								//_selectNumber 와 _selectShopNumber의 위치에도 입력 시켜줘야 함
+								if (_select == 0) loadPrice(_firstPrice, _select);
+								if (_select == 2) loadPrice(_secondPrice, _select);
+								if (_select == 4) loadPrice(_thirdPrice, _select);
+								if (_select == 6) loadPrice(_fourthPrice, _select);
+
+								if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+								if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+								if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+								if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+
+								_selectItem.item = nullptr;
+								_isSelect = false;
+							}
 						}		
 						
 						//가격 설정하던 중이면
@@ -616,8 +649,7 @@ void inventory::moveItem()
 									if (_select == 2) _secondPrice[i].count = 0;
 									if (_select == 4) _thirdPrice[i].count = 0;
 									if (_select == 6) _fourthPrice[i].count = 0;
-								}
-								
+								}								
 							}
 
 							//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
@@ -666,6 +698,8 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
+							_selectItem.item = nullptr;
+							_isSelect = false;
 						}
 
 						//쇼케이스에서 가져옴
@@ -677,7 +711,9 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
-						}
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}		
 
 						//설정했었던 아이템 가격 불러오기
 						for (int i = 0; i < _vPrice.size(); ++i)
@@ -685,18 +721,21 @@ void inventory::moveItem()
 							if (_vPrice.size() < 0) continue;
 
 							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
-							if (_vPrice[i].index == _shop[_select].item->getIndex())
-							{
-								if (_select == 0) loadPrice(_firstPrice);
-								if (_select == 2) loadPrice(_secondPrice);
-								if (_select == 4) loadPrice(_thirdPrice);
-								if (_select == 6) loadPrice(_fourthPrice);
-							}
-						}
+							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+							//_selectNumber 와 _selectShopNumber의 위치에도 입력 시켜줘야 함
+							if (_select == 0) loadPrice(_firstPrice, _select);
+							if (_select == 2) loadPrice(_secondPrice, _select);
+							if (_select == 4) loadPrice(_thirdPrice, _select);
+							if (_select == 6) loadPrice(_fourthPrice, _select);
 
-						_selectItem.item = nullptr;
-						_isSelect = false;
+							if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}
 					}
 				}
 			}

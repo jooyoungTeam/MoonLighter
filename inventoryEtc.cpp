@@ -349,7 +349,7 @@ void inventory::renderInven()
 			if (_isSwap)
 			{
 				float line;
-				if (i == _selectCount) line = 2.f;
+				if (i == _selectCount && _isSetPrice) line = 2.f;
 				else line = 1.f;
 
 				if (_select == 1)
@@ -436,13 +436,15 @@ void inventory::savePrice(int select)
 //===========================================↑↑가격 저장하기↑↑===========================================//
 
 
-
-void inventory::loadPrice(tagSetPrice setPrice[PRICESPACE])
+//===========================================↓↓가격 불러오기↓↓===========================================//
+void inventory::loadPrice(tagSetPrice setPrice[PRICESPACE], int select)
 {
 	for (int i = 0; i < _vPrice.size(); ++i)
 	{
+		if (_shop[select].item == nullptr) return;
+
 		//인덱스가 같은 가격만 불러오기
-		if (_vPrice[i].index == _shop[_select].item->getIndex())
+		if (_vPrice[i].index == _shop[select].item->getIndex())
 		{
 			setPrice[0].count = _vPrice[i].price / 10000;
 			setPrice[1].count = (_vPrice[i].price - (setPrice[0].count * 10000)) / 1000;
@@ -452,7 +454,7 @@ void inventory::loadPrice(tagSetPrice setPrice[PRICESPACE])
 		}	
 	}
 }
-
+//===========================================↑↑가격 불러오기↑↑===========================================//
 
 
 //===========================================↓↓인벤 닫기↓↓===========================================//
@@ -595,3 +597,4 @@ void inventory::draw()
 		_frameCount = 0;
 	}
 }
+//===========================================↑↑프레임 돌리기↑↑===========================================//
