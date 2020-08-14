@@ -29,8 +29,8 @@ private:
 	RECT               _leftRightButton[2];
 	tagSampleObject    _sampleObject[4];
 	OBJECT 	           _currentSampleObject;    //현재 보고있는 오브젝트 넘버
-	vector<tagObject*> _object;
-	tagObject*         _currentObject;          //선택한 오브젝트
+	tagObject		   _object[100];
+	tagObject          _currentObject;          //선택한 오브젝트
 	bool               _isSelectObject;
 	// --------- object ---------- //
 
@@ -56,8 +56,6 @@ private:
 
 	int           _frameCount;
 	int           _saveTime;
-	int			  _dragNumX;
-	int			  _dragNumY;
 	int           _nowIndex;
 
 
@@ -66,6 +64,7 @@ private:
 	int           _tileY;
 	Image*        _mapImg;
 	player*       _player;
+	int           _objectOrder;
 	// ----------- 임시 변수 ------------ //
 public:
 	tile() {}
