@@ -7,33 +7,38 @@ HRESULT shopStage::init()
 	ImageManager::GetInstance()->AddImage("shop_mid", L"Image/Shop/shop_mid.png");
 	ImageManager::GetInstance()->AddImage("shop_first", L"Image/Shop/shop_first.png");
 	ImageManager::GetInstance()->AddFrameImage("shop_door", L"Image/Shop/shop_door.png",5,1);
+	_celler = ImageManager::GetInstance()->AddFrameImage("shop_cellere", L"Image/Shop/celler.png", 66, 1);
 
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
 	_player = new player;
 	_player->init(WINSIZEX / 2 + 184, 445.5f);
 
-	_shopNPC = new shopNPC;
-	_shopNPC->init();
+	_npcM = new shopNPCManager;
+	_npcM->init();
 	
-	_doorRC = RectMakePivot(Vector2(WINSIZEX / 2 + 10, 1100), Vector2(50, 100), Pivot::Center);
+	_doorRC = RectMakePivot(Vector2(WINSIZEX / 2 + 80, 1100), Vector2(50, 100), Pivot::Center);
 
 	disPlaySet();
 
 	_doorFrameTimer = 0;
 	_doorIndex = 0;
 
+	_cellerFrameTimer = 0;
+	_cellerIndex = _celler->GetMaxFrameX() - 1;
+
 	return S_OK;
 }
 
 void shopStage::render()
 {
+	//CAMERAMANAGER->zOrderRender(_backGround, 0, 0, 1400, 1.f, 1.0f);
 	CAMERAMANAGER->render(_backGround, 0, 0, 1.f, 1.0f);
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
+
 	_player->render();
 
-	if(_enterNPC)
-		_shopNPC->render();
+	_npcM->render();
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -45,7 +50,12 @@ void shopStage::render()
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 17, 613, 1.15f, 1.0f);    
 	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2  + 2, 1162, 1.15f, 1.0f);
 	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);
-	CAMERAMANAGER->rectangle(_doorRC, D2D1::ColorF::Red, 1.f, 2.f);
+
+	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0, 1.5, 1.f);
+
+	CAMERAMANAGER->zOrderALLRender();
+	//CAMERAMANAGER->frameRender(_celler, WINSIZEX / 2 + 160, 830, _cellerIndex,0,1.5,1.f);
+	//CAMERAMANAGER->rectangle(_doorRC, D2D1::ColorF::Red, 1.f, 2.f);
 }
 
 void shopStage::update()
@@ -53,8 +63,8 @@ void shopStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		if (_enterNPC)
-			_shopNPC->updadte();
+		
+		_npcM->update();
 
 		for (int i = 0; i < 4; ++i)
 		{
@@ -63,6 +73,16 @@ void shopStage::update()
 				_display[i].it->fieldUpdate();
 			}
 		}
+	}
+
+	_cellerFrameTimer++;
+	if (_cellerFrameTimer > 7)
+	{
+		if (_cellerIndex < _celler->GetMaxFrameX() - 1)
+		{
+			_cellerIndex++;
+		}
+		_cellerFrameTimer = 0;
 	}
 
 	if(INVENTORY->getState() == INVEN_STATE::SHOP)
@@ -78,7 +98,7 @@ void shopStage::update()
 
 void shopStage::release()
 {
-
+	_npcM->release();
 }
 
 void shopStage::disPlaySet()
@@ -99,13 +119,6 @@ void shopStage::disPlayUpdate()
 
 		if (_display[i].it != NULL)
 		{
-			if (_shopNPC->getIsBuy())
-			{
-				_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
-				_display[_shopNPC->getRndItem()].it = NULL;
-				break;
-			}
-
 			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
 			_display[i].it->setShakeY(_display[i].pos.y);
 		}
@@ -115,21 +128,32 @@ void shopStage::disPlayUpdate()
 void shopStage::doorUpdate()
 {
 	if(KEYMANAGER->isOnceKeyDown('E'))
-		_enterNPC = true;
+		_npcM->npcAdd(NPC_NOMAL);
 
 	switch (_doorState)
 	{
 	case DOOR_CLOSE:
 		RECT temp;
-		if (IntersectRect(&temp, &_doorRC.GetRect(), &_shopNPC->getNPCRect().GetRect()))
+		for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 		{
-			_doorState = DOOR_OPENING;
+			if (IntersectRect(&temp, &_doorRC.GetRect(), &_npcM->getVnpc()[i]->getNPCRect().GetRect()))
+			{
+				_doorState = DOOR_OPENING;
+			}
 		}
 		break;
 	case DOOR_OPEN:
-		if (!IntersectRect(&temp, &_doorRC.GetRect(), &_shopNPC->getNPCRect().GetRect()))
+		if(_npcM->getVnpc().size() == 0) _doorState = DOOR_CLOSING;
+
+		for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 		{
-			_doorState = DOOR_CLOSING;
+			if (IntersectRect(&temp, &_doorRC.GetRect(), &_npcM->getVnpc()[i]->getNPCRect().GetRect()))
+			{
+				break;
+			}
+
+			if(i == _npcM->getVnpc().size() - 1)
+				_doorState = DOOR_CLOSING;
 		}
 		break;
 	case DOOR_OPENING:
@@ -162,35 +186,46 @@ void shopStage::doorUpdate()
 
 void shopStage::buyItem()
 {
-	if (_display[_shopNPC->getRndItem()].it != NULL)
+	for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 	{
-		switch (_shopNPC->getRndItem())
+		if (_npcM->getVnpc()[i]->getIsCount())
 		{
-		case 0:
-			_shopNPC->setRightPrice(_display[0].it->getPrice());
-			_shopNPC->setSettingPrice(_display[0].settingPrice);
-			break;
+			_cellerIndex = 0;
+			_npcM->getVnpc()[i]->setIsCount(false);
+		}
 
-		case 1:
-			_shopNPC->setRightPrice(_display[1].it->getPrice());
-			_shopNPC->setSettingPrice(_display[1].settingPrice);
-			break;
+		if (_display[_npcM->getVnpc()[i]->getRndItem()].it != NULL)
+		{
+			switch (_npcM->getVnpc()[i]->getRndItem())
+			{
+			case 0:
+				_npcM->getVnpc()[i]->setRightPrice(_display[0].it->getPrice());
+				_npcM->getVnpc()[i]->setSettingPrice(_display[0].settingPrice);
+				break;
 
-		case 2:
-			_shopNPC->setRightPrice(_display[2].it->getPrice());
-			_shopNPC->setSettingPrice(_display[2].settingPrice);
-			break;
+			case 1:
+				_npcM->getVnpc()[i]->setRightPrice(_display[1].it->getPrice());
+				_npcM->getVnpc()[i]->setSettingPrice(_display[1].settingPrice);
+				break;
 
-		case 3:
-			_shopNPC->setRightPrice(_display[3].it->getPrice());
-			_shopNPC->setSettingPrice(_display[3].settingPrice);
-			break;
+			case 2:
+				_npcM->getVnpc()[i]->setRightPrice(_display[2].it->getPrice());
+				_npcM->getVnpc()[i]->setSettingPrice(_display[2].settingPrice);
+				break;
+
+			case 3:
+				_npcM->getVnpc()[i]->setRightPrice(_display[3].it->getPrice());
+				_npcM->getVnpc()[i]->setSettingPrice(_display[3].settingPrice);
+				break;
+			}
+		}
+
+		if (_npcM->getVnpc()[i]->getIsBuy())
+		{
+			if (_display[_npcM->getVnpc()[i]->getRndItem()].it == NULL) return;
+
+			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it);
+			_display[_npcM->getVnpc()[i]->getRndItem()].it = NULL;
 		}
 	}
-
-	/*if (_shopNPC->getIsBuy())
-	{
-		_shopNPC->setItem(_display[_shopNPC->getRndItem()].it);
-		_display[_shopNPC->getRndItem()].it = NULL;
-	}*/
 }
