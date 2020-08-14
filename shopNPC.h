@@ -31,6 +31,7 @@ enum npcState			// NPC 상태 ENUM
 
 enum npcEmotionState	// NPC 기분 NUM
 {
+	NPC_EMOTION_NULL,	// 없는상태
 	NPC_CHOOSE,			// 고르는 상태
 	NPC_TOO_EXPENSIVE,	// 너무 비쌈
 	NPC_EXPENSIVE,		// 비쌈
@@ -117,7 +118,7 @@ public:
 	//============================ Set ===========================
 	void setSettingPrice(int price) { _settingPrice = price; }
 	void setRightPrice(int price) { _rightPrice = price; }
-	void setItem(item* item) { _item = item; }
+	void setItem(ITEMTYPE _it) { _item->init(_it); }
 	void setIsCount(bool arg) { _isCount = arg; }
 };
 

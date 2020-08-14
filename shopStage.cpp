@@ -73,17 +73,18 @@ void shopStage::update()
 				_display[i].it->fieldUpdate();
 			}
 		}
+
+		_cellerFrameTimer++;
+		if (_cellerFrameTimer > 7)
+		{
+			if (_cellerIndex < _celler->GetMaxFrameX() - 1)
+			{
+				_cellerIndex++;
+			}
+			_cellerFrameTimer = 0;
+		}
 	}
 
-	_cellerFrameTimer++;
-	if (_cellerFrameTimer > 7)
-	{
-		if (_cellerIndex < _celler->GetMaxFrameX() - 1)
-		{
-			_cellerIndex++;
-		}
-		_cellerFrameTimer = 0;
-	}
 
 	disPlayUpdate();
 	
@@ -102,23 +103,27 @@ void shopStage::release()
 
 void shopStage::disPlaySet()
 {
-	_display[0].init(Vector2(565, 870), NULL, 0, 0, false);
-	_display[1].init(Vector2(565, 930), NULL, 0, 0, false);
-	_display[2].init(Vector2(630, 870), NULL, 0, 0, false);
-	_display[3].init(Vector2(630, 930), NULL, 0, 0, false);
+	_display[0].init(Vector2(635, 870), NULL, 0, 0, false);
+	_display[1].init(Vector2(635, 930), NULL, 0, 0, false);
+	_display[2].init(Vector2(700, 870), NULL, 0, 0, false);
+	_display[3].init(Vector2(700, 930), NULL, 0, 0, false);
 }
 
 void shopStage::disPlayUpdate()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		_display[i].count = INVENTORY->getShowCase()[i*2].count;
-		_display[i].it = INVENTORY->getShowCase()[i*2].item;
-		_display[i].settingPrice = INVENTORY->getShowCase()[i*2].price;
+		_display[i].count = INVENTORY->getShowCase()[i * 2].count;
+		_display[i].it = INVENTORY->getShowCase()[i * 2].item;
+		_display[i].settingPrice = INVENTORY->getShowCase()[i * 2].totalPrice;
+		_display[i].rightPrice = INVENTORY->getShowCase()[i * 2].originalPrice;
+
 
 		if (_display[i].it != NULL)
 		{
-			_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
+			if(INVENTORY->getIsInven())
+				_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
+
 			_display[i].it->setShakeY(_display[i].pos.y);
 		}
 	}
@@ -187,45 +192,50 @@ void shopStage::buyItem()
 {
 	for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 	{
+		// 카운터에 도착하면
 		if (_npcM->getVnpc()[i]->getIsCount())
 		{
+			// 팔았다는 카운터 애니메이션재생
 			_cellerIndex = 0;
 			_npcM->getVnpc()[i]->setIsCount(false);
 		}
 
+		// 선택한 아이템에 따라 넘겨줌
 		if (_display[_npcM->getVnpc()[i]->getRndItem()].it != NULL)
 		{
 			switch (_npcM->getVnpc()[i]->getRndItem())
 			{
 			case 0:
-				_npcM->getVnpc()[i]->setRightPrice(_display[0].it->getPrice());
+				_npcM->getVnpc()[i]->setRightPrice(_display[0].rightPrice);
 				_npcM->getVnpc()[i]->setSettingPrice(_display[0].settingPrice);
 				break;
 
 			case 1:
-				_npcM->getVnpc()[i]->setRightPrice(_display[1].it->getPrice());
+				_npcM->getVnpc()[i]->setRightPrice(_display[1].rightPrice);
 				_npcM->getVnpc()[i]->setSettingPrice(_display[1].settingPrice);
 				break;
 
 			case 2:
-				_npcM->getVnpc()[i]->setRightPrice(_display[2].it->getPrice());
+				_npcM->getVnpc()[i]->setRightPrice(_display[2].rightPrice);
 				_npcM->getVnpc()[i]->setSettingPrice(_display[2].settingPrice);
 				break;
 
 			case 3:
-				_npcM->getVnpc()[i]->setRightPrice(_display[3].it->getPrice());
+				_npcM->getVnpc()[i]->setRightPrice(_display[3].rightPrice);
 				_npcM->getVnpc()[i]->setSettingPrice(_display[3].settingPrice);
 				break;
 			}
 		}
 
+		// 구매했을때
 		if (_npcM->getVnpc()[i]->getIsBuy())
 		{
-			if (_display[_npcM->getVnpc()[i]->getRndItem()].it == NULL) return;
+			//if (_display[_npcM->getVnpc()[i]->getRndItem()].it == NULL) return;
 
-			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it);
-			_display[_npcM->getVnpc()[i]->getRndItem()].it = NULL;
-			//INVENTORY.setS
+			cout << "들어옴" << endl;
+			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it->getType());
+			INVENTORY->resetShowCase(_npcM->getVnpc()[i]->getRndItem() * 2);
+			//_display[_npcM->getVnpc()[i]->getRndItem()].it = NULL;
 		}
 	}
 }
