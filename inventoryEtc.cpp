@@ -434,6 +434,23 @@ void inventory::savePrice(int select)
 //===========================================↑↑가격 저장하기↑↑===========================================//
 
 
+
+void inventory::testPrice(tagSetPrice setPrice[PRICESPACE])
+{
+	for (int i = 0; i < _vPrice.size(); ++i)
+	{
+
+
+		/*setPrice[0].count = _vPrice[i].price / 10000;
+		setPrice[1].count = (_vPrice[i].price - setPrice[0].count * 10000) / 1000;
+		setPrice[2].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000) / 100;
+		setPrice[3].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100) / 10;
+		setPrice[4].count = (_vPrice[i].price - setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10);*/
+	}
+}
+
+
+
 //===========================================↓↓인벤 닫기↓↓===========================================//
 void inventory::closeInven()
 {
