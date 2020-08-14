@@ -103,7 +103,7 @@ HRESULT inventory::init()
 
 	_gold = 0;
 	_select = 0;
-	_firstCount = _secondCount = _thirdCount = _fourthCount = 4;
+	_selectCount = 4;
 
 	_isSwap = false;
 	_isSale = false;
@@ -170,16 +170,21 @@ void inventory::update()
 	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
+	
+	//if (_shop[_select].item != nullptr)
+	{
+		setPrice(_firstPrice, 0);	//가격 정하기
+		setPrice(_secondPrice, 2);
+		setPrice(_thirdPrice, 4);
+		setPrice(_fourthPrice, 6);
 
-	setPrice(_firstPrice, 0);				//가격 정하기
-	setPrice(_secondPrice, 2);
-	setPrice(_thirdPrice, 4);
-	setPrice(_fourthPrice, 6);
+		savePrice();				//가격 저장하기
+	}
 
-	moveInven();			//인벤에서 돌아다니기
-	selectItem();			//아이템 선택하기
-	moveItem();				//아이템 인벤에서 옮기기
-	useMirror();			//미러상태
+	moveInven();					//인벤에서 돌아다니기
+	selectItem();					//아이템 선택하기
+	moveItem();						//아이템 인벤에서 옮기기
+	useMirror();					//미러상태
 }
 
 void inventory::release()
@@ -252,11 +257,11 @@ void inventory::selectItem()
 				_selectNumber = -1;
 				_selectGearNumber = -1;
 				_selectShopNumber = _select;
+				_isSelect = true;
 
 				//선택한 쇼케이스가 비어있지 않다면
 				if (_shop[_select].item != nullptr)
 				{
-					_isSelect = true;
 					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 					_selectItem.item = _shop[_select].item;
 					_selectItem.count++;
@@ -275,11 +280,7 @@ void inventory::selectItem()
 					if (_select % 2 != 0 && !_isSetPrice)
 					{
 						if (_selectItem.item != nullptr) return;
-						_firstCount = 4;
-						_secondCount = 4;
-						_thirdCount = 4;
-						_fourthCount = 4;
-						_isSelect = true;
+						_selectCount = 4;
 						_isSetPrice = true;
 					}
 				}				
@@ -526,20 +527,29 @@ void inventory::moveItem()
 						item* select;
 						select = new item;
 						select->init(_selectItem.item->getType());
-
 						_shop[_select].item = select;
 						_shop[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
-						_isSelect = false;
+
+						/*for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
+
+							if (_vPrice[i].index == _shop[_select].item->getIndex())
+							{
+								_shop[_select].price = _vPrice[i].price;
+							}
+						}*/
+
 					}	
 
 					//아이템 가격 설정 끄기
 					if (_select % 2 != 0 && _isSetPrice)
 					{
 						if (_selectItem.item != nullptr) return;
-						_isSelect = false;
 						_isSetPrice = false;
 					}
+					_isSelect = false;
 				}
 
 				//비어있지 않으면

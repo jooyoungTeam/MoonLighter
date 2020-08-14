@@ -21,11 +21,12 @@ void inventory::moveInven()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select / 10 == 0) _select = 0;
+					if (_select % 5 == 0) _select = _select / 5 - 1;
 					else _select = 3;
 				}
 			}
 		}
+
 		else
 		{
 			if (_state == INVEN_STATE::NOTE)
@@ -46,17 +47,15 @@ void inventory::moveInven()
 				if (!_isSetPrice)
 				{
 					_select += 4;
-					if (_select == 8)
+					if (_select > 7)
 					{
 						_isSwap = false;
-						_select = 0;
+						if (_select == 8) _select = 0;
+						if (_select == 9) _select = 5;
+						if (_select == 10) _select = 10;
+						if (_select == 11) _select = 15;
 					}
-
-					if (_select == 11)
-					{
-						_isSwap = false;
-						_select = 15;
-					}
+					
 				}
 
 				else
@@ -85,17 +84,10 @@ void inventory::moveInven()
 
 				if (_state == INVEN_STATE::SHOP)
 				{
-					if (_select < 0)
-					{
-						_isSwap = true;
-						_select = 4;
-					}
-
-					if (_select == 14)
-					{
-						_isSwap = true;
-						_select = 6;
-					}
+					_isSwap = true;
+					if (_select < 0) _select = 4;
+					else  if (_select < 19) _select = _select % 5 + _select / 5 + 1;
+					else _select = 7;
 				}
 			}
 		}
@@ -121,8 +113,10 @@ void inventory::moveInven()
 					if (_select < 0)
 					{
 						_isSwap = false;
-						if (_select == -4 || _select == -3) _select = 4;
-						if (_select == -1 || _select == -2) _select = 19;
+						if (_select == -4) _select = 4;
+						if (_select == -3) _select = 9;
+						if (_select == -2) _select = 14;
+						if (_select == -1) _select = 19;
 					}
 				}
 
@@ -171,10 +165,10 @@ void inventory::moveInven()
 
 				else if (_isSetPrice && _shop[_select - 1].item != nullptr)
 				{
-					if (_select == 1) setCount(_firstPrice, _firstCount, L"up");
-					if (_select == 3) setCount(_secondPrice, _secondCount, L"up");
-					if (_select == 5) setCount(_thirdPrice, _thirdCount, L"up");
-					if (_select == 7) setCount(_fourthPrice, _fourthCount, L"up");
+					if (_select == 1) setCount(_firstPrice, L"up");
+					if (_select == 3) setCount(_secondPrice, L"up");
+					if (_select == 5) setCount(_thirdPrice, L"up");
+					if (_select == 7) setCount(_fourthPrice, L"up");
 				}
 			}
 		}
@@ -217,10 +211,10 @@ void inventory::moveInven()
 
 				else if (_isSetPrice && _shop[_select - 1].item != nullptr)
 				{
-					if (_select == 1) setCount(_firstPrice, _firstCount, L"down");
-					if (_select == 3) setCount(_secondPrice, _secondCount, L"down");
-					if (_select == 5) setCount(_thirdPrice, _thirdCount, L"down");
-					if (_select == 7) setCount(_fourthPrice, _fourthCount, L"down");
+					if (_select == 1) setCount(_firstPrice, L"down");
+					if (_select == 3) setCount(_secondPrice, L"down");
+					if (_select == 5) setCount(_thirdPrice, L"down");
+					if (_select == 7) setCount(_fourthPrice, L"down");
 				}
 			}
 		}
@@ -315,7 +309,7 @@ void inventory::renderInven()
 
 		for (int i = 0; i < SHOPSPACE; i++)
 		{
-			//D2DRenderer::GetInstance()->DrawRectangle(_shop[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+			//D2DRenderer::GetInstance()->DrawRectangle(_shop[i].rc, D2DRenderer::DefaultBrush::White, 1.f);
 
 			//아이템이 들어가면 이미지 띄우기
 			if (_shop[i].item != nullptr)
@@ -326,10 +320,10 @@ void inventory::renderInven()
 
 			//가격 적어두기
 			if (i % 2 != 0)
-				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
+			D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
 
 			//선택 커서 띄어두기
-			if (i == _select && _isSwap /*&& !_isSetPrice*/)
+			if (i == _select && _isSwap)
 			{
 				if (i % 2 == 0)
 				{
@@ -346,7 +340,12 @@ void inventory::renderInven()
 		//가격설정칸 활성상태에 따른 렌더 변화
 		for (int i = 0; i < PRICESPACE; i++)
 		{
-			//if (_isSwap)
+			D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+
+			if (_isSwap)
 			{
 				float line;
 				if (i == _selectCount) line = 2.f;
@@ -372,36 +371,15 @@ void inventory::renderInven()
 					D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
 				}
 			}
-
-			//else
-			{
-				D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-				D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-				D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-				D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-			}
 		}
-
 	}
 }
 //===========================================↑↑인벤 상태에 따른 렌더↑↑===========================================//
 
 
 //===========================================↓↓가격 설정하기↓↓===========================================//
-void inventory::setCount(tagSetPrice price[PRICESPACE], int selectCount, wstring direction)
+void inventory::setCount(tagSetPrice price[PRICESPACE], wstring direction)
 {
-	if (direction == L"right")
-	{
-		selectCount++;
-		if (selectCount == 5) selectCount = 0;
-	}
-
-	if (direction == L"left")
-	{	
-		selectCount--;
-		if (selectCount == -1) selectCount = 4;
-	}	
-
 	if (direction == L"up")
 	{
 		price[_selectCount].count++;
@@ -423,12 +401,25 @@ void inventory::setPrice(tagSetPrice setPrice[PRICESPACE], int select)
 	for (int i = 0; i < PRICESPACE; i++)
 	{
 		setPrice[i].rc = RectMakePivot(Vector2(_shop[select + 1].rc.GetCenter().x + i * 20 - 40, _shop[select + 1].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-		_shop[select].price = setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10 + setPrice[4].count;
-		//_shop[s].item->getIndex() 
-		_shop[select].totalPrice = _shop[select].count * _shop[select].price;
-	}
+	}	
+
+	_shop[select].price = setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10 + setPrice[4].count;
+	_shop[select].totalPrice = _shop[select].count * _shop[select].price;
 }
 //===========================================↑↑가격 계산하기↑↑===========================================//
+
+
+//===========================================↓↓가격 저장하기↓↓===========================================//
+void inventory::savePrice()
+{
+	//이미 들어간 인덱스면 추가 저장x
+	//tagSavePrice save;
+	//save.index = _shop[select].item->getIndex();
+	//save.price = _shop[select].price;
+	//
+	//_vPrice.push_back(save);	
+}
+//===========================================↑↑가격 저장하기↑↑===========================================//
 
 
 //===========================================↓↓인벤 닫기↓↓===========================================//

@@ -50,6 +50,12 @@ struct tagSetPrice					//가격 설정 창
 	int count;						//입력되는 숫자
 };
 
+struct tagSavePrice					//가격 저장용
+{
+	int index;						//아이템 번호
+	int price;						//설정한 가격
+};
+
 class player;
 class UI;
 
@@ -80,12 +86,9 @@ private:
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
 	int _count;							//미러 딜레이
+	int _selectCount;					//가격 선택
 	int _gold;							//소지금
-	int _selectCount;
-	int _firstCount;					//가격 선택
-	int _secondCount;
-	int _thirdCount;
-	int _fourthCount;
+	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
 
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
@@ -110,10 +113,9 @@ public:
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
 	void renderInven();										//인벤 상태에 따른 렌더 조정
-	//가격 설정하기
-	void setCount(tagSetPrice price[PRICESPACE], int selectCount, wstring direction);
-	//가격 계산하기
-	void setPrice(tagSetPrice price[PRICESPACE], int select);
+	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
+	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
+	void savePrice();										//가격 저장하기
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
