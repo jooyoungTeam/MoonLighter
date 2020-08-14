@@ -9,14 +9,13 @@ class tile : public gameNode
 {
 private:
 	button*           _button;
-	vector<tagTile>   _vTile;
-	vector<tagTile>   _vAttribute;
-	int				  _tileSize[2];
+	tagTile           _tiles[TILEX * TILEY];
 	tagDragRect       _drag;
 	POINT             _currentTile; //인덱스
 	RECT              _currentRect;           
 	RECT              _dragTile;    // 마우스 포인터 마우스 안에있을 때
 
+	DWORD             _attribute[TILEX * TILEY];
 
 	// --------- 팔레트 변수 --------- //
 	RECT                _sampleTileUI; // 팔레트 그림 있는곳
@@ -30,7 +29,7 @@ private:
 	RECT               _leftRightButton[2];
 	tagSampleObject    _sampleObject[4];
 	OBJECT 	           _currentSampleObject;    //현재 보고있는 오브젝트 넘버
-	vector<tagObject>  _vObject;
+	tagObject		   _object[100];
 	tagObject          _currentObject;          //선택한 오브젝트
 	bool               _isSelectObject;
 	// --------- object ---------- //
@@ -41,13 +40,31 @@ private:
 	FloatRect     _miniMapMove;
 	// --------- 미니맵 변수	
 
+	// ----------- 던전맵 변수
+	tagTile           _dungeonTiles[TILEX * TILEY];
+	DWORD             _dungeonAttribute[TILEX * TILEY];
+	// ----------- 던전맵 변수
+
+	// ----------- 마을 맵 변수
+	tagTile           _townTiles[TILEX * TILEY];
+	DWORD             _townAttribute[TILEX * TILEY];
+	// ----------- 마을 맵 변수
+
+	// ----------- 충돌 처리 타일로 바꿔줄 렉트
+
+	// ----------- 충돌 처리 타일로 바꿔줄 렉트
+
 	int           _frameCount;
 	int           _saveTime;
 	int           _nowIndex;
 
+
 	// ----------- 임시 변수 ------------ //
+	int           _tileX;
+	int           _tileY;
 	Image*        _mapImg;
 	player*       _player;
+	int           _objectOrder;
 	// ----------- 임시 변수 ------------ //
 public:
 	tile() {}
@@ -71,12 +88,20 @@ public:
 	void mapMove();
 	void sampleOnOff();
 
-	void saveMap();
+	// ----------------------------------
+	void saveDungeonMap();
+	void saveTownMap();
+	void renderDungeonMap();
 
-	void loadMap();
+	void loadDungeonMap();
+	void loadTownMap();
+	void renderTownMap();
 	// ----------------------------------
 
+	tagTile* getDungeonTile() { return _dungeonTiles; }
+	DWORD* getDungeonAttribute() { return _dungeonAttribute; }
+
 	TERRAIN terrainSelect(int frameX, int frameY);
-	Image* findImg(OBJECT type, int imgNum);
+
 };
 
