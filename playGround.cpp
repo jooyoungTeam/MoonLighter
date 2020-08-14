@@ -146,6 +146,8 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("UI_base", L"Image/UI/UI_base.png");
 	ImageManager::GetInstance()->AddImage("UI_weapon_1", L"Image/UI/UI_weapon_1.png");
 	ImageManager::GetInstance()->AddImage("UI_weapon_2", L"Image/UI/UI_weapon_2.png");
+	ImageManager::GetInstance()->AddImage("bow", L"Image/UI/Bow.png");
+	ImageManager::GetInstance()->AddImage("sword", L"Image/UI/Sword.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant", L"image/UI/UI_pendant.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant_ring", L"Image/UI/UI_pendant_ring.png");
 	ImageManager::GetInstance()->AddImage("UI_front", L"Image/UI/UI_front.png");

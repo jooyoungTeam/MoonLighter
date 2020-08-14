@@ -179,26 +179,10 @@ void inventory::update()
 		setPrice(_fourthPrice, 6);
 	}
 
-
 	moveInven();					//인벤에서 돌아다니기
 	selectItem();					//아이템 선택하기
 	moveItem();						//아이템 인벤에서 옮기기
 	useMirror();					//미러상태
-	////설정했었던 아이템 가격 불러오기
-	//for (int i = 0; i < _vPrice.size(); ++i)
-	//{
-	//	if (_vPrice.size() < 0) continue;
-	//	if (_shop[_select].item == nullptr) continue;
-
-	//	//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-	//	//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
-	//	//빈 자리에 넣는 건 저장이 되는데,
-	//	//아이템을 바꿔 넣거나, 되돌려 넣을 때 0으로 뜸
-	//	if (_select == 0) loadPrice(_firstPrice);
-	//	if (_select == 2) loadPrice(_secondPrice);
-	//	if (_select == 4) loadPrice(_thirdPrice);
-	//	if (_select == 6) loadPrice(_fourthPrice);
-	//}
 }
 
 void inventory::release()

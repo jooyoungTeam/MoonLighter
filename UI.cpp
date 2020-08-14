@@ -34,14 +34,24 @@ void UI::render()
 	_HpBarImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY);
 
 	//무기 자리 렉트
-	D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
+	//D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
 	
-	//플레이어가 무기를 바꾸면
-	if (!_player->getWeaponChange()) _firstWeapon->Render(Vector2(0, 0));
-	if (_player->getWeaponChange()) _secondWeapon->Render(Vector2(0, 0));
+	//플레이어 기본무기
+	if (!_player->getWeaponChange())
+	{
+		ImageManager::GetInstance()->FindImage("sword")->Render(Vector2(_weapon.left + 15, _weapon.top + 15));
+		_firstWeapon->Render(Vector2(0, 0));
+	}
+
+	//플레이어 서브무기
+	if (_player->getWeaponChange())
+	{
+		ImageManager::GetInstance()->FindImage("bow")->Render(Vector2(_weapon.left + 15, _weapon.top + 10));
+		_secondWeapon->Render(Vector2(0, 0));
+	}
 
 	//펜던트 자리 렉트
-	D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);
+	//D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);
 
 	//펜던트
 	_pendant->Render(Vector2(_portal.left - 30, _portal.top - 15));
