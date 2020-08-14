@@ -42,6 +42,7 @@ struct tagShop						//상점
 	int count;						//아이템 개수
 	int price;						//아이템 설정가
 	int totalPrice;					//아이템의 전체 금액
+	int originalPrice;				//아이템 원가 전체 금액
 };
 
 struct tagSetPrice					//가격 설정 창
@@ -115,7 +116,7 @@ public:
 	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
-	void savePrice();										//가격 저장하기
+	void savePrice(int select);								//가격 저장하기
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기

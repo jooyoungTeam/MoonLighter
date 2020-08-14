@@ -178,7 +178,7 @@ void inventory::update()
 		setPrice(_thirdPrice, 4);
 		setPrice(_fourthPrice, 6);
 
-		savePrice();				//가격 저장하기
+		//savePrice();				//가격 저장하기
 	}
 
 	moveInven();					//인벤에서 돌아다니기
@@ -531,22 +531,34 @@ void inventory::moveItem()
 						_shop[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
 
-						/*for (int i = 0; i < _vPrice.size(); ++i)
-						{
-							if (_vPrice.size() < 0) continue;
+						//저장되어있지 않은 인덱스라면 막기
+						//for (int i = 0; i < _vPrice.size(); ++i)
+						//{
+						//	if (_vPrice.size() < 0) continue;
 
-							if (_vPrice[i].index == _shop[_select].item->getIndex())
-							{
-								_shop[_select].price = _vPrice[i].price;
-							}
-						}*/
-
+						//	//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+						//	//렌더랑 연결?
+						//	//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
+						//	if (_vPrice[i].index == _shop[_select].item->getIndex())
+						//	{
+						//		_shop[_select].price = _vPrice[i].price;
+						//	}
+						//}
 					}	
 
 					//아이템 가격 설정 끄기
 					if (_select % 2 != 0 && _isSetPrice)
 					{
 						if (_selectItem.item != nullptr) return;
+
+						//쇼케이스에 아이템이 있으면 가격 저장
+						//if (_shop[_select - 1].item != nullptr) savePrice(_select - 1);
+						//
+						////쇼케이스 아이템이 빈 칸이면 카운트 초기화
+						//if (_shop[_select - 1].item == nullptr)
+						//{
+
+						//}
 						_isSetPrice = false;
 					}
 					_isSelect = false;
