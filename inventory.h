@@ -42,12 +42,19 @@ struct tagShop						//상점
 	int count;						//아이템 개수
 	int price;						//아이템 설정가
 	int totalPrice;					//아이템의 전체 금액
+	int originalPrice;				//아이템 원가 전체 금액
 };
 
 struct tagSetPrice					//가격 설정 창
 {
 	FloatRect rc;					//가격 변경 렉트
 	int count;						//입력되는 숫자
+};
+
+struct tagSavePrice					//가격 저장용
+{
+	int index;						//아이템 번호
+	int price;						//설정한 가격
 };
 
 class player;
@@ -80,12 +87,9 @@ private:
 	int _mirrorBallFrameX;				//미러 안 공 프레임X
 	int _saleFrameX;					//판매 프레임X
 	int _count;							//미러 딜레이
+	int _selectCount;					//가격 선택
 	int _gold;							//소지금
-	int _selectCount;
-	int _firstCount;					//가격 선택
-	int _secondCount;
-	int _thirdCount;
-	int _fourthCount;
+	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
 
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값
@@ -110,10 +114,9 @@ public:
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
 	void renderInven();										//인벤 상태에 따른 렌더 조정
-	//가격 설정하기
-	void setCount(tagSetPrice price[PRICESPACE], int selectCount, wstring direction);
-	//가격 계산하기
-	void setPrice(tagSetPrice price[PRICESPACE], int select);
+	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
+	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
+	void savePrice(int select);								//가격 저장하기
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
@@ -128,6 +131,15 @@ public:
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
+	void resetShowCase(int index) 
+	{ 
+		_shop[index].count = 0;
+		_shop[index].countNum = L"";
+		_shop[index].item = NULL;
+		_shop[index].originalPrice = 0;
+		_shop[index].price = 0;
+		_shop[index].totalPrice = 0;
+	}
 
 public:
 	//플레이어 참조용

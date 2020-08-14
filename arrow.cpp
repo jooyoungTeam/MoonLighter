@@ -56,7 +56,7 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float d
 
 	arrow.arrowImage = ImageManager::GetInstance()->FindImage("playerArrow");
 	
-	arrow.speed = 10.0f;
+	arrow.speed = 17.0f;
 	arrow.x = arrow.shootX = x;
 	arrow.y = arrow.shootY = y;
 
@@ -98,7 +98,7 @@ void arrow::arrowMove()
 
 		_viArrow->rc = RectMakePivot(Vector2(_viArrow->x, _viArrow->y), Vector2(30, 30), Pivot::Center);
 
-		if ((300 < getDistance(_viArrow->x, _viArrow->y, _viArrow->shootX, _viArrow->shootY)))
+		if ((1600 < getDistance(_viArrow->x, _viArrow->y, _viArrow->shootX, _viArrow->shootY)))
 		{
 			_viArrow = _vArrow.erase(_viArrow);
 		}

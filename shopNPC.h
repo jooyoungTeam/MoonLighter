@@ -56,7 +56,7 @@ private:
 	POINT				_goToPoint;			// 가야 할곳
 	POINT				_itemWayPoint[4];	// 아이템 고르는 좌표
 	POINT				_counterPoint;		// 카운터 좌표
-	POINT				_aroundPoint[4];	// 배회 좌표
+	POINT				_aroundPoint[3];	// 배회 좌표
 	POINT				_eixtPoint;			// 출입문 좌표
 
 	float				_centerX;			// 중점 x
@@ -72,6 +72,7 @@ private:
 	int					_indexY;			// 프레임인덱스Y
 	int					_emotionIndexX;		// 이모션 프레임인덱스 X
 	int					_rndChoiceItem;		// 아이템 고르는 난수
+	int					_rndChoicePt;		// 배회 난수
 	int					_rightPrice;		// 물건의 적정가
 	int					_settingPrice;		// 플레이어가 정한 가격
 	int					_selectPrice;		// 고른 물건의 가격
@@ -79,12 +80,14 @@ private:
 
 	bool				_checkItem[4];		// 아이템 확인 여부(똑같은 아이템 안보기)
 	bool				_isBuy;				// 구매했는지 확인
+	bool				_isAway;			// 떠나는지 확인
+	bool				_isCount;			// 계산중인지 확인
 public:
 	shopNPC() {}
 	~shopNPC() {}
 
 public:
-	HRESULT init();
+	HRESULT init(npcType type);
 	void	release();
 	void	updadte();
 	void	render();
@@ -96,7 +99,8 @@ public:
 	void	unMoveSet();					// 못 움직이는곳 셋팅
 	void    wayPointSet();					// 가야되는곳 셋팅
 	void	directionCheck();				// 방향 검사
-	void	chooseItem();					// 아이템 뽑기.
+	void	chooseItem();					// 아이템 뽑기
+	void	choosePt();
 
 public:
 	//============================ Get ===========================
@@ -106,12 +110,14 @@ public:
 	int  getSelectPrice() { return _selectPrice; }
 	int  getRndItem() { return _rndChoiceItem; }
 	bool getIsBuy() { return _isBuy; }
-	
+	bool getIsAway() { return _isAway; }
+	bool getIsCount() { return _isCount; }
 
 public:
 	//============================ Set ===========================
 	void setSettingPrice(int price) { _settingPrice = price; }
 	void setRightPrice(int price) { _rightPrice = price; }
 	void setItem(item* item) { _item = item; }
+	void setIsCount(bool arg) { _isCount = arg; }
 };
 
