@@ -1,16 +1,11 @@
 #pragma once
 
 #define TILESIZE 50
-
-#define TILEX 60
-#define TILEY 49
-
-#define TILESIZEX (TILESIZE * TILEX)
-#define TILESIZEY (TILESIZE * TILEY)
+#define TILEX 100
+#define TILEY 100
 
 #define SAMPLETILEX 9
 #define SAMPLETILEY 5
-
 
 #define ATTR_UNMOVE		0x00000001
 #define ATTR_SWAMP		0x00000002
@@ -18,7 +13,7 @@
 
 enum TERRAIN
 {
-	TR_WALL, TR_FLOOR, TR_GRASS, TR_WATER, TR_NONE, TR_END
+	TR_WALL, TR_FLOOR, TR_GRASS, TR_WATER, TR_NONE, TR_COLLISION, TR_END
 };
 
 enum OBJECT
@@ -43,7 +38,6 @@ struct tagTile
 	int     idX;
 	int     idY;
 	bool    isColTile;
-	string  str;
 };
 
 
@@ -58,12 +52,11 @@ struct tagObject
 {
 	OBJECT   type;
 	RECT     rc;
-	Image*   img;
-	bool     isActive;
 	bool     isFrameRender;
 	float    scale;
 	int      frameX;
 	int      count;
+	int      imgNumber;
 };
 
 
