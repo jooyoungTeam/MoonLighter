@@ -4,6 +4,7 @@
 
 void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
+	//cout << "¾ÆÀÌµé" << endl;
 	enemy.setAttackDelay(enemy.getAttackDelay() + 1);
 	if (enemyType == ENEMY_GOLEM)
 	{
@@ -60,6 +61,7 @@ void enemyMoveState::update(enemy & enemy, ENEMYTYPE enemyType)
 
 void enemyAttackState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
+	//cout << "¾îÅÃ" << endl;
 	enemy.attack();
 	enemy.setAttackDelay(0);
 	//enemy.setAttackRect(RectMakePivot(Vector2(enemy.getX(), enemy.getY()), Vector2(enemy.getWidth(), enemy.getHeight()), Pivot::Center));
@@ -78,10 +80,12 @@ void enemyAttackState::update(enemy & enemy, ENEMYTYPE enemyType)
 
 void enemyHitState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
+	//cout << "Èý" << endl;
 	enemy.enemyHit();
 }
 
 void enemyDeadState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
+	//cout << "Á×À½" << endl;
 	enemy.dead();
 }

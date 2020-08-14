@@ -109,7 +109,7 @@ void enemyManager::render()
 	}
 	_bullet->render();
 
-	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
+	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
 	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 	ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
 	EFFECTMANAGER->render();
@@ -119,13 +119,13 @@ void enemyManager::setEnemy()
 {
 	int i = 1;
 
-	enemy* boss1;
-	boss1 = new boss;
-	boss1->playerCheck(_x, _y, _rc);
-	boss1->init(i, 1360, 300, 250, 300, ENEMY_BOSS);
-	_vEnemy.push_back(boss1);
+	//enemy* boss1;
+	//boss1 = new boss;
+	//boss1->playerCheck(_x, _y, _rc);
+	//boss1->init(i, 1360, 300, 590, 650, ENEMY_BOSS);
+	//_vEnemy.push_back(boss1);
 
-	i++;
+	//i++;
 	enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
@@ -214,44 +214,17 @@ void enemyManager::playerCol()
 	RECT temp;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-		if (_vEnemy[i]->getState() != _vEnemy[i]->getDead())
+
+		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()) )
 		{
-			if (PtInRect(&_vEnemy[i]->getEnemyRect().GetRect(), _ptMouse))
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-				{
-					_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
-					_vEnemy[i]->setHP();
-					_vEnemy[i]->setIsHit(true);
-					_vEnemy[i]->setBarAlpha(1.0);
-					//_vEnemy[i]->setState(_vEnemy[i]->getHit());
-					if (_vEnemy[i]->getCurHP() <= 0)
-					{
-						_vEnemy[i]->setOnceAni(true);
-					}
-				}
-			}
-			
-			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
-			{
-				_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
-				_vEnemy[i]->setHP();
-				_vEnemy[i]->setIsHit(true);
-				_vEnemy[i]->setBarAlpha(1.0);
-				_player->setAttackRc(0, 0, 0, 0);
-				//_vEnemy[i]->setState(_vEnemy[i]->getHit());
-				if (_vEnemy[i]->getCurHP() <= 0)
-				{
-					_vEnemy[i]->setOnceAni(true);
-				}
-			}
-
-			//if (IntersectRect(&temp, &dynamic_cast<boss*>(_vEnemy[i])->getBAttack2()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
-			//{
-			//	cout << "맞는당" << endl;
-			//}
-
-			
+			_vEnemy[i]->setEnemyAttack();
+			_player->setAttackRc(0, 0, 0, 0);
+		}
+	
+		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()))
+		{
+			cout << " 플레이어 맞음 " << endl;
+			_vEnemy[i]->setAttackRect(0, 0, 0, 0);
 		}
 	}
 
