@@ -20,6 +20,7 @@ void bossStage::render()
 	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	_player->render();
 	_enemy->render();
+	CAMERAMANAGER->zOrderALLRender();
 }
 
 void bossStage::update()

@@ -51,6 +51,7 @@ protected:
 	int _rndX;			//astar 랜덤 값 준거
 	int _rndY;			//이것또한..
 	int _hitCount;		//맞을때 반짝
+	int _bossHitCount;
 	int _isHitCount;	//isHit의 카운트임
 
 
@@ -114,6 +115,42 @@ public:
 	void setSaveHP(int hp) { _saveHP = hp; }
 	void setIsHit(bool hit) { _isHit = hit; }
 	void setBarAlpha(float alpha) { _barAlpha = alpha; }
+	void setEnemyAttack(int hp = 5)
+	{
+		if (_state != _hit && _state != _dead)
+		{
+			_saveHP = _bar.width;
+			if (_type != ENEMY_BOSS)
+			{
+				hp = 30;
+				_isHit = true;
+				_barAlpha = 1.0f;
+			}
+			_curHP -= hp;
+			if (_curHP <= 0)
+			{
+				_onceAni = true;
+				if (_type == ENEMY_BOSS)
+				{
+					_state = _dead;
+				}
+			}
+			if (_type == ENEMY_BOSS)
+			{
+				if (_state == _idle)
+				{
+					_bossHitCount++;
+
+				}
+				if (_bossHitCount > 4)
+				{
+					_bossHitCount = 0;
+					_isHit = true;
+				}
+			}
+		}
+	}
+
 
 	//---------------------------------get-----------------------------------
 

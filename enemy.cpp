@@ -24,6 +24,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 	_type = type;
 	_maxHP = _curHP = 100;
 	_speed = 0;
+	_bossHitCount = 0;
 	_bar.width = 80;
 	_saveHP = _bar.width;
 	_bar.x = _x - _width;
@@ -140,6 +141,7 @@ void enemy::render()
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
+	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato, 0.8f);
 	/*D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);*/
@@ -285,6 +287,9 @@ void enemy::ani()
 	int BossDown[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "BossDown", "BossUp", BossDown, 32, 13, false);
 
+	int BossLight[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,10,9,8,7,6,5,4,3,2,1,0};
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossLight", "bossHit", BossLight, 39, 13, true);
+
 	int dead1[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHit", "bossHit", dead1, 41, 13, false);
 
@@ -314,8 +319,10 @@ void enemy::ani()
 	int shoot3[] = { 48,47,46,45,44,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHandFly3", "bossHandFly", shoot3, 44, 7, false);
 
-	int attack3[]{ 0,1,2,3,4,5,6,7,8,8,7,6,5,4,3,2,1,0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttack3", "bossHandFly", attack3, 18, 7, false);
+	int attack3_1[]{ 0,1,2,3,4,5,6,7,8 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttack11", "bossHandFly", attack3_1, 9, 7, false);
+	int attack3_2[]{ 8,7,6,5,4,3,2,1,0 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossAttack22", "bossHandFly", attack3_2, 9, 7, false);
 
 }
 
@@ -436,12 +443,16 @@ void enemy::setBar()
 
 void enemy::checkBoolCount()
 {
+	if (_type == ENEMY_BOSS && _isHit)
+	{
+		_state = _hit;
+	}
 	if (_curHP <= 0)
 	{
 		_curHP = 0;
 		_state = _dead;
 	}
-	if (_isHit)
+	if (_type != ENEMY_BOSS && _isHit)
 	{
 		_isHitCount++;
 		enemyHit();
