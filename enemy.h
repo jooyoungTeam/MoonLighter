@@ -71,6 +71,7 @@ protected:
 	bool _onceAni;		//애니 스타트 하는거 한 번만 들어오게..
 	bool _realDead;		//애니 다 하구 에너미 없어지게 하는거
 	bool _isHit;		//맞음
+	bool _isBossPull;
 		
 
 
@@ -104,17 +105,24 @@ public:
 
 	void setAttackRect(float x, float y, float width, float height) { _attackRc = RectMakePivot(Vector2(x, y), Vector2(width, height), Pivot::Center); }
 
-	void setIsAttack(bool attack) { _isAttack = attack; }
-	void setAttackDelay(int delay) { _attackDelay = delay; }
 	void setAttackAngle(float angle) { _attackAngle = angle; }
 	void setScale(float s) { _scale = s; }
+	void setBarAlpha(float alpha) { _barAlpha = alpha; }
+
+
+	void setAttackDelay(int delay) { _attackDelay = delay; }
+	void setHP(int hp = 30) { _curHP -= hp; }
+	void setSaveHP(int hp) { _saveHP = hp; }
+
+
+	void setIsAttack(bool attack) { _isAttack = attack; }
 	void setIsCol(bool col) { _isCol = col; }
 	void setOnceAni(bool ani) { _onceAni = ani; }
 	void setRealDead(bool d) { _realDead = d; }
-	void setHP(int hp = 30) { _curHP -= hp; }
-	void setSaveHP(int hp) { _saveHP = hp; }
 	void setIsHit(bool hit) { _isHit = hit; }
-	void setBarAlpha(float alpha) { _barAlpha = alpha; }
+	void setIsPull(bool pull) { _isBossPull = pull; }
+
+
 	void setEnemyAttack(int hp = 5)
 	{
 		if (_state != _hit && _state != _dead)
@@ -172,6 +180,7 @@ public:
 	bool getIsCol() { return _isCol; }
 	bool getRealDead() { return _realDead; }
 	bool getIsHit() { return _isHit; }
+	bool getIsPull() { return _isBossPull; }
 	
 
 	tagBar getBar() { return _bar; }

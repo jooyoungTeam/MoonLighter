@@ -174,6 +174,7 @@ void enemy::ani()
 	//¿»·Î ½½¶óÀÓ
 	ImageManager::GetInstance()->AddFrameImage("yellowSlime", L"image/enemy/yellowSlime.png", 8, 1);
 	ImageManager::GetInstance()->AddFrameImage("yellowSlimeDead", L"image/enemy/yellowSlimeDead.png", 11, 1);
+	ImageManager::GetInstance()->AddFrameImage("yellowSlimePang", L"image/enemy/yellowSlime_pang.png", 7, 1);
 
 	//ÆÌ
 	ImageManager::GetInstance()->AddFrameImage("bulletCollision", L"image/enemy/bullet_collision.png", 5, 1);
@@ -239,6 +240,8 @@ void enemy::ani()
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "yellowSlime", "yellowSlime", yellowSlime, 8, 13, true);
 
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "yellowSlimeDead", "yellowSlimeDead", slimeDead, 11, 13, false);
+	int yellowSlimePang[] = { 0,1,2,3,4,5,6 };
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "yellowSlimePang", "yellowSlimePang", yellowSlimePang, 7, 13, false);
 
 
 	//ÆÌ
@@ -288,7 +291,7 @@ void enemy::ani()
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "BossDown", "BossUp", BossDown, 32, 13, false);
 
 	int BossLight[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,10,9,8,7,6,5,4,3,2,1,0};
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossLight", "bossHit", BossLight, 39, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossLight", "bossHit", BossLight, 39, 13, false);
 
 	int dead1[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 };
 	KEYANIMANAGER->addArrayFrameAnimation(_index, "bossHit", "bossHit", dead1, 41, 13, false);
