@@ -6,12 +6,16 @@ enum BOSS_PATTERN
 	ATTACK2,
 	ATTACK3,
 };
-
-enum BOSS_3PATTERN
+enum BOSS_ANI
 {
-	PATTERN1,
-	PATTERN2
+	ONE,
+	TWO,
+	THREE,
+	FOUR,
+	FIVE, 
+	SIX
 };
+
 
 struct tagAttack1
 {
@@ -21,8 +25,7 @@ struct tagAttack1
 	float speed;
 	float width, height;
 	float angle;
-	bool isBottom;
-	bool onceImage;
+	bool isAttack;
 	int xRandom;
 	int yRandom;
 	int count;
@@ -35,12 +38,14 @@ struct tagAttack1
 struct tagAttackRect
 {
 	FloatRect rc;
+	FloatRect attackRc;
 	float x, y;
 	float mX, mY;
 	float width;
 	float speed;
 	bool rackFall;
 	float alpha;
+	float rackAlpha;
 	float scale;
 	int attackCount;
 	int rackCount;
@@ -57,19 +62,17 @@ private:
 	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 	BOSS_PATTERN _bossPattern;
-	BOSS_3PATTERN _bossPattern3;
+	BOSS_ANI _bossAni;
 
 	float _handAngle1;
 	float _handAngle2;
-	bool _isBossAttack;
-	bool _isBossAttackEnd;
 	bool _isHandCol;
 	bool _patternCheck;
-	bool _patternCheck2;
+	bool _playerCol;
 	int _cameraShake;
 	int _bossAttackCount;
 	int _patternRandom;
-	int _patternRandom2;
+	int _saveRandom;
 
 public:
 	boss() {}
@@ -90,6 +93,7 @@ public:
 	void attack3_2();
 	void attack2Angle();
 	void setRock();
+	void playerCol();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
