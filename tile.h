@@ -2,7 +2,6 @@
 #include "gameNode.h"
 #include "tileNode.h"
 #include "button.h"
-#include "player.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class tile : public gameNode
@@ -25,7 +24,6 @@ private:
 	bool                _isActive;
 	// --------- 팔레트 변수 --------- //
 
-
 	// --------- object ---------- //
 	RECT               _leftRightButton[2];
 	tagSampleObject    _sampleObject[4];
@@ -47,7 +45,6 @@ private:
 
 	// ----------- 임시 변수 ------------ //
 	Image*        _mapImg;
-	player*       _player;
 	// ----------- 임시 변수 ------------ //
 public:
 	tile() {}

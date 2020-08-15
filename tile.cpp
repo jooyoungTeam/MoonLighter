@@ -3,12 +3,10 @@
 
 HRESULT tile::init()
 {
-	_tileSize[0] = 60;
-	_tileSize[1] = 49;
+	_tileSize[0] = 32;
+	_tileSize[1] = 18;
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
-	_player = new player;
-	_player->init(500, 500);
-	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
+
 
 	imageLoad();
 	{
@@ -25,8 +23,8 @@ HRESULT tile::init()
 	}
 
 	{
-		_miniMap = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
-		_miniMapMove = RectMakePivot(Vector2(10, WINSIZEY - 210), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+		_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
+		_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
 	}
 
 	{
@@ -43,7 +41,10 @@ HRESULT tile::init()
 
 void tile::render()
 {
-	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
+	if (_mapImg != NULL)
+	{
+		CAMERAMANAGER->render(_mapImg, 0, 0, 1);
+	}
 
 	for (int i = 0; i < 19; i++)
 	{
@@ -62,9 +63,10 @@ void tile::render()
 
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
 				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
-
-
-				if (_vTile[index].isColTile && _button->getType() == BUTTON_COLLISION)
+			}
+			if (_vTile[index].terrain == TR_WALL || _vTile[index].isColTile)
+			{
+				if (_button->getType() == BUTTON_COLLISION)
 				{
 					CAMERAMANAGER->fillRectangle(_vTile[index].rc, D2D1::ColorF::Red, 0.5f);
 				}
@@ -159,6 +161,14 @@ void tile::render()
 			{
 				ImageManager::GetInstance()->FindImage("objectSpa")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
 			}
+			else if (_currentSampleObject == OBJ_DUN1)
+			{
+				ImageManager::GetInstance()->FindImage("objectDungeon1")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+			}
+			else if (_currentSampleObject == OBJ_DUN2)
+			{
+				ImageManager::GetInstance()->FindImage("objectDungeon2")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+			}
 		}
 
 
@@ -204,8 +214,6 @@ void tile::render()
 
 	}
 
-	_player->render();
-
 	// 팔레트 껐다켰다하는 렉트
 	ImageManager::GetInstance()->FindImage("sampleUIOnOff")->Render(Vector2(_sampleTileOnOff.left, _sampleTileOnOff.top));
 }
@@ -216,7 +224,6 @@ void tile::update()
 	setMap();
 	drag();
 	saveLoad();
-	_player->update();
 
 }
 
@@ -310,19 +317,18 @@ void tile::drag()
 				{
 					_vTile[i].terrainFrameX = _currentTile.x;
 					_vTile[i].terrainFrameY = _currentTile.y;
+					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
-					_vTile[i].terrainFrameX = _currentTile.x;
-					_vTile[i].terrainFrameY = _currentTile.y;
+					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
 					_vTile[i].isColTile = true;
-					_vTile[i].terrain = TR_COLLISION;
 				}
 
 
@@ -359,7 +365,7 @@ void tile::setup()
 			temp.isDrag = false;
 			temp.idX = j;
 			temp.idY = i;
-
+			temp.isColTile = false;
 			_vTile.push_back(temp);
 		}
 	}
@@ -368,11 +374,8 @@ void tile::setup()
 	for (int i = 0; i < _tileSize[1] * _tileSize[0]; ++i)
 	{
 		_vTile[i].terrainFrameX = 8;
-		_vTile[i].terrainFrameY = 0;
+		_vTile[i].terrainFrameY = 4;
 		_vTile[i].terrain = terrainSelect(_vTile[i].terrainFrameX, _vTile[i].terrainFrameY);
-
-		// ---------- 임시
-		_vTile[i].terrain = TR_NONE;
 	}
 }
 
@@ -381,6 +384,7 @@ void tile::setMap()
 	POINT pt = _ptMouse;
 	pt.x += CAMERAMANAGER->getLeft();
 	pt.y += CAMERAMANAGER->getTop();
+	sampleOnOff();
 
 	// 선택할 때 범위
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -429,8 +433,6 @@ void tile::setMap()
 
 			_button->update();
 		}
-
-		sampleOnOff();
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
@@ -448,7 +450,7 @@ void tile::setMap()
 						continue;
 					if (PtInRect(&_vTile[index].rc, pt))
 					{
-						_vTile[index].terrain = TR_NONE;
+						_vTile[index].isColTile = false;
 						break;
 					}
 				}
@@ -526,6 +528,7 @@ void tile::setMap()
 					else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 					{
 						_vTile[index].terrain = TR_NONE;
+						_vTile[index].isColTile = false;
 					}
 
 					break;
@@ -567,6 +570,7 @@ void tile::imageLoad()
 	//ImageManager::GetInstance()
 
 	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+
 	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
 	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
 	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
@@ -586,108 +590,169 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
 	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
 
-}
+	ImageManager::GetInstance()->AddImage("objectDungeon1", L"Object/objectDungeon1.png");
+	ImageManager::GetInstance()->AddImage("objectDungeon2", L"Object/objectDungeon2.png");
+	ImageManager::GetInstance()->AddImage("object_skull1", L"Object/skull1.png");
+	ImageManager::GetInstance()->AddImage("object_skull2", L"Object/skull2.png");
+	ImageManager::GetInstance()->AddImage("object_skull3", L"Object/skull3.png");
+	ImageManager::GetInstance()->AddImage("object_pot", L"Object/pot.png");
+	ImageManager::GetInstance()->AddImage("object_pot_slime", L"Object/pot_slime.png");
+	ImageManager::GetInstance()->AddImage("object_pillar", L"Object/pillar.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock", L"Object/smallRock.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
 
+
+}
 
 void tile::loadMap()
 {
-	if (_button->getType() == BUTTON_LOAD_TOWN)
+	if (_button->getType() == BUTTON_LOAD_TOWN || _button->getType() == BUTTON_LOAD_BOSS
+		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON)
 	{
 		HANDLE file;
 		DWORD read;
-
 		int size[2];
-		// ------------ 타일
+		const char* fileName;
+		fileName = "";
+		if (_button->getType() == BUTTON_LOAD_TOWN)
+		{
+			_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
+			fileName = "townMap.map";
+		}
+		else if (_button->getType() == BUTTON_LOAD_BOSS)
+		{
+			_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
+			fileName = "boss.map";
+		}
+		else if (_button->getType() == BUTTON_LOAD_SHOP)
+		{
 
+			_mapImg = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
+			fileName = "shop.map";
+		}
+		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
+		{
+			_mapImg = NULL;
+			fileName = "dungeon1.map";
+		}
 		if (_vTile.size() > 0)
 			_vTile.clear();
 		if (_vObject.size() > 0)
 			_vObject.clear();
 
-		file = CreateFile("townMap.map", GENERIC_READ, NULL, NULL,
+		file = CreateFile(fileName, GENERIC_READ, NULL, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-		ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
 
 		tagTile* temTile = new tagTile[_tileSize[0] * _tileSize[1]];
-		ReadFile(file, temTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, temTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &read, NULL);
 
 		for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
 		{
 			_vTile.push_back(temTile[i]);
 		}
 
-		ReadFile(file, size, sizeof(int) * 2, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, size, sizeof(int) * 2, &read, NULL);
+
 		// ------------ 오브젝트		
 		tagObject* temp = new tagObject[size[1]];
-		ReadFile(file, temp, sizeof(tagObject) * size[1], &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+		ReadFile(file, temp, sizeof(tagObject) * size[1], &read, NULL);
 		for (int i = 0; i < size[1]; i++)
 		{
 			_vObject.push_back(temp[i]);
 		}
 
-		//memset(_townAttribute, 0, sizeof(DWORD) * TILEX * TILEY);
-		//for (int i = 0; i < TILEX * TILEY; ++i)
-		//{
-		//	if (_townTiles[i].terrain == TR_WALL) _townAttribute[i] |= ATTR_UNMOVE;
-		//}
-
 		CloseHandle(file);
 
 
-
+		_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
+		_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+		CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 		_button->setType(BUTTON_TERRAIN);
+
 	}
-
-
 }
 
 void tile::saveMap()
 {
-	if (_button->getType() == BUTTON_SAVE_TOWN)
+	if (_button->getType() == BUTTON_SAVE_TOWN || _button->getType() == BUTTON_SAVE_BOSS
+		|| _button->getType() == BUTTON_SAVE_SHOP || _button->getType() == BUTTON_SAVE_DUNGEON)
 	{
 		_saveTime++;
-		if (_saveTime % 50 == 0)
+	}
+
+	if (_saveTime > 50)
+	{
+		HANDLE file;
+		DWORD write;
+		const char* fileName;
+		fileName = "";
+		if (_button->getType() == BUTTON_SAVE_TOWN)
 		{
-			// ----------------- 중복 실행 안되도록 여기에 입력
-			HANDLE file;
-			DWORD write;
 			_tileSize[0] = 60;
 			_tileSize[1] = 49;
-			// ----------------- 타일 ----------------- //
-			tagTile* tempTile = new tagTile[60 * 49];
-			for (int i = 0; i < _vTile.size(); i++)
-			{
-				tempTile[i] = _vTile[i];
-			}
-			// ----------------- 타일 ----------------- //
 
-			// ----------------- 오브젝트 ----------------- //
-			int size[2] = { 1,_vObject.size() };
-			tagObject* temp = new tagObject[_vObject.size()];
-			for (int i = 0; i < _vObject.size(); i++)
-			{
-				temp[i] = _vObject[i];
-			}
-			// ----------------- 오브젝트 ----------------- //
-
-			file = CreateFile("townMap.map", GENERIC_WRITE, NULL, NULL,
-				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-			WriteFile(file, _tileSize, sizeof(int) * 2, &write, NULL);
-			WriteFile(file, tempTile, sizeof(tagTile) * 60 * 49, &write, NULL);
-			WriteFile(file, size, sizeof(int) * 2, &write, NULL);
-			WriteFile(file, temp, sizeof(tagObject) * _vObject.size(), &write, NULL);
-
-			CloseHandle(file);
-
-			_saveTime = 0;
-			_button->setType(BUTTON_TERRAIN);
+			if (_mapImg != ImageManager::GetInstance()->FindImage("townMap")) return;
+			fileName = "townMap.map";
 		}
+		else if (_button->getType() == BUTTON_SAVE_BOSS)
+		{
+			_tileSize[0] = 60;
+			_tileSize[1] = 41;
+
+			if (_mapImg != ImageManager::GetInstance()->FindImage("bossRoom1")) return;
+			fileName = "boss.map";
+		}
+		else if (_button->getType() == BUTTON_SAVE_SHOP)
+		{
+			_tileSize[0] = 32;
+			_tileSize[1] = 28;
+
+			if (_mapImg != ImageManager::GetInstance()->FindImage("shop_background")) return;
+			fileName = "shop.map";
+		}
+		else if (_button->getType() == BUTTON_SAVE_DUNGEON)
+		{
+			_tileSize[0] = 32;
+			_tileSize[1] = 18;
+
+			fileName = "dungeon1.map";
+		}
+
+		// ----------------- 타일 ----------------- //
+		tagTile* tempTile = new tagTile[_tileSize[0] * _tileSize[1]];
+		for (int i = 0; i < _vTile.size(); i++)
+		{
+			tempTile[i] = _vTile[i];
+		}
+		// ----------------- 타일 ----------------- //
+		// ----------------- 오브젝트 ----------------- //
+		int size[2] = { 1,_vObject.size() };
+		tagObject* temp = new tagObject[_vObject.size()];
+		for (int i = 0; i < _vObject.size(); i++)
+		{
+			temp[i] = _vObject[i];
+		}
+		// ----------------- 오브젝트 ----------------- //
+		file = CreateFile(fileName, GENERIC_WRITE, NULL, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+
+		WriteFile(file, _tileSize, sizeof(int) * 2, &write, NULL);
+		WriteFile(file, tempTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &write, NULL);
+		WriteFile(file, size, sizeof(int) * 2, &write, NULL);
+		WriteFile(file, temp, sizeof(tagObject) * _vObject.size(), &write, NULL);
+
+
+		CloseHandle(file);
+
+
+		_saveTime = 0;
+		_button->setType(BUTTON_TERRAIN);
 	}
+
 }
-
-
 
 void tile::selectObject()
 {
@@ -777,24 +842,24 @@ void tile::eraseObject(int arrNum)
 
 void tile::mapMove()
 {
-	//if (KEYMANAGER->isStayKeyDown('W'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() - 5);
-	//if (KEYMANAGER->isStayKeyDown('S'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 5);
-	//if (KEYMANAGER->isStayKeyDown('A'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 5);
-	//if (KEYMANAGER->isStayKeyDown('D'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 5);
-
-	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
+	if (KEYMANAGER->isStayKeyDown('W'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() - 10);
+	if (KEYMANAGER->isStayKeyDown('S'))	CAMERAMANAGER->setY(CAMERAMANAGER->getY() + 10);
+	if (KEYMANAGER->isStayKeyDown('A'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 10);
+	if (KEYMANAGER->isStayKeyDown('D'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 10);
 
 	float x = CAMERAMANAGER->getLeft() * 0.05f;
 	float y = CAMERAMANAGER->getTop() * 0.05f;
-	_miniMapMove = RectMakePivot(Vector2(10 + x, WINSIZEY - 210 + y), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+	_miniMapMove = RectMakePivot(Vector2(10 + x, 10 + y), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
 }
 
 void tile::sampleOnOff()
 {
-	if (PtInRect(&_sampleTileOnOff, _ptMouse))
+	if (KEYMANAGER->isOnceKeyDown('F'))
 	{
 		_isActive = !_isActive;
 	}
+
+
 
 	if (_isActive)
 	{
@@ -827,7 +892,8 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 		if (frameX == i && frameY == 3) return TR_GRASS;
 
 		// 다섯번째 줄
-		if (frameX == i && frameY == 4) return TR_GRASS;
+		if (frameX == 8 && frameY == 4) return TR_NONE;
+		else if (frameX == i && frameY == 4) return TR_GRASS;
 	}
 
 	return TR_NONE;
@@ -872,12 +938,25 @@ Image * tile::findImg(OBJECT type, int imgNum)
 		else if (imgNum == 1)	              img = ImageManager::GetInstance()->FindImage("npc_2");
 		else if (imgNum == 2)	              img = ImageManager::GetInstance()->FindImage("npc_3");
 		else if (imgNum == 3)	              img = ImageManager::GetInstance()->FindImage("npc_4");
-
 	}
 	else if (type == OBJ_SPA)
 	{
 		if (imgNum == 0 || imgNum == 1 || imgNum == 2 || imgNum == 3)			img = ImageManager::GetInstance()->FindImage("spa");
 
+	}
+	else if (type == OBJ_DUN1)
+	{
+		if (imgNum == 0)		              img = ImageManager::GetInstance()->FindImage("object_skull1");
+		else if (imgNum == 1)	              img = ImageManager::GetInstance()->FindImage("object_skull2");
+		else if (imgNum == 2)	              img = ImageManager::GetInstance()->FindImage("object_skull3");
+		else if (imgNum == 3)	              img = ImageManager::GetInstance()->FindImage("object_pot");
+	}
+	else if (type == OBJ_DUN2)
+	{
+		if (imgNum == 0)		              img = ImageManager::GetInstance()->FindImage("object_pot_slime");
+		else if (imgNum == 1)	              img = ImageManager::GetInstance()->FindImage("object_pillar");
+		else if (imgNum == 2)	              img = ImageManager::GetInstance()->FindImage("object_smallRock");
+		else if (imgNum == 3)	              img = ImageManager::GetInstance()->FindImage("object_smallRock_slime");
 	}
 
 	return img;

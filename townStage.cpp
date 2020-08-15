@@ -25,7 +25,7 @@ void townStage::update()
 void townStage::render()
 {
 	mapToolRender();
-	
+
 
 	_player->render();
 }
@@ -40,20 +40,20 @@ void townStage::loadMap()
 
 	int _tileSize[2];
 	int size[2];
-	
+
 	// ------------ 타일
 
 	file = CreateFile("townMap.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
 
-	ReadFile(file, _tile, sizeof(tagTile) * 60 * 49, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, _tile, sizeof(tagTile) * 60 * 49, &read, NULL);
 
-	ReadFile(file, size, sizeof(int) * 2, &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, size, sizeof(int) * 2, &read, NULL);
 	// ------------ 오브젝트		
 	tagObject* temp = new tagObject[size[1]];
-	ReadFile(file, temp, sizeof(tagObject) * size[1], &read, NULL); //32 * 18 ==>> 1600 x 900 사이즈
+	ReadFile(file, temp, sizeof(tagObject) * size[1], &read, NULL);
 	for (int i = 0; i < size[1]; i++)
 	{
 		_vObject.push_back(temp[i]);
@@ -62,7 +62,7 @@ void townStage::loadMap()
 	memset(_townAttribute, 0, sizeof(DWORD) * 60 * 49);
 	for (int i = 0; i < 60 * 49; ++i)
 	{
-		if (_tile[i].terrain == TR_WALL || _tile[i].terrain == TR_COLLISION) _townAttribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _townAttribute[i] |= ATTR_UNMOVE;
 	}
 
 	CloseHandle(file);
@@ -82,10 +82,9 @@ void townStage::mapToolRender()
 			if (index >= 60 * 49)
 				continue;
 
-			if (_tile[index].terrain != TR_NONE)
+			if (KEYMANAGER->isToggleKey('V'))
 			{
-				Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
-				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
+				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
