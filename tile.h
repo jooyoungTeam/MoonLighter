@@ -44,7 +44,9 @@ private:
 	int           _nowIndex;
 
 	// ----------- 임시 변수 ------------ //
+	int           _currentLoadType;          // 현재 어느맵을 로드했는지세이브 안꼬이게
 	Image*        _mapImg;
+	int           _autoCalc;
 	// ----------- 임시 변수 ------------ //
 public:
 	tile() {}
@@ -64,7 +66,7 @@ public:
 	void eraseObject(int arrNum);
 
 	void autoTile();
-
+	void autoTileType(int idx, TERRAIN type);
 	void mapMove();
 	void sampleOnOff();
 

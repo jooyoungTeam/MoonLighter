@@ -2,24 +2,24 @@
 #include "gameNode.h"
 #include "enemyManager.h"
 #include "tile.h"
-#include "player.h"
 
 class dungeonStage : public gameNode
 {
 private:
-	player*       _player;
-	enemyManager* _enemy;
-	tile*         _tile;
-	tagTile       _dungeonTiles[TILEX * TILEY];
-	DWORD         _dungeonAttribute[TILEX * TILEY];
+	class player*     _player;
+	enemyManager*     _enemy;
 
+	tile*             _tileClass;
+	DWORD             _attribute[32 * 18];
+	tagTile			  _tile[32 * 18];
+	vector<tagObject> _vObject;
 public:
 	HRESULT init();
 	void render();
 	void update();
 	void release();
 
-
+	void setPlayerLink(player* player) { _player = player; };
 	void loadDungeonMap();
 	void renderDungeonMap();
 };
