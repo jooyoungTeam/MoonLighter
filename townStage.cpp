@@ -84,7 +84,17 @@ void townStage::mapToolRender()
 
 			if (KEYMANAGER->isToggleKey('V'))
 			{
-				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
+				POINT pos;
+				pos.x = _player->getShadowX();
+				pos.y = _player->getShadowY();
+				if (PtInRect(&_tile[index].rc, pos))
+				{
+					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::White, 1);
+				}
+				else
+				{
+					CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
+				}
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);

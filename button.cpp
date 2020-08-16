@@ -115,6 +115,10 @@ void button::setButton()
 	_button[BUTTON_COLLISION].name = L"COLLISION";
 	_button[BUTTON_COLLISION].state = BUTTON_ALWAYS;
 
+	_button[BUTTON_AUTO].rc = RectMakeCenter(WINSIZEX / 2 + 630, 50, 80, 30);
+	_button[BUTTON_AUTO].name = L"	  AUTO";
+	_button[BUTTON_AUTO].state = BUTTON_ALWAYS;
+
 	_button[BUTTON_SAVE].rc = RectMakeCenter(WINSIZEX / 2 + 530, 100, 80, 30);
 	_button[BUTTON_SAVE].name = L"    SAVE";
 	_button[BUTTON_SAVE].state = BUTTON_ALWAYS;
@@ -167,7 +171,7 @@ void button::setButton()
 	_button[BUTTON_ERASE_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 730, 150, 80, 30);
 	_button[BUTTON_ERASE_OBJECT].name = L"OBJECT";
 	_button[BUTTON_ERASE_OBJECT].state = BUTTON_OFF;
-
+	
 
 	_button[BUTTON_EXIT].rc = RectMakeCenter(WINSIZEX / 2 + 530, 50, 50, 30);
 	_button[BUTTON_EXIT].name = L"  EXIT";

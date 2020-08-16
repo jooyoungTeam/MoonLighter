@@ -3,7 +3,6 @@
 #include "tile.h"
 #include "title.h"
 #include "shopStage.h"
-#include "dungeonStage.h"
 #include "townStage.h"
 #include "bossStage.h"
 HRESULT stageManager::init()
@@ -14,7 +13,8 @@ HRESULT stageManager::init()
 	INVENTORY->init();
 
 	_player = new player;
-
+	_dungeon = new dungeonStage;
+	_dungeon->setPlayerLink(_player);
 	_ui->getPlayerMemoryAddressLink(_player);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
@@ -22,7 +22,7 @@ HRESULT stageManager::init()
 
 	SCENEMANAGER->addScene("Å¸ÀÏ¾À", new tile);
 	SCENEMANAGER->addScene("¼¥¾À", new shopStage);
-	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
+	SCENEMANAGER->addScene("´øÀü¾À", _dungeon);
 	SCENEMANAGER->addScene("¸¶À»¾À", new townStage);
 	SCENEMANAGER->addScene("º¸½º¾À", new bossStage);
 

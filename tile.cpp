@@ -64,13 +64,14 @@ void tile::render()
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
 				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
 			}
-			if (_vTile[index].terrain == TR_WALL || _vTile[index].isColTile)
+			if (KEYMANAGER->isToggleKey('V'))
 			{
-				if (_button->getType() == BUTTON_COLLISION)
+				if (_vTile[index].terrain == TR_WALL || _vTile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_vTile[index].rc, D2D1::ColorF::Red, 0.5f);
 				}
 			}
+
 
 			if (_vTile[index].isDrag)
 			{
@@ -224,7 +225,7 @@ void tile::update()
 	setMap();
 	drag();
 	saveLoad();
-
+	autoTile();
 }
 
 void tile::release()
@@ -607,7 +608,7 @@ void tile::imageLoad()
 void tile::loadMap()
 {
 	if (_button->getType() == BUTTON_LOAD_TOWN || _button->getType() == BUTTON_LOAD_BOSS
-		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON)
+		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON || _button->getType() == BUTTON_LOAD_ENTERENCE)
 	{
 		HANDLE file;
 		DWORD read;
@@ -616,24 +617,33 @@ void tile::loadMap()
 		fileName = "";
 		if (_button->getType() == BUTTON_LOAD_TOWN)
 		{
+			_currentLoadType = 1;
 			_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
 			fileName = "townMap.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_BOSS)
 		{
+			_currentLoadType = 2;
 			_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
 			fileName = "boss.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_SHOP)
 		{
-
+			_currentLoadType = 3;
 			_mapImg = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
 			fileName = "shop.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
 		{
+			_currentLoadType = 4;
 			_mapImg = NULL;
-			fileName = "dungeon1.map";
+			fileName = "dungeon3.map";
+		}
+		else if (_button->getType() == BUTTON_LOAD_ENTERENCE)
+		{
+			_currentLoadType = 5;
+			_mapImg = NULL;
+			fileName = "dungeonEnterence.map";
 		}
 		if (_vTile.size() > 0)
 			_vTile.clear();
@@ -676,8 +686,9 @@ void tile::loadMap()
 
 void tile::saveMap()
 {
+	if (_currentLoadType == 0) return;
 	if (_button->getType() == BUTTON_SAVE_TOWN || _button->getType() == BUTTON_SAVE_BOSS
-		|| _button->getType() == BUTTON_SAVE_SHOP || _button->getType() == BUTTON_SAVE_DUNGEON)
+		|| _button->getType() == BUTTON_SAVE_SHOP || _button->getType() == BUTTON_SAVE_DUNGEON || _button->getType() == BUTTON_SAVE_ENTERENCE)
 	{
 		_saveTime++;
 	}
@@ -690,36 +701,69 @@ void tile::saveMap()
 		fileName = "";
 		if (_button->getType() == BUTTON_SAVE_TOWN)
 		{
+			if (_currentLoadType != 1)
+			{
+				_saveTime = 0;
+				_button->setType(BUTTON_TERRAIN);
+				return;
+			}
 			_tileSize[0] = 60;
 			_tileSize[1] = 49;
 
-			if (_mapImg != ImageManager::GetInstance()->FindImage("townMap")) return;
 			fileName = "townMap.map";
 		}
 		else if (_button->getType() == BUTTON_SAVE_BOSS)
 		{
+			if (_currentLoadType != 2)
+			{
+				_saveTime = 0;
+				_button->setType(BUTTON_TERRAIN);
+				return;
+			}
 			_tileSize[0] = 60;
 			_tileSize[1] = 41;
 
-			if (_mapImg != ImageManager::GetInstance()->FindImage("bossRoom1")) return;
 			fileName = "boss.map";
 		}
 		else if (_button->getType() == BUTTON_SAVE_SHOP)
 		{
+			if (_currentLoadType != 3)
+			{
+				_saveTime = 0;
+				_button->setType(BUTTON_TERRAIN);
+				return;
+			}
 			_tileSize[0] = 32;
 			_tileSize[1] = 28;
 
-			if (_mapImg != ImageManager::GetInstance()->FindImage("shop_background")) return;
 			fileName = "shop.map";
 		}
 		else if (_button->getType() == BUTTON_SAVE_DUNGEON)
 		{
+			if (_currentLoadType != 4)
+			{
+				_saveTime = 0;
+				_button->setType(BUTTON_TERRAIN);
+				return;
+			}
 			_tileSize[0] = 32;
 			_tileSize[1] = 18;
 
-			fileName = "dungeon1.map";
+			fileName = "dungeon3.map";
 		}
+		else if (_button->getType() == BUTTON_SAVE_ENTERENCE)
+		{
+			if (_currentLoadType != 5)
+			{
+				_saveTime = 0;
+				_button->setType(BUTTON_TERRAIN);
+				return;
+			}
+			_tileSize[0] = 32;
+			_tileSize[1] = 18;
 
+			fileName = "dungeonEnterence.map";
+		}
 		// ----------------- 타일 ----------------- //
 		tagTile* tempTile = new tagTile[_tileSize[0] * _tileSize[1]];
 		for (int i = 0; i < _vTile.size(); i++)
@@ -828,8 +872,20 @@ void tile::selectObject()
 				_currentObject.isFrameRender = false;
 				break;
 			}
-
-
+			else if (_currentSampleObject == OBJ_DUN1)
+			{
+				_currentObject.isFrameRender = false;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_DUN2)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 1)
+				{
+					_currentObject.scale = 2.0f;
+				}
+				break;
+			}
 		}
 
 	}
@@ -838,6 +894,114 @@ void tile::selectObject()
 void tile::eraseObject(int arrNum)
 {
 	_vObject.erase(_vObject.begin() + arrNum);
+}
+
+void tile::autoTile()
+{
+	if (_button->getType() == BUTTON_AUTO)
+	{
+		for (int i = 0; i < 19; i++)
+		{
+			for (int j = 0; j < 33; j++)
+			{
+				int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
+				int cullY = CAMERAMANAGER->getTop() / TILESIZE;
+				int index = (i + cullY) * _tileSize[0] + (j + cullX);
+				if (index >= _tileSize[0] * _tileSize[1])
+					continue;
+				_autoCalc = 0;
+				autoTileType(index, TR_GRASS);
+				autoTileType(index, TR_CEMENT);
+		
+			}
+		}
+		_button->setType(BUTTON_TERRAIN);
+	}
+
+}
+
+void tile::autoTileType(int idx,TERRAIN type)
+{
+	if (_vTile[idx].terrain == type)
+	{
+		if (_vTile[idx - _tileSize[0]].terrain == type) // 위쪽이 잔디
+		{
+			_autoCalc += 1;
+		}
+		if (_vTile[idx + 1].terrain == type)
+		{
+			_autoCalc += 2;
+		}
+		if (_vTile[idx + _tileSize[0]].terrain == type)
+		{
+			_autoCalc += 4;
+		}
+		if (_vTile[idx - 1].terrain == type)
+		{
+			_autoCalc += 8;
+		}
+
+		if (_autoCalc == 0)
+		{
+			_vTile[idx].terrainFrameX = 8;
+		}
+		else if (_autoCalc == 1)
+		{
+			_vTile[idx].terrainFrameX = 3;
+		}
+		else if (_autoCalc == 2)
+		{
+			_vTile[idx].terrainFrameX = 1;
+		}
+		else if (_autoCalc == 4)
+		{
+			_vTile[idx].terrainFrameX = 7;
+		}
+		else if (_autoCalc == 8)
+		{
+			_vTile[idx].terrainFrameX = 5;
+		}
+		else if (_autoCalc == 3)
+		{
+			_vTile[idx].terrainFrameX = 2;
+		}
+		else if (_autoCalc == 6)
+		{
+			_vTile[idx].terrainFrameX = 0;
+		}
+		else if (_autoCalc == 12)
+		{
+			_vTile[idx].terrainFrameX = 6;
+		}
+		else if (_autoCalc == 9)
+		{
+			_vTile[idx].terrainFrameX = 4;
+		}
+		else if (_autoCalc == 7)
+		{
+			_vTile[idx].terrainFrameX = 1;
+		}
+		else if (_autoCalc == 14)
+		{
+			_vTile[idx].terrainFrameX = 7;
+		}
+		else if (_autoCalc == 13)
+		{
+			_vTile[idx].terrainFrameX = 5;
+		}
+		else if (_autoCalc == 11)
+		{
+			_vTile[idx].terrainFrameX = 3;
+		}
+
+		else if (_autoCalc == 15)
+		{
+			_vTile[idx].terrainFrameX = 8;
+		}
+		_autoCalc = 0;
+	}
+
+
 }
 
 void tile::mapMove()
@@ -883,7 +1047,7 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 		else if (frameX == i && frameY == 0) return TR_WALL;
 
 		// 두번째 줄
-		if (frameX == i && frameY == 1) return TR_GRASS;
+		if (frameX == i && frameY == 1) return TR_CEMENT;
 
 		// 세번째 줄
 		if (frameX == i && frameY == 2) return TR_GRASS;
