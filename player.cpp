@@ -55,13 +55,15 @@ void player::render()
 		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportOut"))
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
+		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
+		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 2.63f);
 	}
 	else
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
-		CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
+		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
 		//D2DRenderer::GetInstance()->FillRectangle(_playerRc , D2D1::ColorF::Tomato, 1.0f);
+		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f);
 	}
 	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))
@@ -448,7 +450,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			case DIRECTION::LEFT:
 				cout << "¿ÞÂÊµé¾î¿È" << endl;
 				_playerRc.left = tile[tileIndex[i]].rc.right;
-				_playerRc.right = _playerRc.left + 28;
+				_playerRc.right = _playerRc.left + 70;
 
 				_playerX = (_playerRc.left + _playerRc.right) / 2;
 				break;
@@ -463,7 +465,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			case DIRECTION::RIGHT:
 				cout << "¿À¸¥ÂÊµé¾î¿È" << endl;
 				_playerRc.right = tile[tileIndex[i]].rc.left;
-				_playerRc.left = _playerRc.right - 28;
+				_playerRc.left = _playerRc.right - 70;
 
 				_playerX = (_playerRc.left + _playerRc.right) / 2;
 				break;
