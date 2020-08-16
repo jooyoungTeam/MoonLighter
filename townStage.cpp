@@ -4,13 +4,11 @@
 HRESULT townStage::init()
 {
 	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
-
 	_objectManager = new objectManager;
-
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
 	_player = new player;
-	_player->init(500, 500);
+	_player->init(600, 500);
 	return S_OK;
 }
 
@@ -19,6 +17,7 @@ void townStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
+		_player->tileCollision(_townAttribute, _tile);
 	}
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
@@ -28,6 +27,8 @@ void townStage::render()
 	mapToolRender();
 
 	_player->render();
+
+	CAMERAMANAGER->zOrderALLRender();
 }
 
 void townStage::release()

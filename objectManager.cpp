@@ -44,12 +44,7 @@ void objectManager::objectRender()
 		{
 			CAMERAMANAGER->zOrderRender(findImg(_vObject[i].type, _vObject[i].imgNumber), _vObject[i].rc.left, _vObject[i].rc.top, _vObject[i].rc.bottom, 1, _vObject[i].scale);
 		}
-		//CAMERAMANAGER->render(_object[i]->img, _object[i]->rc.left, _object[i]->rc.top, 0.4f);
-		//CAMERAMANAGER->rectangle(_object[i]->rc, D2D1::ColorF::LimeGreen, 1.0f, 5);
 	}
-	CAMERAMANAGER->zOrderALLRender();
-
-
 }
 
 void objectManager::currentObjectRender()
