@@ -32,7 +32,7 @@ void boss::set()
 void boss::render()
 {
 	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
-
+//	if (KEYANIMANAGER->findAnimation(""))
 	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
 	
 	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
@@ -66,13 +66,13 @@ void boss::render()
 
 void boss::attack()
 {
-	cout << _patternRandom << endl;
-	playerCol();
+	_playerCol = playerCol();
+
 	if (!_patternCheck)
 	{
 		_patternRandom = RND->getFromIntTo(0,5);
-		//랜덤으로 공격 받는데 
-		//전에 했던 공격이면 리턴. 다시 받아와라
+	//	랜덤으로 공격 받는데 
+	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
 		{
 			attack();
@@ -93,7 +93,7 @@ void boss::attack()
 		}
 		if (_patternRandom == 3)
 		{
-			if ((getDistance(_pX, _pY, _x, _y)) >= 400)
+			if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 			{
 				attack();
 				return;
@@ -145,6 +145,7 @@ void boss::dead()
 {
 	if (_bossAni == ONE)
 	{
+		_y = 625;
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_motion = KEYANIMANAGER->findAnimation(_index, "bossHit");
 		_motion->start();
@@ -154,10 +155,11 @@ void boss::dead()
 	{
 		if (!KEYANIMANAGER->findAnimation(_index, "bossHit")->isPlay())
 		{
+			_y = 650;
 			_img = ImageManager::GetInstance()->FindImage("bossDead");
 			_motion = KEYANIMANAGER->findAnimation(_index, "bossDead");
 			_motion->start();
-			_bossAni = ONE;
+			_bossAni = THREE;
 		}
 	}
 }
@@ -240,6 +242,7 @@ void boss::attack1()
 			_patternCheck = false;
 			_attackDelay = 0;
 			_attack1.count = 0;
+			_bossAni = ONE;
 		}
 	}
 }
@@ -319,7 +322,7 @@ void boss::attack2()
 				_state = _idle;
 				_attackDelay = 0;
 				_patternCheck = false;
-
+				_bossAni = ONE;
 				_cameraShake = 0;
 			}
 		}
@@ -376,6 +379,7 @@ void boss::attack3()
 		if (_bossPattern == ROCK_FALL)
 		{
 			attack3_2();
+
 		}
 		if (_bossPattern == PLAYER_PULL)
 		{
@@ -390,6 +394,7 @@ void boss::attack4()
 	if (_bossAni == ONE)
 	{
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
+		_y = 625;
 		_motion = KEYANIMANAGER->findAnimation(_index, "bossLight");
 		_motion->start();
 		_bossAni = TWO;
@@ -405,6 +410,7 @@ void boss::attack4()
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
 			_motion->start();
+			_y = 500;
 			_state = _idle;
 			_bossAni = ONE;
 			_exCount = 0;
@@ -623,6 +629,7 @@ void boss::attack3_2()
 						_attack3Rc2[i].rockAlpha = 0;
 						_attack3.delay = 0;
 						_state = _idle;
+						_bossAni = ONE;
 						_attackDelay = 0;
 						_attack3Rc2[i].rackCount = 0;
 						_patternCheck = false;
@@ -650,6 +657,7 @@ void boss::attack3_3()
 	{
 		_isBossPull = false;
 		_state = _idle;
+		_bossAni = ONE;
 		_patternCheck = false;
 		_attackDelay = 0;
 	}
@@ -727,28 +735,27 @@ void boss::setRock()
 	}
 }
 
-void boss::playerCol()
+bool boss::playerCol()
 {
 	RECT temp;
 	for (int i = 0; i < 13; i++)
 	{
 		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) ||
-			IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) ||
-			IntersectRect(&temp, &_attack1.rc.GetRect(), &_pRc.GetRect()) ||
-			IntersectRect(&temp, & _attackRc.GetRect(), &_pRc.GetRect()) ||
-			_isHandCol)
+			IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()))
 		{
-			_playerCol = true;
+
+			return true;
 		}
-		else
-		{
-			_playerCol = false;
-		}
-	
 	}
-	if (_playerCol)
-	{	
-		cout << "플레이어 맞음" << endl;
+
+	if (IntersectRect(&temp, &_attack1.rc.GetRect(), &_pRc.GetRect()) ||
+		IntersectRect(&temp, &_attackRc.GetRect(), &_pRc.GetRect()) ||
+		_isHandCol)
+	{
+
+		return true;
 	}
+
+	return false;
 }
 

@@ -114,9 +114,14 @@ void enemy::release()
 
 void enemy::update()
 {
+	//cout << _bossHitCount << endl;
 	if (_type != ENEMY_BOSS)
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
+	}
+	if (_type == ENEMY_BOSS)
+	{
+		//cout << _isHit << endl;
 	}
 	_state->update(*this,  _type);
 	enemyWay();
@@ -449,6 +454,7 @@ void enemy::checkBoolCount()
 	if (_type == ENEMY_BOSS && _isHit)
 	{
 		_state = _hit;
+		_isHit = false;
 	}
 	if (_curHP <= 0)
 	{

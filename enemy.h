@@ -11,6 +11,16 @@ struct tagBar
 	FloatRect middle;
 	FloatRect front;
 };
+enum BOSS_ANI
+{
+	ONE,
+	TWO,
+	THREE,
+	FOUR,
+	FIVE,
+	SIX
+};
+
 
 class enemy : public gameNode
 {
@@ -30,6 +40,7 @@ protected:
 	ENEMYTYPE _type;
 	GOLEMDIR _golemDir;
 	POTDIR _potDir;
+	BOSS_ANI _bossAni;
 
 	tagBar _bar;
 	
@@ -102,9 +113,10 @@ public:
 	void setState(enemyState* state) { this->_state = state; }
 	void setMotion(Image* img, animation* ani) { _img = img; _motion = ani; _motion->start(); }
 	void setPotDirection(POTDIR dir) { _potDir = dir; }
+	void setBossAni(BOSS_ANI ani) { _bossAni = ani; }
 
 	void setAttackRect(float x, float y, float width, float height) { _attackRc = RectMakePivot(Vector2(x, y), Vector2(width, height), Pivot::Center); }
-
+	void setY(float y) { _y = y; }
 	void setAttackAngle(float angle) { _attackAngle = angle; }
 	void setScale(float s) { _scale = s; }
 	void setBarAlpha(float alpha) { _barAlpha = alpha; }
@@ -123,7 +135,7 @@ public:
 	void setIsPull(bool pull) { _isBossPull = pull; }
 
 
-	void setEnemyAttack(int hp = 5)
+	void setEnemyAttack(int hp = 3)
 	{
 		if (_state != _hit && _state != _dead)
 		{
@@ -135,25 +147,28 @@ public:
 				_barAlpha = 1.0f;
 			}
 			_curHP -= hp;
-			if (_curHP <= 0)
-			{
-				_onceAni = true;
-				if (_type == ENEMY_BOSS)
-				{
-					_state = _dead;
-				}
-			}
 			if (_type == ENEMY_BOSS)
 			{
 				if (_state == _idle)
 				{
 					_bossHitCount++;
-
 				}
-				if (_bossHitCount > 4)
+				if (_bossHitCount > 2)
 				{
 					_bossHitCount = 0;
-					_isHit = true;
+					_state = _hit;
+				}
+			}
+		}
+		if (_curHP <= 0)
+		{
+			_onceAni = true;
+			if (_type == ENEMY_BOSS)
+			{
+				if (_state != _dead)
+				{
+					_bossAni = ONE;
+					_state = _dead;
 				}
 			}
 		}

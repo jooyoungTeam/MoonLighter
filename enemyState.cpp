@@ -41,8 +41,9 @@ void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 	}
 	if (enemyType == ENEMY_BOSS)
 	{
+		enemy.setY(500);
 		_attackDistance = 5000;
-		_attackDelayCount = 50;
+		_attackDelayCount = 100;
 	}
 
 	if (enemy.getAttackDelay() > _attackDelayCount)

@@ -8,15 +8,6 @@ enum BOSS_PATTERN
 	PLAYER_PULL,	//플레이어 끌어당기는 공격
 	EXPLOSION	//폭발 공격
 };
-enum BOSS_ANI
-{
-	ONE,
-	TWO,
-	THREE,
-	FOUR,
-	FIVE, 
-	SIX
-};
 
 
 struct tagAttack1
@@ -64,7 +55,6 @@ private:
 	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 	BOSS_PATTERN _bossPattern;
-	BOSS_ANI _bossAni;
 
 	FloatRect _attackRc;
 	float _handAngle1;
@@ -98,7 +88,7 @@ public:
 	void attack3_3();
 	void attack2Angle();
 	void setRock();
-	void playerCol();
+	bool playerCol();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
