@@ -319,8 +319,6 @@ void player::animationLoad()
 //활나가는 방향
 void player::arrowShoot()
 {
-	cout << _bowChargeState << endl;
-
 	if (_playerDirection == DIRECTION::UP)
 	{
 		//애니메이션 시작하면서 Count가 0이여야 한발씩 나감
@@ -398,12 +396,87 @@ void player::arrowShoot()
 }
 
 //타일 충돌용
-void player::tileCollision()
+void player::tileCollision(DWORD* attribute, tagTile* tile)
 {
-	//FloatRect rcCollision;	//임의의 충돌판정용 렉트
-	//int tileIndex[2];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
-	//int tileX, tileY;	//실제 탱크가 어디 타일에 있는지 좌표 계산용 (left, top)
+	RECT rcCollision;	//임의의 충돌판정용 렉트
+	int tileIndex[2];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
+	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
-	////임의 충돌판정용 렉트에 대입 먼저
-	//rcCollision = _playerRc;
+	//임의 충돌판정용 렉트에 대입 먼저
+	rcCollision.left = _playerRc.left;
+	rcCollision.right = _playerRc.right;
+	rcCollision.top = _playerRc.top;
+	rcCollision.bottom = _playerRc.bottom;
+
+	//렉트 크기 잘라주기
+	rcCollision.left += 2;
+	rcCollision.top += 2;
+	rcCollision.right -= 2;
+	rcCollision.bottom -= 2;
+
+	tileX = rcCollision.left / TILESIZE;
+	tileY = rcCollision.top / TILESIZE;
+
+	switch (_playerDirection)
+	{
+	case DIRECTION::LEFT:
+		tileIndex[0] = tileX + tileY * 60;
+		tileIndex[1] = tileX + (tileY + 1) * 60;
+		break;
+	case DIRECTION::UP:
+		tileIndex[0] = tileX + tileY * 60;
+		tileIndex[1] = (tileX + 1) + tileY * 60;
+		break;
+	case DIRECTION::RIGHT:
+		tileIndex[0] = (tileX + tileY * 60) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
+		break;
+	case DIRECTION::DOWN:
+		tileIndex[0] = (tileX + tileY * 60) + 60;
+		tileIndex[1] = (tileX + 1 + tileY * 60) + 49;
+		break;
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		RECT rc;
+		if (((attribute[tileIndex[i]] & ATTR_UNMOVE) == ATTR_UNMOVE) &&
+			IntersectRect(&rc, &tile[tileIndex[i]].rc, &rcCollision))
+		{
+			switch (_playerDirection)
+			{
+			case DIRECTION::LEFT:
+				cout << "왼쪽들어옴" << endl;
+				_playerRc.left = tile[tileIndex[i]].rc.right;
+				_playerRc.right = _playerRc.left + 28;
+
+				_playerX = (_playerRc.left + _playerRc.right) / 2;
+				break;
+
+			case DIRECTION::UP:
+				cout << "위쪽들어옴" << endl;
+				_playerRc.top = tile[tileIndex[i]].rc.bottom;
+				_playerRc.bottom = _playerRc.top + 70;
+
+				_playerY = (_playerRc.top + _playerRc.bottom) / 2;
+				break;
+			case DIRECTION::RIGHT:
+				cout << "오른쪽들어옴" << endl;
+				_playerRc.right = tile[tileIndex[i]].rc.left;
+				_playerRc.left = _playerRc.right - 28;
+
+				_playerX = (_playerRc.left + _playerRc.right) / 2;
+				break;
+			case DIRECTION::DOWN:
+				cout << "아래쪽들어옴" << endl;
+				_playerRc.bottom = tile[tileIndex[i]].rc.top;
+				_playerRc.top = _playerRc.bottom - 70;
+
+				_playerY = (_playerRc.top + _playerRc.bottom) / 2;
+				break;
+			}
+		}
+	}
+
+	_playerRc = rcCollision;
 }

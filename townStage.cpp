@@ -19,6 +19,7 @@ void townStage::update()
 	{
 		_player->update();
 	}
+	_player->tileCollision(_townAttribute, _tile);
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
 
