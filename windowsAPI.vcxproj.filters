@@ -58,11 +58,11 @@
     <Filter Include="playGround\강해라">
       <UniqueIdentifier>{a40dee95-f80e-47f2-aa69-2706a012fa15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\송용은">
-      <UniqueIdentifier>{df840e29-cfea-4ab6-ac55-e6d5d1b399c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\stage">
       <UniqueIdentifier>{790afaf2-380e-4e2d-ab9a-69ad2f21963b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\송용은">
+      <UniqueIdentifier>{df840e29-cfea-4ab6-ac55-e6d5d1b399c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
