@@ -176,7 +176,9 @@
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="LibraryHeader.h" />
-    <ClInclude Include="objectManager.h" />
+    <ClInclude Include="objectManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="playGround.h" />
@@ -236,7 +238,9 @@
     <ClCompile Include="itemManager.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
-    <ClCompile Include="objectManager.cpp" />
+    <ClCompile Include="objectManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerState.cpp" />
     <ClCompile Include="playGround.cpp" />
