@@ -2,18 +2,11 @@
 #include"enemy.h"
 enum BOSS_PATTERN
 {
-	ATTACK1,
-	ATTACK2,
-	ATTACK3,
-};
-enum BOSS_ANI
-{
-	ONE,
-	TWO,
-	THREE,
-	FOUR,
-	FIVE, 
-	SIX
+	HAND_FALL,	//손 떨어지는 공격	
+	ARM_LONG,	//팔 늘어나는 공격
+	ROCK_FALL,	//돌 떨어지는 공격
+	PLAYER_PULL,	//플레이어 끌어당기는 공격
+	EXPLOSION	//폭발 공격
 };
 
 
@@ -45,7 +38,7 @@ struct tagAttackRect
 	float speed;
 	bool rackFall;
 	float alpha;
-	float rackAlpha;
+	float rockAlpha;
 	float scale;
 	int attackCount;
 	int rackCount;
@@ -62,8 +55,8 @@ private:
 	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 	BOSS_PATTERN _bossPattern;
-	BOSS_ANI _bossAni;
 
+	FloatRect _attackRc;
 	float _handAngle1;
 	float _handAngle2;
 	bool _isHandCol;
@@ -73,6 +66,7 @@ private:
 	int _bossAttackCount;
 	int _patternRandom;
 	int _saveRandom;
+	int _exCount;
 
 public:
 	boss() {}
@@ -83,7 +77,7 @@ public:
 	virtual void attack();
 	virtual void dead();
 	virtual void enemyHit();
-	void attack1();
+	void attack1();	
 	void attack2();
 	void attack3();
 	void attack4();
@@ -91,12 +85,12 @@ public:
 	void attack2_1();
 	void attack3_1();
 	void attack3_2();
+	void attack3_3();
 	void attack2Angle();
 	void setRock();
-	void playerCol();
+	bool playerCol();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
-	bool getHandCol() { return _isHandCol; }
 };
 

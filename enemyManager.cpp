@@ -59,28 +59,7 @@ void enemyManager::update()
 			}
 		}
 	}
-	/*if (!_test)
-	{
-		if (KEYMANAGER->isStayKeyDown(VK_UP))
-		{
-			_y -= 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-		{
-			_y += 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-		{
-			_x -= 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-		{
-			_x += 2;
-		}
 
-
-	}
-*/
 	if (_bulletDelay > 90)
 	{
 		potBullet();
@@ -88,7 +67,6 @@ void enemyManager::update()
 	playerCol();
 	bulletCol();
 	_bullet->update();
-	//cout << _testCount << endl;
 
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -161,7 +139,7 @@ void enemyManager::setEnemy()
 	//_vEnemy.push_back(pot2);
 
 	//
-	//i++;
+//	i++;
 
 	//enemy* yelS1;
 	//yelS1 = new anotherSlime;
@@ -233,7 +211,16 @@ void enemyManager::playerCol()
 			//_player->setCurrentState(_());
 			_vEnemy[i]->setAttackRect(0, 0, 0, 0);
 		}
+		if (_vEnemy[i]->getIsPull())
+		{
+			float angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
+			_player->setX(_player->getX() + cosf(angle) * 10);
+			_player->setY(_player->getY() - sinf(angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
+		}
 	}
+
 
 }
 
