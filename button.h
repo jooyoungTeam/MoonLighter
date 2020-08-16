@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-typedef void(*CALLBACK_FUNCTION)(void);
 
 enum BUTTONTYPE
 {
@@ -9,7 +8,7 @@ enum BUTTONTYPE
 	BUTTON_OBJECT,
 	BUTTON_COLLISION,
 	BUTTON_AUTO,
-	
+
 	BUTTON_SAVE,
 	BUTTON_SAVE_DUNGEON,
 	BUTTON_SAVE_TOWN,
@@ -44,12 +43,12 @@ enum BUTTONSTATE
 struct tagButton
 {
 	RECT	      rc;
-    wstring       name;
+	wstring       name;
 	BUTTONSTATE   state;
 };
 
 
-class button :	public gameNode
+class button : public gameNode
 {
 private:
 	tagButton         _button[BUTTON_END];

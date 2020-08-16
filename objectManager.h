@@ -6,6 +6,13 @@ enum OBJECT
 	OBJ_NONE,
 };
 
+struct tagSampleObject
+{
+	RECT    rc;
+	int     objFrameX;
+	int     objFrameY;
+};
+
 struct tagObject
 {
 	OBJECT   type;
@@ -21,20 +28,33 @@ class objectManager : public gameNode
 {
 private:
 	vector<tagObject>  _vObject;
+
+
+	OBJECT 	           _currentSampleObject;    //현재 보고있는 오브젝트 넘버
+	tagObject          _currentObject;          //선택한 오브젝트
+	bool               _isSelectObject;         //잡고있는지
+	RECT               _leftRightButton[2];
+	tagSampleObject    _sampleObject[4];		//팔레트에 보여지는 오브젝트
+
 public:
 	objectManager() {}
 	~objectManager() {}
 public:
 	HRESULT init();
-	void render();
+	void objectRender();           //오브젝트만 랜더
+	void currentObjectRender();    // 잡고있는 오브젝트 렌더
+	void sampleObjectPageRender(); // 팔레트에 있는 오브젝트 렌더
 	void update();
 	void release();
 public:
+	void sampleObjectPage();
 	void save(BUTTONTYPE type);
 	void load(BUTTONTYPE type);
-	void setObject(POINT pt,tagObject object);
-	void selectObject(tagObject& object, OBJECT type, int imgNumber);
-	void eraseObject(int arrNum) { _vObject.erase(_vObject.begin() + arrNum); }	
+	void setObject(POINT pt);
+	void selectObject();
+	void eraseObject(POINT pt);
 	Image* findImg(OBJECT type, int imgNum);
+public:
+	vector<tagObject> getVObject() { return _vObject; }
 };
 

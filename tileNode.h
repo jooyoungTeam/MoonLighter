@@ -1,11 +1,6 @@
 #pragma once
 
 #define TILESIZE 50
-#define TILEX 100
-#define TILEY 100
-
-#define SAMPLETILEX 9
-#define SAMPLETILEY 5
 
 #define ATTR_UNMOVE		0x00000001
 #define ATTR_SWAMP		0x00000002
@@ -13,19 +8,7 @@
 
 enum TERRAIN
 {
-	TR_WALL, TR_FLOOR,TR_CEMENT, TR_GRASS, TR_WATER, TR_NONE, TR_END
-};
-
-enum OBJECT
-{
-	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT, OBJ_NPC, OBJ_SPA, OBJ_DUN1, OBJ_DUN2,
-	OBJ_NONE,
-};
-
-enum POS
-{
-	POS_FLAG1, POS_FLAG2,
-	POS_TANK1, POS_TANK2,
+	TR_WALL, TR_FLOOR, TR_CEMENT, TR_GRASS, TR_WATER, TR_NONE, TR_END
 };
 
 struct tagTile
@@ -39,26 +22,6 @@ struct tagTile
 	int     idY;
 	bool    isColTile;
 };
-
-
-struct tagSampleObject
-{
-	RECT    rc;
-	int     objFrameX;
-	int     objFrameY;
-};
-
-struct tagObject
-{
-	OBJECT   type;
-	RECT     rc;
-	bool     isFrameRender;
-	float    scale;
-	int      frameX;
-	int      count;
-	int      imgNumber;
-};
-
 
 struct tagSampleTile
 {

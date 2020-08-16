@@ -240,6 +240,9 @@
     <ClInclude Include="bossStage.h">
       <Filter>playGround\stage</Filter>
     </ClInclude>
+    <ClInclude Include="palette.h">
+      <Filter>playGround\차주영</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -400,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="inventoryEtc.cpp">
       <Filter>playGround\김지아</Filter>
+    </ClCompile>
+    <ClCompile Include="palette.cpp">
+      <Filter>playGround\차주영</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

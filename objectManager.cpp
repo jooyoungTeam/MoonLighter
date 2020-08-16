@@ -3,15 +3,24 @@
 
 HRESULT objectManager::init()
 {
+	_leftRightButton[0] = RectMakeCenter(WINSIZEX - 321, 230, 70, 70);
+	_leftRightButton[1] = RectMakeCenter(WINSIZEX - 220, 230, 70, 70);
 
+	for (int i = 0; i < 4; i++)
+	{
+		_sampleObject[i].rc = RectMake(WINSIZEX - 505.0f + (i % 2) * 225, WINSIZEY * 0.5f - 70 + (i / 2) * 225, 225, 225);
+	}
 
 	return S_OK;
 }
 
-void objectManager::render()
+void objectManager::objectRender()
 {
 	for (int i = 0; i < _vObject.size(); i++) // 오브젝트들 렌더
 	{
+		if (CAMERAMANAGER->getLeft() > _vObject[i].rc.right || CAMERAMANAGER->getLeft() + WINSIZEX < _vObject[i].rc.left
+			|| CAMERAMANAGER->getTop() > _vObject[i].rc.bottom || CAMERAMANAGER->getTop() + WINSIZEY < _vObject[i].rc.top) continue;
+
 		if (_vObject[i].isFrameRender)
 		{
 			CAMERAMANAGER->zOrderFrameRender(findImg(_vObject[i].type, _vObject[i].imgNumber), (_vObject[i].rc.left + _vObject[i].rc.right) * 0.5f, (_vObject[i].rc.top + _vObject[i].rc.bottom) * 0.5f,
@@ -40,6 +49,66 @@ void objectManager::render()
 	}
 	CAMERAMANAGER->zOrderALLRender();
 
+
+}
+
+void objectManager::currentObjectRender()
+{
+	if (_isSelectObject)
+	{
+		findImg(_currentObject.type, _currentObject.imgNumber)->SetAlpha(0.5f);
+		if (_currentObject.isFrameRender)
+		{
+			_currentObject.rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, findImg(_currentObject.type, _currentObject.imgNumber)->GetFrameSize().x *_currentObject.scale,
+				findImg(_currentObject.type, _currentObject.imgNumber)->GetFrameSize().y * _currentObject.scale);
+			findImg(_currentObject.type, _currentObject.imgNumber)->FrameRender(Vector2((_currentObject.rc.left + _currentObject.rc.right) * 0.5f, (_currentObject.rc.top + _currentObject.rc.bottom) * 0.5f), 1, 0, _currentObject.scale);
+		}
+		else
+		{
+			_currentObject.rc = RectMakeCenter(_ptMouse.x, _ptMouse.y, findImg(_currentObject.type, _currentObject.imgNumber)->GetWidth() * _currentObject.scale,
+				findImg(_currentObject.type, _currentObject.imgNumber)->GetHeight() * _currentObject.scale);
+			findImg(_currentObject.type, _currentObject.imgNumber)->Render(Vector2(_currentObject.rc.left, _currentObject.rc.top), _currentObject.scale);
+		}
+
+		D2DRenderer::GetInstance()->FillRectangle(_currentObject.rc, D2D1::ColorF::LimeGreen, 0.4f);
+	}
+
+}
+
+void objectManager::sampleObjectPageRender()
+{
+	if (_currentSampleObject == OBJ_HOUSE)
+	{
+		ImageManager::GetInstance()->FindImage("objectHouse")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_ARCHITECTURE)
+	{
+		ImageManager::GetInstance()->FindImage("objectArchitecture")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_DOOR)
+	{
+		ImageManager::GetInstance()->FindImage("objectDoor")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_PLANT)
+	{
+		ImageManager::GetInstance()->FindImage("objectPlant")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_NPC)
+	{
+		ImageManager::GetInstance()->FindImage("objectNPC")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_SPA)
+	{
+		ImageManager::GetInstance()->FindImage("objectSpa")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_DUN1)
+	{
+		ImageManager::GetInstance()->FindImage("objectDungeon1")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
+	else if (_currentSampleObject == OBJ_DUN2)
+	{
+		ImageManager::GetInstance()->FindImage("objectDungeon2")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+	}
 }
 
 void objectManager::update()
@@ -48,6 +117,32 @@ void objectManager::update()
 
 void objectManager::release()
 {
+	_vObject.clear();
+}
+
+void objectManager::sampleObjectPage()
+{
+	for (int i = 0; i < 2; i++) // 왼쪽 오른쪽 버튼 눌렀을 때
+	{
+		if (PtInRect(&_leftRightButton[i], _ptMouse))
+		{
+			if (i == 0)
+			{
+				int num = (int)_currentSampleObject;
+				num--;
+				if (num < 0) num = 0;
+				_currentSampleObject = (OBJECT)num;
+			}
+			else
+			{
+				int num = (int)_currentSampleObject;
+				num++;
+				if (num > (int)OBJ_NONE - 1) num = (int)OBJ_NONE - 1;
+				_currentSampleObject = (OBJECT)num;
+			}
+			break;
+		}
+	}
 }
 
 void objectManager::save(BUTTONTYPE type)
@@ -63,7 +158,7 @@ void objectManager::save(BUTTONTYPE type)
 	else if (type == BUTTON_SAVE_SHOP)
 		fileName = "shop.object";
 	else if (type == BUTTON_SAVE_DUNGEON)
-		fileName = "dungeon3.object";
+		fileName = "dungeon1.object";
 	else if (type == BUTTON_SAVE_ENTERENCE)
 		fileName = "dungeonEnterence.object";
 
@@ -99,7 +194,7 @@ void objectManager::load(BUTTONTYPE type)
 	else if (type == BUTTON_LOAD_SHOP)
 		fileName = "shop.object";
 	else if (type == BUTTON_LOAD_DUNGEON)
-		fileName = "dungeon3.object";
+		fileName = "dungeon1.object";
 	else if (type == BUTTON_LOAD_ENTERENCE)
 		fileName = "dungeonEnterence.object";
 
@@ -122,119 +217,136 @@ void objectManager::load(BUTTONTYPE type)
 	CloseHandle(file);
 }
 
-void objectManager::setObject(POINT pt, tagObject object)
+void objectManager::setObject(POINT pt)
 {
-	int w = (object.rc.right - object.rc.left) / 2;
-	int h = (object.rc.bottom - object.rc.top) / 2;
-	tagObject tempObject = object;
-	tempObject.rc.left = pt.x - w;
-	tempObject.rc.top = pt.y - h;
-	tempObject.frameX = 0;
+	if (_isSelectObject)
+	{
+		int w = (_currentObject.rc.right - _currentObject.rc.left) / 2;
+		int h = (_currentObject.rc.bottom - _currentObject.rc.top) / 2;
+		tagObject tempObject = _currentObject;
+		tempObject.rc.left = pt.x - w;
+		tempObject.rc.top = pt.y - h;
+		tempObject.frameX = 0;
 
-	if (tempObject.isFrameRender)
-	{
-		tempObject.rc.right = tempObject.rc.left + findImg(tempObject.type, tempObject.imgNumber)->GetFrameSize().x * tempObject.scale;
-		tempObject.rc.bottom = tempObject.rc.top + findImg(tempObject.type, tempObject.imgNumber)->GetFrameSize().y * tempObject.scale;
-	}
-	else
-	{
-		tempObject.rc.right = tempObject.rc.left + findImg(tempObject.type, tempObject.imgNumber)->GetWidth() * tempObject.scale;
-		tempObject.rc.bottom = tempObject.rc.top + findImg(tempObject.type, tempObject.imgNumber)->GetHeight() * tempObject.scale;
-	}
-	_vObject.push_back(tempObject);
-}
-
-void objectManager::selectObject(tagObject& object, OBJECT type, int imgNumber)
-{
-	object.scale = 1;
-	object.type = type;
-	object.imgNumber = imgNumber;
-	if (type == OBJ_HOUSE)
-	{
-		object.isFrameRender = false;
-		if (imgNumber == 0)
+		if (tempObject.isFrameRender)
 		{
-			object.scale = 1.7f;
-			object.isFrameRender = true;
+			tempObject.rc.right = tempObject.rc.left + findImg(tempObject.type, tempObject.imgNumber)->GetFrameSize().x * tempObject.scale;
+			tempObject.rc.bottom = tempObject.rc.top + findImg(tempObject.type, tempObject.imgNumber)->GetFrameSize().y * tempObject.scale;
 		}
-
-		else if (imgNumber == 2)
+		else
 		{
-			object.scale = 1.2f;
+			tempObject.rc.right = tempObject.rc.left + findImg(tempObject.type, tempObject.imgNumber)->GetWidth() * tempObject.scale;
+			tempObject.rc.bottom = tempObject.rc.top + findImg(tempObject.type, tempObject.imgNumber)->GetHeight() * tempObject.scale;
 		}
-		return;
-	}
-
-	else if (type == OBJ_ARCHITECTURE)
-	{
-		object.isFrameRender = false;
-		if (imgNumber == 2)
-		{
-			object.scale = 5.0f;
-		}
-		return;
-
-	}
-	else if (type == OBJ_DOOR)
-	{
-		object.isFrameRender = false;
-
-		return;
-	}
-	else if (type == OBJ_PLANT)
-	{
-		object.isFrameRender = true;
-		if (imgNumber == 0)
-		{
-			object.scale = 1.5f;
-		}
-		if (imgNumber == 1)
-		{
-			object.scale = 2.5f;
-		}
-		if (imgNumber == 2)
-		{
-			object.scale = 1.5f;
-		}
-		if (imgNumber == 3)
-		{
-			object.scale = 2.3f;
-			object.isFrameRender = false;
-		}
-
-		return;
-	}
-	else if (type == OBJ_NPC)
-	{
-		object.isFrameRender = true;
-		return;
-
-	}
-	else if (type == OBJ_SPA)
-	{
-		object.isFrameRender = false;
-		return;
-
-	}
-	else if (type == OBJ_DUN1)
-	{
-		object.isFrameRender = false;
-		return;
-		
-	}
-	else if (type == OBJ_DUN2)
-	{
-		object.isFrameRender = false;
-		if (imgNumber == 1)
-		{
-			object.scale = 2.0f;
-		}
-		return;
+		_vObject.push_back(tempObject);
+		_isSelectObject = false;
 	}
 }
 
-	
+void objectManager::selectObject()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (PtInRect(&_sampleObject[i].rc, _ptMouse))
+		{
+			_currentObject.scale = 1;
+			_currentObject.type = _currentSampleObject;
+			_isSelectObject = true;
+			_currentObject.imgNumber = i;
+			if (_currentSampleObject == OBJ_HOUSE)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 0)
+				{
+					_currentObject.scale = 1.7f;
+					_currentObject.isFrameRender = true;
+				}
 
+				else if (i == 2)
+				{
+					_currentObject.scale = 1.2f;
+				}
+				break;
+			}
+
+			else if (_currentSampleObject == OBJ_ARCHITECTURE)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 2)
+				{
+					_currentObject.scale = 5.0f;
+				}
+
+				break;
+			}
+			else if (_currentSampleObject == OBJ_DOOR)
+			{
+				_currentObject.isFrameRender = false;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_PLANT)
+			{
+				_currentObject.isFrameRender = true;
+				if (i == 0)
+				{
+					_currentObject.scale = 1.5f;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 2.5f;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 1.5f;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 2.3f;
+					_currentObject.isFrameRender = false;
+				}
+
+				break;
+			}
+			else if (_currentSampleObject == OBJ_NPC)
+			{
+				_currentObject.isFrameRender = true;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_SPA)
+			{
+				_currentObject.isFrameRender = false;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_DUN1)
+			{
+				_currentObject.isFrameRender = false;
+				break;
+			}
+			else if (_currentSampleObject == OBJ_DUN2)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 1)
+				{
+					_currentObject.scale = 2.0f;
+				}
+				break;
+			}
+		}
+
+	}
+}
+
+void objectManager::eraseObject(POINT pt)
+{
+	for (int i = 0; i < _vObject.size(); i++)
+	{
+		if (PtInRect(&_vObject[i].rc, pt))
+		{
+			_vObject.erase(_vObject.begin() + i);
+			break;
+		}
+	}
+}
 
 Image * objectManager::findImg(OBJECT type, int imgNum)
 {

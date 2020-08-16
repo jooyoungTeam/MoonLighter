@@ -29,10 +29,8 @@ void button::render()
 
 }
 
-
 void button::update()
 {
-
 	for (int i = 0; i < BUTTON_END; i++)
 	{
 		if (_button[i].state == BUTTON_OFF) continue;
@@ -84,7 +82,7 @@ void button::update()
 		_button[BUTTON_ERASE_TERRAIN].state = BUTTON_TEMP;
 		_button[BUTTON_ERASE_OBJECT].state = BUTTON_TEMP;
 	}
-	else if(_currentType == BUTTON_TERRAIN || _currentType == BUTTON_OBJECT)
+	else if (_currentType == BUTTON_TERRAIN || _currentType == BUTTON_OBJECT)
 	{
 		for (int i = 0; i < BUTTON_END; i++)
 		{
@@ -171,7 +169,7 @@ void button::setButton()
 	_button[BUTTON_ERASE_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 730, 150, 80, 30);
 	_button[BUTTON_ERASE_OBJECT].name = L"OBJECT";
 	_button[BUTTON_ERASE_OBJECT].state = BUTTON_OFF;
-	
+
 
 	_button[BUTTON_EXIT].rc = RectMakeCenter(WINSIZEX / 2 + 530, 50, 50, 30);
 	_button[BUTTON_EXIT].name = L"  EXIT";

@@ -4,18 +4,17 @@
 HRESULT dungeonStage::init()
 {
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
-	//ImageManager::GetInstance()->AddImage("dungeonBackground", L"Image/map/dungeon_background.png");
-	_tileClass = new tile;
-	_tileClass->init();
+
+
+	_objectManager = new objectManager;
+
+
+
 	loadDungeonMap();
 	_player->init(500, 500);
-	//_enemy = new enemyManager;
-	//_enemy->setPlayerLink(_player);
-	//_enemy->init();
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
-	//loadDungeonMap();
-	
+
 
 
 	return S_OK;
@@ -24,11 +23,8 @@ HRESULT dungeonStage::init()
 void dungeonStage::render()
 {
 	renderDungeonMap();
-	//CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("dungeonBackground"), 0, 0);
 	_player->render();
-	//_enemy->render();
 
-	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 }
 
 void dungeonStage::update()
@@ -58,29 +54,22 @@ void dungeonStage::loadDungeonMap()
 
 	// ------------ 타일
 
-	file = CreateFile("dungeon3.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("dungeon1.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
 
-	ReadFile(file, _tile, sizeof(tagTile) * 32 * 18, &read, NULL);
+	ReadFile(file, _tile, sizeof(tagTile) * DUNTILEX * DUNTILEY, &read, NULL);
 
-	ReadFile(file, size, sizeof(int) * 2, &read, NULL);
-	// ------------ 오브젝트		
-	tagObject* temp = new tagObject[size[1]];
-	ReadFile(file, temp, sizeof(tagObject) * size[1], &read, NULL);
-	for (int i = 0; i < size[1]; i++)
-	{
-		_vObject.push_back(temp[i]);
-	}
-
-	memset(_attribute, 0, sizeof(DWORD) * 32 * 18);
-	for (int i = 0; i < 32 * 18; ++i)
+	memset(_attribute, 0, sizeof(DWORD) * DUNTILEX * DUNTILEY);
+	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
 	}
 
 	CloseHandle(file);
+
+	_objectManager->load(BUTTON_LOAD_DUNGEON);
 
 }
 
@@ -112,34 +101,5 @@ void dungeonStage::renderDungeonMap()
 	}
 
 
-	for (int i = 0; i < _vObject.size(); i++) // 오브젝트들 렌더
-	{
-		if (_vObject[i].isFrameRender)
-		{
-			CAMERAMANAGER->zOrderFrameRender(_tileClass->findImg(_vObject[i].type, _vObject[i].imgNumber), (_vObject[i].rc.left + _vObject[i].rc.right) * 0.5f, (_vObject[i].rc.top + _vObject[i].rc.bottom) * 0.5f,
-				_vObject[i].rc.bottom, _vObject[i].frameX, 0, _vObject[i].scale, 1);
-
-			_vObject[i].count++;
-			int frameCount;
-			_vObject[i].type == OBJ_NPC ? frameCount = 5 : frameCount = 10;
-			if (_vObject[i].count % frameCount == 0)
-			{
-				_vObject[i].count = 0;
-				_vObject[i].frameX++;
-
-				if (_tileClass->findImg(_vObject[i].type, _vObject[i].imgNumber)->GetMaxFrameX() <= _vObject[i].frameX)
-				{
-					_vObject[i].frameX = 0;
-				}
-			}
-
-		}
-		else
-		{
-			CAMERAMANAGER->zOrderRender(_tileClass->findImg(_vObject[i].type, _vObject[i].imgNumber), _vObject[i].rc.left, _vObject[i].rc.top, _vObject[i].rc.bottom, 1, _vObject[i].scale);
-		};
-	}
-	CAMERAMANAGER->zOrderALLRender();
-
-
+	_objectManager->objectRender();
 }
