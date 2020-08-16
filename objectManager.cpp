@@ -45,6 +45,9 @@ void objectManager::objectRender()
 			CAMERAMANAGER->zOrderRender(findImg(_vObject[i].type, _vObject[i].imgNumber), _vObject[i].rc.left, _vObject[i].rc.top, _vObject[i].rc.bottom, 1, _vObject[i].scale);
 		}
 	}
+
+	CAMERAMANAGER->zOrderALLRender();
+
 }
 
 void objectManager::currentObjectRender()
