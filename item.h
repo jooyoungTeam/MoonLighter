@@ -11,7 +11,8 @@ enum class ITEMTYPE
 	BROKEN_SWORD, GOLEM_CORE,
 	FABRIC, GOLEM_PIECES,
 	GOLEMKING_CRYSTAL, GOLEMKING_RECORD,
-	POTION_S
+	POTION_S,
+	NONE
 };
 
 enum class ITEMBUNDLE
@@ -49,7 +50,7 @@ public:
 	item() {}
 	~item() {}
 
-	HRESULT init(ITEMBUNDLE bundle, float x, float y, float endX, float endY);
+	HRESULT init(ITEMBUNDLE bundle, float x, float y, float endX, float endY, int count);
 	HRESULT init(ITEMTYPE type);
 	void render();				//인벤토리용 랜더
 	void cameraRender();	    //필드용 랜더
@@ -60,7 +61,7 @@ public:
 	void release();
 	
 	void category();			//아이템 종류에 따른 정보 정리
-	void setBundle();			//에너미 종류에 따른 아이템 묶기
+	void setBundle(int count);			//에너미 종류에 따른 아이템 묶기
 
 
 public:

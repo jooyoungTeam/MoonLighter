@@ -231,7 +231,6 @@ bool inventory::putItem(item* item)
 	if (invenFullNum >= 19)
 	{
 		return false;
-
 	}
 	else
 	{
@@ -249,6 +248,7 @@ bool inventory::putItem(item* item)
 				else
 					continue;
 			}
+
 			if (_inven[i].item == nullptr && i < 20)
 			{
 				_inven[i].item = item;
@@ -272,12 +272,12 @@ int inventory::fullInven()
 	{
 		if (_inven[i].item == nullptr) return 0;
 
-
 		if (_inven[i].count >= _inven[i].item->getLimit())
 		{
 			_inven[i].isFull = true;
 			invenFullNum++;
 		}
+
 		else
 		{
 			_inven[i].isFull = false;
