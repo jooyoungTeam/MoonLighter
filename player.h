@@ -34,7 +34,7 @@ private:
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
 	int					_bowChargeCount;					//활 충전 카운트
 	int					_bowAlphaCount;						//활 충전 알파 카운트
-	int					tileIndex[2];
+	int					tileIndex[3];
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerRcW, _playerRcH;				//플레이어 RC 크기
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
@@ -113,7 +113,7 @@ public:
 	bool getTileColRightTop() { return _tileColRightTop; }
 	bool getTileColLeftBottom() { return _tileColLeftBottom; }
 	bool getTileColRightBottom() { return _tileColRightBottom; }
-
+	void setPlayerPos(float x, float y) { _playerX = x, _playerY = y; }
 	
 	int*  getColTileIdx() { return tileIndex; }
 	FloatRect getPlayerRc() { return _playerRc; }

@@ -350,6 +350,25 @@ void playerWalkState::update(player & player)
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
 			player.setCurrentState(player.getWalkState());
 			player.setDirection(DIRECTION::UP);
+
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			if (player.getDirection() == DIRECTION::RIGHTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+			if (player.getDirection() == DIRECTION::LEFTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
 		}
 
 		//만약 이동중 구르기 누르면
@@ -390,7 +409,28 @@ void playerWalkState::update(player & player)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
 			player.setDirection(DIRECTION::DOWN);
+
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			if (player.getDirection() == DIRECTION::RIGHTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+			if (player.getDirection() == DIRECTION::LEFTTOP)
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
 		}
+
+		
 
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -465,6 +505,39 @@ void playerWalkState::update(player & player)
 			x = 1;
 		//Vector2(x, y).Normalize();
 	}
+
+	//오른쪽위 이동
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk") && player.getDirection() == DIRECTION::RIGHTTOP)
+	{
+		cout << "RightTop 들어오는중" << endl;
+		if (!player.getTileColRightTop())
+			player.setShadowX(player.getShadowX() + 0);
+	}
+
+	//왼쪽위 이동
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk") && player.getDirection() == DIRECTION::LEFTTOP)
+	{
+		cout << "LeftTop 들어오는중" << endl;
+		if (!player.getTileColLeftTop())
+			player.setShadowX(player.getShadowX() - 0);
+	}
+
+	//왼쪽아래 이동
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk") && player.getDirection() == DIRECTION::LEFTBOTTOM)
+	{
+		cout << "LEFTBottom 들어오는중" << endl;
+		if (!player.getTileColLeftBottom())
+			player.setShadowX(player.getShadowX() - 0);
+	}
+
+	//오른쪽아래 이동
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
+	{
+		cout << "RightBottom 들어오는중" << endl;
+		if (!player.getTileColRightBottom())
+			player.setShadowX(player.getShadowX() + 0);
+	}
+
 	Vector2 vec(x, y);
 	Vector2 diagonal = Vector2::Normalize(&vec);
 	if (Vector2::Length(&vec) > 1) // 대각선일 때

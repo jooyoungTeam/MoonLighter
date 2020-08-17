@@ -7,6 +7,7 @@ HRESULT townStage::init()
 	_objectManager = new objectManager;
 	_objectManager->init();
 
+	_player->setPlayerPos(1000, 700);
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
 	return S_OK;
@@ -92,7 +93,7 @@ void townStage::mapToolRender()
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
 				}
-				for (int i = 0; i < 2; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[_player->getColTileIdx()[i]].rc, D2D1::ColorF::White, 1);
 				}
