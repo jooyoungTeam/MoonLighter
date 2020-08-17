@@ -13,6 +13,7 @@ enum class renderType
 	RENDER,
 	FRAME_RENDER,
 	ANI_RENDER,
+	ANI_ALPHARENDER,
 };
 
 struct tagFade
@@ -76,7 +77,8 @@ public:
 	void zOrderFrameRender(Image* img, float x, float y, float z, float frmaeX, float frameY, float scale, float alpha);
 	// 제트오더 랜더 추가 ( 렌더 타입, 이미지, 중점 x, 중점 y, 애니메이션)
 	void zOrderAniRender(Image* img, float x, float y, float z, animation* ani,float scale);
-
+	// 제트오더 랜더 추가 ( 이미지, 중점 x, 중점 y, 중점 z, 애니메이션, 스케일값, 알파값)
+	void zOrderAniAlphaRender(Image* img, float x, float y, float z, animation* ani, float scale, float alpha);
 	// 퀵 정렬 기반 Z-Order 정렬함수 (스테이지 매니저 or 각 스테이지 업데이트 부분에 넣을 것)
 	void zOrderSort(int i, int j);
 
@@ -101,6 +103,7 @@ public:
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY);
 	void frameRender(Image* img, float destX, float destY, int frameX, int frameY, float scale, float alpha);
 	void aniRender(Image * img, int destX, int destY, animation * ani, float scale);
+	void aniAlphaRender(Image * img, int destX, int destY, animation * ani, float scale, float alpha);
 public:
 	float getLeft() { return _left; }
 	float getTop() { return _top; }

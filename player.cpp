@@ -15,6 +15,7 @@ HRESULT player::init(float x, float y)
 	_swim = new playerSwimState();
 	_bow = new playerbowState();
 	_sword = new playerSwordState();
+	_hit = new playerHitState();
 	_broom = new playerBroomState();
 	_bed = new playerBedState();
 	_teleport = new playerTeleportState();
@@ -31,6 +32,8 @@ HRESULT player::init(float x, float y)
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
 	_playerCurrentHp = 150;
 	_SwordDamage = 30;
+	_hitAlpha = 0;
+	_hitCondition = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -49,7 +52,12 @@ HRESULT player::init(float x, float y)
 void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
-	if (_playerMotion == KEYANIMANAGER->findAnimation("playerBroom")
+	//플레이어 히트 상태일 경우 알파값줌
+	if (_hitCondition)
+	{
+		CAMERAMANAGER->zOrderAniAlphaRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f, _hitAlpha);
+	}
+	else if (_playerMotion == KEYANIMANAGER->findAnimation("playerBroom")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerBed")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportIn")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportOut"))

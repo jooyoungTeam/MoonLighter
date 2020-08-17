@@ -34,6 +34,7 @@ private:
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
 	int					_bowChargeCount;					//활 충전 카운트
 	int					_bowAlphaCount;						//활 충전 알파 카운트
+	int					_hitAlphaCount;						//히트 알파 카운트
 	int					tileIndex[3];
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerRcW, _playerRcH;				//플레이어 RC 크기
@@ -42,6 +43,7 @@ private:
 	float				_playerAttackW, _playerAttackH;		//플레이어 공격범위
 	float				_playerCurrentHp;					//플레이어 체력
 	float				_SwordDamage;						//플레이어 검 공격력
+	float				_hitAlpha;							//히트당하면 알파값 조정
 	bool				_swordAttack;						//플레이어 검 공격하는중
 	bool				_swordAttackCombo;					//플레이어 검 콤보공격
 	bool				_weaponChange;						//플레이어 무기 변경
@@ -49,14 +51,16 @@ private:
 	bool				_bowBool;							//활 충전 값
 	bool				_bowChargeAlpha;					//활 충전 알파
 	bool				_bowChargeState;					//활 충전상태인지.
+	bool				_hitCondition;						//히트 상태인지
+	bool				_enemyCol;							//에너미와 충돌상태
 	bool				_tileColLeft;						//타일 충돌 상태인지
 	bool				_tileColRight;						//타일 충돌 상태인지
 	bool				_tileColTop;						//타일 충돌 상태인지
 	bool				_tileColBottom;						//타일 충돌 상태인지
-	bool				_tileColLeftTop;						//타일 충돌 상태인지
-	bool				_tileColRightTop;						//타일 충돌 상태인지
-	bool				_tileColLeftBottom;						//타일 충돌 상태인지
-	bool				_tileColRightBottom;						//타일 충돌 상태인지
+	bool				_tileColLeftTop;					//타일 충돌 상태인지
+	bool				_tileColRightTop;					//타일 충돌 상태인지
+	bool				_tileColLeftBottom;					//타일 충돌 상태인지
+	bool				_tileColRightBottom;				//타일 충돌 상태인지
 
 	//플레이어 상태 정의
 	playerState*	    _idle;
@@ -68,6 +72,7 @@ private:
 	playerState*	    _swim;
 	playerState*	    _bow;
 	playerState*	    _sword;
+	playerState*		_hit;
 	playerState*	    _broom;
 	playerState*		_bed;
 	playerState*		_teleport;
@@ -90,6 +95,7 @@ public:
 	int getBedCount() { return _bedCount; }
 	int getBowChargeCount() { return _bowChargeCount; }
 	int getBowAlphaCount() { return _bowAlphaCount; }
+	int getHitAlphaCount() { return _hitAlphaCount; }
 	float getX() { return _playerX; }
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
@@ -98,6 +104,7 @@ public:
 	float getSwordDamage() { return _SwordDamage; }
 	float getPlayerRcW() { return _playerRcW; }
 	float getPlayerRcH() { return  _playerRcH; }
+	float getHitAlpha() { return _hitAlpha; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
@@ -105,6 +112,8 @@ public:
 	bool getBowBool() { return _bowBool; }
 	bool getBowChargeAlpha() { return _bowChargeAlpha; }
 	bool getBowChargeState() { return _bowChargeState; }
+	bool getHitCondition() { return _hitCondition; }
+	bool getEnemyCol() { return _enemyCol; }
 	bool getTileColLeft() { return _tileColLeft; }
 	bool getTileColTop() { return _tileColTop; }
 	bool getTileColRight() { return _tileColRight; }
@@ -127,11 +136,13 @@ public:
 	void setBedCount(int bedCount) { _bedCount = bedCount; }
 	void setBowChargeCount(int bowChargeCount) { _bowChargeCount = bowChargeCount; }
 	void setBowAlphaCount(int bowAlphaCount) { _bowAlphaCount = bowAlphaCount; }
+	void setHitAlphaCount(int hitAlphaCount) { _hitAlphaCount = hitAlphaCount; }
 	void setX(float playerX) { _playerX = playerX; }
 	void setY(float playerY) { _playerY = playerY; }
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
 	void setPlayerCurrentHp(float playerCurrentHp) { _playerCurrentHp = playerCurrentHp; }
+	void setHitAlpha(float hitAlpha) { _hitAlpha = hitAlpha; }
 	void setPlayerRcW(float playerRcW) { _playerRcW = playerRcW; }
 	void setPlayerRcH(float playerRcH) { _playerRcH = playerRcH; }
 	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
@@ -141,6 +152,8 @@ public:
 	void setBowBool(bool bowBool) { _bowBool = bowBool; }
 	void setBowChargeAlpha(bool bowChargeAlpha) { _bowChargeAlpha = bowChargeAlpha; }
 	void setBowChargeState(bool bowChargeState) { _bowChargeState = bowChargeState; }
+	void setHitCondition(bool hitCondition) { _hitCondition = hitCondition; }
+	void setEnemyCol(bool enemyCol) { _enemyCol = enemyCol; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }
@@ -165,6 +178,7 @@ public:
 	playerState* getSwimState()			{ return _swim; }
 	playerState* getBowState()			{ return _bow; }
 	playerState* getSwordState()		{ return _sword; }
+	playerState* getHitState()			{ return _hit; }
 	playerState* getBroomState()		{ return _broom; }
 	playerState* getBedState()			{ return _bed; }
 	playerState* getTeleportState()		{ return _teleport; }
