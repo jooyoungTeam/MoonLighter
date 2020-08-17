@@ -6,7 +6,6 @@ HRESULT stageManager::init()
 {
 	_player = new player;
 	_player->init(500, 500);
-
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;

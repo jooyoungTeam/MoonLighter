@@ -67,6 +67,7 @@ private:
 	int _patternRandom;
 	int _saveRandom;
 	int _exCount;
+	int _attackTimer;
 
 public:
 	boss() {}

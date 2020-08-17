@@ -219,6 +219,14 @@ void enemyManager::playerCol()
 			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
 			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
 		}
+		if (_vEnemy[i]->getIsPush())
+		{
+			float angle = getAngle(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _player->getX(), _player->getY());
+			_player->setX(_player->getX() + cosf(angle) * 10);
+			_player->setY(_player->getY() - sinf(angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
+		}
 	}
 
 

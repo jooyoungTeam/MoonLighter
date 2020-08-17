@@ -169,20 +169,23 @@ void cameraManager::cameraUpdate()
 	if (_fade.fadeStart)
 	{
 		_fade.fadeTime++;
-		if (_fade.fadeTime % 5 == 0)
+		if (_fade.fadeTime % 1 == 0)
 		{
 			_fade.fadeTime = 0;
 			if (_fade.fadeType == FADETYPE::FADEIN)
 			{
-				_fade.fadeAlpha += 0.07f;
+				_fade.fadeAlpha += 0.03f;
 				//if (_fade.fadeAlpha >= 1)
 				//	_fade.fadeStart = false;
 			}
 			else
 			{
-				_fade.fadeAlpha -= 0.07f;
+				_fade.fadeAlpha -= 0.007f;
 				if (_fade.fadeAlpha <= 0)
+				{
+					_fade.fadeAlpha = 0;
 					_fade.fadeStart = false;
+				}
 			}
 		}
 	}

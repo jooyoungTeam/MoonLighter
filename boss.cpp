@@ -24,6 +24,11 @@ void boss::set()
 	_rightBottom.x = 886;
 	_rightBottom.y = 1185;
 	_bossAni = ONE;
+	for (int i = 0; i < 13; ++i)
+	{
+		_attack3Rc[i].rc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
+		_attack3Rc2[i].rc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
+	}
 
 	_attack2.img = ImageManager::GetInstance()->FindImage("bossLong");
 	_attack2.hole = ImageManager::GetInstance()->FindImage("bossLong2");
@@ -35,7 +40,7 @@ void boss::render()
 //	if (KEYANIMANAGER->findAnimation(""))
 	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
 	
-	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
+	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
 	for (int i = 0; i < 13; ++i)
 	{
 		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock0"), _attack3Rc[i].rc.left, _attack3Rc[i].rc.top, _attack3Rc[i].rc.bottom, _attack3Rc[i].alpha, 1.5f);
@@ -57,20 +62,26 @@ void boss::render()
 	//CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
 	//CAMERAMANAGER->line(_leftBottom, _leftTop, D2D1::ColorF::Black, 2.0f);
 	
-	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
-	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
-	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
+	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, 1.0f);
+	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, 1.0f);
+	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, 1.0f);
 
-
+	EFFECTMANAGER->render();
 }
 
 void boss::attack()
 {
 	_playerCol = playerCol();
-
+	if (_playerCol)
+	{
+		cout << "플레이어 죽음" << endl;
+	}
+	cout << _attackTimer << endl;
 	if (!_patternCheck)
 	{
+		_attackTimer = 0;
 		_patternRandom = RND->getFromIntTo(0,5);
+
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
@@ -85,6 +96,11 @@ void boss::attack()
 		}
 		if (_patternRandom == 1)
 		{
+			if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
+			{
+				attack();
+				return;
+			}
 			_bossPattern = ARM_LONG;
 		}
 		if (_patternRandom == 2)
@@ -93,7 +109,7 @@ void boss::attack()
 		}
 		if (_patternRandom == 3)
 		{
-			if ((getDistance(_pX, _pY, _x, _y)) >= 600)
+			if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
 			{
 				attack();
 				return;
@@ -102,6 +118,11 @@ void boss::attack()
 		}
 		if (_patternRandom == 4)
 		{
+			if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
+			{
+				attack();
+				return;
+			}
 			_bossPattern = EXPLOSION;
 		}
 		//공격 뭐할지 결정됐음 나가
@@ -313,7 +334,7 @@ void boss::attack2()
 		for (int i = 0; i < 13; i++)
 		{
 			_attack3Rc[i].alpha -= 0.05f;
-			_attack3Rc[i].attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
 			_attack2.count = 0;
 
 			if (_attack3Rc[i].alpha <= 0)
@@ -322,6 +343,7 @@ void boss::attack2()
 				_state = _idle;
 				_attackDelay = 0;
 				_patternCheck = false;
+				_isRockBottom = false;
 				_bossAni = ONE;
 				_cameraShake = 0;
 			}
@@ -369,7 +391,7 @@ void boss::attack3()
 		{
 			attack3_1();
 			_attack3.delay++;
-			if (_attack3.delay > 180)
+			if (_attack3.delay > 100)
 			{
 				_attack3.delay = 0;
 				_attack3.isAttack = true;
@@ -411,14 +433,29 @@ void boss::attack4()
 			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
 			_motion->start();
 			_y = 500;
+			EFFECTMANAGER->play("bossPullEffect", _pX + 135, _pY  + 90);
 			_state = _idle;
-			_bossAni = ONE;
+			//_bossAni = ONE;
 			_exCount = 0;
 			_patternCheck = false;
 			_attackDelay = 0;
-			_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+			_attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		}
 	}
+	RECT temp;
+	if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
+	{
+		if (((getDistance(_pX, _pY, _x, _y)) < 500))
+		{
+			_isBossPush = true;
+		}
+	}
+		if ((getDistance(_pX, _pY, _x, _y)) >= 1000)
+		{
+			_isBossPush = false;
+		}
+
+	
 
 }
 
@@ -549,6 +586,7 @@ void boss::attack3_1()
 		{
 			setRock();
 			_attack3Rc[i].rackFall = true;
+			_isRockBottom = false;
 		}
 	}
 	for (int i = 0; i < 13; ++i)
@@ -558,6 +596,15 @@ void boss::attack3_1()
 			_attack3Rc[i].mY += 25;
 			if (_attack3Rc[i].mY >= _attack3Rc[i].y)
 			{
+				_attackTimer++;
+				if (_attackTimer < 100)
+				{
+					_isRockBottom = true;
+				}
+				else
+				{
+					_isRockBottom = false;
+				}
 				_cameraShake++;
 				_attack3Rc[i].mY = _attack3Rc[i].y;
 			}
@@ -582,14 +629,17 @@ void boss::attack3_2()
 			_attack3Rc2[i].width = 150;
 			_attack3Rc2[i].x = RND->getFromIntTo(600, 2500);
 			_attack3Rc2[i].y = RND->getFromIntTo(600, 1200);
+			_attack3Rc2[0].x = _pX;
+			_attack3Rc2[0].y = _pY;
 			_attack3Rc2[i].mX = 0 - _attack3Rc2[i].x;
 			_attack3Rc2[i].mY = 0 - _attack3Rc2[i].y;
 			_attack3Rc2[i].alpha = 0.5f;
 			_attack3Rc2[i].rockAlpha = 1.0f;
 			_attack3Rc2[i].rackFall = true;
+			_isRockBottom = false;
 			_attack3Rc2[i].scale = 0.5f;
 			_attack3Rc2[i].rackCount = 0;
-			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(0, 0), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
+			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 		}
 		if (_attack3Rc2[i].rackFall)
 		{
@@ -613,6 +663,15 @@ void boss::attack3_2()
 			_attack3Rc2[i].rackCount++;
 			if (_attack3Rc2[i].mY >= _attack3Rc2[i].y)
 			{
+				_attackTimer++;
+				if (_attackTimer < 100)
+				{
+					_isRockBottom = true;
+				}
+				else
+				{
+					_isRockBottom = false;
+				}
 				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 				CAMERAMANAGER->shakeCamera(3, 2);
 				_attack3Rc2[i].mY = _attack3Rc2[i].y;
@@ -633,7 +692,8 @@ void boss::attack3_2()
 						_attackDelay = 0;
 						_attack3Rc2[i].rackCount = 0;
 						_patternCheck = false;
-						_attack3Rc2[i].attackRc = RectMakePivot(Vector2(0, 0), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
+						_isRockBottom = false;
+						_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 
 						_attack3Rc2[i].rackFall = false;
 						
@@ -740,10 +800,15 @@ bool boss::playerCol()
 	RECT temp;
 	for (int i = 0; i < 13; i++)
 	{
-		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) ||
-			IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()))
+		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
+			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 
+				return true;
+		}
+		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
+		{
+			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 			return true;
 		}
 	}
@@ -752,7 +817,8 @@ bool boss::playerCol()
 		IntersectRect(&temp, &_attackRc.GetRect(), &_pRc.GetRect()) ||
 		_isHandCol)
 	{
-
+		_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
+		_attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		return true;
 	}
 
