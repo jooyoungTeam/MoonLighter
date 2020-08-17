@@ -88,7 +88,7 @@ void shopStage::update()
 
 	disPlayUpdate();
 	
-	buyItem();
+	npcProcess();
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
@@ -189,7 +189,7 @@ void shopStage::doorUpdate()
 	}
 }
 
-void shopStage::buyItem()
+void shopStage::npcProcess()
 {
 	for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 	{
@@ -199,6 +199,25 @@ void shopStage::buyItem()
 			// 팔았다는 카운터 애니메이션재생
 			_cellerIndex = 0;
 			_npcM->getVnpc()[i]->setIsCount(false);
+		}
+
+		_display[_npcM->getVnpc()[i]->getRndItem()].isPeople = true;
+
+		if (_npcM->getVnpc()[i]->getIsCheckEnd())
+		{
+			_display[_npcM->getVnpc()[i]->getRndItem()].isPeople = false;
+		}
+
+		for (int j = 0; j < 4; ++j)
+		{
+			if (_display[j].isPeople)
+			{
+				_npcM->getVnpc()[i]->setIsAnotherPerson(j, true);
+			}
+			else
+			{
+				_npcM->getVnpc()[i]->setIsAnotherPerson(j, false);
+			}
 		}
 
 		// 선택한 아이템에 따라 넘겨줌
@@ -231,12 +250,8 @@ void shopStage::buyItem()
 		// 구매했을때
 		if (_npcM->getVnpc()[i]->getIsBuy())
 		{
-			//if (_display[_npcM->getVnpc()[i]->getRndItem()].it == NULL) return;
-
-			cout << "들어옴" << endl;
 			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it->getType());
 			INVENTORY->resetShowCase(_npcM->getVnpc()[i]->getRndItem() * 2);
-			//_display[_npcM->getVnpc()[i]->getRndItem()].it = NULL;
 		}
 	}
 }

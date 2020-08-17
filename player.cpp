@@ -319,7 +319,7 @@ void player::animationLoad()
 //활나가는 방향
 void player::arrowShoot()
 {
-	cout << _bowChargeState << endl;
+	//cout << _bowChargeState << endl;
 
 	if (_playerDirection == DIRECTION::UP)
 	{

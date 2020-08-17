@@ -80,9 +80,11 @@ private:
 	int					_checkItemCount;	// 아이템 확인한 수
 
 	bool				_checkItem[4];		// 아이템 확인 여부(똑같은 아이템 안보기)
+	bool				_isAnotherPerson[4];// 다른사람이 자기가 고른 아이템을 보고있는지
 	bool				_isBuy;				// 구매했는지 확인
 	bool				_isAway;			// 떠나는지 확인
 	bool				_isCount;			// 계산중인지 확인
+	bool				_isCheckEnd;		// 아이템 확인이 끝났는지 확인			
 public:
 	shopNPC() {}
 	~shopNPC() {}
@@ -113,12 +115,14 @@ public:
 	bool getIsBuy() { return _isBuy; }
 	bool getIsAway() { return _isAway; }
 	bool getIsCount() { return _isCount; }
-
+	bool getIsCheckEnd() { return _isCheckEnd; }
 public:
 	//============================ Set ===========================
 	void setSettingPrice(int price) { _settingPrice = price; }
 	void setRightPrice(int price) { _rightPrice = price; }
 	void setItem(ITEMTYPE _it) { _item->init(_it); }
 	void setIsCount(bool arg) { _isCount = arg; }
+	void setIsAnotherPerson(int index, bool arg) { _isAnotherPerson[index] = arg; }
+	void setIsCheckEnd(bool arg) { _isCheckEnd = arg; }
 };
 

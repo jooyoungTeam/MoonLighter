@@ -26,6 +26,7 @@ struct tagDisplayStand
 	int	  count;			// 아이템 개수
 
 	bool  isActive;			// 진열대에 아이템이 있냐?
+	bool  isPeople;			// 진열대에 사람이 있냐?
 
 	void init(Vector2 mPos, item* mIt, int mPrice, int mCount, bool mIsActive)
 	{
@@ -77,7 +78,7 @@ public:
 	void disPlayUpdate();			// 진열대 업데이트
 	void doorUpdate();				// 문 업데이트
 
-	void buyItem();					// 아이템 구매
+	void npcProcess();					// 아이템 구매
 
 public:
 	//============================ Get ===========================

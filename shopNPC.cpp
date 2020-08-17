@@ -66,6 +66,11 @@ void shopNPC::updadte()
 {
 	directionCheck();
 
+	for (int i = 0; i < 4; ++i)
+	{
+		cout << _isAnotherPerson[i] << endl;
+	}
+
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
 	_item->setItemPos(_centerX, _centerY - 50);
 	_item->update();
@@ -134,6 +139,10 @@ void shopNPC::updadte()
 			// 아니면 다시 쇼핑
 			else
 			{
+				if (_delayTimer > 290 && _delayTimer < 292)
+				{
+					_isCheckEnd = true;
+				}
 				if (_delayTimer > 300)
 				{
 					if (_checkItemCount < 4)
@@ -166,6 +175,7 @@ void shopNPC::updadte()
 		if (_delayTimer > 200)
 		{
 			_npcEmotionState = NPC_EMOTION_NULL;
+			_isCheckEnd = true;
 			frameUpdate();
 			move();
 		}
@@ -297,8 +307,6 @@ void shopNPC::comparePrice()
 	// 아이템 적정가와 플레이어 셋팅가격 차이 구하기
 	int tempPrice;
 	tempPrice = _settingPrice - _rightPrice;
-
-	cout << tempPrice << endl;
 
 	// tempPrice의 크기에 따른 처리
 
@@ -438,15 +446,17 @@ void shopNPC::directionCheck()
 	{
 		_indexY = 0;
 	}
-
 }
 
 void shopNPC::chooseItem()
-{
+{	
 	// 중복 방지 (안 본 아이템이 나올때 까지 루프)
-	while (_checkItem[_rndChoiceItem])
+	while (true)
 	{
 		_rndChoiceItem = RND->getInt(4);
+
+		if (!_isAnotherPerson && !_checkItem[_rndChoiceItem])
+			break;
 	}
 
 	// 확인한 아이템 숫자 늘려주기
