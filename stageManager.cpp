@@ -55,6 +55,8 @@ void stageManager::update()
 
 	SCENEMANAGER->update();
 
+	KEYANIMANAGER->update();
+
 	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
 		INVENTORY->setIsInven(true);

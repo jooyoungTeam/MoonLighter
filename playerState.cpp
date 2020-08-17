@@ -361,12 +361,12 @@ void playerWalkState::update(player & player)
 			}
 			if (player.getDirection() == DIRECTION::RIGHTTOP)
 			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
 				player.setCurrentState(player.getWalkState());
 			}
 			if (player.getDirection() == DIRECTION::LEFTTOP)
 			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
 				player.setCurrentState(player.getWalkState());
 			}
 		}
@@ -420,12 +420,12 @@ void playerWalkState::update(player & player)
 			}
 			if (player.getDirection() == DIRECTION::RIGHTTOP)
 			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation( "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
 				player.setCurrentState(player.getWalkState());
 			}
 			if (player.getDirection() == DIRECTION::LEFTTOP)
 			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
 				player.setCurrentState(player.getWalkState());
 			}
 		}
@@ -507,7 +507,7 @@ void playerWalkState::update(player & player)
 	}
 
 	//오른쪽위 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk") && player.getDirection() == DIRECTION::RIGHTTOP)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation( "playerUpWalk") && player.getDirection() == DIRECTION::RIGHTTOP)
 	{
 		cout << "RightTop 들어오는중" << endl;
 		if (!player.getTileColRightTop())
@@ -515,7 +515,7 @@ void playerWalkState::update(player & player)
 	}
 
 	//왼쪽위 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerUpWalk") && player.getDirection() == DIRECTION::LEFTTOP)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerUpWalk") && player.getDirection() == DIRECTION::LEFTTOP)
 	{
 		cout << "LeftTop 들어오는중" << endl;
 		if (!player.getTileColLeftTop())
@@ -523,7 +523,7 @@ void playerWalkState::update(player & player)
 	}
 
 	//왼쪽아래 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk") && player.getDirection() == DIRECTION::LEFTBOTTOM)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownWalk") && player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
 		cout << "LEFTBottom 들어오는중" << endl;
 		if (!player.getTileColLeftBottom())
@@ -531,7 +531,7 @@ void playerWalkState::update(player & player)
 	}
 
 	//오른쪽아래 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownWalk") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownWalk") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
 		cout << "RightBottom 들어오는중" << endl;
 		if (!player.getTileColRightBottom())
@@ -961,14 +961,14 @@ void playerRollState::update(player & player)
 	}
 
 	//왼쪽아래 구르기
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll") && player.getDirection() == DIRECTION::LEFTBOTTOM)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownRoll") && player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
 		if (!player.getTileColLeftBottom())
 		player.setShadowX(player.getShadowX() - 5);
 	}
 
 	//오른쪽아래 구르기
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation(player.getIndex(), "playerDownRoll") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
+	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownRoll") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
 		if (!player.getTileColRightBottom())
 		player.setShadowX(player.getShadowX() + 5);

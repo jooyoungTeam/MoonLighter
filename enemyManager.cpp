@@ -103,7 +103,7 @@ void enemyManager::setEnemy()
 	boss1->init(i, 1360, 300, 590, 650, ENEMY_BOSS);
 	_vEnemy.push_back(boss1);
 
-	i++;
+
 	enemy* redS1;
 	redS1 = new redSlime;
 	redS1->playerCheck(_x, _y, _rc);
@@ -117,7 +117,6 @@ void enemyManager::setEnemy()
 	_vEnemy.push_back(redS12);
 
 
-	i++;
 
 	enemy* gol1;
 	gol1 = new golem;
@@ -131,7 +130,7 @@ void enemyManager::setEnemy()
 	gol12->init(i, 800, 500, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol12);
 	
-	i++;
+
 
 	enemy* pot1;
 	pot1 = new pot;
@@ -145,10 +144,7 @@ void enemyManager::setEnemy()
 	pot22->init(i, 1200, 700, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot22);
 	
-	i++;
 
-	//
-	i++;
 
 	enemy* pot2;
 	pot2 = new pot;
@@ -157,15 +153,7 @@ void enemyManager::setEnemy()
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
 
-	enemy* pot2;
-	pot2 = new pot;
-	pot2->playerCheck(_x, _y, _rc);
-	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
-	pot2->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(pot2);
 
-	
-//	i++;
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
@@ -173,7 +161,6 @@ void enemyManager::setEnemy()
 	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
-	i++;
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
