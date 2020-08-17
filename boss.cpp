@@ -54,6 +54,11 @@ void boss::render()
 	}
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
+	//if (_attack1.isAttack)
+	//{
+	//	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _pX, _pY + _attack1.yRandom, 1.0f, 1.0f);
+
+	//}
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
 	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
@@ -81,7 +86,6 @@ void boss::attack()
 	{
 		_attackTimer = 0;
 		_patternRandom = RND->getFromIntTo(0,5);
-
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
@@ -464,10 +468,11 @@ void boss::attack1_1()
 	
 	if (!_attack1.isAttack)
 	{
-		_attack1.xRandom = RND->getFromIntTo(-100, 100);
-		_attack1.yRandom = RND->getFromIntTo(-100, 100);
+		_attack1.xRandom = RND->getFromIntTo(-50, 50);
+		_attack1.yRandom = RND->getFromIntTo(-50, 50);
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{
+			_attack1.x = _pX + _attack1.xRandom;
 			_attack1.y += _attack1.speed;
 			_attack1.speed += 0.9f;
 			_attack1.rc = RectMakePivot(Vector2(_attack1.x, _attack1.y), Vector2(50, 50), Pivot::Center);
@@ -804,7 +809,7 @@ bool boss::playerCol()
 		{
 			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 
-				return true;
+			return true;
 		}
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{

@@ -21,7 +21,7 @@ HRESULT enemyManager::init()
 	setEnemy();
 
 	_bullet = new bullet;
-	_bullet->init();
+	_bullet->init("enemyBullet");
 	
 	_test = false;
 
@@ -128,17 +128,17 @@ void enemyManager::setEnemy()
 	//_vEnemy.push_back(pot1);
 
 	//
-	//i++;
+	i++;
 
 
-	//enemy* pot2;
-	//pot2 = new pot;
-	//pot2->playerCheck(_x, _y, _rc);
-	//pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
-	//pot2->setPotDirection(POT_RIGHT);
-	//_vEnemy.push_back(pot2);
+	enemy* pot2;
+	pot2 = new pot;
+	pot2->playerCheck(_x, _y, _rc);
+	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
+	pot2->setPotDirection(POT_RIGHT);
+	_vEnemy.push_back(pot2);
 
-	//
+	
 //	i++;
 
 	//enemy* yelS1;
@@ -182,6 +182,11 @@ void enemyManager::potBullet()
 			{
 				_bullet->fire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), PI *3.5, 3.f);
 			}
+
+		}
+
+		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+		{
 
 		}
 	}

@@ -218,6 +218,7 @@ void enemy::ani()
 
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
+	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
 	EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
 
 
