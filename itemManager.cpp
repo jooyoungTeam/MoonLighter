@@ -31,13 +31,18 @@ void itemManager::release()
 	_vItem.clear();
 }
 
-void itemManager::setItem(ITEMTYPE type, float x, float y)
+void itemManager::setItem(ITEMBUNDLE bundle, float x, float y)
 {
-	item* material;
-	material = new item;
-	material->init(type, x, y);
+	int count = RND->getFromIntTo(2, 4);
 
-	_vItem.push_back(material);
+	for (int i = 0; i < count; i++)
+	{
+		item* material;
+		material = new item;
+		material->init(bundle, x, y, x + RND->getFromIntTo(-50, 50), y + RND->getInt(50));
+
+		_vItem.push_back(material);
+	}
 }
 
 void itemManager::erase(int arrNum)

@@ -226,6 +226,7 @@ void inventory::selectItem()
 				//인벤 카운트가 0 이하가 되면 비워버린다
 				if (_inven[_select].count <= 0)
 				{
+					_isFull = false;
 					_inven[_select].item = nullptr;
 				}
 			}

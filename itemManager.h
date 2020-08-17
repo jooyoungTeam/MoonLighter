@@ -5,6 +5,7 @@
 class itemManager :	public gameNode
 {
 private:
+	item* _item;
 	vector<item*> _vItem;
 
 public:
@@ -16,7 +17,7 @@ public:
 	void update();
 	void render();
 
-	void setItem(ITEMTYPE type, float x, float y);
+	void setItem(ITEMBUNDLE bundle, float x, float y);
 	void erase(int arrNum);
 
 	vector<item*> getVItem() { return _vItem; }
