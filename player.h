@@ -34,6 +34,7 @@ private:
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
 	int					_bowChargeCount;					//활 충전 카운트
 	int					_bowAlphaCount;						//활 충전 알파 카운트
+	int					tileIndex[2];
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerRcW, _playerRcH;				//플레이어 RC 크기
 	float				_playerShadowX, _playerShadowY;		//플레이어 그림자 중점
@@ -48,6 +49,14 @@ private:
 	bool				_bowBool;							//활 충전 값
 	bool				_bowChargeAlpha;					//활 충전 알파
 	bool				_bowChargeState;					//활 충전상태인지.
+	bool				_tileColLeft;						//타일 충돌 상태인지
+	bool				_tileColRight;						//타일 충돌 상태인지
+	bool				_tileColTop;						//타일 충돌 상태인지
+	bool				_tileColBottom;						//타일 충돌 상태인지
+	bool				_tileColLeftTop;						//타일 충돌 상태인지
+	bool				_tileColRightTop;						//타일 충돌 상태인지
+	bool				_tileColLeftBottom;						//타일 충돌 상태인지
+	bool				_tileColRightBottom;						//타일 충돌 상태인지
 
 	//플레이어 상태 정의
 	playerState*	    _idle;
@@ -87,6 +96,8 @@ public:
 	float getShadowY() { return _playerShadowY; }
 	float getplayerCurrentHp() { return _playerCurrentHp; }
 	float getSwordDamage() { return _SwordDamage; }
+	float getPlayerRcW() { return _playerRcW; }
+	float getPlayerRcH() { return  _playerRcH; }
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
@@ -94,7 +105,17 @@ public:
 	bool getBowBool() { return _bowBool; }
 	bool getBowChargeAlpha() { return _bowChargeAlpha; }
 	bool getBowChargeState() { return _bowChargeState; }
+	bool getTileColLeft() { return _tileColLeft; }
+	bool getTileColTop() { return _tileColTop; }
+	bool getTileColRight() { return _tileColRight; }
+	bool getTileColBottom() { return _tileColBottom; }
+	bool getTileColLeftTop() { return _tileColLeftTop; }
+	bool getTileColRightTop() { return _tileColRightTop; }
+	bool getTileColLeftBottom() { return _tileColLeftBottom; }
+	bool getTileColRightBottom() { return _tileColRightBottom; }
 
+	
+	int*  getColTileIdx() { return tileIndex; }
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	Image* getImage() { return _playerImg; }
@@ -111,6 +132,8 @@ public:
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
 	void setPlayerCurrentHp(float playerCurrentHp) { _playerCurrentHp = playerCurrentHp; }
+	void setPlayerRcW(float playerRcW) { _playerRcW = playerRcW; }
+	void setPlayerRcH(float playerRcH) { _playerRcH = playerRcH; }
 	void setSwordAttack(bool swordAttack) { _swordAttack = swordAttack; }
 	void setSwrodAttackCombo(bool swordAttackCombo) { _swordAttackCombo = swordAttackCombo; }
 	void setWeaponChange(bool weaponChange) { _weaponChange = weaponChange; }
