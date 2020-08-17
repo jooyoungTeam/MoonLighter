@@ -160,6 +160,9 @@ void inventory::render()
 	{
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
+
+	if (fullInven() >= 19)
+	D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - 50, WINSIZEY / 2, L"아이템 창이 가득 찼습니다.", 40, D2DRenderer::DefaultBrush::Red);
 }
 
 void inventory::update()
@@ -170,7 +173,9 @@ void inventory::update()
 	if (_isSelect && !_isSwap) _selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
-	
+
+	//fullInven();
+
 	if (_state == INVEN_STATE::SHOP)
 	{
 		setPrice(_firstPrice, 0);	//가격 정하기
@@ -226,7 +231,7 @@ void inventory::selectItem()
 				//인벤 카운트가 0 이하가 되면 비워버린다
 				if (_inven[_select].count <= 0)
 				{
-					_isFull = false;
+					_inven[_select].isFull = false;
 					_inven[_select].item = nullptr;
 				}
 			}

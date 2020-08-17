@@ -82,15 +82,18 @@ void item::fieldUpdate()
 
 void item::move()
 {
-	if (_endX > _x)
+	if (_isDrop)
 	{
-		_x += 2;
-	}
+		if (_endX > _x)
+		{
+			_x += 2;
+		}
 
-	if (_endX < _x)
-	{
-		_x -= 2;
-	}
+		if (_endX < _x)
+		{
+			_x -= 2;
+		}
+	}	
 
 	if (_y >= _endY)
 	{	
@@ -107,8 +110,18 @@ void item::move()
 	{
 		_jumpPower = 0;
 		_gravity = 0;
-		_y = _endY;
-		_x = _endX;
+	}
+}
+
+void item::follow(FloatRect rc)
+{
+	float distance = getDistance(_x, _y, rc.GetCenter().x, rc.GetCenter().y);
+	float angle = getAngle(_x, _y, rc.GetCenter().x, rc.GetCenter().y);
+
+	if (distance <= 100)
+	{
+		_x += cosf(angle) * 1;
+		_y -= sinf(angle) * 1;
 	}
 }
 
@@ -243,40 +256,40 @@ void item::category()
 
 void item::setBundle()
 {
-	_count = RND->getInt(4);
+	_count = RND->getInt(10);
 
 	switch (_bundle)
 	{
 	case ITEMBUNDLE::SLIME_RED:
-		if (_count < 3) _type = ITEMTYPE::SLIME_RED;
+		if (_count < 6) _type = ITEMTYPE::SLIME_RED;
 		break;
 
 	case ITEMBUNDLE::SLIME_BLUE:
-		if (_count < 3) _type = ITEMTYPE::SLIME_BLUE;
+		if (_count < 6) _type = ITEMTYPE::SLIME_BLUE;
 		break;
 
 	case ITEMBUNDLE::SLIME_YELLOW:
-		if (_count < 3) _type = ITEMTYPE::SLIME_YELLOW;
+		if (_count < 6) _type = ITEMTYPE::SLIME_YELLOW;
 		break;
 
 	case ITEMBUNDLE::GOLEM_KNIGHT:
-		if (_count == 0) _type = ITEMTYPE::GOLEM_PIECES;
-		if (_count == 1) _type = ITEMTYPE::GOLEM_CORE;
-		if (_count == 2) _type = ITEMTYPE::FABRIC;
-		if (_count == 3) _type = ITEMTYPE::BROKEN_SWORD;
+		if (_count >= 0 && _count < 2) _type = ITEMTYPE::GOLEM_PIECES;
+		if (_count >= 2 && _count < 3) _type = ITEMTYPE::FABRIC;
+		if (_count >= 3 && _count < 4) _type = ITEMTYPE::BROKEN_SWORD;
+		if (_count >= 4 && _count < 6) _type = ITEMTYPE::GOLEM_CORE;
 		break;
 
 	case ITEMBUNDLE::GOLEM_POT:
-		if (_count == 0) _type = ITEMTYPE::CRYSTAL_ENERGY;
-		if (_count == 1) _type = ITEMTYPE::REINFORCED_STEEL;
-		if (_count == 2) _type = ITEMTYPE::GOLEM_CORE;
+		if (_count >= 0 && _count < 2) _type = ITEMTYPE::CRYSTAL_ENERGY;
+		if (_count >= 2 && _count < 3) _type = ITEMTYPE::REINFORCED_STEEL;
+		if (_count >= 3 && _count < 5) _type = ITEMTYPE::GOLEM_CORE;
 		break;
 
 	case ITEMBUNDLE::GOLEM_KING:
-		if (_count == 0) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
-		if (_count == 1) _type = ITEMTYPE::GOLEMKING_RECORD;
-		if (_count == 2) _type = ITEMTYPE::FABRIC;
-		if (_count == 3) _type = ITEMTYPE::SLIME_RED;
+		if (_count >= 0 && _count < 2) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
+		if (_count >= 2 && _count < 3) _type = ITEMTYPE::GOLEMKING_RECORD;
+		if (_count >= 3 && _count < 4) _type = ITEMTYPE::FABRIC;
+		if (_count >= 4 && _count < 6) _type = ITEMTYPE::SLIME_RED;
 		break;
 	}
 }
