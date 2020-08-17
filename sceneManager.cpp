@@ -41,11 +41,14 @@ void sceneManager::release()
 void sceneManager::update()
 {
 	if (_currentScene) _currentScene->update();
+
+
 }
 
 void sceneManager::render()
 {
 	if (_currentScene) _currentScene->render();
+;
 }
 
 gameNode * sceneManager::addScene(string sceneName, gameNode * scene)
@@ -60,7 +63,6 @@ gameNode * sceneManager::addScene(string sceneName, gameNode * scene)
 HRESULT sceneManager::changeScene(string sceneName)
 {
 	mapSceneIter find = _mSceneList.find(sceneName);
-
 	if (find == _mSceneList.end()) return E_FAIL;
 	if (find->second == _currentScene) return S_OK;
 
@@ -69,6 +71,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 		//어떤 씬의 정보가 들어있기 때문에 릴리즈 먼저 해주고
 		if (_currentScene) _currentScene->release();
 
+		CAMERAMANAGER->fadeInOut(FADETYPE::FADEOUT);
 		//현재 씬에 바꾸려는 씬을 담는다
 		_currentScene = find->second;
 
