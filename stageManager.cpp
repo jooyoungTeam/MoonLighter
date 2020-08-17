@@ -6,7 +6,6 @@ HRESULT stageManager::init()
 {
 	_player = new player;
 	_player->init(500, 500);
-
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -43,6 +42,7 @@ void stageManager::render()
 {
 	SCENEMANAGER->render();
 	//_ui->render();
+	//_itemMg->render();
 	if (INVENTORY->getIsInven()) INVENTORY->render();
 
 }
@@ -50,6 +50,7 @@ void stageManager::render()
 
 void stageManager::update()
 {
+	cout << "ÇÔÁ¤¿ª" << endl;
 	FloatRect _test;
 	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
 
@@ -80,17 +81,17 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
-		_itemMg->setItem(ITEMTYPE::SLIME_RED, 200 + RND->getInt(50), 200 + RND->getInt(50));
+		_itemMg->setItem(ITEMBUNDLE::SLIME_RED, 200 + RND->getInt(50), 200 + RND->getInt(50));
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('U'))
 	{
-		_itemMg->setItem(ITEMTYPE::BROKEN_SWORD, 200 + RND->getInt(50), 200 + RND->getInt(50));
+		_itemMg->setItem(ITEMBUNDLE::GOLEM_POT, WINSIZEX / 2, WINSIZEY / 2);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('T'))
 	{
-		_itemMg->setItem(ITEMTYPE::POTION_S, 200 + RND->getInt(50), 200 + RND->getInt(50));
+		_itemMg->setItem(ITEMBUNDLE::GOLEM_KING, WINSIZEX / 2, WINSIZEY / 2);
 	}
 
 	_itemMg->update();
@@ -100,7 +101,7 @@ void stageManager::update()
 		if (_test.left - _itemMg->getVItem()[i]->getRc().left < 30 && _test.top - _itemMg->getVItem()[i]->getRc().top < 30)
 		{
 			INVENTORY->putItem(_itemMg->getVItem()[i]);
-			_itemMg->erase(i);
+			if (!INVENTORY->getIsFull()) _itemMg->erase(i);
 		}
 	}
 

@@ -5,6 +5,10 @@
 #include "itemManager.h"
 #include "item.h"
 
+#define SHOPTILEX 32
+#define SHOPTILEY 28
+
+
 class inventory;
 
 enum doorState
@@ -40,7 +44,7 @@ struct tagDisplayStand
 class shopStage : public gameNode
 {
 private:
-	// =============== 기본 ===============
+	// =============== 기본 ===============f
 	Image* _backGround;				// 배경 이미지
 	Image* _celler;					// 판매원 이미지
 	class player* _player;				// 플레이어
@@ -62,6 +66,11 @@ private:
 	bool  _enterNPC;				// NPC 들어오는지 확인
 
 
+
+	DWORD             _attribute[SHOPTILEX * SHOPTILEY];
+	tagTile			  _tile[SHOPTILEX * SHOPTILEY];
+
+
 public:
 	shopStage() {}
 	~shopStage() {}
@@ -71,18 +80,20 @@ public:
 	void render();
 	void update();
 	void release();
-
-
+	void loadMap();
+	void renderMap();
 	void disPlaySet();				// 진열대 세팅
 	void disPlayUpdate();			// 진열대 업데이트
 	void doorUpdate();				// 문 업데이트
 
+	void buyItem();					// 아이템 구매
+	
 	void npcProcess();					// 아이템 구매
 
 public:
 	//============================ Get ===========================
 
-
+	
 	void setPlayerLink(player* player) { _player = player; };
 public:
 	//============================ Set ===========================

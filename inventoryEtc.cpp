@@ -242,6 +242,7 @@ void inventory::putItem(item* item)
 			{
 				if (_inven[i].count >= _inven[i].item->getLimit())
 				{
+					_isFull = true;
 					continue;
 				}
 
