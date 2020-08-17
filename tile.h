@@ -19,9 +19,15 @@ private:
 	RECT              _dragTile;    // 마우스 포인터 마우스 안에있을 때
 	objectManager*    _objectManager;
 	palette*          _palette;
+
+
+
+
 	// --------- 미니맵 변수	
-	FloatRect     _miniMap;
+	miniMap       _mini[100 * 100];
+	Image*        _miniMapImg;
 	FloatRect     _miniMapMove;
+	FloatRect     _miniMap;
 	// --------- 미니맵 변수	
 
 	int           _saveTime;

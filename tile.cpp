@@ -6,6 +6,7 @@ HRESULT tile::init()
 	_tileSize[0] = 100;
 	_tileSize[1] = 100;
 
+
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 	_objectManager = new objectManager;
 	_objectManager->init();
@@ -15,6 +16,13 @@ HRESULT tile::init()
 	_palette->init();
 	_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
 	_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+
+	for (int i = 0; i < 100 * 100; i++)
+	{
+		_mini[i].rc = RectMakePivot(Vector2(10 + (i % 100) * 2.5f, 10 + (int)(i / 100) * 2.5f), Vector2(2.5f, 2.5f), Pivot::LeftTop);
+		_mini[i].isDraw = false;
+	}
+
 
 	_button = new button;
 	_button->init();
@@ -112,10 +120,27 @@ void tile::render()
 	}
 
 	// ¹Ì´Ï¸Ê
-	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
-	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1, 2);
-
+	if (_miniMapImg == NULL)
+	{
+		D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
+		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
+	}
+	else
+	{
+		_miniMapImg->Render(Vector2(_miniMap.left, _miniMap.top), 0.05f);
+		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
+	}
+	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::White, 1, 2);
 	_objectManager->currentObjectRender();
+
+	for (int i = 0; i < 100 * 100; i++)
+	{
+		if (_mini[i].isDraw)
+		{
+			D2DRenderer::GetInstance()->FillRectangle(_mini[i].rc, D2D1::ColorF::Black, 0.5f);
+			//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(Vector2(_mini[i].rc.left, _mini[i].rc.top), _vTile[i].terrainFrameX, _vTile[i].terrainFrameY,0.05f);
+		}
+	}
 
 	// ÆÈ·¹Æ® ²°´ÙÄ×´ÙÇÏ´Â ·ºÆ®
 	ImageManager::GetInstance()->FindImage("sampleUIOnOff")->Render(Vector2(_palette->getSampleOnOffRect().left, _palette->getSampleOnOffRect().top));
@@ -209,12 +234,14 @@ void tile::drag()
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 					_vTile[i].pos = posSelect(_currentTile.x, _currentTile.y);
+					_mini[i].isDraw = true;
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
+					_mini[i].isDraw = false;
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
@@ -342,6 +369,7 @@ void tile::setMap()
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
+						_mini[index].isDraw = true;
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -351,6 +379,7 @@ void tile::setMap()
 					{
 						_vTile[index].terrain = TR_NONE;
 						_vTile[index].isColTile = false;
+						_mini[index].isDraw = false;
 					}
 
 					break;
@@ -439,30 +468,35 @@ void tile::loadMap()
 		{
 			_currentLoadType = 1;
 			_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
+			_miniMapImg = _mapImg;
 			fileName = "townMap.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_BOSS)
 		{
 			_currentLoadType = 2;
 			_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
+			_miniMapImg = _mapImg;
 			fileName = "boss.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_SHOP)
 		{
 			_currentLoadType = 3;
 			_mapImg = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
+			_miniMapImg = _mapImg;
 			fileName = "shop.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
 		{
 			_currentLoadType = 4;
 			_mapImg = NULL;
+			_miniMapImg = NULL;
 			fileName = "dungeon1.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_ENTERENCE)
 		{
 			_currentLoadType = 5;
 			_mapImg = NULL;
+			_miniMapImg = NULL;
 			fileName = "dungeonEnterence.map";
 		}
 		if (_vTile.size() > 0)
