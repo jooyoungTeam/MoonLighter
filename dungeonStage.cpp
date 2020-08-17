@@ -5,13 +5,11 @@ HRESULT dungeonStage::init()
 {
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
-
 	_objectManager = new objectManager;
 
 
 
 	loadDungeonMap();
-	_player->init(500, 500);
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
