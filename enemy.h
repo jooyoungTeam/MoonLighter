@@ -82,7 +82,9 @@ protected:
 	bool _onceAni;		//애니 스타트 하는거 한 번만 들어오게..
 	bool _realDead;		//애니 다 하구 에너미 없어지게 하는거
 	bool _isHit;		//맞음
-	bool _isBossPull;
+	bool _isBossPull;	//보스 끌어당김
+	bool _isBossPush;	//보스 밈
+	bool _isRockBottom;
 		
 
 
@@ -133,7 +135,8 @@ public:
 	void setRealDead(bool d) { _realDead = d; }
 	void setIsHit(bool hit) { _isHit = hit; }
 	void setIsPull(bool pull) { _isBossPull = pull; }
-
+	void setIsPush(bool push) { _isBossPush = push; }
+	void setIsRockBottom(bool bottom) { _isRockBottom = bottom; }
 
 	void setEnemyAttack(int hp = 3)
 	{
@@ -196,7 +199,8 @@ public:
 	bool getRealDead() { return _realDead; }
 	bool getIsHit() { return _isHit; }
 	bool getIsPull() { return _isBossPull; }
-	
+	bool getIsPush() { return _isBossPush; }
+	bool getIsRockBottom() { return _isRockBottom; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }
