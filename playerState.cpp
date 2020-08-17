@@ -24,7 +24,7 @@ void playerIdleState::update(player & player)
 	}
 
 	//히트상태
-	if (player.getEnemyCol)
+	if (player.getEnemyCol())
 	{
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getHitState());
@@ -345,7 +345,7 @@ void playerWalkState::update(player & player)
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 
 	//히트상태
-	if (player.getEnemyCol)
+	if (player.getEnemyCol())
 	{
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getHitState());
