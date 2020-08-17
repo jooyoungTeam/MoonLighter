@@ -90,7 +90,7 @@ public:
 	~shopNPC() {}
 
 public:
-	HRESULT init(npcType type);
+	HRESULT init(npcType type, vector<POINT> vUnMove);
 	void	release();
 	void	updadte();
 	void	render();
@@ -99,7 +99,6 @@ public:
 	void	emotionFrameUpdate();			// 이모션 프레임 업데이트
 	void	move();							// npc 이동
 	void	comparePrice();					// 가격 비교
-	void	unMoveSet();					// 못 움직이는곳 셋팅
 	void    wayPointSet();					// 가야되는곳 셋팅
 	void	directionCheck();				// 방향 검사
 	void	chooseItem();					// 아이템 뽑기

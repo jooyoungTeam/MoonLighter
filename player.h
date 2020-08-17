@@ -118,7 +118,7 @@ public:
 	void setBowBool(bool bowBool) { _bowBool = bowBool; }
 	void setBowChargeAlpha(bool bowChargeAlpha) { _bowChargeAlpha = bowChargeAlpha; }
 	void setBowChargeState(bool bowChargeState) { _bowChargeState = bowChargeState; }
-	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion = playerMotion, _playerImg = img; _playerMotion->start(); }
+	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }
 	void setAttackRc(float playerAttackX, float playerAttackY, float playerAttackW, float playerAttackH)

@@ -30,34 +30,39 @@ void golem::set()
 
 void golem::attack()
 {
+	
 	if (!_isAttack)
 	{
 		switch (_golemDir)
 		{
 		case GOLEM_LEFT:
 			_attackDelay = 0;
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemLeftAttack");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemLeftAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			_attackRc = RectMakePivot(Vector2(_x - 70, _y + 20), Vector2(_width + 10, _height - 60), Pivot::Center);
 			break;
 		case GOLEM_RIGHT:
 			_attackDelay = 0;
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemRightAttack");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemRightAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			_attackRc = RectMakePivot(Vector2(_x + 70, _y + 20), Vector2(_width + 10, _height - 60), Pivot::Center);
 			break;
 		case GOLEM_TOP:
 			_attackDelay = 0;
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemUpAttack");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemUpAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			_attackRc = RectMakePivot(Vector2(_x, _y - 60), Vector2(_width - 30, _height - 30), Pivot::Center);
 			break;
 		case GOLEM_BOTTOM:
 			_attackDelay = 0;
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemDownAttack");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemDownAttack");
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
 			_motion->start();
 			_attackRc = RectMakePivot(Vector2(_x, _y + 80), Vector2(_width - 30, _height - 30), Pivot::Center);
@@ -81,14 +86,16 @@ void golem::enemyMove()
 	if ((_angle >= 315 && _angle < 360) || (_angle >= 0 && _angle < 45))
 	{
 		_golemDir = GOLEM_LEFT;
-		_motion = KEYANIMANAGER->findAnimation(_index, "golemLeft");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation( "golemLeft");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
 	}
 	else if (_angle >= 135 && _angle < 225)
 	{
 		_golemDir = GOLEM_RIGHT;
-		_motion = KEYANIMANAGER->findAnimation(_index, "golemRight");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation( "golemRight");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
 	}
@@ -96,14 +103,16 @@ void golem::enemyMove()
 	if (_angle >= 45 && _angle < 135)
 	{
 		_golemDir = GOLEM_BOTTOM;
-		_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation( "golemDown");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
 	}
 	else if (_angle >= 225 && _angle < 315)
 	{
 		_golemDir = GOLEM_TOP;
-		_motion = KEYANIMANAGER->findAnimation(_index, "golemUp");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation( "golemUp");
 		_img = ImageManager::GetInstance()->FindImage("golem");
 		_motion->start();
 	}
@@ -121,22 +130,26 @@ void golem::direcitonChange()
 		switch (_golemDir)
 		{
 		case GOLEM_LEFT:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemLeft");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemLeft");
 			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
 			break;
 		case GOLEM_RIGHT:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemRight");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemRight");
 			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
 			break;
 		case GOLEM_TOP:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemUp");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemUp");
 			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
 			break;
 		case GOLEM_BOTTOM:
-			_motion = KEYANIMANAGER->findAnimation(_index, "golemDown");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "golemDown");
 			_img = ImageManager::GetInstance()->FindImage("golem");
 			_motion->start();
 			break;
@@ -150,7 +163,7 @@ void golem::dead()
 	if (_onceAni)
 	{
 		_img = ImageManager::GetInstance()->FindImage("golemRed");
-		//_motion = KEYANIMANAGER->findAnimation(_index, "golemRed");
+		//_motion = KEYANIMANAGER->findAnimation( "golemRed");
 		_onceAni = false;
 	}
 	hitMove();

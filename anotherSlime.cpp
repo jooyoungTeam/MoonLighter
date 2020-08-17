@@ -34,7 +34,8 @@ void anotherSlime::attack()
 			if (_yRandom == 4)
 			{
 				_img = ImageManager::GetInstance()->FindImage("yellowSlimePang");
-				_motion = KEYANIMANAGER->findAnimation(_index, "yellowSlimePang");
+				_motion->stop();
+				_motion = KEYANIMANAGER->findAnimation( "yellowSlimePang");
 				_motion->start();
 				_once = true;
 				_pang = true;
@@ -58,28 +59,30 @@ void anotherSlime::dead()
 		if (_type == ENEMY_YELLOW_SLIME)
 		{
 			_img = ImageManager::GetInstance()->FindImage("yellowSlimeDead");
-			_motion = KEYANIMANAGER->findAnimation(_index, "yellowSlimeDead");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "yellowSlimeDead");
 			_motion->start();
 			_onceAni = false;
 		}
 		if (_type == ENEMY_BLUE_SLIME)
 		{
 			_img = ImageManager::GetInstance()->FindImage("blueSlimeDead");
-			_motion = KEYANIMANAGER->findAnimation(_index, "blueSlimeDead");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation( "blueSlimeDead");
 			_motion->start();
 			_onceAni = false;
 		}
 	}
 	if (_type == ENEMY_YELLOW_SLIME)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "yellowSlimeDead")->isPlay())
+		if (!KEYANIMANAGER->findAnimation( "yellowSlimeDead")->isPlay())
 		{
 			_realDead = true;
 		}
 	}
 	if (_type == ENEMY_BLUE_SLIME)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "blueSlimeDead")->isPlay())
+		if (!KEYANIMANAGER->findAnimation( "blueSlimeDead")->isPlay())
 		{
 			_realDead = true;
 		}

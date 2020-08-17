@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "shopStage.h"
 #include "player.h"
+
 HRESULT shopStage::init()
 {
 	_backGround = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
@@ -36,12 +37,16 @@ void shopStage::render()
 
 	_player->render();
 
+	
+
 	_npcM->render();
 
 	for (int i = 0; i < 4; ++i)
 	{
 		if (_display[i].it != NULL)
 			_display[i].it->cameraRender();
+
+		CAMERAMANAGER->rectangle(_display[i].rc, D2D1::ColorF::Black, 1.f, 2.f);
 	}
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
@@ -122,7 +127,12 @@ void shopStage::loadMap()
 	memset(_attribute, 0, sizeof(DWORD) * SHOPTILEX * SHOPTILEY);
 	for (int i = 0; i < SHOPTILEX * SHOPTILEY; ++i)
 	{
-		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile)
+		{
+			_attribute[i] |= ATTR_UNMOVE;
+
+			_unMoveTile.push_back(PointMake(_tile[i].idX, _tile[i].idY));
+		}
 	}
 
 	CloseHandle(file);
@@ -183,13 +193,40 @@ void shopStage::disPlayUpdate()
 			_display[i].isActive = true;
 			_display[i].it->setShakeY(_display[i].pos.y);
 		}
+		else
+		{
+			_display[i].isActive = false;
+		}
+
+		RECT temp;
+		for (int j = 0; j < _npcM->getVnpc().size(); ++j)
+		{
+			if(IntersectRect(&temp, &_display[i].rc.GetRect(), &_npcM->getVnpc()[j]->getNPCRect().GetRect()))
+			{
+				_display[i].isPeople = true;
+				break;
+			}
+			
+			if(j == _npcM->getVnpc().size()-1)
+				_display[i].isPeople = false;
+		}
+
+
+		if (_display[i].isPeople)
+		{
+			cout << i << " 번째 : "<< "충돌 O" << endl;
+		}
+		if (!_display[i].isPeople)
+		{
+			cout << i << " 번째 : " << "충돌 X" << endl;
+		}
 	}
 }
 
 void shopStage::doorUpdate()
 {
 	if(KEYMANAGER->isOnceKeyDown('E'))
-		_npcM->npcAdd(NPC_NOMAL);
+		_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
 
 	switch (_doorState)
 	{
@@ -255,13 +292,6 @@ void shopStage::npcProcess()
 			// 팔았다는 카운터 애니메이션재생
 			_cellerIndex = 0;
 			_npcM->getVnpc()[i]->setIsCount(false);
-		}
-
-		_display[_npcM->getVnpc()[i]->getRndItem()].isPeople = true;
-
-		if (_npcM->getVnpc()[i]->getIsCheckEnd())
-		{
-			_display[_npcM->getVnpc()[i]->getRndItem()].isPeople = false;
 		}
 
 		for (int j = 0; j < 4; ++j)

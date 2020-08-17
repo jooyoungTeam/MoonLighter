@@ -40,7 +40,7 @@ HRESULT player::init(float x, float y)
 
 	_playerShadowImg = ImageManager::GetInstance()->FindImage("playerShadow");
 	_playerImg = ImageManager::GetInstance()->FindImage("playerBed");
-	_playerMotion = KEYANIMANAGER->findAnimation(_index, "playerBed");
+	_playerMotion = KEYANIMANAGER->findAnimation("playerBed");
 	_playerMotion->start();
 
 	return S_OK;
@@ -49,10 +49,10 @@ HRESULT player::init(float x, float y)
 void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
-	if (_playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBroom")
-		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerBed")
-		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportIn")
-		|| _playerMotion == KEYANIMANAGER->findAnimation(_index, "playerTeleportOut"))
+	if (_playerMotion == KEYANIMANAGER->findAnimation("playerBroom")
+		|| _playerMotion == KEYANIMANAGER->findAnimation("playerBed")
+		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportIn")
+		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportOut"))
 	{
 		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
@@ -78,10 +78,9 @@ void player::render()
 
 void player::update()
 {
-	KEYANIMANAGER->update();
 	_CurrentState->update(*this);
 	_arrow->update();
-	arrowShoot();
+	//arrowShoot();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
@@ -97,194 +96,194 @@ void player::animationLoad()
 	//플레이어 아이들상태
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightIdle", L"image/player/moveState.png", 10, 13);
 	int playerRightIdle[] = { 80, 81, 82, 83, 84, 85, 86, 87, 88, 89 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightIdle", "playerRightIdle", playerRightIdle, 10, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightIdle", "playerRightIdle", playerRightIdle, 10, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftIdle", L"image/player/moveState.png", 10, 13);
 	int playerLeftIdle[] = { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftIdle", "playerLeftIdle", playerLeftIdle, 10, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftIdle", "playerLeftIdle", playerLeftIdle, 10, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpIdle", L"image/player/moveState.png", 10, 13);
 	int playerUpIdle[] = { 100, 101, 102, 103, 104, 105, 106, 107, 108, 109 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpIdle", "playerUpIdle", playerUpIdle, 10, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpIdle", "playerUpIdle", playerUpIdle, 10, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownIdle", L"image/player/moveState.png", 10, 13);
 	int playerDownIdle[] = { 110, 111, 112, 113, 114, 115, 116, 117, 118, 119 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownIdle", "playerDownIdle", playerDownIdle, 10, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownIdle", "playerDownIdle", playerDownIdle, 10, 13, true);
 
 	//플레이어 죽음
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDie", L"image/player/moveState.png", 10, 13);
 	int playerDie[] = { 120, 121, 122, 123, 124, 125, 126, 127, 128, 129 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDie", "playerDie", playerDie, 10, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDie", "playerDie", playerDie, 10, 13, false);
 
 	//플레이어 이동
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpWalk", L"image/player/moveState.png", 10, 13);
 	int playerUpWalk[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpWalk", "playerUpWalk", playerUpWalk, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpWalk", "playerUpWalk", playerUpWalk, 8, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownWalk", L"image/player/moveState.png", 10, 13);
 	int playerDownWalk[] = { 10, 11, 12, 13, 14, 15, 16, 17 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownWalk", "playerDownWalk", playerDownWalk, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownWalk", "playerDownWalk", playerDownWalk, 8, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightWalk", L"image/player/moveState.png", 10, 13);
 	int playerRightWalk[] = { 20, 21, 22, 23, 24, 25, 26, 27 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightWalk", "playerRightWalk", playerRightWalk, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightWalk", "playerRightWalk", playerRightWalk, 8, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftWalk", L"image/player/moveState.png", 10, 13);
 	int playerLeftWalk[] = { 30, 31, 32, 33, 34, 35, 36, 37 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftWalk", "playerLeftWalk", playerLeftWalk, 8, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftWalk", "playerLeftWalk", playerLeftWalk, 8, 13, true);
 
 	//플레이어 구르기
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightRoll", L"image/player/moveState.png", 10, 13);
 	int playerRightRoll[] = { 40, 41, 42, 43, 44, 45, 46, 47 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightRoll", "playerRightRoll", playerRightRoll, 8, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightRoll", "playerRightRoll", playerRightRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftRoll", L"image/player/moveState.png", 10, 13);
 	int playerLeftRoll[] = { 50, 51, 52, 53, 54, 55, 56, 57 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftRoll", "playerLeftRoll", playerLeftRoll, 8, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftRoll", "playerLeftRoll", playerLeftRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpRoll", L"image/player/moveState.png", 10, 13);
 	int playerUpRoll[] = { 60, 61, 62, 63, 64, 65, 66, 67 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpRoll", "playerUpRoll", playerUpRoll, 8, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpRoll", "playerUpRoll", playerUpRoll, 8, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownRoll", L"image/player/moveState.png", 10, 13);
 	int playerDownRoll[] = { 70, 71, 72, 73, 74, 75, 76, 77 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownRoll", "playerDownRoll", playerDownRoll, 8, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownRoll", "playerDownRoll", playerDownRoll, 8, 13, false);
 
 	//플레이어 활
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpBow", L"image/player/bowState.png", 9, 4);
 	int playerUpBow[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpBow", "playerUpBow", playerUpBow, 9, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpBow", "playerUpBow", playerUpBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownBow", L"image/player/bowState.png", 9, 4);
 	int playerDownBow[] = { 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownBow", "playerDownBow", playerDownBow, 9, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownBow", "playerDownBow", playerDownBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightBow", L"image/player/bowState.png", 9, 4);
 	int playerRightBow[] = { 18, 19, 20, 21, 22, 23, 24, 25, 26 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightBow", "playerRightBow", playerRightBow, 9, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightBow", "playerRightBow", playerRightBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftBow", L"image/player/bowState.png", 9, 4);
 	int playerLeftBow[] = { 27, 28, 29, 30, 31, 32, 33, 34, 35 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftBow", "playerLeftBow", playerLeftBow, 9, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerArrow", L"image/player/arrow.png", 1, 1);
 	int playerArrow[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerArrow", "playerArrow", playerArrow, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerArrow", "playerArrow", playerArrow, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowUpCharge", L"image/player/bowChargeState.png", 1, 4);
 	int bowUpCharge[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowUpCharge", "bowUpCharge", bowUpCharge, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowUpCharge", "bowUpCharge", bowUpCharge, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowDownCharge", L"image/player/bowChargeState.png", 1, 4);
 	int bowDownCharge[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowDownCharge", "bowDownCharge", bowDownCharge, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowDownCharge", "bowDownCharge", bowDownCharge, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowRightCharge", L"image/player/bowChargeState.png", 1, 4);
 	int bowRightCharge[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowRightCharge", "bowRightCharge", bowRightCharge, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowRightCharge", "bowRightCharge", bowRightCharge, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowLeftCharge", L"image/player/bowChargeState.png", 1, 4);
 	int bowLeftCharge[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowLeftCharge", "bowLeftCharge", bowLeftCharge, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowLeftCharge", "bowLeftCharge", bowLeftCharge, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowUpChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
 	int bowUpChargeWhite[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowUpChargeWhite", "bowUpChargeWhite", bowUpChargeWhite, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowUpChargeWhite", "bowUpChargeWhite", bowUpChargeWhite, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowDownChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
 	int bowDownChargeWhite[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowDownChargeWhite", "bowDownChargeWhite", bowDownChargeWhite, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowDownChargeWhite", "bowDownChargeWhite", bowDownChargeWhite, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowRightChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
 	int bowRightChargeWhite[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowRightChargeWhite", "bowRightChargeWhite", bowRightChargeWhite, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowRightChargeWhite", "bowRightChargeWhite", bowRightChargeWhite, 1, 0, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("bowLeftChargeWhite", L"image/player/bowChargeStateAlpha.png", 1, 4);
 	int bowLeftChargeWhite[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "bowLeftChargeWhite", "bowLeftChargeWhite", bowLeftChargeWhite, 1, 0, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bowLeftChargeWhite", "bowLeftChargeWhite", bowLeftChargeWhite, 1, 0, false);
 
 	//플레이어 검 콤보
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword1", L"image/player/swordState.png", 11, 4);
 	int playerUpSword1[] = { 0, 1, 2, 3, 4, 5 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword1", "playerUpSword1", playerUpSword1, 6, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpSword1", "playerUpSword1", playerUpSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSword2", L"image/player/swordState.png", 11, 4);
 	int playerUpSword2[] = { 6, 7, 8, 9, 10 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSword2", "playerUpSword2", playerUpSword2, 5, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpSword2", "playerUpSword2", playerUpSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSword1", L"image/player/swordState.png", 11, 4);
 	int playerDownSword1[] = { 11, 12, 13, 14, 15, 16 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword1", "playerDownSword1", playerDownSword1, 6, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownSword1", "playerDownSword1", playerDownSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSword2", L"image/player/swordState.png", 11, 4);
 	int playerDownSword2[] = { 17, 18, 19, 20, 21 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSword2", "playerDownSword2", playerDownSword2, 5, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownSword2", "playerDownSword2", playerDownSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightSword1", L"image/player/swordState.png", 11, 4);
 	int playerRightSword1[] = { 22, 23, 24, 25, 26, 27 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword1", "playerRightSword1", playerRightSword1, 6, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation(+"playerRightSword1", "playerRightSword1", playerRightSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightSword2", L"image/player/swordState.png", 11, 4);
 	int playerRightSword2[] = { 28, 29, 30, 31, 32 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSword2", "playerRightSword2", playerRightSword2, 5, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightSword2", "playerRightSword2", playerRightSword2, 5, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSword1", L"image/player/swordState.png", 11, 4);
 	int playerLeftSword1[] = { 33, 34, 35, 36, 37, 38 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword1", "playerLeftSword1", playerLeftSword1, 6, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftSword1", "playerLeftSword1", playerLeftSword1, 6, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSword2", L"image/player/swordState.png", 11, 4);
 	int playerLeftSword2[] = { 39, 40, 41, 42, 43 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSword2", "playerLeftSword2", playerLeftSword2, 5, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftSword2", "playerLeftSword2", playerLeftSword2, 5, 13, false);
 
 	//플레이어 막기
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightShield", L"image/player/shieldState.png", 4, 1);
 	int playerRightShield[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightShield", "playerRightShield", playerRightShield, 1, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightShield", "playerRightShield", playerRightShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftShield", L"image/player/shieldState.png", 4, 1);
 	int playerLeftShield[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftShield", "playerLeftShield", playerLeftShield, 1, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftShield", "playerLeftShield", playerLeftShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpShield", L"image/player/shieldState.png", 4, 1);
 	int playerUpShield[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpShield", "playerUpShield", playerUpShield, 1, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpShield", "playerUpShield", playerUpShield, 1, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownShield", L"image/player/shieldState.png", 4, 1);
 	int playerDownShield[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownShield", "playerDownShield", playerDownShield, 1, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownShield", "playerDownShield", playerDownShield, 1, 13, false);
 
 	//플레이어 수영
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownIdleSwim", L"image/player/swimState.png", 10, 4);
 	int playerDownIdleSwim[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownIdleSwim", "playerDownIdleSwim", playerDownIdleSwim, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownIdleSwim", "playerDownIdleSwim", playerDownIdleSwim, 1, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftIdleSwim", L"image/player/swimState.png", 10, 4);
 	int playerLeftIdleSwim[] = { 10 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftIdleSwim", "playerLeftIdleSwim", playerLeftIdleSwim, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftIdleSwim", "playerLeftIdleSwim", playerLeftIdleSwim, 1, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightIdleSwim", L"image/player/swimState.png", 10, 4);
 	int playerRightIdleSwim[] = { 20 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightIdleSwim", "playerRightIdleSwim", playerRightIdleSwim, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightIdleSwim", "playerRightIdleSwim", playerRightIdleSwim, 1, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpIdleSwim", L"image/player/swimState.png", 10, 4);
 	int playerUpIdleSwim[] = { 30 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpIdleSwim", "playerUpIdleSwim", playerUpIdleSwim, 1, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpIdleSwim", "playerUpIdleSwim", playerUpIdleSwim, 1, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSwim", L"image/player/swimState.png", 10, 4);
 	int playerDownSwim[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerDownSwim", "playerDownSwim", playerDownSwim, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation( "playerDownSwim", "playerDownSwim", playerDownSwim, 9, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSwim", L"image/player/swimState.png", 10, 4);
 	int playerLeftSwim[] = { 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerLeftSwim", "playerLeftSwim", playerLeftSwim, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerLeftSwim", "playerLeftSwim", playerLeftSwim, 9, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerRightSwim", L"image/player/swimState.png", 10, 4);
 	int playerRightSwim[] = { 21, 22, 23, 24, 25, 26, 27, 28, 29 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerRightSwim", "playerRightSwim", playerRightSwim, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerRightSwim", "playerRightSwim", playerRightSwim, 9, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerUpSwim", L"image/player/swimState.png", 10, 4);
 	int playerUpSwim[] = { 31, 32, 33, 34, 35, 36, 37, 38, 39 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerUpSwim", "playerUpSwim", playerUpSwim, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerUpSwim", "playerUpSwim", playerUpSwim, 9, 13, true);
 
 	//빗자루 개싹수;
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerBroom", L"image/player/droomState.png", 119, 1);
@@ -292,27 +291,27 @@ void player::animationLoad()
 	31, 32, 33, 34, 35, 36, 37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,
 	74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,
 	114,115,116,117,118};
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerBroom", "playerBroom", playerBroom, 119, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerBroom", "playerBroom", playerBroom, 119, 13, true);
 
 	//침대 싹수
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerBed", L"image/player/bedState.png", 58, 1);
 	int playerBed[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
 	31, 32, 33, 34, 35, 36, 37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerBed", "playerBed", playerBed, 58, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerBed", "playerBed", playerBed, 58, 13, false);
 
 	//텔레포트
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerTeleport", L"image/player/teleport.png", 26, 1);
 	int playerTeleport[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerTeleport", "playerTeleport", playerTeleport, 26, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerTeleport", "playerTeleport", playerTeleport, 26, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerTeleportIn", L"image/player/teleportIn.png", 20, 1);
 	int playerTeleportIn[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerTeleportIn", "playerTeleportIn", playerTeleportIn, 20, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerTeleportIn", "playerTeleportIn", playerTeleportIn, 20, 13, false);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerTeleportOut", L"image/player/teleportOut.png", 58, 1);
 	int playerTeleportOut[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
 	31, 32, 33, 34, 35, 36, 37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57 };
-	KEYANIMANAGER->addArrayFrameAnimation(_index, "playerTeleportOut", "playerTeleportOut", playerTeleportOut, 58, 13, false);
+	KEYANIMANAGER->addArrayFrameAnimation("playerTeleportOut", "playerTeleportOut", playerTeleportOut, 58, 13, false);
 
 	//그림자
 	ImageManager::GetInstance()->AddImage("playerShadow", L"image/player/playerShadow.png");
@@ -324,7 +323,7 @@ void player::arrowShoot()
 	if (_playerDirection == DIRECTION::UP)
 	{
 		//애니메이션 시작하면서 Count가 0이여야 한발씩 나감
-		if (KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay() && _arrowCount == 0)
+		if (KEYANIMANAGER->findAnimation("playerUpBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
 
@@ -341,7 +340,7 @@ void player::arrowShoot()
 	}
 	if (_playerDirection == DIRECTION::DOWN)
 	{
-		if (KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay() && _arrowCount == 0)
+		if (KEYANIMANAGER->findAnimation("playerDownBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
 			if (_bowChargeState)
@@ -357,7 +356,7 @@ void player::arrowShoot()
 	}
 	if (_playerDirection == DIRECTION::LEFT)
 	{
-		if (KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay() && _arrowCount == 0)
+		if (KEYANIMANAGER->findAnimation("playerLeftBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
 			if (_bowChargeState)
@@ -373,7 +372,7 @@ void player::arrowShoot()
 	}
 	if (_playerDirection == DIRECTION::RIGHT)
 	{
-		if (KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay() && _arrowCount == 0)
+		if (KEYANIMANAGER->findAnimation("playerRightBow")->isPlay() && _arrowCount == 0)
 		{
 			_arrowCount++;
 			if (_bowChargeState)
@@ -388,10 +387,10 @@ void player::arrowShoot()
 		}
 	}
 	//애니메이션 끝나면 다시 카운트 초기화
-	if (!KEYANIMANAGER->findAnimation(_index, "playerUpBow")->isPlay()
-		&& !KEYANIMANAGER->findAnimation(_index, "playerDownBow")->isPlay()
-		&& !KEYANIMANAGER->findAnimation(_index, "playerLeftBow")->isPlay()
-		&& !KEYANIMANAGER->findAnimation(_index, "playerRightBow")->isPlay())
+	if (!KEYANIMANAGER->findAnimation("playerUpBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation("playerDownBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation("playerLeftBow")->isPlay()
+		&& !KEYANIMANAGER->findAnimation("playerRightBow")->isPlay())
 	{
 		_arrowCount = 0;
 	}

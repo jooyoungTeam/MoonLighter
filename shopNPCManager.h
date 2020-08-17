@@ -17,7 +17,7 @@ public:
 	void render();
 	void release();
 
-	void npcAdd(npcType type);
+	void npcAdd(npcType type, vector<POINT> vUnMove);
 	void npcErase(int index);
 	void npcExit();
 
