@@ -55,7 +55,7 @@ public:
 public:
 
 	TERRAIN terrainSelect(int frameX, int frameY);
-
+	ACTIVEPOS posSelect(int frameX, int frameY);
 };
 
 

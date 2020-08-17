@@ -133,6 +133,7 @@ void shopStage::loadMap()
 
 			_unMoveTile.push_back(PointMake(_tile[i].idX, _tile[i].idY));
 		}
+		if (_tile[i].pos == POS_TOWN)      _attribute[i] |= TP_TOWN;         // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
@@ -160,6 +161,13 @@ void shopStage::renderMap()
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
+				}
+
+				if (_tile[index].pos != POS_NONE)
+				{
+					Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
+
+					CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
 				}
 			}
 		}

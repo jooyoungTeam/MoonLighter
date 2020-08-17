@@ -41,15 +41,22 @@ void tile::render()
 				continue;
 
 			CAMERAMANAGER->rectangle(_vTile[index].rc, D2D1::ColorF::Black, 1.0f);
-			if (_vTile[index].terrain != TR_NONE)
+			if (_vTile[index].terrain != TR_NONE && _vTile[index].pos == POS_NONE)
 			{
 				Vector2 vec((_vTile[index].rc.left + _vTile[index].rc.right) * 0.5f, (_vTile[index].rc.top + _vTile[index].rc.bottom) * 0.5f);
 
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
 				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
 			}
+
 			if (KEYMANAGER->isToggleKey('V'))
 			{
+				if (_vTile[index].pos != POS_NONE)
+				{
+					Vector2 vec((_vTile[index].rc.left + _vTile[index].rc.right) * 0.5f, (_vTile[index].rc.top + _vTile[index].rc.bottom) * 0.5f);
+
+					CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
+				}
 				if (_vTile[index].terrain == TR_WALL || _vTile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_vTile[index].rc, D2D1::ColorF::Red, 0.5f);
@@ -201,6 +208,7 @@ void tile::drag()
 					_vTile[i].terrainFrameY = _currentTile.y;
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+					_vTile[i].pos = posSelect(_currentTile.x, _currentTile.y);
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
@@ -245,6 +253,7 @@ void tile::setup()
 		_vTile[i].terrainFrameX = 8;
 		_vTile[i].terrainFrameY = 4;
 		_vTile[i].terrain = terrainSelect(_vTile[i].terrainFrameX, _vTile[i].terrainFrameY);
+		_vTile[i].pos = posSelect(_vTile[i].terrainFrameX, _vTile[i].terrainFrameY);
 	}
 }
 
@@ -332,6 +341,7 @@ void tile::setMap()
 						_vTile[index].terrainFrameX = _currentTile.x;
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -727,8 +737,26 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 		// 다섯번째 줄
 		if (frameX == 8 && frameY == 4) return TR_NONE;
 		else if (frameX == i && frameY == 4) return TR_GRASS;
+
+		// 여섯번째 줄
+		if (frameX == i && frameY == 5) return TR_POS;
 	}
 
 	return TR_NONE;
+}
+
+ACTIVEPOS tile::posSelect(int frameX, int frameY)
+{
+	if (frameX == 0 && frameY == 5)      return POS_TOWN;
+	else if (frameX == 1 && frameY == 5) return POS_SHOP;
+	else if (frameX == 2 && frameY == 5) return POS_ENTERENCE;
+	else if (frameX == 3 && frameY == 5) return POS_DUN1;
+	else if (frameX == 4 && frameY == 5) return POS_DUN2;
+	else if (frameX == 5 && frameY == 5) return POS_DUN3;
+	else if (frameX == 6 && frameY == 5) return POS_SPA;
+	else if (frameX == 7 && frameY == 5) return POS_BOSS;
+	else if (frameX == 8 && frameY == 5) return POS_BOSS;
+
+	return POS_NONE;
 }
 
