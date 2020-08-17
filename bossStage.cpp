@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "bossStage.h"
+#include "player.h"
 
 HRESULT bossStage::init()
 {
@@ -9,8 +10,6 @@ HRESULT bossStage::init()
 	_objectManager = new objectManager;
 
 	_enemy = new enemyManager;
-	_player = new player;
-	_player->init(1500, 800);
 	_enemy->setPlayerLink(_player);
 
 	_enemy->init();

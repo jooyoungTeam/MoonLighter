@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "player.h"
 #include "tile.h"
 #include "objectManager.h"
 
@@ -9,12 +8,12 @@
 class townStage : public gameNode
 {
 private:
-	player*           _player;
 	Image*            _mapImg;
 
 	DWORD             _townAttribute[TOWNTILEX * TOWNTILEY];
 	tagTile			  _tile[TOWNTILEX * TOWNTILEY];
 	objectManager*    _objectManager;
+	class player*     _player;
 public:
 	townStage() {}
 	~townStage() {}
@@ -24,6 +23,7 @@ public:
 	void    render();
 	void    release();
 
+	void setPlayerLink(player* player) { _player = player; };
 	void    loadMap();
 	void    mapToolRender();
 };

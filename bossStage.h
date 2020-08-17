@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "player.h"
 #include "enemyManager.h"
 #include "objectManager.h"
 
@@ -12,7 +11,7 @@ class bossStage : public gameNode
 {
 private:
 	Image*  _mapImg;
-	player*  _player;
+	class player*  _player;
 	enemyManager* _enemy;
 
 	objectManager* _objectManager;
@@ -27,4 +26,5 @@ public:
 public:
 	void loadMap();
 	void renderMap();
+	void setPlayerLink(player* player) { _player = player; };
 };
