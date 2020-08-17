@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "player.h"
 #include "shopNPCManager.h"
 #include "tile.h"
 #include "itemManager.h"
@@ -44,7 +43,7 @@ private:
 	// =============== 기본 ===============
 	Image* _backGround;				// 배경 이미지
 	Image* _celler;					// 판매원 이미지
-	player* _player;				// 플레이어
+	class player* _player;				// 플레이어
 	float _cellerFrameTimer;
 	int	  _cellerIndex;
 
@@ -84,6 +83,7 @@ public:
 	//============================ Get ===========================
 
 
+	void setPlayerLink(player* player) { _player = player; };
 public:
 	//============================ Set ===========================
 

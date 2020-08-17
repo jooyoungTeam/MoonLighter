@@ -11,6 +11,16 @@ struct tagBar
 	FloatRect middle;
 	FloatRect front;
 };
+enum BOSS_ANI
+{
+	ONE,
+	TWO,
+	THREE,
+	FOUR,
+	FIVE,
+	SIX
+};
+
 
 class enemy : public gameNode
 {
@@ -30,6 +40,7 @@ protected:
 	ENEMYTYPE _type;
 	GOLEMDIR _golemDir;
 	POTDIR _potDir;
+	BOSS_ANI _bossAni;
 
 	tagBar _bar;
 	
@@ -51,6 +62,7 @@ protected:
 	int _rndX;			//astar 랜덤 값 준거
 	int _rndY;			//이것또한..
 	int _hitCount;		//맞을때 반짝
+	int _bossHitCount;
 	int _isHitCount;	//isHit의 카운트임
 
 
@@ -70,6 +82,7 @@ protected:
 	bool _onceAni;		//애니 스타트 하는거 한 번만 들어오게..
 	bool _realDead;		//애니 다 하구 에너미 없어지게 하는거
 	bool _isHit;		//맞음
+	bool _isBossPull;
 		
 
 
@@ -100,20 +113,67 @@ public:
 	void setState(enemyState* state) { this->_state = state; }
 	void setMotion(Image* img, animation* ani) { _img = img; _motion = ani; _motion->start(); }
 	void setPotDirection(POTDIR dir) { _potDir = dir; }
+	void setBossAni(BOSS_ANI ani) { _bossAni = ani; }
 
 	void setAttackRect(float x, float y, float width, float height) { _attackRc = RectMakePivot(Vector2(x, y), Vector2(width, height), Pivot::Center); }
-
-	void setIsAttack(bool attack) { _isAttack = attack; }
-	void setAttackDelay(int delay) { _attackDelay = delay; }
+	void setY(float y) { _y = y; }
 	void setAttackAngle(float angle) { _attackAngle = angle; }
 	void setScale(float s) { _scale = s; }
+	void setBarAlpha(float alpha) { _barAlpha = alpha; }
+
+
+	void setAttackDelay(int delay) { _attackDelay = delay; }
+	void setHP(int hp = 30) { _curHP -= hp; }
+	void setSaveHP(int hp) { _saveHP = hp; }
+
+
+	void setIsAttack(bool attack) { _isAttack = attack; }
 	void setIsCol(bool col) { _isCol = col; }
 	void setOnceAni(bool ani) { _onceAni = ani; }
 	void setRealDead(bool d) { _realDead = d; }
-	void setHP(int hp = 30) { _curHP -= hp; }
-	void setSaveHP(int hp) { _saveHP = hp; }
 	void setIsHit(bool hit) { _isHit = hit; }
-	void setBarAlpha(float alpha) { _barAlpha = alpha; }
+	void setIsPull(bool pull) { _isBossPull = pull; }
+
+
+	void setEnemyAttack(int hp = 3)
+	{
+		if (_state != _hit && _state != _dead)
+		{
+			_saveHP = _bar.width;
+			if (_type != ENEMY_BOSS)
+			{
+				hp = 30;
+				_isHit = true;
+				_barAlpha = 1.0f;
+			}
+			_curHP -= hp;
+			if (_type == ENEMY_BOSS)
+			{
+				if (_state == _idle)
+				{
+					_bossHitCount++;
+				}
+				if (_bossHitCount > 2)
+				{
+					_bossHitCount = 0;
+					_state = _hit;
+				}
+			}
+		}
+		if (_curHP <= 0)
+		{
+			_onceAni = true;
+			if (_type == ENEMY_BOSS)
+			{
+				if (_state != _dead)
+				{
+					_bossAni = ONE;
+					_state = _dead;
+				}
+			}
+		}
+	}
+
 
 	//---------------------------------get-----------------------------------
 
@@ -135,6 +195,7 @@ public:
 	bool getIsCol() { return _isCol; }
 	bool getRealDead() { return _realDead; }
 	bool getIsHit() { return _isHit; }
+	bool getIsPull() { return _isBossPull; }
 	
 
 	tagBar getBar() { return _bar; }

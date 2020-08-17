@@ -17,7 +17,8 @@ enum class MIRROR_STATE
 	STOP, STAY, ACTIVE				//미러가 멈춰있음, 미러에 머물러 있음, 미러를 사용함
 };
 
-struct tagInven						//인벤토리
+//인벤토리
+struct tagInven						
 {
 	FloatRect rc;					//인벤 칸 렉트
 	item* item;						//인벤에 담는 아이템 클래스
@@ -26,7 +27,8 @@ struct tagInven						//인벤토리
 	int price;						//아이템 가격(설정가)
 };
 
-struct tagGear						//장비창
+//장비창
+struct tagGear						
 {
 	FloatRect rc;					//장비 칸 렉트
 	item* item;						//장비창에 담는 아이템 클래스
@@ -34,7 +36,8 @@ struct tagGear						//장비창
 	int count;						//아이템 개수
 };
 
-struct tagShop						//상점
+//상점
+struct tagShop						
 {
 	FloatRect rc;					//아이템 담는 렉트
 	item* item;						//쇼케이스에 담는 아이템 클래스
@@ -45,13 +48,15 @@ struct tagShop						//상점
 	int originalPrice;				//아이템 원가 전체 금액
 };
 
-struct tagSetPrice					//가격 설정 창
+//가격 설정 창
+struct tagSetPrice					
 {
 	FloatRect rc;					//가격 변경 렉트
 	int count;						//입력되는 숫자
 };
 
-struct tagSavePrice					//가격 저장용
+//가격 저장용
+struct tagSavePrice					
 {
 	int index;						//아이템 번호
 	int price;						//설정한 가격
@@ -117,6 +122,7 @@ public:
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
 	void savePrice(int select);								//가격 저장하기
+	void loadPrice(tagSetPrice p[PRICESPACE], int s);		//가격 불러오기
 	void closeInven();										//인벤 닫으면
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
@@ -139,7 +145,7 @@ public:
 		_shop[index].originalPrice = 0;
 		_shop[index].price = 0;
 		_shop[index].totalPrice = 0;
-	}
+	}					//아이템 팔린 후 쇼케이스 리셋
 
 public:
 	//플레이어 참조용

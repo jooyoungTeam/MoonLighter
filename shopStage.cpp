@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "shopStage.h"
-
+#include "player.h"
 HRESULT shopStage::init()
 {
 	_backGround = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
@@ -11,8 +11,6 @@ HRESULT shopStage::init()
 
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 
-	_player = new player;
-	_player->init(WINSIZEX / 2 + 184, 445.5f);
 
 	_npcM = new shopNPCManager;
 	_npcM->init();

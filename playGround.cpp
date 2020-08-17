@@ -102,7 +102,40 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("build_Well", L"Object/build_Well.png");
 	ImageManager::GetInstance()->AddImage("buildBoard", L"Object/buildBoard.png");
 	ImageManager::GetInstance()->AddImage("build_fountain", L"Object/build_fountain.png");
-	ImageManager::GetInstance()->AddImage("bench", L"Object/bench.png");
+	ImageManager::GetInstance()->AddImage("bench", L"Object/bench.png");	
+	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+
+	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
+	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
+	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
+	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
+	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
+	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
+	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
+	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
+
+	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_fountain1", L"Object/plant_fountain1.png", 9, 1);
+	ImageManager::GetInstance()->AddFrameImage("Object_build_Bottom1", L"Object/Object_build_Bottom1.png", 53, 1);
+
+	ImageManager::GetInstance()->AddFrameImage("npc_1", L"Object/npc_1.png", 17, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_2", L"Object/npc_2.png", 54, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
+
+	ImageManager::GetInstance()->AddImage("objectDungeon1", L"Object/objectDungeon1.png");
+	ImageManager::GetInstance()->AddImage("objectDungeon2", L"Object/objectDungeon2.png");
+	ImageManager::GetInstance()->AddImage("object_skull1", L"Object/skull1.png");
+	ImageManager::GetInstance()->AddImage("object_skull2", L"Object/skull2.png");
+	ImageManager::GetInstance()->AddImage("object_skull3", L"Object/skull3.png");
+	ImageManager::GetInstance()->AddImage("object_pot", L"Object/pot.png");
+	ImageManager::GetInstance()->AddImage("object_pot_slime", L"Object/pot_slime.png");
+	ImageManager::GetInstance()->AddImage("object_pillar", L"Object/pillar.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock", L"Object/smallRock.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
+
+
 
 	//===========================================¡é¡é¾ÆÀÌÅÛ¡é¡é===========================================//
 	ImageManager::GetInstance()->AddImage("slime_red", L"Image/Item/slime_jelly.png");
@@ -146,6 +179,8 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("UI_base", L"Image/UI/UI_base.png");
 	ImageManager::GetInstance()->AddImage("UI_weapon_1", L"Image/UI/UI_weapon_1.png");
 	ImageManager::GetInstance()->AddImage("UI_weapon_2", L"Image/UI/UI_weapon_2.png");
+	ImageManager::GetInstance()->AddImage("bow", L"Image/UI/Bow.png");
+	ImageManager::GetInstance()->AddImage("sword", L"Image/UI/Sword.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant", L"image/UI/UI_pendant.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant_ring", L"Image/UI/UI_pendant_ring.png");
 	ImageManager::GetInstance()->AddImage("UI_front", L"Image/UI/UI_front.png");

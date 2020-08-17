@@ -1,19 +1,27 @@
 #pragma once
 #include "gameNode.h"
 
-typedef void(*CALLBACK_FUNCTION)(void);
 
 enum BUTTONTYPE
 {
 	BUTTON_TERRAIN,
 	BUTTON_OBJECT,
 	BUTTON_COLLISION,
+	BUTTON_AUTO,
+
 	BUTTON_SAVE,
 	BUTTON_SAVE_DUNGEON,
 	BUTTON_SAVE_TOWN,
+	BUTTON_SAVE_BOSS,
+	BUTTON_SAVE_SHOP,
+	BUTTON_SAVE_ENTERENCE,
+
 	BUTTON_LOAD,
 	BUTTON_LOAD_DUNGEON,
 	BUTTON_LOAD_TOWN,
+	BUTTON_LOAD_BOSS,
+	BUTTON_LOAD_SHOP,
+	BUTTON_LOAD_ENTERENCE,
 
 	BUTTON_ERASE,
 	BUTTON_ERASE_TERRAIN,
@@ -35,12 +43,12 @@ enum BUTTONSTATE
 struct tagButton
 {
 	RECT	      rc;
-    wstring       name;
+	wstring       name;
 	BUTTONSTATE   state;
 };
 
 
-class button :	public gameNode
+class button : public gameNode
 {
 private:
 	tagButton         _button[BUTTON_END];

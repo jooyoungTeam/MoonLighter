@@ -2,10 +2,14 @@
 #include"enemy.h"
 enum BOSS_PATTERN
 {
-	ATTACK1,
-	ATTACK2,
-	ATTACK3,
+	HAND_FALL,	//손 떨어지는 공격	
+	ARM_LONG,	//팔 늘어나는 공격
+	ROCK_FALL,	//돌 떨어지는 공격
+	PLAYER_PULL,	//플레이어 끌어당기는 공격
+	EXPLOSION	//폭발 공격
 };
+
+
 struct tagAttack1
 {
 	FloatRect rc;
@@ -14,8 +18,7 @@ struct tagAttack1
 	float speed;
 	float width, height;
 	float angle;
-	bool isBottom;
-	bool onceImage;
+	bool isAttack;
 	int xRandom;
 	int yRandom;
 	int count;
@@ -28,8 +31,18 @@ struct tagAttack1
 struct tagAttackRect
 {
 	FloatRect rc;
+	FloatRect attackRc;
 	float x, y;
+	float mX, mY;
+	float width;
 	float speed;
+	bool rackFall;
+	float alpha;
+	float rockAlpha;
+	float scale;
+	int attackCount;
+	int rackCount;
+	int random;
 };
 class boss : public enemy	
 {
@@ -39,15 +52,21 @@ private:
 	tagAttack1 _attack2;
 	tagAttack1 _attack3;
 	tagAttackRect _attack3Rc[13];
+	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 	BOSS_PATTERN _bossPattern;
 
+	FloatRect _attackRc;
 	float _handAngle1;
 	float _handAngle2;
-	bool _isBossAttack;
-	bool _isBossAttackEnd;
 	bool _isHandCol;
+	bool _patternCheck;
+	bool _playerCol;
+	int _cameraShake;
 	int _bossAttackCount;
+	int _patternRandom;
+	int _saveRandom;
+	int _exCount;
 
 public:
 	boss() {}
@@ -58,16 +77,20 @@ public:
 	virtual void attack();
 	virtual void dead();
 	virtual void enemyHit();
-	void attack1();
+	void attack1();	
 	void attack2();
 	void attack3();
+	void attack4();
 	void attack1_1();
 	void attack2_1();
 	void attack3_1();
+	void attack3_2();
+	void attack3_3();
 	void attack2Angle();
+	void setRock();
+	bool playerCol();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
-	bool getHandCol() { return _isHandCol; }
 };
 

@@ -59,28 +59,7 @@ void enemyManager::update()
 			}
 		}
 	}
-	/*if (!_test)
-	{
-		if (KEYMANAGER->isStayKeyDown(VK_UP))
-		{
-			_y -= 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-		{
-			_y += 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-		{
-			_x -= 2;
-		}
-		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-		{
-			_x += 2;
-		}
 
-
-	}
-*/
 	if (_bulletDelay > 90)
 	{
 		potBullet();
@@ -88,7 +67,6 @@ void enemyManager::update()
 	playerCol();
 	bulletCol();
 	_bullet->update();
-	//cout << _testCount << endl;
 
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -109,7 +87,7 @@ void enemyManager::render()
 	}
 	_bullet->render();
 
-	CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
+	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
 	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
 	ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
 	EFFECTMANAGER->render();
@@ -122,60 +100,60 @@ void enemyManager::setEnemy()
 	enemy* boss1;
 	boss1 = new boss;
 	boss1->playerCheck(_x, _y, _rc);
-	boss1->init(i, 1360, 300, 250, 300, ENEMY_BOSS);
+	boss1->init(i, 1360, 300, 590, 650, ENEMY_BOSS);
 	_vEnemy.push_back(boss1);
 
-	i++;
-	enemy* redS1;
-	redS1 = new redSlime;
-	redS1->playerCheck(_x, _y, _rc);
-	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
-	_vEnemy.push_back(redS1);
+	//i++;
+	//enemy* redS1;
+	//redS1 = new redSlime;
+	//redS1->playerCheck(_x, _y, _rc);
+	//redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
+	//_vEnemy.push_back(redS1);
 
-	i++;
+	//i++;
 
-	enemy* gol1;
-	gol1 = new golem;
-	gol1->playerCheck(_x, _y, _rc);
-	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol1);
+	//enemy* gol1;
+	//gol1 = new golem;
+	//gol1->playerCheck(_x, _y, _rc);
+	//gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol1);
 
-	
-	i++;
+	//
+	//i++;
 
-	enemy* pot1;
-	pot1 = new pot;
-	pot1->playerCheck(_x, _y, _rc);
-	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
-	_vEnemy.push_back(pot1);
+	//enemy* pot1;
+	//pot1 = new pot;
+	//pot1->playerCheck(_x, _y, _rc);
+	//pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
+	//_vEnemy.push_back(pot1);
 
-	
-	i++;
+	//
+	//i++;
 
 
-	enemy* pot2;
-	pot2 = new pot;
-	pot2->playerCheck(_x, _y, _rc);
-	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
-	pot2->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(pot2);
+	//enemy* pot2;
+	//pot2 = new pot;
+	//pot2->playerCheck(_x, _y, _rc);
+	//pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
+	//pot2->setPotDirection(POT_RIGHT);
+	//_vEnemy.push_back(pot2);
 
-	
-	i++;
+	//
+//	i++;
 
-	enemy* yelS1;
-	yelS1 = new anotherSlime;
-	yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	_vEnemy.push_back(yelS1);
+	//enemy* yelS1;
+	//yelS1 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	//yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	//_vEnemy.push_back(yelS1);
 
-	i++;
+	//i++;
 
-	enemy* bleS1;
-	bleS1 = new anotherSlime;
-	bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	_vEnemy.push_back(bleS1);
+	//enemy* bleS1;
+	//bleS1 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	//bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	//_vEnemy.push_back(bleS1);
 
 
 
@@ -214,46 +192,35 @@ void enemyManager::playerCol()
 	RECT temp;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-		if (_vEnemy[i]->getState() != _vEnemy[i]->getDead())
+
+		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
 		{
-			if (PtInRect(&_vEnemy[i]->getEnemyRect().GetRect(), _ptMouse))
+			_vEnemy[i]->setEnemyAttack();
+			_player->setAttackRc(0, 0, 0, 0);
+		}
+		for (int i = 0; i < _player->getArrow()->getVArrow().size(); ++i)
+		{
+			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[i].rc.GetRect()))
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-				{
-					_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
-					_vEnemy[i]->setHP();
-					_vEnemy[i]->setIsHit(true);
-					_vEnemy[i]->setBarAlpha(1.0);
-					//_vEnemy[i]->setState(_vEnemy[i]->getHit());
-					if (_vEnemy[i]->getCurHP() <= 0)
-					{
-						_vEnemy[i]->setOnceAni(true);
-					}
-				}
+				_vEnemy[i]->setEnemyAttack();
+				//_player->se(0, 0, 0, 0);
 			}
-			
-			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
-			{
-				_vEnemy[i]->setSaveHP(_vEnemy[i]->getBar().width);
-				_vEnemy[i]->setHP();
-				_vEnemy[i]->setIsHit(true);
-				_vEnemy[i]->setBarAlpha(1.0);
-				_player->setAttackRc(0, 0, 0, 0);
-				//_vEnemy[i]->setState(_vEnemy[i]->getHit());
-				if (_vEnemy[i]->getCurHP() <= 0)
-				{
-					_vEnemy[i]->setOnceAni(true);
-				}
-			}
-
-			//if (IntersectRect(&temp, &dynamic_cast<boss*>(_vEnemy[i])->getBAttack2()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
-			//{
-			//	cout << "¸Â´Â´ç" << endl;
-			//}
-
-			
+		}
+		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()))
+		{
+			//_player->setCurrentState(_());
+			_vEnemy[i]->setAttackRect(0, 0, 0, 0);
+		}
+		if (_vEnemy[i]->getIsPull())
+		{
+			float angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
+			_player->setX(_player->getX() + cosf(angle) * 10);
+			_player->setY(_player->getY() - sinf(angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
 		}
 	}
+
 
 }
 

@@ -73,7 +73,7 @@ public:
 
 public:
 	void animationLoad();
-	void tileCollision();
+	void tileCollision(DWORD* attribute, tagTile* tile);
 	void arrowShoot();
 
 public:

@@ -2,32 +2,38 @@
 #include "stageManager.h"
 #include "tile.h"
 #include "title.h"
-#include "shopStage.h"
-#include "dungeonStage.h"
-#include "townStage.h"
-#include "bossStage.h"
 HRESULT stageManager::init()
 {
+	_player = new player;
+	_player->init(500, 500);
+
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
 	INVENTORY->init();
 
-	_player = new player;
+	_town = new townStage;
+	_boss = new bossStage;
+	_shop = new shopStage;
 
+	_dungeon = new dungeonStage;
 	_ui->getPlayerMemoryAddressLink(_player);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
 
 	SCENEMANAGER->addScene("Å¸ÀÏ¾À", new tile);
-	SCENEMANAGER->addScene("¼¥¾À", new shopStage);
-	SCENEMANAGER->addScene("´øÀü¾À", new dungeonStage);
-	SCENEMANAGER->addScene("¸¶À»¾À", new townStage);
-	SCENEMANAGER->addScene("º¸½º¾À", new bossStage);
+	SCENEMANAGER->addScene("¼¥¾À", _shop);
+	SCENEMANAGER->addScene("´øÀü¾À", _dungeon);
+	SCENEMANAGER->addScene("¸¶À»¾À",	_town);
+	SCENEMANAGER->addScene("º¸½º¾À", _boss);
 
 
 
+	_dungeon->setPlayerLink(_player);
+	_town->setPlayerLink(_player);
+	_boss->setPlayerLink(_player);
+	_shop->setPlayerLink(_player);
 	SCENEMANAGER->changeScene("Å¸ÀÌÆ²¾À");
 
 	return S_OK;
@@ -38,6 +44,7 @@ void stageManager::render()
 	SCENEMANAGER->render();
 	//_ui->render();
 	if (INVENTORY->getIsInven()) INVENTORY->render();
+
 }
 
 
@@ -104,24 +111,20 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F2))
 	{
-		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("¸¶À»¾À");
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F3))
 	{
-		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("´øÀü¾À");
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F4))
 	{
-		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("¼¥¾À");
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
-		KEYANIMANAGER->release();
 		SCENEMANAGER->changeScene("º¸½º¾À");
 	}
 }

@@ -171,14 +171,12 @@ void inventory::update()
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	
-	//if (_shop[_select].item != nullptr)
+	if (_state == INVEN_STATE::SHOP)
 	{
 		setPrice(_firstPrice, 0);	//가격 정하기
 		setPrice(_secondPrice, 2);
 		setPrice(_thirdPrice, 4);
 		setPrice(_fourthPrice, 6);
-
-		//savePrice();				//가격 저장하기
 	}
 
 	moveInven();					//인벤에서 돌아다니기
@@ -257,11 +255,11 @@ void inventory::selectItem()
 				_selectNumber = -1;
 				_selectGearNumber = -1;
 				_selectShopNumber = _select;
-				_isSelect = true;
 
 				//선택한 쇼케이스가 비어있지 않다면
 				if (_shop[_select].item != nullptr)
 				{
+					_isSelect = true;
 					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 					_selectItem.item = _shop[_select].item;
 					_selectItem.count++;
@@ -270,6 +268,15 @@ void inventory::selectItem()
 					if (_shop[_select].count <= 0)
 					{
 						_shop[_select].item = nullptr;
+						
+						//쇼케이스가 비게 되면 가격 초기화
+						for (int i = 0; i < PRICESPACE; i++)
+						{
+							if (_select == 0) _firstPrice[i].count = 0;
+							if (_select == 2) _secondPrice[i].count = 0;
+							if (_select == 4) _thirdPrice[i].count = 0;
+							if (_select == 6) _fourthPrice[i].count = 0;
+						}						
 					}
 				}
 
@@ -281,6 +288,7 @@ void inventory::selectItem()
 					{
 						if (_selectItem.item != nullptr) return;
 						_selectCount = 4;
+						_isSelect = true;
 						_isSetPrice = true;
 					}
 				}				
@@ -531,25 +539,24 @@ void inventory::moveItem()
 						_shop[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
 
-						//저장되어있지 않은 인덱스라면 막기
-						//for (int i = 0; i < _vPrice.size(); ++i)
-						//{
-						//	if (_vPrice.size() < 0) continue;
+						//설정했었던 아이템 가격 불러오기
+						for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
 
-						//	//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-						//	//렌더랑 연결?
-						//	//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price
-						//	if (_vPrice[i].index == _shop[_select].item->getIndex())
-						//	{
-						//		_shop[_select].price = _vPrice[i].price;
-						//	}
-						//}
+							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+							if (_select == 0) loadPrice(_firstPrice, _select);
+							if (_select == 2) loadPrice(_secondPrice, _select);
+							if (_select == 4) loadPrice(_thirdPrice, _select);
+							if (_select == 6) loadPrice(_fourthPrice, _select);
+						}
 					}	
 
-					//아이템 가격 설정 끄기
+					//가격 설정하는 창이면
 					if (_select % 2 != 0)
 					{
-						//아이템을 들고 왔다면						
+						//아이템을 들고 왔다면
 						if (_selectItem.item != nullptr)
 						{
 							if (_selectNumber >= 0)
@@ -563,22 +570,38 @@ void inventory::moveItem()
 								if (_shop[_selectShopNumber].item == nullptr) _shop[_selectShopNumber].item = _selectItem.item;
 								_shop[_selectShopNumber].count += _selectItem.count;
 							}
-							_isSelect = false;
 							_selectItem.item = nullptr;
-							return;
+							_isSelect = false;
+
+							//설정했었던 아이템 가격 불러오기
+							for (int i = 0; i < _vPrice.size(); ++i)
+							{
+								if (_vPrice.size() < 0) continue;
+
+								//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+								//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+								//_selectNumber 와 _selectShopNumber의 위치에도 입력 시켜줘야 함
+								if (_select == 0) loadPrice(_firstPrice, _select);
+								if (_select == 2) loadPrice(_secondPrice, _select);
+								if (_select == 4) loadPrice(_thirdPrice, _select);
+								if (_select == 6) loadPrice(_fourthPrice, _select);
+
+								if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+								if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+								if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+								if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+
+								_selectItem.item = nullptr;
+								_isSelect = false;
+							}
 						}		
 						
 						//가격 설정하던 중이면
 						if (_isSetPrice)
 						{
 							//쇼케이스에 아이템이 있으면 가격 저장
-							//if (_shop[_select - 1].item != nullptr) savePrice(_select - 1);
-							//
-							////쇼케이스 아이템이 빈 칸이면 카운트 초기화
-							//if (_shop[_select - 1].item == nullptr)
-							//{
-
-							//}
+							if (_shop[_select - 1].item != nullptr) savePrice(_select - 1);
+																			
 							_isSetPrice = false;
 						}						
 					}
@@ -602,6 +625,15 @@ void inventory::moveItem()
 							{
 								_shop[_select].count = 0;
 								_shop[_select].item = nullptr;
+
+								//쇼케이스 아이템이 빈 칸이면 카운트 초기화
+								for (int i = 0; i < PRICESPACE; i++)
+								{
+									if (_select == 0) _firstPrice[i].count = 0;
+									if (_select == 2) _secondPrice[i].count = 0;
+									if (_select == 4) _thirdPrice[i].count = 0;
+									if (_select == 6) _fourthPrice[i].count = 0;
+								}								
 							}
 
 							//쇼케이스 아이템을 다 들어버리면 다시 돌려놓기
@@ -663,6 +695,28 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
+							_selectItem.item = nullptr;
+							_isSelect = false;
+						}		
+
+						//설정했었던 아이템 가격 불러오기
+						for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
+
+							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
+							//_selectNumber 와 _selectShopNumber의 위치에도 입력 시켜줘야 함
+							if (_select == 0) loadPrice(_firstPrice, _select);
+							if (_select == 2) loadPrice(_secondPrice, _select);
+							if (_select == 4) loadPrice(_thirdPrice, _select);
+							if (_select == 6) loadPrice(_fourthPrice, _select);
+
+							if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+
 							_selectItem.item = nullptr;
 							_isSelect = false;
 						}
