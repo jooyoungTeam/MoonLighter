@@ -44,9 +44,7 @@ void stageManager::render()
 	//_ui->render();
 	//_itemMg->render();
 	if (INVENTORY->getIsInven()) INVENTORY->render();
-
 }
-
 
 void stageManager::update()
 {
@@ -82,7 +80,7 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
-		_itemMg->setItem(ITEMBUNDLE::SLIME_RED, 200 + RND->getInt(50), 200 + RND->getInt(50));
+		_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('U'))
