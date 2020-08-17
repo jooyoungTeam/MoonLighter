@@ -266,8 +266,7 @@ bool inventory::putItem(item* item)
 int inventory::fullInven()
 {
 	int invenFullNum = 0;
-	//이렇게 하면 다른 아이템의 빈 자리가 있을 때,
-	//빈 자리가 없는 아이템은 erase만 되고 인벤으로 들어오지 않는다
+
 	for (int i = 0; i < 20; i++)
 	{
 		if (_inven[i].item == nullptr) return 0;
@@ -460,7 +459,6 @@ void inventory::savePrice(int select)
 	save.price = _shop[select].price;
 
 	_vPrice.push_back(save);
-	//cout << _vPrice.size() << endl;
 }
 //===========================================↑↑가격 저장하기↑↑===========================================//
 
