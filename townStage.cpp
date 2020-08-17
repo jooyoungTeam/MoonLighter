@@ -6,7 +6,8 @@ HRESULT townStage::init()
 	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
 	_objectManager = new objectManager;
 	_objectManager->init();
-	
+
+	_player->setPlayerPos(1000, 700);
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
 	return S_OK;
@@ -64,6 +65,8 @@ void townStage::loadMap()
 void townStage::mapToolRender()
 {
 	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
+
+	_objectManager->objectRender();
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)
@@ -81,7 +84,6 @@ void townStage::mapToolRender()
 				pos.y = _player->getShadowY();
 				if (PtInRect(&_tile[index].rc, pos))
 				{
-					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::White, 1);
 				}
 				else
 				{
@@ -91,9 +93,12 @@ void townStage::mapToolRender()
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
 				}
+				for (int i = 0; i < 3; i++)
+				{
+					CAMERAMANAGER->fillRectangle(_tile[_player->getColTileIdx()[i]].rc, D2D1::ColorF::White, 1);
+				}
 			}
 		}
 	}
 
-	_objectManager->objectRender();
 }

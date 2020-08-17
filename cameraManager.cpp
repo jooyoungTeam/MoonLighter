@@ -180,9 +180,12 @@ void cameraManager::cameraUpdate()
 			}
 			else
 			{
-				_fade.fadeAlpha -= 0.005f;
+				_fade.fadeAlpha -= 0.007f;
 				if (_fade.fadeAlpha <= 0)
+				{
+					_fade.fadeAlpha = 0;
 					_fade.fadeStart = false;
+				}
 			}
 		}
 	}

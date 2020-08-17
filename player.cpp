@@ -27,12 +27,12 @@ HRESULT player::init(float x, float y)
 	_playerShadowY = y;
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
-	_playerRcW = _playerRcH = 70;
+	_playerRcW = _playerRcH = 50;
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
 	_playerCurrentHp = 150;
 	_SwordDamage = 30;
 
-	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
+	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 
@@ -72,14 +72,20 @@ void player::render()
 		CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Red, 0.5f);
 		CAMERAMANAGER->rectangle(_playerAttackRc, D2D1::ColorF::Blue, 1.0f);
 		CAMERAMANAGER->rectangle(_playerShadowRc, D2D1::ColorF::Blue, 1.0f);
-
 	}
+
+
 }
 
 void player::update()
 {
 	_CurrentState->update(*this);
+	
 	_arrow->update();
+	arrowShoot();
+	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
+	_playerX = _playerShadowX;
+	_playerY = _playerShadowY - 50;
 	//arrowShoot();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -400,7 +406,7 @@ void player::arrowShoot()
 void player::tileCollision(DWORD* attribute, tagTile* tile)
 {
 	RECT rcCollision;	//임의의 충돌판정용 렉트
-	int tileIndex[2];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
+	tileIndex[3];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
 	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
 	//임의 충돌판정용 렉트에 대입 먼저
@@ -410,10 +416,10 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	rcCollision.bottom = _playerRc.bottom;
 
 	//렉트 크기 잘라주기
-	rcCollision.left += 2;
-	rcCollision.top += 2;
-	rcCollision.right -= 2;
-	rcCollision.bottom -= 2;
+	//rcCollision.left += 10;
+	//rcCollision.top += 10;
+	//rcCollision.right -= 10;
+	//rcCollision.bottom -= 10;
 
 	tileX = rcCollision.left / TILESIZE;
 	tileY = rcCollision.top / TILESIZE;
@@ -433,12 +439,32 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
 		break;
 	case DIRECTION::DOWN:
+		tileIndex[0] = (tileX + tileY * 60) + 60;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
+		break;
+	case DIRECTION::LEFTTOP:
+		tileIndex[0] = tileX + tileY * 60;
+		tileIndex[1] = tileX + (tileY + 1) * 60;
+		tileIndex[2] = (tileX + 1) + tileY * 60;
+		break;
+	case DIRECTION::RIGHTTOP:
+		tileIndex[0] = (tileX + tileY * 60) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
+		tileIndex[2] = tileX + tileY * 60;
+		break;
+	case DIRECTION::LEFTBOTTOM:
 		tileIndex[0] = (tileX + tileY * 60) + 60;
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 49;
+		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
+		tileIndex[2] = (tileX + (tileY - 1) * 60) + 60;
+		break;
+	case DIRECTION::RIGHTBOTTOM:
+		tileIndex[0] = (tileX + tileY * 60) + 60;
+		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
+		tileIndex[2] = (tileX + 1 + (tileY - 1) * 60) + 60;
 		break;
 	}
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		RECT rc;
 		if (((attribute[tileIndex[i]] & ATTR_UNMOVE) == ATTR_UNMOVE) &&
@@ -447,37 +473,48 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			switch (_playerDirection)
 			{
 			case DIRECTION::LEFT:
-				cout << "왼쪽들어옴" << endl;
-				_playerRc.left = tile[tileIndex[i]].rc.right;
-				_playerRc.right = _playerRc.left + 70;
-
-				_playerX = (_playerRc.left + _playerRc.right) / 2;
+				_tileColLeft = true;
+				return;
 				break;
-
 			case DIRECTION::UP:
-				cout << "위쪽들어옴" << endl;
-				_playerRc.top = tile[tileIndex[i]].rc.bottom;
-				_playerRc.bottom = _playerRc.top + 70;
-
-				_playerY = (_playerRc.top + _playerRc.bottom) / 2;
+				_tileColTop = true;
+				return;
 				break;
 			case DIRECTION::RIGHT:
-				cout << "오른쪽들어옴" << endl;
-				_playerRc.right = tile[tileIndex[i]].rc.left;
-				_playerRc.left = _playerRc.right - 70;
-
-				_playerX = (_playerRc.left + _playerRc.right) / 2;
+				_tileColRight = true;
+				return;
 				break;
 			case DIRECTION::DOWN:
-				cout << "아래쪽들어옴" << endl;
-				_playerRc.bottom = tile[tileIndex[i]].rc.top;
-				_playerRc.top = _playerRc.bottom - 70;
-
-				_playerY = (_playerRc.top + _playerRc.bottom) / 2;
+				_tileColBottom = true;
+				return;
+				break;
+			case DIRECTION::LEFTTOP:
+				_tileColLeftTop = true;
+				return;
+				break;
+			case DIRECTION::RIGHTTOP:
+				_tileColRightTop = true;
+				return;
+				break;
+			case DIRECTION::LEFTBOTTOM:
+				_tileColLeftBottom = true;
+				return;
+				break;
+			case DIRECTION::RIGHTBOTTOM:
+				_tileColRightBottom = true;
+				return;
 				break;
 			}
 		}
 	}
+	//_playerRc = rcCollision;
 
-	_playerRc = rcCollision;
+	_tileColLeft = false;
+	_tileColTop = false;
+	_tileColRight = false;
+	_tileColBottom = false;
+	_tileColLeftTop = false;
+	_tileColRightTop = false;
+	_tileColLeftBottom = false;
+	_tileColRightBottom = false;
 }

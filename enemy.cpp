@@ -68,6 +68,7 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 		_motion->start();
 		break;
 	case ENEMY_BOSS:
+		_bar.x = _x - _width;
 		_x = x + 200;
 		_y = y + 200;
 		_motion = KEYANIMANAGER->findAnimation("boss");
@@ -135,6 +136,8 @@ void enemy::update()
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 	setShadow();
+
+	EFFECTMANAGER->update();
 }
 
 void enemy::render()
@@ -186,7 +189,6 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("pot", L"image/enemy/pot.png", 11, 4);
 	EFFECTMANAGER->addEffect("bulletCollision", "bulletCollision", 90, 18, 18, 18, 1.0f, 0.2f, 10.0f, 1.5f);
 
-
 	//°ñ·½
 	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
 	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8,4);
@@ -214,6 +216,9 @@ void enemy::ani()
 
 
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
+	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
+	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
+	EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
 
 
 
@@ -444,6 +449,11 @@ void enemy::setBar()
 		_bar.x = _x - _width + 10;
 		_bar.y = _y - (_height / 2) - 15;
 		break;
+	case ENEMY_BOSS:
+		_bar.x = _x + _width + 10;
+		_bar.y = _y + _height;
+		break;
+
 
 	}
 }

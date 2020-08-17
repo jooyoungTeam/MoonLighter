@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "bullet.h"
 
-HRESULT bullet::init()
+HRESULT bullet::init(const char* imageName)
 {
+	_imageName = imageName;
 	return S_OK;
 }
 
@@ -53,7 +54,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 	if (80 < _vBullet.size()) return;
 	tagBullet bullet;
 	ZeroMemory(&bullet, sizeof(tagBullet));
-	bullet.img = ImageManager::GetInstance()->FindImage("bullet");
+	bullet.img = ImageManager::GetInstance()->FindImage(_imageName);
 	bullet.speed = speed;
 	bullet.x = bullet.sX = x;
 	bullet.y = bullet.sY = y;

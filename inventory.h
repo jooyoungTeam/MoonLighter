@@ -25,6 +25,7 @@ struct tagInven
 	wstring number;					//아이템 개수 표시 string
 	int count;						//아이템 개수
 	int price;						//아이템 가격(설정가)
+	bool isFull;
 };
 
 //장비창
@@ -102,8 +103,6 @@ private:
 	bool _isSetPrice;					//가격 설정할 거니
 	bool _isInven;						//인벤토리 열었니?
 
-	bool _isFull;
-
 	player* _player;
 	UI* _ui;
 
@@ -117,25 +116,30 @@ public:
 	void release();
 
 	void moveInven();										//인벤에서 돌아다니기
-	void putItem(item* item);								//인벤에 아이템 넣기
+	bool putItem(item* item);								//인벤에 아이템 넣기
+	int fullInven();										//인벤 가득 찼는지 확인하기
+
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
+
 	void renderInven();										//인벤 상태에 따른 렌더 조정
+	void closeInven();										//인벤 닫으면
+
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
 	void savePrice(int select);								//가격 저장하기
 	void loadPrice(tagSetPrice p[PRICESPACE], int s);		//가격 불러오기
-	void closeInven();										//인벤 닫으면
+
 	void useMirror();										//미러 사용하기
 	void draw();											//이미지 프레임 돌리기
 
 public:
 	int getGold() { return _gold; }							//소지금 가져가기
+	tagInven* getInven() { return _inven; }
 	tagGear getPotion() { return _gear[4]; }				//장비칸 4번째(포션) 가져가기
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
-	bool getIsFull() { return _isFull; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기

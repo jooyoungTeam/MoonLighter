@@ -21,7 +21,7 @@ HRESULT enemyManager::init()
 	setEnemy();
 
 	_bullet = new bullet;
-	_bullet->init();
+	_bullet->init("enemyBullet");
 	
 	_test = false;
 
@@ -147,6 +147,15 @@ void enemyManager::setEnemy()
 	
 	i++;
 
+	//
+	i++;
+
+	enemy* pot2;
+	pot2 = new pot;
+	pot2->playerCheck(_x, _y, _rc);
+	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
+	pot2->setPotDirection(POT_RIGHT);
+	_vEnemy.push_back(pot2);
 
 	enemy* pot2;
 	pot2 = new pot;
@@ -156,7 +165,7 @@ void enemyManager::setEnemy()
 	_vEnemy.push_back(pot2);
 
 	
-	i++;
+//	i++;
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
@@ -201,6 +210,11 @@ void enemyManager::potBullet()
 			}
 
 		}
+
+		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+		{
+
+		}
 	}
 }
 
@@ -231,6 +245,14 @@ void enemyManager::playerCol()
 		if (_vEnemy[i]->getIsPull())
 		{
 			float angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
+			_player->setX(_player->getX() + cosf(angle) * 10);
+			_player->setY(_player->getY() - sinf(angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
+		}
+		if (_vEnemy[i]->getIsPush())
+		{
+			float angle = getAngle(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _player->getX(), _player->getY());
 			_player->setX(_player->getX() + cosf(angle) * 10);
 			_player->setY(_player->getY() - sinf(angle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);

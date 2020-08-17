@@ -29,6 +29,7 @@ void tile::render()
 		CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	}
 
+	_objectManager->objectRender();
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)
@@ -65,7 +66,6 @@ void tile::render()
 		}
 	}
 
-	_objectManager->objectRender();
 
 	// 선택중인 렉트
 	{

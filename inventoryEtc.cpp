@@ -56,7 +56,7 @@ void inventory::moveInven()
 						if (_select == 10) _select = 10;
 						if (_select == 11) _select = 15;
 					}
-					
+
 				}
 
 				else
@@ -225,39 +225,67 @@ void inventory::moveInven()
 
 
 //===========================================↓↓아이템 인벤에 넣기↓↓===========================================//
-void inventory::putItem(item* item)
+bool inventory::putItem(item* item)
 {
-	for (int i = 0; i < INVENSPACE; i++)
+	int invenFullNum = fullInven();
+	if (invenFullNum >= 19)
 	{
-		if (_inven[i].item == nullptr && i < 20)
+		return false;
+	}
+	else
+	{
+		for (int i = 0; i < INVENSPACE; i++)
 		{
-			_inven[i].item = item;
-			_inven[i].count++;
-			break;
-		}
+			if (_inven[i].isFull) continue;
 
-		if (_inven[i].item != nullptr)
-		{
-			if (_inven[i].item->getIndex() == item->getIndex())
+			if (_inven[i].item != nullptr)
 			{
-				if (_inven[i].count >= _inven[i].item->getLimit())
+				if (_inven[i].item->getIndex() == item->getIndex())
 				{
-					_isFull = true;
-					continue;
+					_inven[i].count++;
+					return true;
 				}
-
-				_inven[i].count++;
-				break;
+				else
+					continue;
 			}
 
-			if (_inven[i].item->getIndex() != item->getIndex())
+			if (_inven[i].item == nullptr && i < 20)
 			{
-				continue;
+				_inven[i].item = item;
+				_inven[i].count++;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 //===========================================↑↑아이템 인벤에 넣기↑↑===========================================//
+
+
+//===========================================↓↓인벤 가득 찼는지 확인↓↓===========================================//
+int inventory::fullInven()
+{
+	int invenFullNum = 0;
+	//이렇게 하면 다른 아이템의 빈 자리가 있을 때,
+	//빈 자리가 없는 아이템은 erase만 되고 인벤으로 들어오지 않는다
+	for (int i = 0; i < 20; i++)
+	{
+		if (_inven[i].item == nullptr) return 0;
+
+		if (_inven[i].count >= _inven[i].item->getLimit())
+		{
+			_inven[i].isFull = true;
+			invenFullNum++;
+		}
+
+		else
+		{
+			_inven[i].isFull = false;
+		}
+	}
+	return invenFullNum;
+}
+//===========================================↑↑인벤 가득 찼는지 확인↑↑===========================================//
 
 
 //===========================================↓↓인벤 상태에 따른 렌더↓↓===========================================//
@@ -322,7 +350,7 @@ void inventory::renderInven()
 
 			//가격 적어두기
 			if (i % 2 != 0)
-			D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
+				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
 
 			//선택 커서 띄어두기
 			if (i == _select && _isSwap)
@@ -403,7 +431,7 @@ void inventory::setPrice(tagSetPrice setPrice[PRICESPACE], int select)
 	for (int i = 0; i < PRICESPACE; i++)
 	{
 		setPrice[i].rc = RectMakePivot(Vector2(_shop[select + 1].rc.GetCenter().x + i * 20 - 40, _shop[select + 1].rc.GetCenter().y), Vector2(20, 30), Pivot::Center);
-	}	
+	}
 
 	_shop[select].price = setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10 + setPrice[4].count;
 	_shop[select].totalPrice = _shop[select].count * _shop[select].price;
@@ -430,8 +458,8 @@ void inventory::savePrice(int select)
 	tagSavePrice save;
 	save.index = _shop[select].item->getIndex();
 	save.price = _shop[select].price;
-	
-	_vPrice.push_back(save);	
+
+	_vPrice.push_back(save);
 	//cout << _vPrice.size() << endl;
 }
 //===========================================↑↑가격 저장하기↑↑===========================================//
@@ -452,7 +480,7 @@ void inventory::loadPrice(tagSetPrice setPrice[PRICESPACE], int select)
 			setPrice[2].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000)) / 100;
 			setPrice[3].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100)) / 10;
 			setPrice[4].count = (_vPrice[i].price - (setPrice[0].count * 10000 + setPrice[1].count * 1000 + setPrice[2].count * 100 + setPrice[3].count * 10));
-		}	
+		}
 	}
 }
 //===========================================↑↑가격 불러오기↑↑===========================================//

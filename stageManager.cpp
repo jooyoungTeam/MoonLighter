@@ -50,8 +50,6 @@ void stageManager::render()
 
 void stageManager::update()
 {
-	KEYANIMANAGER->update();
-
 	FloatRect _test;
 	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
 
@@ -97,12 +95,20 @@ void stageManager::update()
 
 	_itemMg->update();
 
+	RECT temp;
+
 	for (int i = 0; i < _itemMg->getVItem().size(); ++i)
 	{
-		if (_test.left - _itemMg->getVItem()[i]->getRc().left < 30 && _test.top - _itemMg->getVItem()[i]->getRc().top < 30)
+		_itemMg->getVItem()[i]->update();
+		_itemMg->getVItem()[i]->follow(_test);
+
+		if (IntersectRect(&temp, &_test.GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
 		{
-			INVENTORY->putItem(_itemMg->getVItem()[i]);
-			if (!INVENTORY->getIsFull()) _itemMg->erase(i);
+			if (INVENTORY->putItem(_itemMg->getVItem()[i]))
+			{
+				_itemMg->erase(i);
+			}
+			return;
 		}
 	}
 

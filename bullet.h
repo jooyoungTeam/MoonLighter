@@ -23,10 +23,11 @@ private:
 	vector<tagBullet> _vBullet;
 	vector<tagBullet>::iterator _viBullet;
 	tagBullet _bullet;
+	const char* _imageName;
 
 
 public:
-	virtual HRESULT init();
+	virtual HRESULT init(const char* imageName);
 	virtual void release();
 	virtual void update();
 	virtual void render();
