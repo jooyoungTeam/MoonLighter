@@ -251,10 +251,6 @@ void item::category()
 			_limitCount = 5;
 			_price = 1500;
 			break;
-
-		default:
-
-			break;
 	}
 }
 

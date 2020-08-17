@@ -33,7 +33,7 @@ void itemManager::release()
 
 void itemManager::setItem(ITEMBUNDLE bundle, float x, float y)
 {
-	int count = RND->getFromIntTo(2, 4);
+	int count = RND->getFromIntTo(2, 3);
 	int rnd = RND->getInt(10);
 	if (rnd >= 6) return;
 	for (int i = 0; i < count; i++)
