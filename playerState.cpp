@@ -39,24 +39,28 @@ void playerIdleState::update(player & player)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
 			player.setCurrentState(player.getWalkState());
+			player.setDirection(DIRECTION::UP);
 		}
 		//아래 
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
 			player.setCurrentState(player.getWalkState());
+			player.setDirection(DIRECTION::DOWN);
 		}
 		//왼쪽 
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftWalk"), ImageManager::GetInstance()->FindImage("playerLeftWalk"));
 			player.setCurrentState(player.getWalkState());
+			player.setDirection(DIRECTION::LEFT);
 		}
 		//오른쪽 
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightWalk"), ImageManager::GetInstance()->FindImage("playerRightWalk"));
 			player.setCurrentState(player.getWalkState());
+			player.setDirection(DIRECTION::RIGHT);
 		}
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	}
@@ -353,39 +357,232 @@ void playerWalkState::update(player & player)
 
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//위
-	bool isMove = false;
-	bool isbool = true;
 
 	int x = 0;
 	int y = 0;
-	if (KEYMANAGER->isStayKeyDown('W'))
+
+	if (player.getDirection() == DIRECTION::UP)
 	{
-		if (player.getDirection() != DIRECTION::UP)
+		if (KEYMANAGER->isStayKeyDown('W'))
 		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
-			player.setCurrentState(player.getWalkState());
-			player.setDirection(DIRECTION::UP);
+			//만약 아래키 누르면 위쪽Idle 모습으로 변함
+			if (KEYMANAGER->isOnceKeyDown('S'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
+			}
+			//위쪽Idle 모습으로 멈추기
+			else if (KEYMANAGER->isStayKeyDown('S'))
+			{
+				player.setY(player.getY() - 0);
+				return;
+			}
+			//아래키를 떼면 위로 다시 움직임
+			else if (KEYMANAGER->isOnceKeyUp('S'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+			//만약 이동중 왼쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			//만약 이동중 오른쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			//만약 이동중 구르기 누르면
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (!player.getTileColTop())
+			y = -1;
 		}
+	}
 
-		//if (KEYMANAGER->isStayKeyDown('A'))
-		//{
-		//	player.setDirection(DIRECTION::LEFTTOP);
-		//}
-		//if (KEYMANAGER->isStayKeyDown('D'))
-		//{
-		//	player.setDirection(DIRECTION::RIGHTTOP);
-		//}
-		//if (player.getDirection() == DIRECTION::RIGHTTOP)
-		//{
-		//	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
-		//	player.setCurrentState(player.getWalkState());
-		//}
-		//if (player.getDirection() == DIRECTION::LEFTTOP)
-		//{
-		//	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
-		//	player.setCurrentState(player.getWalkState());
-		//}
+	//아래
+	if (player.getDirection() == DIRECTION::DOWN)
+	{
+		if (KEYMANAGER->isStayKeyDown('S'))
+		{
+			//만약 위쪽키 누르면 아래 Idle 모습으로 변함
+			if (KEYMANAGER->isOnceKeyDown('W'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
+			}
+			//아래Idle 모습으로 멈추기
+			else if (KEYMANAGER->isStayKeyDown('W'))
+			{
+				player.setY(player.getY() + 0);
+				return;
+			}
+			//위쪽키를 떼면 아래로 다시 움직임
+			else if (KEYMANAGER->isOnceKeyUp('W'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+			//만약 이동중 왼쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::LEFTBOTTOM);
+			}
+			//만약 이동중 오른쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::RIGHTBOTTOM);
+			}
 
+			//만약 이동중 구르기 누르면
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (!player.getTileColBottom())
+			y = 1;
+		}
+	}
+
+	//왼쪽
+	if (player.getDirection() == DIRECTION::LEFT)
+	{
+		if (KEYMANAGER->isStayKeyDown('A'))
+		{
+			//만약 오른쪽키 누르면 왼쪽 Idle 모습으로 변함
+			if (KEYMANAGER->isOnceKeyDown('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftIdle"), ImageManager::GetInstance()->FindImage("playerLeftIdle"));
+			}
+			//왼쪽Idle 모습으로 멈추기
+			else if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setX(player.getX() - 0);
+				return;
+			}
+			//오른쪽키를 떼면 왼쪽으로 다시 움직임
+			else if (KEYMANAGER->isOnceKeyUp('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftWalk"), ImageManager::GetInstance()->FindImage("playerLeftWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+			//만약 이동중 위쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('W'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::LEFTTOP);
+			}
+			//만약 이동중 아래키 누르면
+			if (KEYMANAGER->isStayKeyDown('S'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::LEFTBOTTOM);
+			}
+
+			//만약 이동중 구르기 누르면
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftRoll"), ImageManager::GetInstance()->FindImage("playerLeftRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (!player.getTileColLeft())
+			x = -1;
+		}
+	}
+
+	//오른쪽
+	if (player.getDirection() == DIRECTION::RIGHT)
+	{
+		if (KEYMANAGER->isStayKeyDown('D'))
+		{
+			//만약 왼쪽키 누르면 오른쪽 Idle 모습으로 변함
+			if (KEYMANAGER->isOnceKeyDown('A'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightIdle"), ImageManager::GetInstance()->FindImage("playerRightIdle"));
+			}
+			//오른쪽Idle 모습으로 멈추기
+			else if (KEYMANAGER->isStayKeyDown('A'))
+			{
+				player.setX(player.getX() + 0);
+				return;
+			}
+			//왼쪽키를 떼면 오른쪽으로 다시 움직임
+			else if (KEYMANAGER->isOnceKeyUp('A'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightWalk"), ImageManager::GetInstance()->FindImage("playerRightWalk"));
+				player.setCurrentState(player.getWalkState());
+			}
+
+			//만약 이동중 왼쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('W'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpWalk"), ImageManager::GetInstance()->FindImage("playerUpWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+			//만약 이동중 오른쪽키 누르면
+			if (KEYMANAGER->isStayKeyDown('S'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
+				player.setCurrentState(player.getWalkState());
+				player.setDirection(DIRECTION::RIGHTBOTTOM);
+			}
+
+			//만약 이동중 구르기 누르면
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
+				player.setCurrentState(player.getRollState());
+			}
+			if (!player.getTileColRight())
+			x = 1;
+		}
+	}
+
+	//오른쪽위 이동
+	if (player.getDirection() == DIRECTION::RIGHTTOP)
+	{
+		if (!player.getTileColRightTop())
+		{
+			x = 1;
+			y = -1;
+		}
+		//만약 이동중 구르기 누르면
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+			player.setCurrentState(player.getRollState());
+
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+				player.setCurrentState(player.getRollState());
+				player.setDirection(DIRECTION::RIGHTTOP);
+			}
+		}
+	}
+
+	//왼쪽위 이동
+	if (player.getDirection() == DIRECTION::LEFTTOP)
+	{
+		if (!player.getTileColLeftTop())
+		{
+			x = -1;
+			y = -1;
+		}
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -394,58 +591,21 @@ void playerWalkState::update(player & player)
 
 			if (KEYMANAGER->isStayKeyDown('A'))
 			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
+				player.setCurrentState(player.getRollState());
 				player.setDirection(DIRECTION::LEFTTOP);
 			}
-			if (KEYMANAGER->isStayKeyDown('D'))
-			{
-				player.setDirection(DIRECTION::RIGHTTOP);
-			}
-			if (player.getDirection() == DIRECTION::RIGHTTOP)
-			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
-				player.setCurrentState(player.getRollState());
-			}
-			if (player.getDirection() == DIRECTION::LEFTTOP)
-			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
-				player.setCurrentState(player.getRollState());
-			}
 		}
-
-		isMove = true;
-		if(!player.getTileColTop())
-			y = -1;
-		//player.setShadowY(player.getShadowY() - 5);
-		//player.setY(player.getY() - 5);
 	}
-	if (KEYMANAGER->isStayKeyDown('S'))
+
+	//왼쪽아래 이동
+	if (player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
-		if (player.getDirection() != DIRECTION::DOWN)
+		if (!player.getTileColLeftBottom())
 		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
-			player.setDirection(DIRECTION::DOWN);
+			x = -1;
+			y = 1;
 		}
-		//if (KEYMANAGER->isStayKeyDown('A'))
-		//{
-		//	player.setDirection(DIRECTION::LEFTTOP);
-		//}
-		//if (KEYMANAGER->isStayKeyDown('D'))
-		//{
-		//	player.setDirection(DIRECTION::RIGHTTOP);
-		//}
-		//if (player.getDirection() == DIRECTION::RIGHTTOP)
-		//{
-		//	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
-		//	player.setCurrentState(player.getWalkState());
-		//}
-		//if (player.getDirection() == DIRECTION::LEFTTOP)
-		//{
-		//	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
-		//	player.setCurrentState(player.getWalkState());
-		//}
-
-		
-
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -454,102 +614,34 @@ void playerWalkState::update(player & player)
 
 			if (KEYMANAGER->isStayKeyDown('A'))
 			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+				player.setCurrentState(player.getRollState());
 				player.setDirection(DIRECTION::LEFTBOTTOM);
 			}
-			if (KEYMANAGER->isStayKeyDown('D'))
-			{
-				player.setDirection(DIRECTION::RIGHTBOTTOM);
-			}
-			if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
-			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
-				player.setCurrentState(player.getRollState());
-			}
-			if (player.getDirection() == DIRECTION::LEFTBOTTOM)
-			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
-				player.setCurrentState(player.getRollState());
-			}
 		}
-
-		isMove = true;
-		if (!player.getTileColBottom())
-			y = 1;
-		//player.setShadowY(player.getShadowY() + 5);
-		//player.setY(player.getY() + 5);
-	}
-	if (KEYMANAGER->isStayKeyDown('A'))
-	{
-		if (player.getDirection() != DIRECTION::LEFT && !isMove)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftWalk"), ImageManager::GetInstance()->FindImage("playerLeftWalk"));
-			player.setDirection(DIRECTION::LEFT);
-		}
-
-		//만약 이동중 구르기 누르면
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftRoll"), ImageManager::GetInstance()->FindImage("playerLeftRoll"));
-			player.setCurrentState(player.getRollState());
-		}
-		isMove = true;
-		//player.setShadowX(player.getShadowX() - 5);
-		//player.setX(player.getX() - 5);
-		if (!player.getTileColLeft())
-			x = - 1;
-	}
-	if (KEYMANAGER->isStayKeyDown('D'))
-	{
-		if (player.getDirection() != DIRECTION::RIGHT && !isMove)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightWalk"), ImageManager::GetInstance()->FindImage("playerRightWalk"));
-			player.setDirection(DIRECTION::RIGHT);
-		}
-
-		//만약 이동중 구르기 누르면
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
-			player.setCurrentState(player.getRollState());
-		}
-		isMove = true;
-		//player.setShadowX(player.getShadowX() + 5);
-		//player.setX(player.getX() + 5);
-		if (!player.getTileColRight())
-			x = 1;
-		//Vector2(x, y).Normalize();
-	}
-
-	//오른쪽위 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation( "playerUpWalk") && player.getDirection() == DIRECTION::RIGHTTOP)
-	{
-		cout << "RightTop 들어오는중" << endl;
-		if (!player.getTileColRightTop())
-			player.setShadowX(player.getShadowX() + 0);
-	}
-
-	//왼쪽위 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerUpWalk") && player.getDirection() == DIRECTION::LEFTTOP)
-	{
-		cout << "LeftTop 들어오는중" << endl;
-		if (!player.getTileColLeftTop())
-			player.setShadowX(player.getShadowX() - 0);
-	}
-
-	//왼쪽아래 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownWalk") && player.getDirection() == DIRECTION::LEFTBOTTOM)
-	{
-		cout << "LEFTBottom 들어오는중" << endl;
-		if (!player.getTileColLeftBottom())
-			player.setShadowX(player.getShadowX() - 0);
 	}
 
 	//오른쪽아래 이동
-	if (player.getPlayerMotion() == KEYANIMANAGER->findAnimation("playerDownWalk") && player.getDirection() == DIRECTION::RIGHTBOTTOM)
+	if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
-		cout << "RightBottom 들어오는중" << endl;
 		if (!player.getTileColRightBottom())
-			player.setShadowX(player.getShadowX() + 0);
+		{
+			x = 1;
+			y = 1;
+		}
+		//만약 이동중 구르기 누르면
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+			player.setCurrentState(player.getRollState());
+
+			if (KEYMANAGER->isStayKeyDown('D'))
+			{
+				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
+				player.setCurrentState(player.getRollState());
+				player.setDirection(DIRECTION::RIGHTBOTTOM);
+			}
+		}
 	}
 
 	Vector2 vec(x, y);
@@ -568,12 +660,6 @@ void playerWalkState::update(player & player)
 		player.setX(player.getX() + (vec.x * MOVESPPED));
 		player.setShadowY(player.getShadowY() + (vec.y * MOVESPPED));
 		player.setY(player.getY() + (vec.y * MOVESPPED));
-	}
-
-
-	if (!isMove)
-	{
-		// idle로 돌아가게
 	}
 
 	//위쪽키 떼면
@@ -609,7 +695,6 @@ void playerWalkState::update(player & player)
 	//아래키 떼면
 	if (KEYMANAGER->isOnceKeyUp('S'))
 	{
-		isbool = false;
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 		
