@@ -69,8 +69,7 @@ void enemyAttackState::update(enemy & enemy, ENEMYTYPE enemyType)
 
 	if (enemyType == ENEMY_GOLEM)
 	{
-		if (!KEYANIMANAGER->findAnimation(enemy.getIndex(), "golemLeftAttack")->isPlay() && !KEYANIMANAGER->findAnimation(enemy.getIndex(), "golemRightAttack")->isPlay() &&
-			!KEYANIMANAGER->findAnimation(enemy.getIndex(), "golemUpAttack")->isPlay() && !KEYANIMANAGER->findAnimation(enemy.getIndex(), "golemDownAttack")->isPlay())
+		if (!enemy.getAni()->isPlay())
 		{
 			enemy.enemyMove();
 			enemy.setState(enemy.getIdle());

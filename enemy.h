@@ -113,7 +113,7 @@ public:
 
 	//---------------------------------set-----------------------------------
 	void setState(enemyState* state) { this->_state = state; }
-	void setMotion(Image* img, animation* ani) { _img = img; _motion = ani; _motion->start(); }
+	void setMotion(Image* img, animation* ani) { _img = img; _motion->stop();  _motion = ani; _motion->start(); }
 	void setPotDirection(POTDIR dir) { _potDir = dir; }
 	void setBossAni(BOSS_ANI ani) { _bossAni = ani; }
 

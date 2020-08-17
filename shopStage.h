@@ -22,6 +22,7 @@ enum doorState
 struct tagDisplayStand
 {
 	Vector2 pos;			// 위치
+	FloatRect rc;			// 렉트
 
 	item* it;				// 아이템
 	int	  settingPrice;		// 플레이어 세팅 가격
@@ -34,6 +35,15 @@ struct tagDisplayStand
 	void init(Vector2 mPos, item* mIt, int mPrice, int mCount, bool mIsActive)
 	{
 		pos = mPos;
+		int tempX = pos.x;
+		if (pos.y == 870)
+		{
+			rc = RectMakePivot(Vector2(tempX,830), Vector2(50, 50), Pivot::Center);
+		}
+		else
+		{
+			rc = RectMakePivot(Vector2(tempX, 1000), Vector2(50, 50), Pivot::Center);
+		}
 		it = mIt;
 		settingPrice = mPrice;
 		count = mCount;
@@ -65,6 +75,8 @@ private:
 	shopNPCManager* _npcM;			// NPC 매니저
 	bool  _enterNPC;				// NPC 들어오는지 확인
 
+	vector<POINT> _unMoveTile;
+
 
 
 	DWORD             _attribute[SHOPTILEX * SHOPTILEY];
@@ -85,9 +97,6 @@ public:
 	void disPlaySet();				// 진열대 세팅
 	void disPlayUpdate();			// 진열대 업데이트
 	void doorUpdate();				// 문 업데이트
-
-	void buyItem();					// 아이템 구매
-	
 	void npcProcess();					// 아이템 구매
 
 public:

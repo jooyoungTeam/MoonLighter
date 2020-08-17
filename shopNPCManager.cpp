@@ -34,11 +34,11 @@ void shopNPCManager::release()
 	_vNpc.clear();
 }
 
-void shopNPCManager::npcAdd(npcType type)
+void shopNPCManager::npcAdd(npcType type, vector<POINT> vUnMove)
 {
 	shopNPC* tempNpc = new shopNPC;
 
-	tempNpc->init(type);
+	tempNpc->init(type, vUnMove);
 	_vNpc.push_back(tempNpc);
 }
 

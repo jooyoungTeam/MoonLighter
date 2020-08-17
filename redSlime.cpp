@@ -23,7 +23,8 @@ void redSlime::attack()
 		_scale = 1.3f;
 		_speed = 0;
 		_img = ImageManager::GetInstance()->FindImage("slimeAttack");
-		_motion = KEYANIMANAGER->findAnimation(_index, "slimeAttack");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "slimeAttack");
 		_motion->start();
 		_x = _pX;
 		_y = _pY;
@@ -35,7 +36,9 @@ void redSlime::attack()
 		if (_bigSlimeCount > 100)
 		{
 			_img = ImageManager::GetInstance()->FindImage("redSlime");
-			_motion = KEYANIMANAGER->findAnimation(_index, "redSlime");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "redSlime");
+			_motion->start();
 			_isAttack = false;
 			_state = _idle;
 			_attackCount = 0;
@@ -56,7 +59,9 @@ void redSlime::attack()
 	if (_attackCount > 50)
 	{
 		_img = ImageManager::GetInstance()->FindImage("redSlime");
-		_motion = KEYANIMANAGER->findAnimation(_index, "redSlime");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "redSlime");
+		_motion->start();
 		_isAttack = false;
 		_state = _idle;
 		_attackCount = 0;
@@ -77,11 +82,12 @@ void redSlime::dead()
 	if (_onceAni)
 	{
 		_img = ImageManager::GetInstance()->FindImage("redSlimeDead");
-		_motion = KEYANIMANAGER->findAnimation(_index, "redSlimeDead");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "redSlimeDead");
 		_motion->start();
 		_onceAni = false;
 	}
-	if (!KEYANIMANAGER->findAnimation(_index, "redSlimeDead")->isPlay())
+	if (!KEYANIMANAGER->findAnimation(  "redSlimeDead")->isPlay())
 	{
 		_realDead = true;
 	}

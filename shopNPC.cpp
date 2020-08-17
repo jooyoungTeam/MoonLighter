@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "shopNPC.h"
 
-HRESULT shopNPC::init(npcType type)
+HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 {
 	// 이미지
 	{
@@ -13,6 +13,7 @@ HRESULT shopNPC::init(npcType type)
 		ImageManager::GetInstance()->AddFrameImage("TooExpensive", L"Image/Shop/tooExpensive.png", 9, 1);
 		ImageManager::GetInstance()->AddFrameImage("Expensive", L"Image/Shop/expensive.png", 5, 1);
 	}
+
 
 	// 동적 할당
 	{
@@ -42,11 +43,12 @@ HRESULT shopNPC::init(npcType type)
 		_npcEmotionState = NPC_EMOTION_NULL;
 		_npcType = type;
 		_isBuy = false;
+		_vUnMove = vUnMove;
 	}
 
 	// 초기화 함수
 	{
-		unMoveSet();
+		//unMoveSet();
 		wayPointSet();
 		chooseItem();
 	}
@@ -54,6 +56,7 @@ HRESULT shopNPC::init(npcType type)
 	_aStar->init(WINSIZEX / 50, 1400 / 50, _centerX / 50, _centerY / 50 - 3, _goToPoint.x, _goToPoint.y, _vUnMove, true);
 
 	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(_img->GetFrameSize().x, _img->GetFrameSize().y), Pivot::Center);
+
 
 	return S_OK;
 }
@@ -65,11 +68,6 @@ void shopNPC::release()
 void shopNPC::updadte()
 {
 	directionCheck();
-
-	for (int i = 0; i < 4; ++i)
-	{
-		cout << _isAnotherPerson[i] << endl;
-	}
 
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
 	_item->setItemPos(_centerX, _centerY - 50);
@@ -206,7 +204,10 @@ void shopNPC::render()
 	if(_npcActionState == NPC_BUY && _item->getImg() != NULL)
 		_item->cameraRender();
 	
-
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Blue, 1.f, 2.f);
+	}
 }
 
 void shopNPC::frameUpdate()
@@ -342,46 +343,6 @@ void shopNPC::comparePrice()
 	}
 }
 
-void shopNPC::unMoveSet()
-{
-	POINT temp;
-
-	temp.x = 12;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 12;
-	temp.y = 18;
-	_vUnMove.push_back(temp);
-
-	temp.x = 12;
-	temp.y = 17;
-	_vUnMove.push_back(temp);
-
-	temp.x = 13;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 13;
-	temp.y = 18;
-	_vUnMove.push_back(temp);
-
-	temp.x = 13;
-	temp.y = 17;
-	_vUnMove.push_back(temp);
-
-	temp.x = 14;
-	temp.y = 19;
-	_vUnMove.push_back(temp);
-
-	temp.x = 14;
-	temp.y = 18;
-	_vUnMove.push_back(temp);
-
-	temp.x = 14;
-	temp.y = 17;
-	_vUnMove.push_back(temp);
-}
 
 void shopNPC::wayPointSet()
 {
@@ -455,7 +416,7 @@ void shopNPC::chooseItem()
 	{
 		_rndChoiceItem = RND->getInt(4);
 
-		if (!_isAnotherPerson && !_checkItem[_rndChoiceItem])
+		if (!_checkItem[_rndChoiceItem] && !_isAnotherPerson[_rndChoiceItem])
 			break;
 	}
 

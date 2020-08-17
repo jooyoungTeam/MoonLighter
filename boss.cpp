@@ -172,17 +172,19 @@ void boss::dead()
 	{
 		_y = 625;
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossHit");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "bossHit");
 		_motion->start();
 		_bossAni = TWO;
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossHit")->isPlay())
+		if (!_motion->isPlay())
 		{
 			_y = 650;
 			_img = ImageManager::GetInstance()->FindImage("bossDead");
-			_motion = KEYANIMANAGER->findAnimation(_index, "bossDead");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "bossDead");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -194,25 +196,28 @@ void boss::enemyHit()
 	if (_bossAni == ONE)
 	{
 		_img = ImageManager::GetInstance()->FindImage("BossUp");
-		_motion = KEYANIMANAGER->findAnimation(_index, "BossDown");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "BossDown");
 		_motion->start();
 		_bossAni = TWO;
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "BossDown")->isPlay())
+		if (!_motion->isPlay())
 		{
 			_img = ImageManager::GetInstance()->FindImage("BossUp");
-			_motion = KEYANIMANAGER->findAnimation(_index, "BossUp");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "BossUp");
 			_motion->start();
 			_bossAni = THREE;
 		}
 	}
 	if (_bossAni == THREE)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "BossUp")->isPlay())
+		if (!_motion->isPlay())
 		{
-			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_state = _idle;
@@ -226,17 +231,19 @@ void boss::attack1()
 {
 	if (_bossAni == ONE)
 	{
+		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossAttack");
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossAttack");
+		_motion = KEYANIMANAGER->findAnimation(  "bossAttack");
 		_motion->start();
 		_bossAni = TWO;
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossAttack")->isPlay())
+		if (!_motion->isPlay())
 		{
+			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossAttackIdle");
-			_motion = KEYANIMANAGER->findAnimation(_index, "bossAttackIdle");
+			_motion = KEYANIMANAGER->findAnimation(  "bossAttackIdle");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -251,16 +258,18 @@ void boss::attack1()
 	}
 	if (_bossAni == FOUR)
 	{
+		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandCome");
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossHandCome");
+		_motion = KEYANIMANAGER->findAnimation(  "bossHandCome");
 		_motion->start();
 		_bossAni = FIVE;
 	}
 	if (_bossAni == FIVE)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossHandCome")->isPlay())
+		if (!_motion->isPlay())
 		{
-			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_state = _idle;
@@ -276,17 +285,19 @@ void boss::attack2()
 {
 	if (_bossAni == ONE)
 	{
+		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossHandFly1");
+		_motion = KEYANIMANAGER->findAnimation(  "bossHandFly1");
 		_motion->start();
 		_bossAni = TWO;
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossHandFly1")->isPlay())
+		if (!_motion->isPlay())
 		{
+			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-			_motion = KEYANIMANAGER->findAnimation(_index, "bossHandFly2");
+			_motion = KEYANIMANAGER->findAnimation(  "bossHandFly2");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -297,8 +308,9 @@ void boss::attack2()
 		attack2_1();
 		if (_attack2.count > 2)
 		{
+			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-			_motion = KEYANIMANAGER->findAnimation(_index, "bossHandFly3");
+			_motion = KEYANIMANAGER->findAnimation(  "bossHandFly3");
 			_motion->start();
 			_bossAttackCount = 0;
 			_bossAni = FOUR;
@@ -325,9 +337,10 @@ void boss::attack2()
 			_attack2.y = -100;
 			_attack2.delay = 0;
 		}
-		if (!KEYANIMANAGER->findAnimation(_index, "bossHandFly3")->isPlay())
+		if (!_motion->isPlay())
 		{
-			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_bossAni = FIVE;
@@ -361,16 +374,18 @@ void boss::attack3()
 
 	if (_bossAni == ONE)
 	{
+		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossAttack11");
+		_motion = KEYANIMANAGER->findAnimation(  "bossAttack11");
 		_motion->start();
 		_bossAni = TWO;
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossAttack11")->isPlay())
+		if (!_motion->isPlay())
 		{
-			_motion = KEYANIMANAGER->findAnimation(_index, "bossAttack22");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "bossAttack22");
 			_motion->start();
 			_onceAni = true;
 			_bossAni = THREE;
@@ -379,10 +394,11 @@ void boss::attack3()
 	}
 	if (_bossAni == THREE)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossAttack22")->isPlay())
+		if (!_motion->isPlay())
 		{
+			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("boss");
-			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
+			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_motion->start();
 			_attackDelay = 0;
 			_bossAni = FOUR;
@@ -421,7 +437,8 @@ void boss::attack4()
 	{
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_y = 625;
-		_motion = KEYANIMANAGER->findAnimation(_index, "bossLight");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "bossLight");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -431,10 +448,11 @@ void boss::attack4()
 	}
 	if (_bossAni == TWO)
 	{
-		if (!KEYANIMANAGER->findAnimation(_index, "bossLight")->isPlay())
+		if (!_motion->isPlay())
 		{
 			_img = ImageManager::GetInstance()->FindImage("boss");
-			_motion = KEYANIMANAGER->findAnimation(_index, "boss");
+			_motion->stop();
+			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_motion->start();
 			_y = 500;
 			EFFECTMANAGER->play("bossPullEffect", _pX + 135, _pY  + 90);

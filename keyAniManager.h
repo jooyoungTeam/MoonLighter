@@ -8,11 +8,15 @@ class Image;
 class keyAniManager : public singletonBase<keyAniManager>
 {
 private:
-	typedef map<string, animation*>				arrAnimation;
-	typedef map<string, animation*>::iterator	iterAnimation;
+	//»ý»ê
+	typedef vector<animation*>				arrAnimations;
+	typedef vector<animation*>::iterator	iterAnimations;
 
-	typedef vector<arrAnimation>				arrTotalAni;
-	typedef vector<arrAnimation>::iterator	    iterTotalAni;
+	typedef map<string, arrAnimations>				arrAnimation;
+	typedef map<string, arrAnimations>::iterator	iterAnimation;
+
+	typedef vector<map<string, arrAnimations>>				arrTotalAni;
+	typedef vector<map<string, arrAnimations>>::iterator	    iterTotalAni;
 
 
 private:
@@ -27,24 +31,19 @@ public:
 	void update();
 	void render();
 
-	void addDefaultFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop);
-	void addDefaultFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop, void* cbFunction);
-	void addDefaultFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop, void* cbFunction, void* obj);
+	void addDefaultFrameAnimation(string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop);
+	void addDefaultFrameAnimation(string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop, void* cbFunction);
+	void addDefaultFrameAnimation(string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop, void* cbFunction, void* obj);
 
-	void addArrayFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop);
-	void addArrayFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction);
-	void addArrayFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction, void* obj);
+	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop);
+	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction);
+	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction, void* obj);
 
-	void addCoordinateFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop);
-	void addCoordinateFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop, void* cbFunction);
-	void addCoordinateFrameAnimation(int index, string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop, void* cbFunction, void* obj);
+	void addCoordinateFrameAnimation(string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop);
+	void addCoordinateFrameAnimation(string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop, void* cbFunction);
+	void addCoordinateFrameAnimation(string animationKeyName, const char* imageKeyName, int start, int end, int fps, bool reverse, bool loop, void* cbFunction, void* obj);
 
-	void start(int index, string animationKeyName);
-	void stop(int index, string animationKeyName);
-	void pause(int index, string animationKeyName);
-	void resume(int index, string animationKeyName);
-
-	animation* findAnimation(int index, string animationKeyName);
+	animation* findAnimation(string animationKeyName);
 
 	void deleteAll();
 
