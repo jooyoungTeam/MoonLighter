@@ -6,7 +6,7 @@
 HINSTANCE _hInstance;
 HWND	  _hWnd;
 HDC		  _hdc;
-LPCTSTR _lpszClass = TEXT("뜨웨니~원");
+LPCTSTR _lpszClass = TEXT("Moonlighter");
 
 POINT _ptMouse;
 

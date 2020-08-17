@@ -6,7 +6,6 @@ HRESULT stageManager::init()
 {
 	_player = new player;
 	_player->init(500, 500);
-
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -50,6 +49,7 @@ void stageManager::render()
 
 void stageManager::update()
 {
+	cout << "ÇÔÁ¤¿ª" << endl;
 	FloatRect _test;
 	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
 
