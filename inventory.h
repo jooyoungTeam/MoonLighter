@@ -97,10 +97,12 @@ private:
 	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
 
 	bool _isSelect;						//아이템 선택하는 불 값
-	bool _isSale;						//아이템 판매하는 불 값
+	bool _isSale;						//아이템 판매하는 불 값(미러사용)
 	bool _isSwap;						//배열 넘어가기
 	bool _isSetPrice;					//가격 설정할 거니
 	bool _isInven;						//인벤토리 열었니?
+
+	bool _isFull;
 
 	player* _player;
 	UI* _ui;
@@ -133,6 +135,7 @@ public:
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
+	bool getIsFull() { return _isFull; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기

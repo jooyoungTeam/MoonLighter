@@ -1,15 +1,23 @@
 #include "stdafx.h"
 #include "item.h"
 
-HRESULT item::init(ITEMTYPE type, float x, float y)
+HRESULT item::init(ITEMBUNDLE bundle, float x, float y, float endX, float endY)
 {
-	_type = type;
+	_bundle = bundle;
 	_x = x;
 	_y = y;
+	_endX = endX;
+	_endY = endY;
+
+	_jumpPower = 3;
+	_gravity = 0.2;
+
 	_shake = 0;
 	_isShake = false;
+	_isDrop = true;
 
-	sort();
+	setBundle();
+	category();
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 
@@ -21,8 +29,9 @@ HRESULT item::init(ITEMTYPE type)
 	_type = type;
 	_shake = 0;
 	_isShake = false;
+	_isDrop = false;
 
-	sort();
+	category();
 	return S_OK;
 }
 
@@ -39,6 +48,7 @@ void item::cameraRender()
 void item::update()
 {
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
+	move();
 }
 
 void item::fieldUpdate()
@@ -70,11 +80,43 @@ void item::fieldUpdate()
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
 
+void item::move()
+{
+	if (_endX > _x)
+	{
+		_x += 2;
+	}
+
+	if (_endX < _x)
+	{
+		_x -= 2;
+	}
+
+	if (_y >= _endY)
+	{	
+		_isDrop = false;
+	}
+
+	if (_isDrop)
+	{
+		_y -= _jumpPower;
+		_jumpPower -= _gravity;
+	}
+
+	if (!_isDrop)
+	{
+		_jumpPower = 0;
+		_gravity = 0;
+		_y = _endY;
+		_x = _endX;
+	}
+}
+
 void item::release()
 {
 }
 
-void item::sort()
+void item::category()
 {
 	//Index ¹øÈ£ 100´ë ½½¶óÀÓ(10°³ ¹­À½, ¹°¾à Àç·á)
 	//Index ¹øÈ£ 200´ë Àç·á (10°³ ¹­À½, ´ëÀåÀåÀÌ Àç·á)
@@ -116,21 +158,21 @@ void item::sort()
 			_price = 3000;
 			break;
 
-		//µ¢±¼
-		case ITEMTYPE::VINE:
-			_img = ImageManager::GetInstance()->FindImage("vine");
-			_itemIndex = 202;
-			_limitCount = 10;
-			_price = 200;
-			break;
+		////µ¢±¼
+		//case ITEMTYPE::VINE:
+		//	_img = ImageManager::GetInstance()->FindImage("vine");
+		//	_itemIndex = 202;
+		//	_limitCount = 10;
+		//	_price = 200;
+		//	break;
 
-		//»Ñ¸®
-		case ITEMTYPE::WOOD:
-			_img = ImageManager::GetInstance()->FindImage("wood");
-			_itemIndex = 203;
-			_limitCount = 5;
-			_price = 500;
-			break;
+		////»Ñ¸®
+		//case ITEMTYPE::WOOD:
+		//	_img = ImageManager::GetInstance()->FindImage("wood");
+		//	_itemIndex = 203;
+		//	_limitCount = 5;
+		//	_price = 500;
+		//	break;
 
 		//ÁÖ¹° ÀÜÇØ
 		case ITEMTYPE::GOLEM_PIECES:
@@ -196,5 +238,45 @@ void item::sort()
 			_limitCount = 5;
 			_price = 1500;
 			break;
+	}
+}
+
+void item::setBundle()
+{
+	_count = RND->getInt(4);
+
+	switch (_bundle)
+	{
+	case ITEMBUNDLE::SLIME_RED:
+		if (_count < 3) _type = ITEMTYPE::SLIME_RED;
+		break;
+
+	case ITEMBUNDLE::SLIME_BLUE:
+		if (_count < 3) _type = ITEMTYPE::SLIME_BLUE;
+		break;
+
+	case ITEMBUNDLE::SLIME_YELLOW:
+		if (_count < 3) _type = ITEMTYPE::SLIME_YELLOW;
+		break;
+
+	case ITEMBUNDLE::GOLEM_KNIGHT:
+		if (_count == 0) _type = ITEMTYPE::GOLEM_PIECES;
+		if (_count == 1) _type = ITEMTYPE::GOLEM_CORE;
+		if (_count == 2) _type = ITEMTYPE::FABRIC;
+		if (_count == 3) _type = ITEMTYPE::BROKEN_SWORD;
+		break;
+
+	case ITEMBUNDLE::GOLEM_POT:
+		if (_count == 0) _type = ITEMTYPE::CRYSTAL_ENERGY;
+		if (_count == 1) _type = ITEMTYPE::REINFORCED_STEEL;
+		if (_count == 2) _type = ITEMTYPE::GOLEM_CORE;
+		break;
+
+	case ITEMBUNDLE::GOLEM_KING:
+		if (_count == 0) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
+		if (_count == 1) _type = ITEMTYPE::GOLEMKING_RECORD;
+		if (_count == 2) _type = ITEMTYPE::FABRIC;
+		if (_count == 3) _type = ITEMTYPE::SLIME_RED;
+		break;
 	}
 }
