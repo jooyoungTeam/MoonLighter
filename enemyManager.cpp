@@ -21,7 +21,7 @@ HRESULT enemyManager::init()
 	setEnemy();
 
 	_bullet = new bullet;
-	_bullet->init("enemyBullet");
+	_bullet->init("bullet");
 	
 	_test = false;
 
