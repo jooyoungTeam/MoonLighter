@@ -243,6 +243,9 @@
     <ClInclude Include="palette.h">
       <Filter>playGround\차주영</Filter>
     </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -406,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="palette.cpp">
       <Filter>playGround\차주영</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>playGround\송용은</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

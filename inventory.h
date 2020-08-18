@@ -47,6 +47,7 @@ struct tagShop
 	int price;						//아이템 설정가
 	int totalPrice;					//아이템의 전체 금액
 	int originalPrice;				//아이템 원가 전체 금액
+	bool isPeople;
 };
 
 //가격 설정 창

@@ -77,7 +77,7 @@ void item::fieldUpdate()
 
 	_y += _shake;
 
-	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
+	//_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
 
 void item::move()

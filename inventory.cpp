@@ -87,6 +87,7 @@ HRESULT inventory::init()
 		}	
 		_shop[i].totalPrice = 0;
 		_shop[i].countNum = to_wstring(_shop[i].count);
+		_shop[i].isPeople = false;
 	}
 
 	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");

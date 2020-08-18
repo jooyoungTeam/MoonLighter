@@ -36,25 +36,18 @@ void shopStage::render()
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
 
 	_player->render();
-
-	
-
 	_npcM->render();
-
-	for (int i = 0; i < 4; ++i)
-	{
-		if (_display[i].it != NULL)
-			_display[i].it->cameraRender();
-
-		CAMERAMANAGER->rectangle(_display[i].rc, D2D1::ColorF::Black, 1.f, 2.f);
-	}
+	_display1->render();
+	_display2->render();
+	_display3->render();
+	_display4->render();
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
-	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 17, 613, 1.15f, 1.0f);    
-	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2  + 2, 1162, 1.15f, 1.0f);
+	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 8, 605,800, 1.f, 1.3f);    
+	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 2, 1158,1300, 1.f, 1.3f);
 	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);
 
-	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0, 1.5, 1.f);
+	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0,2.f,1.f);
 
 	CAMERAMANAGER->zOrderALLRender();
 	//CAMERAMANAGER->frameRender(_celler, WINSIZEX / 2 + 160, 830, _cellerIndex,0,1.5,1.f);
@@ -65,33 +58,65 @@ void shopStage::render()
 
 void shopStage::update()
 {
+	if (_npcM->getVnpc().size() > 2)
+	{
+		_isMaxNpc = true;
+	}
+	else
+	{
+		_isMaxNpc = false;
+	}
+
+	if (!_isMaxNpc)
+	{
+		_npcAddCount++;
+
+		if (_npcAddCount > 400)
+		{
+			int rendType = RND->getInt(3);
+
+			switch (rendType)
+			{
+			case 0:
+				_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
+				break;
+
+			case 1:
+				_npcM->npcAdd(NPC_HERO, _unMoveTile);
+				break;
+
+			case 2:
+				_npcM->npcAdd(NPC_RICH, _unMoveTile);
+				break;
+			}
+
+			_npcAddCount = 0;
+		}
+	}
+
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
 		
 		_npcM->update();
 
-		for (int i = 0; i < 4; ++i)
-		{
-			if (_display[i].it != NULL)
-			{
-				_display[i].it->fieldUpdate();
-			}
-		}
+		disPlayUpdate();
 
 		_cellerFrameTimer++;
-		if (_cellerFrameTimer > 7)
+		if (_cellerFrameTimer > 3)
 		{
 			if (_cellerIndex < _celler->GetMaxFrameX() - 1)
 			{
 				_cellerIndex++;
+				_isCeller = true;
+			}
+			else
+			{
+				_isCeller = false;
 			}
 			_cellerFrameTimer = 0;
 		}
 	}
-
-
-	disPlayUpdate();
 	
 	npcProcess();
 	
@@ -177,65 +202,29 @@ void shopStage::renderMap()
 
 void shopStage::disPlaySet()
 {
-	_display[0].init(Vector2(635, 870), NULL, 0, 0, false);
-	_display[1].init(Vector2(635, 930), NULL, 0, 0, false);
-	_display[2].init(Vector2(700, 870), NULL, 0, 0, false);
-	_display[3].init(Vector2(700, 930), NULL, 0, 0, false);
+	_display1 = new display;
+	_display1->init(0, Vector2(635, 870), NULL, 0, 0, false);
+
+	_display2 = new display;
+	_display2->init(1, Vector2(635, 930), NULL, 0, 0, false);
+
+	_display3 = new display;
+	_display3->init(2, Vector2(700, 870), NULL, 0, 0, false);
+
+	_display4 = new display;
+	_display4->init(3, Vector2(700, 930), NULL, 0, 0, false);
 }
 
 void shopStage::disPlayUpdate()
 {
-	for (int i = 0; i < 4; ++i)
-	{
-		_display[i].count = INVENTORY->getShowCase()[i * 2].count;
-		_display[i].it = INVENTORY->getShowCase()[i * 2].item;
-		_display[i].settingPrice = INVENTORY->getShowCase()[i * 2].totalPrice;
-		_display[i].rightPrice = INVENTORY->getShowCase()[i * 2].originalPrice;
-
-
-		if (_display[i].it != NULL)
-		{
-			if(INVENTORY->getIsInven())
-				_display[i].it->setItemPos(_display[i].pos.x, _display[i].pos.y);
-
-			_display[i].isActive = true;
-			_display[i].it->setShakeY(_display[i].pos.y);
-		}
-		else
-		{
-			_display[i].isActive = false;
-		}
-
-		RECT temp;
-		for (int j = 0; j < _npcM->getVnpc().size(); ++j)
-		{
-			if(IntersectRect(&temp, &_display[i].rc.GetRect(), &_npcM->getVnpc()[j]->getNPCRect().GetRect()))
-			{
-				_display[i].isPeople = true;
-				break;
-			}
-			
-			if(j == _npcM->getVnpc().size()-1)
-				_display[i].isPeople = false;
-		}
-
-
-		if (_display[i].isPeople)
-		{
-			cout << i << " 번째 : "<< "충돌 O" << endl;
-		}
-		if (!_display[i].isPeople)
-		{
-			cout << i << " 번째 : " << "충돌 X" << endl;
-		}
-	}
+	_display1->update();
+	_display2->update();
+	_display3->update();
+	_display4->update();
 }
 
 void shopStage::doorUpdate()
 {
-	if(KEYMANAGER->isOnceKeyDown('E'))
-		_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
-
 	switch (_doorState)
 	{
 	case DOOR_CLOSE:
@@ -258,7 +247,7 @@ void shopStage::doorUpdate()
 				break;
 			}
 
-			if(i == _npcM->getVnpc().size() - 1)
+			if (i == _npcM->getVnpc().size() - 1)
 				_doorState = DOOR_CLOSING;
 		}
 		break;
@@ -295,57 +284,16 @@ void shopStage::npcProcess()
 	for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 	{
 		// 카운터에 도착하면
-		if (_npcM->getVnpc()[i]->getIsCount())
+		if (_npcM->getVnpc()[i]->getIsCount() && !_isCeller)
 		{
 			// 팔았다는 카운터 애니메이션재생
 			_cellerIndex = 0;
 			_npcM->getVnpc()[i]->setIsCount(false);
 		}
-
-		for (int j = 0; j < 4; ++j)
-		{
-			if (_display[j].isPeople)
-			{
-				_npcM->getVnpc()[i]->setIsAnotherPerson(j, true);
-			}
-			else
-			{
-				_npcM->getVnpc()[i]->setIsAnotherPerson(j, false);
-			}
-		}
-
-		// 선택한 아이템에 따라 넘겨줌
-		if (_display[_npcM->getVnpc()[i]->getRndItem()].it != NULL)
-		{
-			switch (_npcM->getVnpc()[i]->getRndItem())
-			{
-			case 0:
-				_npcM->getVnpc()[i]->setRightPrice(_display[0].rightPrice);
-				_npcM->getVnpc()[i]->setSettingPrice(_display[0].settingPrice);
-				break;
-
-			case 1:
-				_npcM->getVnpc()[i]->setRightPrice(_display[1].rightPrice);
-				_npcM->getVnpc()[i]->setSettingPrice(_display[1].settingPrice);
-				break;
-
-			case 2:
-				_npcM->getVnpc()[i]->setRightPrice(_display[2].rightPrice);
-				_npcM->getVnpc()[i]->setSettingPrice(_display[2].settingPrice);
-				break;
-
-			case 3:
-				_npcM->getVnpc()[i]->setRightPrice(_display[3].rightPrice);
-				_npcM->getVnpc()[i]->setSettingPrice(_display[3].settingPrice);
-				break;
-			}
-		}
-
-		// 구매했을때
-		if (_npcM->getVnpc()[i]->getIsBuy())
-		{
-			_npcM->getVnpc()[i]->setItem(_display[_npcM->getVnpc()[i]->getRndItem()].it->getType());
-			INVENTORY->resetShowCase(_npcM->getVnpc()[i]->getRndItem() * 2);
-		}
 	}
+}
+
+void shopStage::npcSet()
+{
+
 }

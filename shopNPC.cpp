@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "shopNPC.h"
+#include "display.h"
 
 HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 {
 	// 이미지
 	{
-		_img = ImageManager::GetInstance()->AddFrameImage("npc1", L"Image/Shop/Guy.png", 8, 4);
+		ImageManager::GetInstance()->AddFrameImage("npc1", L"Image/Shop/Guy.png", 8, 4);
+		ImageManager::GetInstance()->AddFrameImage("npc2", L"Image/Shop/Hero.png", 8, 4);
+		ImageManager::GetInstance()->AddFrameImage("npc3", L"Image/Shop/Girl.png", 8, 4);
 		ImageManager::GetInstance()->AddImage("thinkBox", L"Image/Shop/thinkBox.png");
 		_emotionImg = ImageManager::GetInstance()->AddFrameImage("thinking", L"Image/Shop/think.png", 3, 1);
 		ImageManager::GetInstance()->AddFrameImage("TooCheap", L"Image/Shop/tooCheap.png", 13, 1);
@@ -14,11 +17,23 @@ HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 		ImageManager::GetInstance()->AddFrameImage("Expensive", L"Image/Shop/expensive.png", 5, 1);
 	}
 
+	switch (type)
+	{
+	case NPC_NOMAL:
+		_img = ImageManager::GetInstance()->FindImage("npc1");
+		break;
+	case NPC_HERO:
+		_img = ImageManager::GetInstance()->FindImage("npc2");
+		break;
+	case NPC_RICH:
+		_img = ImageManager::GetInstance()->FindImage("npc3");
+		break;
+	}
+
 
 	// 동적 할당
 	{
 		_aStar = new aStar;
-		_item = new item;
 	}
 
 	// 변수 초기화
@@ -39,6 +54,7 @@ HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 		_selectPrice = 0;
 		_settingPrice = 0;
 		_rndChoiceItem = RND->getInt(4);
+		_oldRndChoiceItem = -1;
 		_npcActionState = NPC_ENTER;
 		_npcEmotionState = NPC_EMOTION_NULL;
 		_npcType = type;
@@ -50,7 +66,7 @@ HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 	{
 		//unMoveSet();
 		wayPointSet();
-		chooseItem();
+		//chooseItem();
 	}
 
 	_aStar->init(WINSIZEX / 50, 1400 / 50, _centerX / 50, _centerY / 50 - 3, _goToPoint.x, _goToPoint.y, _vUnMove, true);
@@ -67,13 +83,19 @@ void shopNPC::release()
 
 void shopNPC::updadte()
 {
-	directionCheck();
+	for (int i = 0; i < 4; ++i)
+	{
+		if (INVENTORY->getShowCase()[i*2].item != NULL)
+		{
+			_isExist = true;
+			break;
+		}
+
+		if (i == 4)
+			_isExist = false;
+	}
 
 	_aStar->update(_centerX / 50, _centerY / 50, _goToPoint.x, _goToPoint.y);
-	_item->setItemPos(_centerX, _centerY - 50);
-	_item->update();
-
-	//cout << _item->getIndex() << endl;
 
 	_thinkBoxX = _centerX;
 	_thinkBoxY = _centerY - 80;
@@ -91,21 +113,50 @@ void shopNPC::updadte()
 		}
 		else
 		{
-			_npcActionState = NPC_SHOPPING;
-			_aStar->changeWayPoint();
+			if (_isExist)
+			{
+				chooseItem();
+			}
+			else
+			{
+				choosePt();
+			}
 		}
 		break;
 
 	case NPC_IDLE:
+		_delayTimer++;
+		if (_delayTimer > 100)
+		{
+			if (_checkItemCount < 4 && _isExist)
+			{
+				if (_idleCount > 3)
+				{
+					_npcActionState = NPC_AWAY;
+					_goToPoint = _eixtPoint;
+					_aStar->changeWayPoint();
+					break;
+				}
+				chooseItem();
+			}
+			else
+			{
+				_npcActionState = NPC_AWAY;
+				_goToPoint = _eixtPoint;
+				_aStar->changeWayPoint();
+			}
+			_delayTimer = 0;
+		}
+		break;
+
+	case NPC_WALK:
 		frameUpdate();
 		move();
-
 		break;
 
 	case NPC_SHOPPING:
 		frameUpdate();
 		move();
-
 		break;
 
 	case NPC_CHECKITEM:
@@ -139,15 +190,18 @@ void shopNPC::updadte()
 			{
 				if (_delayTimer > 290 && _delayTimer < 292)
 				{
-					_isCheckEnd = true;
+					INVENTORY->getShowCase()[_oldRndChoiceItem * 2].isPeople = false;
 				}
 				if (_delayTimer > 300)
 				{
-					if (_checkItemCount < 4)
+					if (_checkItemCount < 4 && _isExist)
+					{
 						chooseItem();
-
-					_npcActionState = NPC_SHOPPING;
-					_npcEmotionState = NPC_EMOTION_NULL;
+					}
+					else if (_checkItemCount < 4 && !_isExist)
+					{
+						choosePt();
+					}
 					_delayTimer = 0;
 				}
 			}
@@ -170,10 +224,15 @@ void shopNPC::updadte()
 				_indexY = 3;
 			}
 		}
+		if (_delayTimer > 199 && _delayTimer <= 200)
+		{
+			_itemImg = INVENTORY->getShowCase()[_oldRndChoiceItem * 2].item->getImg();
+			INVENTORY->getShowCase()[_oldRndChoiceItem * 2].item = NULL;
+		}
 		if (_delayTimer > 200)
 		{
 			_npcEmotionState = NPC_EMOTION_NULL;
-			_isCheckEnd = true;
+			INVENTORY->getShowCase()[_oldRndChoiceItem * 2].isPeople = false;
 			frameUpdate();
 			move();
 		}
@@ -181,18 +240,27 @@ void shopNPC::updadte()
 	case NPC_AWAY:
 		frameUpdate();
 		move();
+		_delayTimer = 0;
 		break;
 	}
 
 
 	_rc = RectMakePivot(Vector2(_centerX, _centerY), Vector2(50, 50), Pivot::Center);
+
 }
 
 void shopNPC::render()
 {
 	_aStar->render();
 
-	CAMERAMANAGER->zOrderFrameRender(_img, _centerX, _centerY, _rc.bottom, _indexX, _indexY, 1.2f, 1.f);
+	if (_npcType == NPC_HERO)
+	{
+		CAMERAMANAGER->zOrderFrameRender(_img, _centerX, _centerY, _rc.bottom, _indexX, _indexY, 0.7f, 1.f);
+	}
+	else
+	{
+		CAMERAMANAGER->zOrderFrameRender(_img, _centerX, _centerY, _rc.bottom, _indexX, _indexY, 1.2f, 1.f);
+	}
 	//CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Green, 1.f, 2.f);
 
 	if (_npcEmotionState != NPC_EMOTION_NULL)
@@ -201,8 +269,8 @@ void shopNPC::render()
 		CAMERAMANAGER->zOrderFrameRender(_emotionImg, _thinkBoxX + 18, _thinkBoxY + 17, _rc.bottom + _thinkBoxY + 17, _emotionIndexX, 0 , 1.4f,1.f);
 	}
 
-	if(_npcActionState == NPC_BUY && _item->getImg() != NULL)
-		_item->cameraRender();
+	if (_npcActionState == NPC_BUY && _itemImg != NULL)
+		CAMERAMANAGER->zOrderRender(_itemImg, _rc.left + _itemImg->GetWidth()/2, _rc.top - 15,_rc.bottom + 10, 1.f,1.f);
 	
 	if (KEYMANAGER->isToggleKey('V'))
 	{
@@ -263,6 +331,7 @@ void shopNPC::emotionFrameUpdate()
 
 void shopNPC::move()
 {
+	directionCheck();
 	if (_aStar->getVShortest().size() > 0)
 	{
 		_angle = getAngle(_centerX, _centerY, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y);
@@ -279,6 +348,10 @@ void shopNPC::move()
 
 		if (getDistance(_centerX, _centerY, _aStar->getVShortest()[0]->center.x, _aStar->getVShortest()[0]->center.y) < 1)
 		{
+			if (_npcActionState == NPC_WALK)
+			{
+				_npcActionState = NPC_IDLE;
+			}
 			if (_npcActionState == NPC_SHOPPING)
 			{
 				_npcActionState = NPC_CHECKITEM;
@@ -377,7 +450,9 @@ void shopNPC::wayPointSet()
 	_aroundPoint[1].y = 21;
 	
 	_aroundPoint[2].x = 19;
-	_aroundPoint[2].y = 22;
+	_aroundPoint[2].y = 19;
+
+	_goToPoint = _itemWayPoint[0];
 }
 
 void shopNPC::directionCheck()
@@ -412,14 +487,32 @@ void shopNPC::directionCheck()
 void shopNPC::chooseItem()
 {	
 	// 중복 방지 (안 본 아이템이 나올때 까지 루프)
+	int count = 0;
 	while (true)
 	{
+		count++;
 		_rndChoiceItem = RND->getInt(4);
 
-		if (!_checkItem[_rndChoiceItem] && !_isAnotherPerson[_rndChoiceItem])
+		if (!_checkItem[_rndChoiceItem] && INVENTORY->getShowCase()[_rndChoiceItem *2].item != NULL)
 			break;
+
+		if (count > 10)
+		{
+			choosePt();
+			return;
+		}
+
 	}
 
+	if (INVENTORY->getShowCase()[_rndChoiceItem * 2].isPeople)
+	{
+		choosePt();
+		return;
+	}
+
+	INVENTORY->getShowCase()[_rndChoiceItem * 2].isPeople = true;
+
+	_oldRndChoiceItem = _rndChoiceItem;
 	// 확인한 아이템 숫자 늘려주기
 	_checkItemCount++;
 
@@ -445,13 +538,29 @@ void shopNPC::chooseItem()
 		_checkItem[3] = true;
 		break;
 	}
+	_settingPrice = INVENTORY->getShowCase()[_rndChoiceItem * 2].totalPrice;
+	_rightPrice = INVENTORY->getShowCase()[_rndChoiceItem * 2].originalPrice;
 
 	_aStar->changeWayPoint();
+
+	_npcActionState = NPC_SHOPPING;
 }
 
 void shopNPC::choosePt()
 {
-	_rndChoicePt = RND->getInt(3);
+	int oldPt = _rndChoicePt;
+	_npcEmotionState = NPC_EMOTION_NULL;
+	_idleCount++;
+
+	while (true)
+	{
+		_rndChoicePt = RND->getInt(3);
+
+		if (oldPt != _rndChoicePt)
+			break;
+	}
+
+	cout << _rndChoicePt << endl;
 
 	switch (_rndChoicePt)
 	{
@@ -467,4 +576,8 @@ void shopNPC::choosePt()
 		_goToPoint = _aroundPoint[2];
 		break;
 	}
+
+	_aStar->changeWayPoint();
+
+	_npcActionState = NPC_WALK;
 }
