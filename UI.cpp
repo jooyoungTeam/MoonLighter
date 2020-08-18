@@ -10,21 +10,27 @@ HRESULT UI::init()
 	_playerHpImg = ImageManager::GetInstance()->FindImage("HPbar");
 	_bossHpImg = ImageManager::GetInstance()->FindImage("boss_HP");
 
-	_bossHpWidth = 38;
-
 	_backBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
 	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
 
 	_weapon = RectMakePivot(Vector2(1456, 119), Vector2(98, 98), Pivot::LeftTop);
 	_portal = RectMakePivot(Vector2(1458, 778), Vector2(100, 100), Pivot::LeftTop);
 
-	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::Center);
+	_bossBackBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, 38), Pivot::Center);
+	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, 38), Pivot::Center);
 
 	_scene = CURRENT_SCENE::TEMP;
 
-	_hpWidth = (_HpBar.right - _HpBar.left) / 2;
 	_frameCount = 0;
 	_frameY = 0;
+	_bossFrameY = 0;
+	_moneyFrameY = 0;
+	_alpha = 1.f;
+
+	_isHit = false;
+	_bossHit = false;
+
+	_bossStage == BOSS_STAGE::STAGE_START;
 
 	return S_OK;
 }
@@ -69,12 +75,18 @@ void UI::render()
 	//소지금
 	D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
 
-	if (_bossStage == BOSS_STAGE::STAGE_START)
+	if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+	{
+		ImageManager::GetInstance()->FindImage("boss_scroll")->SetAlpha(_alpha);
+		ImageManager::GetInstance()->FindImage("boss_scroll")->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 100), 0, _bossFrameY);
+	}
+
+	if (_bossStage == BOSS_STAGE::BOSS_APEEAR || _bossStage == BOSS_STAGE::STAGE_START)
 	{
 		//보스 hp바
 		//D2DRenderer::GetInstance()->DrawRectangle(_bossHpBar, D2DRenderer::DefaultBrush::White, 1.f);
 		ImageManager::GetInstance()->FindImage("boss_bar")->Render(Vector2(_bossHpBar.left, _bossHpBar.top));
-		ImageManager::GetInstance()->FindImage("boss_HP")->FrameRender(Vector2(_bossHpBar.GetCenter().x - 2, _bossHpBar.GetCenter().y), 0, _bossFrameY);
+		ImageManager::GetInstance()->FindImage("boss_HP")->FrameRender(Vector2(_bossBackBar.GetCenter().x - 2, _bossBackBar.GetCenter().y), 0, _bossFrameY);
 	}	
 
 	//장비창 포션 자리가 비어있지 않다면
@@ -91,6 +103,7 @@ void UI::render()
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 	}
 
+	//플레이어 맞을 때 화면 깜박임
 	if (_alphaCount == 1 && _player->getHitCondition())
 	{
 		ImageManager::GetInstance()->FindImage("hit_screen")->SetAlpha(0.5);
@@ -101,14 +114,11 @@ void UI::render()
 void UI::update()
 {
 	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
+	//_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::Center);
 
 	if (_player->getHitCondition())
 	{
 		_isHit = true;
-	}
-
-	if (_player->getHitCondition())
-	{
 		_alphaCount++;
 	}
 
@@ -126,6 +136,7 @@ void UI::update()
 	draw();	
 
 	setPlayerHpBar();
+	setBossHpBar();
 	setMoneyBag();
 }
 
@@ -139,7 +150,7 @@ void UI::setPlayerHpBar()
 	_hpWidth = (_player->getplayerCurrentHp() / 150) * _HpBar.GetWidth();
 }
 
-void UI::setBossHpBar(int bossHp)
+void UI::setBossHpBar()
 {
 
 }
@@ -153,22 +164,41 @@ void UI::draw()
 			_frameY++;
 			if (_frameY >= _playerHpImg->GetMaxFrameY())
 			{
-				_isHit = false;
 				_frameY = 0;
+				_isHit = false;
 			}
-		}			
+		}		
 
 		if (_bossHit)
 		{
 			_bossFrameY++;
-			if (_bossFrameY >= _bossHpImg->GetMaxFrameX())
+			if (_bossFrameY >= _bossHpImg->GetMaxFrameY())
 			{
 				_bossFrameY = 0;
 				_bossHit = false;
 			}
-		}		
-		_frameCount = 0;
+		}	
 	}	
+
+	if (_frameCount % 5 == 0)
+	{
+		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		{
+			_bossFrameY++;
+			if (_bossFrameY >= 8)
+			{
+				_bossFrameY = 8;
+				_alpha -= 0.03;
+
+				if (_alpha <= 0)
+				{
+					_bossFrameY = 0;
+					_bossStage = BOSS_STAGE::BOSS_APEEAR;
+				}
+			}
+		}
+		_frameCount = 0;
+	}
 }
 
 void UI::setMoneyBag()

@@ -46,6 +46,18 @@ void itemManager::setItem(ITEMBUNDLE bundle, float x, float y)
 	}
 }
 
+void itemManager::popItem(ITEMTYPE type, float x, float y)
+{
+	//for (int i = 0; i < count; i++)
+	{
+		item* material;
+		material = new item;
+		material->init(type, x, y, x + RND->getFromIntTo(-50, 50), y + RND->getInt(50));
+
+		_vItem.push_back(material);
+	}
+}
+
 void itemManager::erase(int arrNum)
 {
 	_vItem.erase(_vItem.begin() + arrNum);

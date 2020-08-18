@@ -45,21 +45,24 @@ private:
 
 	bool _isShake;						//둥실둥실
 	bool _isDrop;						//아이템 드랍
+
 public:
 	item() {}
 	~item() {}
 
 	HRESULT init(ITEMBUNDLE bundle, float x, float y, float endX, float endY, int count);
+	HRESULT init(ITEMTYPE type, float x, float y, float endX, float endY);
 	HRESULT init(ITEMTYPE type);
-	void render();				//인벤토리용 랜더
-	void cameraRender();	    //필드용 랜더
-	void update();				//인벤토리용 업데이트
-	void fieldUpdate();			//필드용 업데이트
-	void move();				//아이템 드랍시 움직임
-	void follow(FloatRect rc);	//플레이어 쫓아다닐 함수
+	void render();						//인벤토리용 랜더
+	void cameraRender();				//필드용 랜더
+	void update();						//인벤토리용 업데이트
+	void fieldUpdate();					//필드용 업데이트
 	void release();
+
+	void pop();							//아이템 드랍시 움직임
+	void follow(FloatRect rc);			//플레이어 쫓아다닐 함수
 	
-	void category();			//아이템 종류에 따른 정보 정리
+	void category();					//아이템 종류에 따른 정보 정리
 	void setBundle(int count);			//에너미 종류에 따른 아이템 묶기
 
 
@@ -75,5 +78,7 @@ public:
 	// ================== NPC =================
 	void setItemPos(float x, float y) { _x = x; _y = y; }	// NPC 머리위에 아이템 띄우기 위해 위치 재조정 Setter
 	void setShakeY(float y) { _shakeMaxY = y + 5; _shakeMinY = y; }
+	// ================== 인벤토리 =================
+	void setDrop(BOOL drop = FALSE) { _isDrop = drop; }
 };
 

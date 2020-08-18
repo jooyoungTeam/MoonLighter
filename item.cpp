@@ -24,6 +24,28 @@ HRESULT item::init(ITEMBUNDLE bundle, float x, float y, float endX, float endY, 
 	return S_OK;
 }
 
+HRESULT item::init(ITEMTYPE type, float x, float y, float endX, float endY)
+{
+	_type = type;
+	_x = x;
+	_y = y;
+	_endX = endX;
+	_endY = endY;
+
+	_jumpPower = 3;
+	_gravity = 0.2;
+
+	_shake = 0;
+	_isShake = false;
+	_isDrop = true;
+
+	category();
+
+	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
+
+	return S_OK;
+}
+
 HRESULT item::init(ITEMTYPE type)
 {
 	_type = type;
@@ -48,7 +70,7 @@ void item::cameraRender()
 void item::update()
 {
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
-	move();
+	pop();
 }
 
 void item::fieldUpdate()
@@ -80,7 +102,7 @@ void item::fieldUpdate()
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center);
 }
 
-void item::move()
+void item::pop()
 {
 	if (_isDrop)
 	{
@@ -127,6 +149,7 @@ void item::follow(FloatRect rc)
 
 void item::release()
 {
+	
 }
 
 void item::category()

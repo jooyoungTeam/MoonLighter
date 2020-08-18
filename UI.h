@@ -12,7 +12,7 @@ enum class BOSS_STAGE
 {
 	PLAYER_ENTER,				//플레이어 보스 스테이지 입장
 	BOSS_APEEAR,
-	STAGE_START					//보스 스테이지 시작
+	STAGE_START					//보스 스테이지 시작 (인벤토리 사용 가능?)
 };
 
 class player;
@@ -34,18 +34,19 @@ private:
 	FloatRect _portal;						//펜던트 위치
 	FloatRect _backBar;						//HP바 고정 렉트
 	FloatRect _HpBar;						//HP바 렉트
+	FloatRect _bossBackBar;					//보스 HP바 고정 렉트
 	FloatRect _bossHpBar;					//보스 HP바 렉트
 
 	int _count;								//펜던트 활성화될 때까지 시간
 	int _bossCount;							//보스 방 입장 한 후 시간
-	int _alphaCount;
+	int _alphaCount;						//플레이어 hit 일 때 화면 깜박이는 제한카운트
 	int _frameCount;						//맞았을 때 HP바 프레임 돌릴 시간
 	int _frameY;							//HP바 프레임Y
 	int _bossFrameY;						//보스HP바 프레임Y
 	int _moneyFrameY;						//돈주머니 프레임Y
 
-	float _hpWidth;
-	float _bossHpWidth;
+	float _hpWidth;							//플레이어 체력바 너비
+	float _bossHpWidth;						//보스 체력바 너비
 	float _alpha;
 
 	bool _isHit;							//플레이어 맞을 때
@@ -64,15 +65,19 @@ public:
 	void release();
 
 	void setPlayerHpBar();
-	void setBossHpBar(int bossHp);
+	void setBossHpBar();
 	void draw();
 	void setMoneyBag();
 
 public:
 	CURRENT_SCENE getUIScene() { return _scene; }							//현재 UI 씬 가져가기
+	BOSS_STAGE getBossScene() { return _bossStage; }						//현재 보스 씬 가져가기
 
 public:
 	void setUIScene(CURRENT_SCENE scene) { _scene = scene; }				//현재 UI 씬 정해주기
+	void setBossScene(BOSS_STAGE stage) { _bossStage = stage; }				//현재 보스 씬 정해주기
+	void setBossY(int y) { _bossFrameY = y; }								//임시
+	void setAlpha(float a) { _alpha = a; }
 
 public:
 	//플레이어 참조용

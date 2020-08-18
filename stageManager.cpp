@@ -53,8 +53,8 @@ void stageManager::render()
 	SCENEMANAGER->render();
 	if (KEYMANAGER->isToggleKey('R'))
 	{
-		_ui->render();
 		_itemMg->render();
+		_ui->render();
 	}
 	if (INVENTORY->getIsInven()) INVENTORY->render(); 
 }
@@ -67,6 +67,14 @@ void stageManager::update()
 	SCENEMANAGER->update();
 
 	KEYANIMANAGER->update();
+
+	if (KEYMANAGER->isOnceKeyDown('Z'))
+	{
+		/*for(int i = 0; i <INVENSPACE; i++)
+		_itemMg->popItem(INVENTORY->getInvenItem()[i]->getType(), _test.GetCenter().x, _test.GetCenter().y);*/
+
+		INVENTORY->popInven();
+	}
 
 	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{

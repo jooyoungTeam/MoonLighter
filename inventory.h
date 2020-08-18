@@ -124,6 +124,7 @@ public:
 
 	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void closeInven();										//인벤 닫으면
+	void popInven();//인벤 비우기
 
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
@@ -140,6 +141,9 @@ public:
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
+
+	item* getInvenItem() { 
+		return _inven[INVENSPACE].item; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
