@@ -16,6 +16,11 @@ HRESULT bossStage::init()
 	_enemy->init();
 
 	loadMap();
+
+
+	_miniMap = new miniMap;
+	_miniMap->init(BOSSTILEX, BOSSTILEY);
+	_miniMap->setImage(_mapImg);
 	return S_OK;
 }
 
@@ -26,10 +31,16 @@ void bossStage::render()
 	_enemy->render();
 	renderMap();
 	CAMERAMANAGER->zOrderALLRender();
+
+	POINT pos;
+	pos.x = _player->getX();
+	pos.y = _player->getY();
+	_miniMap->render(_objectManager, pos);
 }
 
 void bossStage::update()
 {
+	_miniMap->update();
 	_player->update();
 	_enemy->update();
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());

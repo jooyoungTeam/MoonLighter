@@ -4,17 +4,23 @@
 HRESULT townStage::init()
 {
 	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
+
 	_objectManager = new objectManager;
 	_objectManager->init();
 
 	_player->setPlayerPos(1000, 700);
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
+
+	_miniMap = new miniMap;
+    _miniMap->init(TOWNTILEX, TOWNTILEY);
+	_miniMap->setImage(_mapImg);
 	return S_OK;
 }
 
 void townStage::update()
 {
+	_miniMap->update();
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
@@ -26,12 +32,18 @@ void townStage::update()
 void townStage::render()
 {
 	mapToolRender();
-
 	_player->render();
+
+
+	POINT pos;
+	pos.x = _player->getX();
+	pos.y = _player->getY();
+	_miniMap->render(_objectManager, pos);
 }
 
 void townStage::release()
 {
+	//_miniMap->release();
 }
 void townStage::loadMap()
 {
