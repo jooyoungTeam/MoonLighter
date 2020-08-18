@@ -10,13 +10,16 @@ HRESULT UI::init()
 	_playerHpImg = ImageManager::GetInstance()->FindImage("HPbar");
 	_bossHpImg = ImageManager::GetInstance()->FindImage("boss_HP");
 
+	_hpWidth = 35;
+	_bossHpWidth = 38;
+
 	_backBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
-	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
+	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
 
 	_weapon = RectMakePivot(Vector2(1456, 119), Vector2(98, 98), Pivot::LeftTop);
 	_portal = RectMakePivot(Vector2(1458, 778), Vector2(100, 100), Pivot::LeftTop);
 
-	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, 38), Pivot::Center);
+	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::Center);
 
 	_scene = CURRENT_SCENE::TEMP;
 
@@ -33,7 +36,8 @@ void UI::render()
 
 	//HP바
 	//D2DRenderer::GetInstance()->DrawRectangle(_backBar, D2DRenderer::DefaultBrush::White, 1.f);
-	_playerHpImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY);
+	//D2DRenderer::GetInstance()->DrawRectangle(_HpBar, D2DRenderer::DefaultBrush::White, 1.f);
+	_playerHpImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY, _hpWidth, 35);
 
 	//무기 자리 렉트
 	//D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
@@ -95,6 +99,8 @@ void UI::render()
 
 void UI::update()
 {
+	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
+
 	if (_player->getHitCondition())
 	{
 		_isHit = true;
@@ -108,6 +114,7 @@ void UI::update()
 	_frameCount++;
 	draw();	
 
+	setPlayerHpBar();
 	setMoneyBag();
 }
 
@@ -115,9 +122,10 @@ void UI::release()
 {
 }
 
-void UI::setPlayerHpBar(int playerHp)
+void UI::setPlayerHpBar()
 {	
-
+	//_width = (currentGauge / maxGauge) * _progressBarBottom->getWidth();
+	_hpWidth = (_player->getplayerCurrentHp() / 100) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar(int bossHp)

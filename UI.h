@@ -43,6 +43,9 @@ private:
 	int _bossFrameY;						//보스HP바 프레임Y
 	int _moneyFrameY;						//돈주머니 프레임Y
 
+	float _hpWidth;
+	float _bossHpWidth;
+
 	bool _isHit;							//플레이어 맞을 때
 	bool _bossHit;							//보스 맞을 때
 
@@ -58,7 +61,7 @@ public:
 	void update();
 	void release();
 
-	void setPlayerHpBar(int playerHp);
+	void setPlayerHpBar();
 	void setBossHpBar(int bossHp);
 	void draw();
 	void setMoneyBag();
