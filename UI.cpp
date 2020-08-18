@@ -147,7 +147,7 @@ void UI::release()
 void UI::setPlayerHpBar()
 {	
 	//_width = (currentGauge / maxGauge) * _progressBarBottom->getWidth();
-	_hpWidth = (_player->getplayerCurrentHp() / 150) * _HpBar.GetWidth();
+	_hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar()

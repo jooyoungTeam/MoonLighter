@@ -51,11 +51,8 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	if (KEYMANAGER->isToggleKey('R'))
-	{
-		_itemMg->render();
-		_ui->render();
-	}
+	_itemMg->render();
+	_ui->render();
 	if (INVENTORY->getIsInven()) INVENTORY->render(); 
 }
 
