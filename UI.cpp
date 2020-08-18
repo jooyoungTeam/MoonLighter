@@ -8,7 +8,8 @@ HRESULT UI::init()
 	_secondWeapon = ImageManager::GetInstance()->FindImage("UI_weapon_2");
 	_pendant = ImageManager::GetInstance()->FindImage("UI_pendant");
 	_pendantRing = ImageManager::GetInstance()->FindImage("UI_pendant_ring");
-	_HpBarImg = ImageManager::GetInstance()->FindImage("HPbar");
+	_playerHpImg = ImageManager::GetInstance()->FindImage("HPbar");
+	_bossHpImg = ImageManager::GetInstance()->FindImage("boss_HP");
 
 	_backBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
 	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
@@ -31,7 +32,7 @@ void UI::render()
 
 	//HP바
 	//D2DRenderer::GetInstance()->DrawRectangle(_backBar, D2DRenderer::DefaultBrush::White, 1.f);
-	_HpBarImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY);
+	_playerHpImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY);
 
 	//무기 자리 렉트
 	//D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
@@ -78,28 +79,37 @@ void UI::render()
 
 void UI::update()
 {
-	if (_isHit)
+	if (_player->getHitCondition())
 	{
 		_frameCount++;
 
 		if (_frameCount % 5 == 0)
 		{
 			_frameY++;
-			if (_frameY >= _HpBarImg->GetMaxFrameY())
+			if (_frameY >= _playerHpImg->GetMaxFrameY())
 			{
 				_frameY = 0;
-				_isHit = false;
 			}
 			_frameCount = 0;
 		}
 	}	
+
+	else 
+	{
+		_frameY = 0;
+	}
 }
 
 void UI::release()
 {
 }
 
-void UI::setUIHp(int playerHp)
+void UI::setPlayerHpBar(int playerHp)
+{	
+
+}
+
+void UI::setBossHpBar(int bossHp)
 {
-	_frameY = 0;
+
 }
