@@ -18,10 +18,20 @@ HRESULT enemyManager::init()
 	_y = _player->getY();
 	_rc = _player->getPlayerRc();
 	_bulletDelay = 0;
-	setEnemy();
-
-	_bullet = new bullet;
-	_bullet->init("bullet");
+	_bulletWait = 0;
+	for (int i = 0; i < _vEnemy.size(); ++i)
+	{
+		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+		{
+			_bullet = new bullet;
+			_bullet->init("bullet");
+		}
+		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+		{
+			_bullet = new bullet;
+			_bullet->init("bossBullet");
+		}
+	}
 	
 	_test = false;
 
@@ -47,6 +57,8 @@ void enemyManager::update()
 	}
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
+		_angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
+		_bulletAngle = getAngle(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _player->getX(), _player->getY());
 		if (_vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME)
 		{
 			if (_vEnemy[i]->getIsCol())
@@ -58,21 +70,39 @@ void enemyManager::update()
 				_test = false;
 			}
 		}
-	}
 
-	if (_bulletDelay > 90)
+		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+		{
+			_bulletWait = 90;
+		}
+		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+		{
+			if (_vEnemy[i]->getBossPattern() == BOSS_BULLET_FIRE)
+			{
+				_bulletWait = 40;
+			}
+			if (_vEnemy[i]->getBossPattern() == BOSS_BULLET_PFIRE)
+			{
+				_bulletWait = 30;
+			}
+		}
+	}
+	
+	if (_bulletDelay > _bulletWait)
 	{
 		potBullet();
 	}
 	playerCol();
 	bulletCol();
-	_bullet->update();
 
+	_bullet->update();
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
+
 		if (_vEnemy[i]->getRealDead())
 		{
 			enemyDead(i);
+			break;
 		}
 	}
 
@@ -84,8 +114,15 @@ void enemyManager::render()
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		_vEnemy[i]->render();
+		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+		{
+			_bullet->potRender();
+		}
+		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+		{
+			_bullet->bossRender();
+		}
 	}
-	_bullet->render();
 
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::DimGray, 1.0);
 	//D2DRenderer::GetInstance()->DrawRectangle(_rc, D2DRenderer::DefaultBrush::Black, 1.f);
@@ -93,87 +130,92 @@ void enemyManager::render()
 	EFFECTMANAGER->render();
 }
 
-void enemyManager::setEnemy()
+void enemyManager::setEnemy1()
 {
-	int i = 1;
-
-	enemy* boss1;
-	boss1 = new boss;
-	boss1->playerCheck(_x, _y, _rc);
-	boss1->init(i, 1360, 300, 590, 650, ENEMY_BOSS);
-	_vEnemy.push_back(boss1);
-
-
-	enemy* redS1;
-	redS1 = new redSlime;
-	redS1->playerCheck(_x, _y, _rc);
-	redS1->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
-	_vEnemy.push_back(redS1);
-	
-	enemy* redS12;
-	redS12 = new redSlime;
-	redS12->playerCheck(_x, _y, _rc);
-	redS12->init(i, 200, 200, 70, 70, ENEMY_RED_SLIME);
-	_vEnemy.push_back(redS12);
-
-
-
 	enemy* gol1;
 	gol1 = new golem;
 	gol1->playerCheck(_x, _y, _rc);
-	gol1->init(i, 700, 500, 80 , 100, ENEMY_GOLEM);
+	gol1->init(700, 500, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
 	enemy* gol12;
 	gol12 = new golem;
 	gol12->playerCheck(_x, _y, _rc);
-	gol12->init(i, 800, 500, 80, 100, ENEMY_GOLEM);
+	gol12->init(800, 500, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol12);
-	
-
 
 	enemy* pot1;
 	pot1 = new pot;
 	pot1->playerCheck(_x, _y, _rc);
-	pot1->init(i , 1200, 500, 50, 50, ENEMY_POT);
+	pot1->init(1200, 500, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot1);
 
 	enemy* pot22;
 	pot22 = new pot;
 	pot22->playerCheck(_x, _y, _rc);
-	pot22->init(i, 1200, 700, 50, 50, ENEMY_POT);
+	pot22->init(1200, 700, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot22);
-	
+
 
 
 	enemy* pot2;
 	pot2 = new pot;
 	pot2->playerCheck(_x, _y, _rc);
-	pot2->init(i, 200, 300, 50, 50, ENEMY_POT);
+	pot2->init(200, 300, 50, 50, ENEMY_POT);
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
 
+
+}
+
+void enemyManager::setEnemy2()
+{
+
+
+
+	enemy* redS1;
+	redS1 = new redSlime;
+	redS1->playerCheck(_x, _y, _rc);
+	redS1->init(200, 200, 70, 70, ENEMY_RED_SLIME);
+	_vEnemy.push_back(redS1);
+	
+	enemy* redS12;
+	redS12 = new redSlime;
+	redS12->playerCheck(_x, _y, _rc);
+	redS12->init(200, 200, 70, 70, ENEMY_RED_SLIME);
+	_vEnemy.push_back(redS12);
 
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
 	yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(i , 200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
 	bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(i, 400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
 
 
 }
 
+void enemyManager::setBoss()
+{
+	enemy* boss1;
+	boss1 = new boss;
+	boss1->playerCheck(_x, _y, _rc);
+	boss1->init(1360, 300, 590, 650, ENEMY_BOSS);
+	_vEnemy.push_back(boss1);
+}
+
 void enemyManager::potBullet()
 {
+	bool bossChangeAngle;
+	int changeCount;
 	_bulletDelay = 0;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -200,7 +242,16 @@ void enemyManager::potBullet()
 
 		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
 		{
-
+			if (_vEnemy[i]->getBossPattern() == BOSS_BULLET_FIRE)
+			{
+				float random = RND->getFromFloatTo(2.5, 3.8);
+				_bullet->manyFire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), random, 5.f, 10);
+	
+			}
+			if (_vEnemy[i]->getBossPattern() == BOSS_BULLET_PFIRE)
+			{
+				_bullet->fire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _bulletAngle, 10.0f);
+			}
 		}
 	}
 }
@@ -215,6 +266,7 @@ void enemyManager::playerCol()
 		{
 			_vEnemy[i]->setEnemyAttack();
 			_player->setAttackRc(0, 0, 0, 0);
+
 		}
 		for (int i = 0; i < _player->getArrow()->getVArrow().size(); ++i)
 		{
@@ -231,19 +283,17 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPull())
 		{
-			float angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
-			_player->setX(_player->getX() + cosf(angle) * 10);
-			_player->setY(_player->getY() - sinf(angle) * 10);
-			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
-			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
+			_player->setX(_player->getX() + cosf(_angle) * 10);
+			_player->setY(_player->getY() - sinf(_angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(_angle) * 10);
 		}
 		if (_vEnemy[i]->getIsPush())
 		{
-			float angle = getAngle(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _player->getX(), _player->getY());
-			_player->setX(_player->getX() + cosf(angle) * 10);
-			_player->setY(_player->getY() - sinf(angle) * 10);
-			_player->setShadowX(_player->getShadowX() + cosf(angle) * 10);
-			_player->setShadowY(_player->getShadowY() - sinf(angle) * 10);
+			_player->setX(_player->getX() + cosf(_angle) * 10);
+			_player->setY(_player->getY() - sinf(_angle) * 10);
+			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
+			_player->setShadowY(_player->getShadowY() - sinf(_angle) * 10);
 		}
 	}
 

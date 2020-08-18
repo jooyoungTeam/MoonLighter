@@ -38,7 +38,8 @@ void boss::render()
 {
 	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
 //	if (KEYANIMANAGER->findAnimation(""))
-	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
+	//CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
+	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
 	
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
 	for (int i = 0; i < 13; ++i)
@@ -76,94 +77,96 @@ void boss::render()
 
 void boss::attack()
 {
-	_playerCol = playerCol();
-	if (_playerCol)
-	{
-		cout << "플레이어 죽음" << endl;
-	}
-	cout << _attackTimer << endl;
-	if (!_patternCheck)
-	{
-		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(0,5);
-	//	랜덤으로 공격 받는데 
-	//	전에 했던 공격이면 리턴. 다시 받아와라
-		if (_patternRandom == _saveRandom)
-		{
-			attack();
-			return;
-		}
+	attack5();
+	_bossPattern = BOSS_BULLET_PFIRE;
+	//_playerCol = playerCol();
+	//if (_playerCol)
+	//{
+	//	cout << "플레이어 죽음" << endl;
+	//}
+	//cout << _attackTimer << endl;
+	//if (!_patternCheck)
+	//{
+	//	_attackTimer = 0;
+	//	_patternRandom = RND->getFromIntTo(0,5);
+	////	랜덤으로 공격 받는데 
+	////	전에 했던 공격이면 리턴. 다시 받아와라
+	//	if (_patternRandom == _saveRandom)
+	//	{
+	//		attack();
+	//		return;
+	//	}
 
-		if (_patternRandom == 0)
-		{
-			_bossPattern = HAND_FALL;
-		}
-		if (_patternRandom == 1)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = ARM_LONG;
-		}
-		if (_patternRandom == 2)
-		{
-			_bossPattern = ROCK_FALL;
-		}
-		if (_patternRandom == 3)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = PLAYER_PULL;
-		}
-		if (_patternRandom == 4)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = EXPLOSION;
-		}
-		//공격 뭐할지 결정됐음 나가
-		_saveRandom = _patternRandom;
-		_bossAni = ONE;
-		_patternCheck = true;
-		_attack3.isAttack = false;
-	}
-	if (_bossPattern == HAND_FALL)
-	{
-		attack1();
-	}
-	if (_bossPattern == ARM_LONG)
-	{
-		
-		if (!_attack3.isAttack)
-		{
-			attack3();
-		}
-		else
-		{
-			attack2();
-			attack2Angle();
-		}
-	}
-	if (_bossPattern == ROCK_FALL)
-	{
-		attack3();
-	}
-	if (_bossPattern == PLAYER_PULL)
-	{
-		attack3();
-	}
-	if (_bossPattern == EXPLOSION)
-	{
-		attack4();
-	}
+	//	if (_patternRandom == 0)
+	//	{
+	//		_bossPattern = HAND_FALL;
+	//	}
+	//	if (_patternRandom == 1)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = ARM_LONG;
+	//	}
+	//	if (_patternRandom == 2)
+	//	{
+	//		_bossPattern = ROCK_FALL;
+	//	}
+	//	if (_patternRandom == 3)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = PLAYER_PULL;
+	//	}
+	//	if (_patternRandom == 4)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = EXPLOSION;
+	//	}
+	//	//공격 뭐할지 결정됐음 나가
+	//	_saveRandom = _patternRandom;
+	//	_bossAni = ONE;
+	//	_patternCheck = true;
+	//	_attack3.isAttack = false;
+	//}
+	//if (_bossPattern == HAND_FALL)
+	//{
+	//	attack1();
+	//}
+	//if (_bossPattern == ARM_LONG)
+	//{
+	//	
+	//	if (!_attack3.isAttack)
+	//	{
+	//		attack3();
+	//	}
+	//	else
+	//	{
+	//		attack2();
+	//		attack2Angle();
+	//	}
+	//}
+	//if (_bossPattern == ROCK_FALL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == PLAYER_PULL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == EXPLOSION)
+	//{
+	//	attack4();
+	//}
 }
 
 void boss::dead()
@@ -478,6 +481,11 @@ void boss::attack4()
 		}
 
 	
+
+}
+
+void boss::attack5()
+{
 
 }
 

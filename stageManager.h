@@ -7,18 +7,23 @@
 #include "bossStage.h"
 #include "shopStage.h"
 #include "townStage.h"
+#include "dungeonStage2.h"
+#include "spaStage.h"
+#include "enterenceStage.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class stageManager : public gameNode
 {
 private:
-	player*       _player;
-	dungeonStage* _dungeon;
-	shopStage*    _shop;
-	townStage*    _town;
-	bossStage*    _boss;
+	player*         _player;
+	dungeonStage*   _dungeon;
+	shopStage*      _shop;
+	townStage*      _town;
+	bossStage*      _boss;
 
-
+	dungeonStage2*  _dungeon2;
+	spaStage*       _spa;
+	enterenceStage* _enterence;
 	UI* _ui;
 	itemManager* _itemMg;
 public:

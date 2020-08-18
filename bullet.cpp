@@ -38,12 +38,22 @@ void bullet::update()
 	}
 }
 
-void bullet::render()
+void bullet::potRender()
 {
 	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
 	{
 		CAMERAMANAGER->frameRender(_viBullet->img, _viBullet->x, _viBullet->y, _viBullet->index, 0);
-		_viBullet->img->SetScale(1.5);
+		_viBullet->img->SetScale(2.5f);
+		//_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
+		//D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
+	}
+}
+void bullet::bossRender()
+{
+	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
+	{
+		CAMERAMANAGER->render(_viBullet->img, _viBullet->x, _viBullet->y, 1.0f);
+		//_viBullet->img->SetScale(2.5f);
 		//_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
 		//D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
 	}
@@ -51,6 +61,7 @@ void bullet::render()
 
 void bullet::fire(float x, float y, float angle, float speed)
 {
+
 	if (80 < _vBullet.size()) return;
 	tagBullet bullet;
 	ZeroMemory(&bullet, sizeof(tagBullet));
@@ -64,6 +75,43 @@ void bullet::fire(float x, float y, float angle, float speed)
 	_vBullet.push_back(bullet);
 
 
+
+
+}
+
+void bullet::manyFire(float x, float y, float angle, float speed, float bulletNum)
+{
+	for (int i = 0; i < bulletNum; ++i)
+	{
+		if (300 < _vBullet.size()) return;
+		tagBullet bullet;
+		ZeroMemory(&bullet, sizeof(tagBullet));
+		bullet.img = ImageManager::GetInstance()->FindImage(_imageName);
+		bullet.speed = speed;
+		bullet.x = bullet.sX = x;
+		bullet.y = bullet.sY = y;
+		bullet.angle = angle + 0.3f *i;
+
+		bullet.rc = RectMakePivot(Vector2(bullet.x, bullet.y), Vector2(10, 10), Pivot::Center);
+		_vBullet.push_back(bullet);
+
+
+	}
+}
+
+void bullet::PFire(float x, float y, float angle, float speed)
+{
+	if (80 < _vBullet.size()) return;
+	tagBullet bullet;
+	ZeroMemory(&bullet, sizeof(tagBullet));
+	bullet.img = ImageManager::GetInstance()->FindImage(_imageName);
+	bullet.speed = speed;
+	bullet.x = bullet.sX = x;
+	bullet.y = bullet.sY = y;
+	bullet.angle = angle;
+
+	bullet.rc = RectMakePivot(Vector2(bullet.x, bullet.y), Vector2(10, 10), Pivot::Center);
+	_vBullet.push_back(bullet);
 }
 
 void bullet::remove(int arr)

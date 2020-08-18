@@ -18,7 +18,9 @@ private:
 	DWORD             _attribute[BOSSTILEX * BOSSTILEY];
 	tagTile			  _tile[BOSSTILEX * BOSSTILEY];
 public:
-
+	bossStage() {}
+	~bossStage() {}
+public:
 	HRESULT init();
 	void    render();
 	void    update();

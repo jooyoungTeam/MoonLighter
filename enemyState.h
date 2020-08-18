@@ -28,6 +28,17 @@ enum POTDIR			//팟
 	POT_BOTTOM
 };
 
+enum BOSS_PATTERN		//보스
+{
+	HAND_FALL,			//손 떨어지는 공격	
+	ARM_LONG,			//팔 늘어나는 공격
+	ROCK_FALL,			//돌 떨어지는 공격
+	PLAYER_PULL,		//플레이어 끌어당기는 공격
+	EXPLOSION,			//폭발 공격
+	BOSS_BULLET_FIRE,	//총알 많이 날라가는거
+	BOSS_BULLET_PFIRE	//플레이어 따라가는거
+};
+
 class enemyIdleState;
 class enemyMoveState;
 class enemyAttackState;

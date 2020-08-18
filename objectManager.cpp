@@ -143,7 +143,7 @@ void objectManager::sampleObjectPage()
 	}
 }
 
-void objectManager::save(BUTTONTYPE type)
+void objectManager::save(BUTTONTYPE type,int num)
 {
 	HANDLE file;
 	DWORD write;
@@ -156,7 +156,14 @@ void objectManager::save(BUTTONTYPE type)
 	else if (type == BUTTON_SAVE_SHOP)
 		fileName = "shop.object";
 	else if (type == BUTTON_SAVE_DUNGEON)
-		fileName = "dungeon1.object";
+	{
+		if (num == 1)
+			fileName = "dungeon1.object";
+		if (num == 2)
+			fileName = "dungeon2.object";
+		if (num == 3)
+			fileName = "spa.object";
+	}
 	else if (type == BUTTON_SAVE_ENTERENCE)
 		fileName = "dungeonEnterence.object";
 
@@ -177,8 +184,7 @@ void objectManager::save(BUTTONTYPE type)
 
 	CloseHandle(file);
 }
-
-void objectManager::load(BUTTONTYPE type)
+void objectManager::load(BUTTONTYPE type, int num)
 {
 	HANDLE file;
 	DWORD read;
@@ -192,7 +198,20 @@ void objectManager::load(BUTTONTYPE type)
 	else if (type == BUTTON_LOAD_SHOP)
 		fileName = "shop.object";
 	else if (type == BUTTON_LOAD_DUNGEON)
-		fileName = "dungeon1.object";
+	{
+		if (num == 1)
+		{
+			fileName = "dungeon1.object";
+		}
+		else if (num == 2)
+		{
+			fileName = "dungeon2.object";
+		}
+		else if (num == 3)
+		{
+			fileName = "spa.object";
+		}
+	}
 	else if (type == BUTTON_LOAD_ENTERENCE)
 		fileName = "dungeonEnterence.object";
 

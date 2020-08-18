@@ -18,7 +18,7 @@ void townStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		_player->tileCollision(_townAttribute, _tile);
+		_player->tileCollision(_attribute, _tile);
 	}
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
@@ -50,17 +50,17 @@ void townStage::loadMap()
 
 	ReadFile(file, _tile, sizeof(tagTile) * TOWNTILEX * TOWNTILEY, &read, NULL);
 
-	memset(_townAttribute, 0, sizeof(DWORD) * TOWNTILEX * TOWNTILEY);
+	memset(_attribute, 0, sizeof(DWORD) * TOWNTILEX * TOWNTILEY);
 	for (int i = 0; i < TOWNTILEX * TOWNTILEY; ++i)
 	{
-		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _townAttribute[i] |= ATTR_UNMOVE;
-		if (_tile[i].pos == POS_SHOP)      _townAttribute[i] |= TP_SHOP;         // 씬 변경해줄 타일
-		if (_tile[i].pos == POS_ENTERENCE) _townAttribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].pos == POS_SHOP)      _attribute[i] |= TP_SHOP;         // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_TOWN);
+	_objectManager->load(BUTTON_LOAD_TOWN,0);
 }
 
 

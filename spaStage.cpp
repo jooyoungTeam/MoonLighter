@@ -1,45 +1,47 @@
 #include "stdafx.h"
-#include "bossStage.h"
-#include "player.h"
+#include "spaStage.h"
 
-HRESULT bossStage::init()
+#include "player.h"
+HRESULT spaStage::init()
 {
-	_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
-	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 3000 - WINSIZEX, 2050 - WINSIZEY);
+	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
-
-	_enemy = new enemyManager;
-	_enemy->setPlayerLink(_player);
-	_enemy->setBoss();
-
-	_enemy->init();
-
 	loadMap();
+
+	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
+
+
+
 	return S_OK;
 }
 
-void bossStage::render()
+void spaStage::render()
 {
-	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
-	_player->render();
-	_enemy->render();
 	renderMap();
-	CAMERAMANAGER->zOrderALLRender();
+	_player->render();
+
 }
 
-void bossStage::update()
+void spaStage::update()
 {
-	_player->update();
-	_enemy->update();
-	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
+
+	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
+	if (!INVENTORY->getIsInven())
+	{
+		_player->update();
+		_player->tileCollision(_attribute, _tile);
+		//_enemy->update();
+	}
+
 }
 
-void bossStage::release()
+void spaStage::release()
 {
+
 }
 
-void bossStage::loadMap()
+void spaStage::loadMap()
 {
 	HANDLE file;
 	DWORD read;
@@ -49,25 +51,27 @@ void bossStage::loadMap()
 
 	// ------------ 타일
 
-	file = CreateFile("boss.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("spa.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
 
-	ReadFile(file, _tile, sizeof(tagTile) * BOSSTILEX * BOSSTILEY, &read, NULL);
+	ReadFile(file, _tile, sizeof(tagTile) * DUNTILEX * DUNTILEY, &read, NULL);
 
-	memset(_attribute, 0, sizeof(DWORD) * BOSSTILEX * BOSSTILEY);
-	for (int i = 0; i < BOSSTILEX * BOSSTILEY; ++i)
+	memset(_attribute, 0, sizeof(DWORD) * DUNTILEX * DUNTILEY);
+	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_BOSS)      _attribute[i] |= TP_BOSS;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_BOSS,0);
+	_objectManager->load(BUTTON_LOAD_DUNGEON, 3);
 }
 
-void bossStage::renderMap()
+void spaStage::renderMap()
 {
 	for (int i = 0; i < 19; i++)
 	{
@@ -75,8 +79,8 @@ void bossStage::renderMap()
 		{
 			int cullX = CAMERAMANAGER->getLeft() / TILESIZE;
 			int cullY = CAMERAMANAGER->getTop() / TILESIZE;
-			int index = (i + cullY) * BOSSTILEX + (j + cullX);
-			if (index >= BOSSTILEX * BOSSTILEY)
+			int index = (i + cullY) * 32 + (j + cullX);
+			if (index >= 32 * 18)
 				continue;
 			if (_tile[index].terrain != TR_NONE)
 			{
@@ -95,5 +99,5 @@ void bossStage::renderMap()
 	}
 
 
-	//_objectManager->objectRender();
+	_objectManager->objectRender();
 }

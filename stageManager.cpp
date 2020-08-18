@@ -5,7 +5,7 @@
 HRESULT stageManager::init()
 {
 	_player = new player;
-	_player->init(500, 500);
+	_player->init(700, 500);
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -14,8 +14,11 @@ HRESULT stageManager::init()
 	_town = new townStage;
 	_boss = new bossStage;
 	_shop = new shopStage;
-
 	_dungeon = new dungeonStage;
+	_dungeon2 = new dungeonStage2;
+	_spa = new spaStage;
+	_enterence = new enterenceStage;
+
 	_ui->getPlayerMemoryAddressLink(_player);
 	//_ui->getBossMemoryAddressLink(_boss);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
@@ -27,10 +30,16 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("´øÀü¾À", _dungeon);
 	SCENEMANAGER->addScene("¸¶À»¾À",	_town);
 	SCENEMANAGER->addScene("º¸½º¾À", _boss);
+	SCENEMANAGER->addScene("´øÀü¾À2", _dungeon2);
+	SCENEMANAGER->addScene("½ºÆÄ¾À", _spa);
+	SCENEMANAGER->addScene("´øÀüÀÔ±¸¾À", _enterence);
 
 
 
 	_dungeon->setPlayerLink(_player);
+	_dungeon2->setPlayerLink(_player);
+	_spa->setPlayerLink(_player);
+	_enterence->setPlayerLink(_player);
 	_town->setPlayerLink(_player);
 	_boss->setPlayerLink(_player);
 	_shop->setPlayerLink(_player);
@@ -146,6 +155,19 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		SCENEMANAGER->changeScene("º¸½º¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->changeScene("´øÀü¾À2");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->changeScene("½ºÆÄ¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F8))
+	{
+		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
+		_player->setPlayerPos(WINSIZEX / 2, WINSIZEY / 2);
 	}
 }
 
