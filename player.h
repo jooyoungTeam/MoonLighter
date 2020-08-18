@@ -54,6 +54,7 @@ private:
 	bool				_bowChargeState;					//활 충전상태인지.
 	bool				_hitCondition;						//히트 상태인지
 	bool				_enemyCol;							//에너미와 충돌상태
+	bool				_colVoid;							//충돌 회피상태
 	bool				_tileColLeft;						//타일 충돌 상태인지
 	bool				_tileColRight;						//타일 충돌 상태인지
 	bool				_tileColTop;						//타일 충돌 상태인지
@@ -119,6 +120,7 @@ public:
 	bool getBowChargeState() { return _bowChargeState; }
 	bool getHitCondition() { return _hitCondition; }
 	bool getEnemyCol() { return _enemyCol; }
+	bool getColVoid() { return _colVoid; }
 	bool getTileColLeft() { return _tileColLeft; }
 	bool getTileColTop() { return _tileColTop; }
 	bool getTileColRight() { return _tileColRight; }
@@ -159,6 +161,7 @@ public:
 	void setBowChargeState(bool bowChargeState) { _bowChargeState = bowChargeState; }
 	void setHitCondition(bool hitCondition) { _hitCondition = hitCondition; }
 	void setEnemyCol(bool enemyCol) { _enemyCol = enemyCol; }
+	void setColVoid(bool colVoid) { _colVoid = colVoid; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }

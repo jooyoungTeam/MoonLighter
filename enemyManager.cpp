@@ -285,25 +285,31 @@ void enemyManager::playerCol()
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
 		{
 			EFFECTMANAGER->play("swordEffect1", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
-			_vEnemy[i]->setEnemyAttack();
+			_vEnemy[i]->setEnemyAttack(30);
 			_player->setAttackRc(0, 0, 0, 0);
 
 		}
 		//È°Ãæµ¹
-		//for (int i = 0; i < _player->getArrow()->getVArrow().size(); ++i)
-		//{
-		//	if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[i].rc.GetRect()))
-		//	{
-		//		_vEnemy[i]->setEnemyAttack();
-		//		_player->getArrow()->playerRemoveArrow(i);
-		//		break;
-		//		//_player->se(0, 0, 0, 0);
-		//	}
-		//}
+		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
+		{
+			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()))
+			{
+				if (_player->getBowChargeState() == true)
+				{
+					_vEnemy[i]->setEnemyAttack(80);
+				}
+				else
+				{
+					_vEnemy[i]->setEnemyAttack(40);
+					_player->getArrow()->playerRemoveArrow(j);
+				}
+				//_player->se(0, 0, 0, 0);
+				break;
+			}
+		}
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
-			cout << "ÇÃ·¹ÀÌ¾î ¸¶Áõ¤±" << endl;
 			//_player->setCurrentState(_());
 			_player->setEnemyCol(true);
 			
@@ -348,7 +354,6 @@ void enemyManager::bulletCol()
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect()))
 				{
-					cout << "ÃÑ¾ËÀÌ¶û ¸ÂÀ½" << endl;
 					ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
 					EFFECTMANAGER->play("bulletCollision", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 					_player->setEnemyCol(true);
@@ -360,7 +365,6 @@ void enemyManager::bulletCol()
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect()))
 				{
-					cout << "ÃÑ¾ËÀÌ¶û ¸ÂÀ½" << endl;
 					ImageManager::GetInstance()->FindImage("redSlimeDead")->SetScale(1.5f);
 					EFFECTMANAGER->play("redSlimeDead", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 					_player->setEnemyCol(true);

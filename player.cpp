@@ -33,7 +33,9 @@ HRESULT player::init(float x, float y)
 	_playerCurrentHp = _playerMaxHp = 150;
 	_SwordDamage = 30;
 	_hitAlpha = 0;
+	_colVoid = true;
 	_enemyCol = false;
+	_bowChargeState = false;
 	_hitCondition = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
@@ -557,7 +559,6 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if (((attribute[tileIndex[0]] & TP_BOSS) == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		cout << "??? " << endl;
 		setPlayerPos(WINSIZEX / 2, 1100);
 		SCENEMANAGER->changeScene("º¸½º¾À");
 		return true;

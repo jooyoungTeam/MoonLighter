@@ -13,7 +13,7 @@ HRESULT playerIdleState::init()
 //Idle 상태
 void playerIdleState::update(player & player)
 {
-	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
+	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());	//사실상 필요없음 일단 냅둠~
 	player.setBedCount(player.getBedCount() + 1);
 	//아이들 상태 오래 지속되면 빗자루질함
 	if (player.getBedCount() >= 300)
@@ -23,10 +23,9 @@ void playerIdleState::update(player & player)
 		player.setBedCount(player.getBedCount() == 0);
 	}
 
-	//히트상태
+	//에너미한테 맞으면 히트상태로 넘어감
 	if (player.getEnemyCol())
 	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getHitState());
 	}
 
@@ -213,11 +212,11 @@ void playerIdleState::update(player & player)
 		{
 			player.setBowChargeAlpha(true);
 			player.setBowChargeState(true);
-
 			if (KEYMANAGER->isStayKeyDown('J'))
 			{
 				if (player.getDirection() == DIRECTION::UP)
 				{
+					player.setShadowY(player.getShadowY() - 0);
 					//알파값효과 내기위해
 					if (player.getBowAlphaCount() <= 10)
 					{
@@ -348,10 +347,9 @@ void playerWalkState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 
-	//히트상태
+	//에너미한테 맞으면 히트상태로 넘어감
 	if (player.getEnemyCol())
 	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getHitState());
 	}
 
@@ -373,7 +371,6 @@ void playerWalkState::update(player & player)
 			//위쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('S'))
 			{
-				player.setY(player.getY() - 0);
 				return;
 			}
 			//아래키를 떼면 위로 다시 움직임
@@ -426,7 +423,6 @@ void playerWalkState::update(player & player)
 			//아래Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('W'))
 			{
-				player.setY(player.getY() + 0);
 				return;
 			}
 			//위쪽키를 떼면 아래로 다시 움직임
@@ -476,7 +472,6 @@ void playerWalkState::update(player & player)
 			//왼쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('D'))
 			{
-				player.setX(player.getX() - 0);
 				return;
 			}
 			//오른쪽키를 떼면 왼쪽으로 다시 움직임
@@ -526,7 +521,6 @@ void playerWalkState::update(player & player)
 			//오른쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('A'))
 			{
-				player.setX(player.getX() + 0);
 				return;
 			}
 			//왼쪽키를 떼면 오른쪽으로 다시 움직임
@@ -943,7 +937,7 @@ void playerWalkState::update(player & player)
 					}
 				}
 				if (player.getDirection() == DIRECTION::LEFT)
-				{
+				{ 
 					if (player.getBowAlphaCount() <= 10)
 					{
 						player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowLeftChargeWhite"), ImageManager::GetInstance()->FindImage("bowLeftChargeWhite"));
@@ -1661,6 +1655,12 @@ void playerSwimState::update(player & player)
 //bow 상태
 void playerbowState::update(player & player)
 {
+	//에너미한테 맞으면 히트상태로 넘어감
+	if (player.getEnemyCol())
+	{
+		player.setCurrentState(player.getHitState());
+	}
+
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 	//만약 애니메이션 재생 끝나면
 	if (!KEYANIMANAGER->findAnimation("playerUpBow")->isPlay() && !KEYANIMANAGER->findAnimation("playerDownBow")->isPlay()
@@ -1732,6 +1732,12 @@ void playerbowState::update(player & player)
 //sword 상태
 void playerSwordState::update(player & player)
 {
+	//에너미한테 맞으면 히트상태로 넘어감
+	if (player.getEnemyCol())
+	{
+		player.setCurrentState(player.getHitState());
+	}
+
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 	//1타 공격
 	if (!player.getSwordAttackCombo())
@@ -1963,6 +1969,6 @@ void playerHitState::update(player & player)
 	if (!player.getHitCondition())
 	{
 		player.setHitAlpha(player.getHitAlpha() == 1.0f);
-		player.setCurrentState(player.getIdleState());
+		player.setCurrentState(player.getWalkState());
 	}
 }
