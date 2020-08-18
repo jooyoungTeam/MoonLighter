@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tile.h"
 #include "objectManager.h"
+#include "miniMap.h"
 
 #define TOWNTILEX 60
 #define TOWNTILEY 49
@@ -9,8 +10,8 @@ class townStage : public gameNode
 {
 private:
 	Image*            _mapImg;
-
-	DWORD             _townAttribute[TOWNTILEX * TOWNTILEY];
+	miniMap*          _miniMap;
+	DWORD             _attribute[TOWNTILEX * TOWNTILEY];
 	tagTile			  _tile[TOWNTILEX * TOWNTILEY];
 	objectManager*    _objectManager;
 	class player*     _player;

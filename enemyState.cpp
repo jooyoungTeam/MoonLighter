@@ -5,6 +5,7 @@
 void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
 	//cout << "¾ÆÀÌµé" << endl;
+	enemy.setIsPlayerHit(false);
 	enemy.setAttackDelay(enemy.getAttackDelay() + 1);
 	if (enemyType == ENEMY_GOLEM)
 	{

@@ -133,7 +133,7 @@ void shopStage::release()
 
 void shopStage::loadMap()
 {
-
+	
 	HANDLE file;
 	DWORD read;
 
@@ -144,7 +144,7 @@ void shopStage::loadMap()
 
 	file = CreateFile("shop.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
+	
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
 
 	ReadFile(file, _tile, sizeof(tagTile) * SHOPTILEX * SHOPTILEY, &read, NULL);

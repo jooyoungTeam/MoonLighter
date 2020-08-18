@@ -4,6 +4,7 @@
 #include "button.h"
 #include "objectManager.h"
 #include "palette.h"
+#include "miniMap.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class tile : public gameNode
@@ -19,16 +20,7 @@ private:
 	RECT              _dragTile;    // 마우스 포인터 마우스 안에있을 때
 	objectManager*    _objectManager;
 	palette*          _palette;
-
-
-
-
-	// --------- 미니맵 변수	
-	miniMap       _mini[100 * 100];
-	Image*        _miniMapImg;
-	FloatRect     _miniMapMove;
-	FloatRect     _miniMap;
-	// --------- 미니맵 변수	
+	miniMap*          _miniMap1;
 
 	int           _saveTime;
 	int           _nowIndex;
@@ -56,8 +48,8 @@ public:
 	void autoTileType(int idx, TERRAIN type);
 	void mapMove();
 
-	void saveMap();
-	void loadMap();
+	void saveMap(int num);
+	void loadMap(int num);
 public:
 
 	TERRAIN terrainSelect(int frameX, int frameY);

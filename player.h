@@ -122,7 +122,7 @@ public:
 	bool getTileColRightTop() { return _tileColRightTop; }
 	bool getTileColLeftBottom() { return _tileColLeftBottom; }
 	bool getTileColRightBottom() { return _tileColRightBottom; }
-	void setPlayerPos(float x, float y) { _playerX = x, _playerY = y; }
+	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
 	
 	int*  getColTileIdx() { return tileIndex; }
 	FloatRect getPlayerRc() { return _playerRc; }
@@ -165,7 +165,7 @@ public:
 	{
 		_playerX = playerRcX, _playerY = playerRcY, _playerRcW = playerRcW, _playerRcH = playerRcH;
 	}
-
+	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
 	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
 
 public:

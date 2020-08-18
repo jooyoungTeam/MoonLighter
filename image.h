@@ -48,6 +48,7 @@ public:
 	void FrameRender(const Vector2& position, const int frameX, const int frameY);
 	void FrameTopRender(const Vector2& position, const int frameX, const int frameY);
 	void FrameRender(const Vector2& position, const int frameX, const int frameY, float scale);
+	void FrameRender(const Vector2& position, const int frameX, const int frameY, float right, float bottom);
 
 	void ResetRenderOption();
 

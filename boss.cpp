@@ -23,6 +23,7 @@ void boss::set()
 	_leftBottom.y = 1185;
 	_rightBottom.x = 886;
 	_rightBottom.y = 1185;
+	_saveRandom = -1;
 	_bossAni = ONE;
 	for (int i = 0; i < 13; ++i)
 	{
@@ -38,7 +39,8 @@ void boss::render()
 {
 	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
 //	if (KEYANIMANAGER->findAnimation(""))
-	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
+	//CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
+	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
 	
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
 	for (int i = 0; i < 13; ++i)
@@ -52,13 +54,11 @@ void boss::render()
 			CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
 			CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
 	}
+	CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
+	CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
-	//if (_attack1.isAttack)
-	//{
-	//	CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _pX, _pY + _attack1.yRandom, 1.0f, 1.0f);
 
-	//}
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
 	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
@@ -76,16 +76,21 @@ void boss::render()
 
 void boss::attack()
 {
-	_playerCol = playerCol();
-	if (_playerCol)
+	if (_isPlayerHit)
 	{
-		cout << "플레이어 죽음" << endl;
+		_hitTimer++;
+		if (_hitTimer > 60)
+		{
+			_isPlayerHit = false;
+			_hitTimer = 0;
+		}
 	}
-	cout << _attackTimer << endl;
+	cout << _hitTimer << endl;
+	_playerCol = playerCol();
 	if (!_patternCheck)
 	{
 		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(0,5);
+		_patternRandom = RND->getFromIntTo(0,7);
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
@@ -129,12 +134,21 @@ void boss::attack()
 			}
 			_bossPattern = EXPLOSION;
 		}
+		if (_patternRandom == 5)
+		{
+			_bossPattern = BOSS_BULLET_FIRE;
+		}
+		if (_patternRandom == 6)
+		{
+			_bossPattern = BOSS_BULLET_PFIRE;
+		}
 		//공격 뭐할지 결정됐음 나가
 		_saveRandom = _patternRandom;
 		_bossAni = ONE;
 		_patternCheck = true;
 		_attack3.isAttack = false;
 	}
+//	cout << _patternRandom << endl;
 	if (_bossPattern == HAND_FALL)
 	{
 		attack1();
@@ -149,7 +163,6 @@ void boss::attack()
 		else
 		{
 			attack2();
-			attack2Angle();
 		}
 	}
 	if (_bossPattern == ROCK_FALL)
@@ -444,7 +457,8 @@ void boss::attack4()
 	}
 	if (_exCount > 50)
 	{
-		_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(800, 900), Pivot::Center);
+		if (!_isPlayerHit)
+			_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(800, 900), Pivot::Center);
 	}
 	if (_bossAni == TWO)
 	{
@@ -481,6 +495,11 @@ void boss::attack4()
 
 }
 
+void boss::attack5()
+{
+
+}
+
 void boss::attack1_1()
 {
 	
@@ -490,7 +509,6 @@ void boss::attack1_1()
 		_attack1.yRandom = RND->getFromIntTo(-50, 50);
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{
-			_attack1.x = _pX + _attack1.xRandom;
 			_attack1.y += _attack1.speed;
 			_attack1.speed += 0.9f;
 			_attack1.rc = RectMakePivot(Vector2(_attack1.x, _attack1.y), Vector2(50, 50), Pivot::Center);
@@ -523,7 +541,7 @@ void boss::attack1_1()
 			{
 				_attack1.y -= _attack1.speed;
 				_attack1.speed += 0.9f;
-				_attack1.rc = RectMakePivot(Vector2(_attack1.x, _attack1.y), Vector2(50, 50), Pivot::Center);
+				_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(50, 50), Pivot::Center);
 			}
 			else
 			{
@@ -551,6 +569,9 @@ void boss::attack2_1()
 	if (_attack2.index <= 0)
 	{
 		_attack2.index = 0;
+
+		attack2Angle();
+		
 	}
 
 	_attack2.x = _x - 140;
@@ -622,10 +643,12 @@ void boss::attack3_1()
 				_attackTimer++;
 				if (_attackTimer < 100)
 				{
-					_isRockBottom = true;
+					if (_attack3Rc[6].mY >= _attack3Rc[6].y)
+						_isRockBottom = true;
 				}
 				else
 				{
+					_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(100, 100), Pivot::Center);
 					_isRockBottom = false;
 				}
 				_cameraShake++;
@@ -636,7 +659,10 @@ void boss::attack3_1()
 				 CAMERAMANAGER->shakeCamera(5, 50);
 			}
 			_attack3Rc[i].rc = RectMakePivot(Vector2(_attack3Rc[i].x, _attack3Rc[i].mY), Vector2(_attack3Rc[i].width, _attack3Rc[i].width), Pivot::Center);
-			_attack3Rc[i].attackRc = RectMakePivot(Vector2(_attack3Rc[i].x, _attack3Rc[i].mY), Vector2(100, 100), Pivot::Center);
+			if (!_isPlayerHit)
+			{
+				_attack3Rc[i].attackRc = RectMakePivot(Vector2(_attack3Rc[i].x, _attack3Rc[i].mY), Vector2(100, 100), Pivot::Center);
+			}
 
 		}
 	}
@@ -676,14 +702,18 @@ void boss::attack3_2()
 			{
 				_attack3Rc2[i].alpha = 1.0f;
 			}
-		
+
 			_attack3Rc2[i].mX = _attack3Rc2[i].x;
 
 
 			_attack3Rc2[i].mY += 30;
-			
-			
+
+
 			_attack3Rc2[i].rackCount++;
+			if (!_isPlayerHit)
+			{
+				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
+			}
 			if (_attack3Rc2[i].mY >= _attack3Rc2[i].y)
 			{
 				_attackTimer++;
@@ -693,9 +723,10 @@ void boss::attack3_2()
 				}
 				else
 				{
+					_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 					_isRockBottom = false;
 				}
-				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
+				
 				CAMERAMANAGER->shakeCamera(3, 2);
 				_attack3Rc2[i].mY = _attack3Rc2[i].y;
 				if (_attack3Rc2[i].rackCount > 150)
@@ -754,7 +785,7 @@ void boss::attack2Angle()
 	float angle3 = getAngle(_leftBottom.x, _leftBottom.y, _pX, _pY);
 	float angle4 = getAngle(_rightBottom.x, _rightBottom.y, _pX, _pY);
 
-	if (angle1 > angle3 && angle2 < angle4 && _pY > _leftTop.y && _pY < _leftBottom.y)
+	if ((angle1 > angle3 && angle2 < angle4 && _pY > _leftTop.y && _pY < _leftBottom.y) && !_isPlayerHit)
 	{
 		_isHandCol = true;
 	}
@@ -762,6 +793,8 @@ void boss::attack2Angle()
 	{
 		_isHandCol = false;
 	}
+	
+
 
 }
 
@@ -825,13 +858,16 @@ bool boss::playerCol()
 	{
 		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
+			_isPlayerHit = true;
 			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
-
+			cout << "돌 1이랑 맞음" << endl;
 			return true;
 		}
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
+			_isPlayerHit = true;
 			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
+			cout << "돌 2이랑 맞음" << endl;
 			return true;
 		}
 	}
@@ -840,6 +876,8 @@ bool boss::playerCol()
 		IntersectRect(&temp, &_attackRc.GetRect(), &_pRc.GetRect()) ||
 		_isHandCol)
 	{
+		_isPlayerHit = true;
+		cout << "손이랑 맞음" << endl;
 		_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		_attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		return true;

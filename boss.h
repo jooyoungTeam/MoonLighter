@@ -1,13 +1,6 @@
 #pragma once
 #include"enemy.h"
-enum BOSS_PATTERN
-{
-	HAND_FALL,	//손 떨어지는 공격	
-	ARM_LONG,	//팔 늘어나는 공격
-	ROCK_FALL,	//돌 떨어지는 공격
-	PLAYER_PULL,	//플레이어 끌어당기는 공격
-	EXPLOSION	//폭발 공격
-};
+
 
 
 struct tagAttack1
@@ -54,13 +47,12 @@ private:
 	tagAttackRect _attack3Rc[13];
 	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
-	BOSS_PATTERN _bossPattern;
+
 
 	FloatRect _attackRc;
 	float _handAngle1;
 	float _handAngle2;
 	bool _isHandCol;
-	bool _patternCheck;
 	bool _playerCol;
 	int _cameraShake;
 	int _bossAttackCount;
@@ -68,6 +60,7 @@ private:
 	int _saveRandom;
 	int _exCount;
 	int _attackTimer;
+	int _hitTimer;
 
 public:
 	boss() {}
@@ -82,6 +75,7 @@ public:
 	void attack2();
 	void attack3();
 	void attack4();
+	void attack5();
 	void attack1_1();
 	void attack2_1();
 	void attack3_1();
@@ -93,5 +87,6 @@ public:
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
+	bool getBossPlayerCol() { return _playerCol; }
 };
 

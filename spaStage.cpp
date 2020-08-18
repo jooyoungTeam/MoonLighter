@@ -1,18 +1,14 @@
 #include "stdafx.h"
-#include "dungeonStage.h"
+#include "spaStage.h"
+
 #include "player.h"
-HRESULT dungeonStage::init()
+HRESULT spaStage::init()
 {
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
-	loadDungeonMap();
+	loadMap();
 
-	_enemy = new enemyManager;
-	_enemy->setPlayerLink(_player);
-
-	_enemy->setEnemy2();
-	_enemy->init();
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
 
@@ -20,34 +16,32 @@ HRESULT dungeonStage::init()
 	return S_OK;
 }
 
-void dungeonStage::render()
+void spaStage::render()
 {
-	renderDungeonMap();
+	renderMap();
 	_player->render();
-	_enemy->render();
 
 }
 
-void dungeonStage::update()
+void spaStage::update()
 {
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		_enemy->update();
 		_player->tileCollision(_attribute, _tile);
 		//_enemy->update();
 	}
 
 }
 
-void dungeonStage::release()
+void spaStage::release()
 {
 
 }
 
-void dungeonStage::loadDungeonMap()
+void spaStage::loadMap()
 {
 	HANDLE file;
 	DWORD read;
@@ -57,7 +51,7 @@ void dungeonStage::loadDungeonMap()
 
 	// ------------ 타일
 
-	file = CreateFile("dungeon1.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("spa.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
@@ -69,15 +63,15 @@ void dungeonStage::loadDungeonMap()
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
 		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
-
+		if (_tile[i].pos == POS_BOSS)      _attribute[i] |= TP_BOSS;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_DUNGEON,1);
+	_objectManager->load(BUTTON_LOAD_DUNGEON, 3);
 }
 
-void dungeonStage::renderDungeonMap()
+void spaStage::renderMap()
 {
 	for (int i = 0; i < 19; i++)
 	{
@@ -99,12 +93,6 @@ void dungeonStage::renderDungeonMap()
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
-				}
-				if (_tile[index].pos != POS_NONE)
-				{
-					Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
-
-					CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
 				}
 			}
 		}

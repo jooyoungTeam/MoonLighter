@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "enemy.h"
 
-HRESULT enemy::init(int index, float x, float y, float width, float height, ENEMYTYPE type)
+HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 {
 	_idle = new enemyIdleState;
 	_move = new enemyMoveState;
@@ -11,7 +11,6 @@ HRESULT enemy::init(int index, float x, float y, float width, float height, ENEM
 
 	_aStar = new aStar;
 
-	_index = index;
 	_scale = 1.0f;
 	ani();
 
@@ -144,11 +143,13 @@ void enemy::render()
 {
 	_aStar->render();
 	//_img->aniRender(Vector2(_x, _y), _motion, _scale);
-	CAMERAMANAGER->aniRender(_img, _x, _y, _motion, _scale);
+	//CAMERAMANAGER->aniRender(_img, _x, _y, _motion, _scale);
+	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, _scale);
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato, 0.8f);
+
 	/*D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);*/
@@ -340,6 +341,11 @@ void enemy::ani()
 
 
 
+void enemy::dead()
+{
+	_realDead = true;
+}
+
 void enemy::enemyWay()
 {
 	_angle = getAngle(_pX, _pY, _x, _y)  * (180 / PI);
@@ -465,11 +471,11 @@ void enemy::checkBoolCount()
 		_state = _hit;
 		_isHit = false;
 	}
-	if (_curHP <= 0)
+/*	if (_curHP <= 0)
 	{
 		_curHP = 0;
 		_state = _dead;
-	}
+	}*/
 	if (_type != ENEMY_BOSS && _isHit)
 	{
 		_isHitCount++;
