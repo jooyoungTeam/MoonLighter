@@ -30,6 +30,7 @@ void dungeonStage2::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
+		_player->tileCollision(_attribute, _tile);
 		//_enemy->update();
 	}
 

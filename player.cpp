@@ -472,7 +472,10 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 		tileIndex[2] = (tileX + 1 + (tileY - 1) * 60) + 60;
 		break;
 	}
-
+	if (tileSceneChange(attribute, tile, rcCollision))
+	{
+		return;
+	}
 	
 	for (int i = 0; i < 3; i++)
 	{
@@ -527,4 +530,59 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	_tileColRightTop = false;
 	_tileColLeftBottom = false;
 	_tileColRightBottom = false;
+}
+bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
+{
+	RECT rc;
+	if (((attribute[tileIndex[0]] & TP_TOWN) == TP_TOWN) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		SCENEMANAGER->changeScene("¸¶À»¾À");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_SHOP) == TP_SHOP) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2 + 80, 1100);
+		SCENEMANAGER->changeScene("¼¥¾À");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_BOSS) == TP_BOSS) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		cout << "??? " << endl;
+		setPlayerPos(WINSIZEX / 2, 1100);
+		SCENEMANAGER->changeScene("º¸½º¾À");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_ENTERENCE) == TP_ENTERENCE) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 1100);
+		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_DUN1) == TP_DUN1) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("´øÀü¾À");
+		return true;
+	}
+
+	if (((attribute[tileIndex[0]] & TP_DUN2) == TP_DUN2) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("´øÀü¾À2");
+		return true;
+	}
+
+	if (((attribute[tileIndex[0]] & TP_SPA) == TP_SPA) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("½ºÆÄ¾À");
+		return true;
+	}
 }

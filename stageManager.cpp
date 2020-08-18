@@ -167,6 +167,7 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F8))
 	{
 		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
+		_player->setPlayerPos(WINSIZEX / 2, WINSIZEY / 2);
 	}
 }
 
