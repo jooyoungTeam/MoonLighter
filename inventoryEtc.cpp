@@ -574,11 +574,22 @@ void inventory::popInven()
 	{
 		if (_inven[i].item == nullptr) continue;
 
+		_vType.clear();
 		SAFE_DELETE(_inven[i].item);
 		_inven[i].item = nullptr;
 	}
 }
+void inventory::test()
+{
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		if (_inven[i].item == nullptr) continue;
+
+		_vType.push_back(_inven[i].item->getType());
+	}
+}
 //===========================================↑↑인벤 비우기↑↑===========================================//
+
 
 //===========================================↓↓미러 사용하기↓↓===========================================//
 void inventory::useMirror()

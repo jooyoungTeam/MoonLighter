@@ -70,9 +70,12 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown('Z'))
 	{
-		/*for(int i = 0; i <INVENSPACE; i++)
-		_itemMg->popItem(INVENTORY->getInvenItem()[i]->getType(), _test.GetCenter().x, _test.GetCenter().y);*/
-
+		if (INVENTORY->getInven()->item == nullptr) return;
+		for (int i = 0; i < 5; i++)
+		{
+			INVENTORY->test();
+			_itemMg->popItem(INVENTORY->getVType()[i], WINSIZEX / 2, WINSIZEY / 2);
+		}
 		INVENTORY->popInven();
 	}
 

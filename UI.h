@@ -10,6 +10,7 @@ enum class CURRENT_SCENE
 
 enum class BOSS_STAGE
 {
+	NOT_BOSS,
 	PLAYER_ENTER,				//플레이어 보스 스테이지 입장
 	BOSS_APEEAR,
 	STAGE_START					//보스 스테이지 시작 (인벤토리 사용 가능?)

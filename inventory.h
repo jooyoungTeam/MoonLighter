@@ -104,6 +104,8 @@ private:
 	bool _isSetPrice;					//가격 설정할 거니
 	bool _isInven;						//인벤토리 열었니?
 
+	vector<ITEMTYPE> _vType;
+
 	player* _player;
 	UI* _ui;
 
@@ -125,7 +127,8 @@ public:
 
 	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void closeInven();										//인벤 닫으면
-	void popInven();//인벤 비우기
+	void popInven();								//인벤 비우기
+	void test();
 
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
 	void setPrice(tagSetPrice p[PRICESPACE], int s);		//가격 계산하기
@@ -143,8 +146,14 @@ public:
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
 
-	item* getInvenItem() { 
-		return _inven[INVENSPACE].item; }
+	/*ITEMTYPE getInvenType() {
+		for (int i = 0; i < INVENSPACE; i++)
+		{
+			if (_inven[i].item != nullptr)
+			return _inven[i].item->getType();
+		}
+	}*/
+	vector<ITEMTYPE> getVType() { return _vType; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기

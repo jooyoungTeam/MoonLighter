@@ -20,6 +20,7 @@ HRESULT UI::init()
 	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, 38), Pivot::Center);
 
 	_scene = CURRENT_SCENE::TEMP;
+	_bossStage == BOSS_STAGE::NOT_BOSS;
 
 	_frameCount = 0;
 	_frameY = 0;
@@ -30,7 +31,6 @@ HRESULT UI::init()
 	_isHit = false;
 	_bossHit = false;
 
-	_bossStage == BOSS_STAGE::STAGE_START;
 
 	return S_OK;
 }

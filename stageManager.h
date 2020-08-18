@@ -26,6 +26,9 @@ private:
 	enterenceStage* _enterence;
 	UI* _ui;
 	itemManager* _itemMg;
+
+	ITEMTYPE _type[INVENSPACE];
+
 public:
 	stageManager() {}
 	~stageManager() {}
