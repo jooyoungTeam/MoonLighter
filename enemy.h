@@ -143,7 +143,7 @@ public:
 	void setPatternCheck(bool pattern) { _patternCheck = pattern; }
 	void setIsPlayerHit(bool hit) { _isPlayerHit = hit; }
 
-	void setEnemyAttack(int hp = 3)
+	void setEnemyAttack(int hp = 30)
 	{
 		if (_curHP <= 0)
 		{
@@ -154,13 +154,12 @@ public:
 			_saveHP = _bar.width;
 			if (_type != ENEMY_BOSS)
 			{
-				hp = 30;
 				_isHit = true;
 				_barAlpha = 1.0f;
 			}
-			_curHP -= hp;
 			if (_type == ENEMY_BOSS)
 			{
+				hp / 5;
 				if (_state == _idle)
 				{
 					_bossHitCount++;
@@ -171,18 +170,18 @@ public:
 					_state = _hit;
 				}
 			}
+			_curHP -= hp;
 		}
 		if (_curHP <= 0)
 		{
-			//if (_type == ENEMY_BOSS)
-			//{
-				if (_state != _dead)
-				{
-					_bossAni = ONE;
-					_onceAni = true;
-					_state = _dead;
-				}
-			//}
+
+			if (_state != _dead)
+			{
+				_bossAni = ONE;
+				_onceAni = true;
+				_state = _dead;
+			}
+			
 		}
 	}
 
