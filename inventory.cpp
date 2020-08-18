@@ -223,6 +223,7 @@ void inventory::selectItem()
 				_isSelect = true;
 				_selectItem.rc = RectMakePivot(Vector2(_inven[_select].rc.left - 5, _inven[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 				_selectItem.item = _inven[_select].item;
+				_selectItem.price = _inven[_select].price;
 				_selectItem.count++;
 				_inven[_select].count--;	
 
@@ -266,6 +267,7 @@ void inventory::selectItem()
 					_isSelect = true;
 					_selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 					_selectItem.item = _shop[_select].item;
+					_selectItem.price = _shop[_select].price;
 					_selectItem.count++;
 					_shop[_select].count--;
 
@@ -391,6 +393,18 @@ void inventory::moveItem()
 						_inven[_select].item = _selectItem.item;
 						_inven[_select].count = _selectItem.count;
 						_inven[_select].price = _selectItem.price;
+
+						for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
+
+							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+							if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+						}
+
 						_selectItem.item = nullptr;
 						_isSelect = false;
 					}	
@@ -674,32 +688,6 @@ void inventory::moveItem()
 					//아이템 인덱스가 다르면
 					else
 					{
-						//가격을 정한 아이템을 쇼케이스에 넣으면 가격이 로드됨
-						//그 상태로 가격을 정하지 않은 아이템을 그 자리에 넣으면 가격이 사라지지 않음
-
-						//가격이 적혀있는 쇼케이스의 아이템을 들면 0으로 초기화
-						//초기화된 자리에 셔플로 가격이 정해진 아이템이 와도 가격은 0		
-
-						//가격을 정한 아이템 자리가 0이고 가격을 정하지 않는 아이템을 셔플시키면
-						//후자 아이템의 가격이 전자 아이템의 가격으로 나옴
-
-						//설정했었던 아이템 가격 불러오기
-						for (int i = 0; i < _vPrice.size(); ++i)
-						{
-							if (_vPrice.size() < 0) continue;
-
-							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-							if (_select == 0) loadPrice(_firstPrice, _select);
-							if (_select == 2) loadPrice(_secondPrice, _select);
-							if (_select == 4) loadPrice(_thirdPrice, _select);
-							if (_select == 6) loadPrice(_fourthPrice, _select);
-
-							if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
-							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
-							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
-							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
-						}
-
 						//인벤에서 가져옴
 						if (_selectNumber >= 0 && _inven[_selectNumber].item == nullptr)
 						{
@@ -709,6 +697,16 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
+
+							//쇼케이스가 비게 되면 가격 초기화
+							for (int i = 0; i < PRICESPACE; i++)
+							{
+								if (_select == 0) _firstPrice[i].count = 0;
+								if (_select == 2) _secondPrice[i].count = 0;
+								if (_select == 4) _thirdPrice[i].count = 0;
+								if (_select == 6) _fourthPrice[i].count = 0;
+							}
+
 							_selectItem.item = nullptr;
 							_isSelect = false;
 						}
@@ -722,10 +720,35 @@ void inventory::moveItem()
 							_shop[_select].item = _selectItem.item;
 							_shop[_select].count = _selectItem.count;
 							_shop[_select].price = _selectItem.price;
+
+							//쇼케이스가 비게 되면 가격 초기화
+							for (int i = 0; i < PRICESPACE; i++)
+							{
+								if (_select == 0) _firstPrice[i].count = 0;
+								if (_select == 2) _secondPrice[i].count = 0;
+								if (_select == 4) _thirdPrice[i].count = 0;
+								if (_select == 6) _fourthPrice[i].count = 0;
+							}
+
 							_selectItem.item = nullptr;
 							_isSelect = false;
 						}		
 
+						for (int i = 0; i < _vPrice.size(); ++i)
+						{
+							if (_vPrice.size() < 0) continue;
+
+							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
+							if (_selectShopNumber == 0) loadPrice(_firstPrice, _selectShopNumber);
+							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
+							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
+							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
+
+							if (_select == 0) loadPrice(_firstPrice, _select);
+							if (_select == 2) loadPrice(_secondPrice, _select);
+							if (_select == 4) loadPrice(_thirdPrice, _select);
+							if (_select == 6) loadPrice(_fourthPrice, _select);
+						}
 						
 					}
 				}
