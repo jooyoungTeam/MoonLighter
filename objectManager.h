@@ -48,8 +48,10 @@ public:
 	void release();
 public:
 	void sampleObjectPage();
-	void save(BUTTONTYPE type);
-	void load(BUTTONTYPE type);
+	// num1 던전1, num2 던전2, num3 스파
+	void save(BUTTONTYPE type, int num);
+	// num1 던전1, num2 던전2, num3 스파
+	void load(BUTTONTYPE type, int num);
 	void setObject(POINT pt);
 	void selectObject();
 	void eraseObject(POINT pt);

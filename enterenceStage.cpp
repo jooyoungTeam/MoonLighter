@@ -1,12 +1,13 @@
 #include "stdafx.h"
-#include "dungeonStage.h"
+#include "enterenceStage.h"
+
 #include "player.h"
-HRESULT dungeonStage::init()
+HRESULT enterenceStage::init()
 {
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
-	loadDungeonMap();
+	loadMap();
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
@@ -15,14 +16,14 @@ HRESULT dungeonStage::init()
 	return S_OK;
 }
 
-void dungeonStage::render()
+void enterenceStage::render()
 {
-	renderDungeonMap();
+	renderMap();
 	_player->render();
 
 }
 
-void dungeonStage::update()
+void enterenceStage::update()
 {
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
@@ -34,12 +35,12 @@ void dungeonStage::update()
 
 }
 
-void dungeonStage::release()
+void enterenceStage::release()
 {
 
 }
 
-void dungeonStage::loadDungeonMap()
+void enterenceStage::loadMap()
 {
 	HANDLE file;
 	DWORD read;
@@ -49,7 +50,7 @@ void dungeonStage::loadDungeonMap()
 
 	// ------------ 타일
 
-	file = CreateFile("dungeon1.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("dungeonEnterence.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
@@ -60,16 +61,17 @@ void dungeonStage::loadDungeonMap()
 	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
-		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
-
+		if (_tile[i].pos == POS_DUN1) _attribute[i] |= TP_DUN1;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_DUN2) _attribute[i] |= TP_DUN2;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_SPA)  _attribute[i] |= TP_SPA;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_DUNGEON,1);
+	_objectManager->load(BUTTON_LOAD_ENTERENCE, 0);
 }
 
-void dungeonStage::renderDungeonMap()
+void enterenceStage::renderMap()
 {
 	for (int i = 0; i < 19; i++)
 	{

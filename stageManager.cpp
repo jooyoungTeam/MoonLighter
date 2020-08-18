@@ -5,7 +5,7 @@
 HRESULT stageManager::init()
 {
 	_player = new player;
-	_player->init(500, 500);
+	_player->init(700, 500);
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -14,8 +14,11 @@ HRESULT stageManager::init()
 	_town = new townStage;
 	_boss = new bossStage;
 	_shop = new shopStage;
-
 	_dungeon = new dungeonStage;
+	_dungeon2 = new dungeonStage2;
+	_spa = new spaStage;
+	_enterence = new enterenceStage;
+
 	_ui->getPlayerMemoryAddressLink(_player);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
@@ -26,10 +29,16 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("던전씬", _dungeon);
 	SCENEMANAGER->addScene("마을씬",	_town);
 	SCENEMANAGER->addScene("보스씬", _boss);
+	SCENEMANAGER->addScene("던전씬2", _dungeon2);
+	SCENEMANAGER->addScene("스파씬", _spa);
+	SCENEMANAGER->addScene("던전입구씬", _enterence);
 
 
 
 	_dungeon->setPlayerLink(_player);
+	_dungeon2->setPlayerLink(_player);
+	_spa->setPlayerLink(_player);
+	_enterence->setPlayerLink(_player);
 	_town->setPlayerLink(_player);
 	_boss->setPlayerLink(_player);
 	_shop->setPlayerLink(_player);
@@ -134,6 +143,18 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		SCENEMANAGER->changeScene("보스씬");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->changeScene("던전씬2");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->changeScene("스파씬");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F8))
+	{
+		SCENEMANAGER->changeScene("던전입구씬");
 	}
 }
 
