@@ -13,8 +13,7 @@ void bullet::release()
 
 void bullet::update()
 {
-	
-	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
+	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end();)
 	{
 		_viBullet->x += cosf(_viBullet->angle) * _viBullet->speed;
 		_viBullet->y += -sinf(_viBullet->angle) * _viBullet->speed;
@@ -34,6 +33,10 @@ void bullet::update()
 		if ((getDistance(_viBullet->x, _viBullet->y, _viBullet->sX, _viBullet->sY) > 1500))
 		{
 			_viBullet = _vBullet.erase(_viBullet);
+		}
+		else
+		{
+			++_viBullet;
 		}
 	}
 }

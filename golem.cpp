@@ -13,6 +13,7 @@ void golem::render()
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
+	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato, 1.0f);
 	//_img->aniRender(Vector2(_x, _y), _motion, 1.18f);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
@@ -73,10 +74,10 @@ void golem::attack()
 		_state = _attack;
 
 		RECT temp;
-		if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
+		/*if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
 		{
 			_attackRc = RectMakePivot(Vector2(0,0), Vector2(0,0), Pivot::Center);
-		}
+		}*/
 	}
 	
 }
