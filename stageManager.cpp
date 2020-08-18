@@ -17,6 +17,7 @@ HRESULT stageManager::init()
 
 	_dungeon = new dungeonStage;
 	_ui->getPlayerMemoryAddressLink(_player);
+	//_ui->getBossMemoryAddressLink(_boss);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
@@ -43,7 +44,8 @@ void stageManager::render()
 	SCENEMANAGER->render();
 	_ui->render();
 	//_itemMg->render();
-	if (INVENTORY->getIsInven()) INVENTORY->render();
+	if (INVENTORY->getIsInven()) INVENTORY->render(); 
+
 }
 
 void stageManager::update()
@@ -54,6 +56,15 @@ void stageManager::update()
 	SCENEMANAGER->update();
 
 	KEYANIMANAGER->update();
+
+	if (KEYMANAGER->isOnceKeyDown('H'))
+	{
+		_player->setHitCondition(true);
+	}
+	if (KEYMANAGER->isOnceKeyUp('H'))
+	{
+		_player->setHitCondition(false);
+	}
 
 	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
@@ -94,6 +105,7 @@ void stageManager::update()
 	}
 
 	_itemMg->update();
+	_ui->update();
 
 	RECT temp;
 

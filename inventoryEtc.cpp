@@ -324,16 +324,17 @@ void inventory::renderInven()
 		ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
 		if (_gear[4].item == nullptr) ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
 
+		ImageManager::GetInstance()->FindImage("inven_sword")->Render(Vector2(_gear[0].rc.GetCenter().x - 30, _gear[0].rc.GetCenter().y - 30));
+		ImageManager::GetInstance()->FindImage("inven_bow")->Render(Vector2(_gear[5].rc.GetCenter().x - 30, _gear[5].rc.GetCenter().y - 30));
+
 		//장비 변경
 		if (!_player->getWeaponChange())
 		{
-			ImageManager::GetInstance()->FindImage("inven_sword")->Render(Vector2(_gear[0].rc.GetCenter().x - 30, _gear[0].rc.GetCenter().y - 30));
 			ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
 		}
 
 		if (_player->getWeaponChange())
 		{
-			ImageManager::GetInstance()->FindImage("inven_bow")->Render(Vector2(_gear[5].rc.GetCenter().x - 30, _gear[5].rc.GetCenter().y - 30));
 			ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
 		}
 

@@ -191,8 +191,9 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("boss_bar", L"Image/UI/Boss_bar.png");
 	ImageManager::GetInstance()->AddFrameImage("boss_HP", L"Image/UI/Boss_HP.png", 1, 5);
 	ImageManager::GetInstance()->AddFrameImage("boss_scroll", L"Image/UI/Boss_room.png", 1, 9);
-	ImageManager::GetInstance()->AddFrameImage("moneyBag", L"Image/UI/money_bag.png", 1, 5);
+	ImageManager::GetInstance()->AddFrameImage("moneyBag", L"Image/UI/money_bag.png", 1, 6);
 	ImageManager::GetInstance()->AddImage("price_cursor", L"Image/UI/select_price.png");
+	ImageManager::GetInstance()->AddImage("hit_screen", L"Image/UI/player_hit_screen.png");
 }
 
 void playGround::cursor()
