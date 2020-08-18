@@ -42,6 +42,7 @@ private:
 	float				_playerAttackX, _playerAttackY;		//플레이어 공격위치
 	float				_playerAttackW, _playerAttackH;		//플레이어 공격범위
 	float				_playerCurrentHp;					//플레이어 체력
+	float				_playerMaxHp;
 	float				_SwordDamage;						//플레이어 검 공격력
 	float				_hitAlpha;							//히트당하면 알파값 조정
 	bool				_swordAttack;						//플레이어 검 공격하는중
@@ -96,15 +97,19 @@ public:
 	int getBowChargeCount() { return _bowChargeCount; }
 	int getBowAlphaCount() { return _bowAlphaCount; }
 	int getHitAlphaCount() { return _hitAlphaCount; }
+	int*  getColTileIdx() { return tileIndex; }
+
 	float getX() { return _playerX; }
 	float getY() { return _playerY; }
 	float getShadowX() { return _playerShadowX; }
 	float getShadowY() { return _playerShadowY; }
 	float getplayerCurrentHp() { return _playerCurrentHp; }
+	float getPlayerMaxHp() { return _playerMaxHp; }
 	float getSwordDamage() { return _SwordDamage; }
 	float getPlayerRcW() { return _playerRcW; }
 	float getPlayerRcH() { return  _playerRcH; }
 	float getHitAlpha() { return _hitAlpha; }
+
 	bool getSwordAttack() { return _swordAttack; }
 	bool getSwordAttackCombo() { return _swordAttackCombo; }
 	bool getWeaponChange() { return _weaponChange; }
@@ -122,9 +127,8 @@ public:
 	bool getTileColRightTop() { return _tileColRightTop; }
 	bool getTileColLeftBottom() { return _tileColLeftBottom; }
 	bool getTileColRightBottom() { return _tileColRightBottom; }
-	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
-	
-	int*  getColTileIdx() { return tileIndex; }
+	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
+
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	Image* getImage() { return _playerImg; }
@@ -142,6 +146,7 @@ public:
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
 	void setPlayerCurrentHp(float playerCurrentHp) { _playerCurrentHp = playerCurrentHp; }
+	void setPlayerMaxHp(float playerMaxHp) { _playerMaxHp = playerMaxHp; }
 	void setHitAlpha(float hitAlpha) { _hitAlpha = hitAlpha; }
 	void setPlayerRcW(float playerRcW) { _playerRcW = playerRcW; }
 	void setPlayerRcH(float playerRcH) { _playerRcH = playerRcH; }
@@ -165,8 +170,8 @@ public:
 	{
 		_playerX = playerRcX, _playerY = playerRcY, _playerRcW = playerRcW, _playerRcH = playerRcH;
 	}
-	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
 	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
+	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
 
 public:
 	playerState* getIdleState()			{ return _idle; }

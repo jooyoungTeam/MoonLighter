@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "enemyManager.h"
 #include "objectManager.h"
+#include "miniMap.h"
 
 #define BOSSTILEX 60
 #define BOSSTILEY 41
@@ -13,6 +14,7 @@ private:
 	Image*  _mapImg;
 	class player*  _player;
 	enemyManager* _enemy;
+	miniMap*          _miniMap;
 
 	objectManager* _objectManager;
 	DWORD             _attribute[BOSSTILEX * BOSSTILEY];

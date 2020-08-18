@@ -78,13 +78,15 @@ protected:
 
 
 	bool _isAttack;		//공격하는지?
-	bool _isCol;
+	bool _isCol;		//레드 슬라임 공격이랑 닿다.
+	bool _isPlayerHit;
 	bool _onceAni;		//애니 스타트 하는거 한 번만 들어오게..
 	bool _realDead;		//애니 다 하구 에너미 없어지게 하는거
 	bool _isHit;		//맞음
 	bool _isBossPull;	//보스 끌어당김
 	bool _isBossPush;	//보스 밈
 	bool _isRockBottom;
+	bool _patternCheck;
 		
 
 
@@ -116,6 +118,7 @@ public:
 	void setMotion(Image* img, animation* ani) { _img = img; _motion->stop();  _motion = ani; _motion->start(); }
 	void setPotDirection(POTDIR dir) { _potDir = dir; }
 	void setBossAni(BOSS_ANI ani) { _bossAni = ani; }
+	void setBossPattern(BOSS_PATTERN pattern) { _bossPattern = pattern; }
 
 	void setAttackRect(float x, float y, float width, float height) { _attackRc = RectMakePivot(Vector2(x, y), Vector2(width, height), Pivot::Center); }
 	void setY(float y) { _y = y; }
@@ -137,8 +140,10 @@ public:
 	void setIsPull(bool pull) { _isBossPull = pull; }
 	void setIsPush(bool push) { _isBossPush = push; }
 	void setIsRockBottom(bool bottom) { _isRockBottom = bottom; }
+	void setPatternCheck(bool pattern) { _patternCheck = pattern; }
+	void setIsPlayerHit(bool hit) { _isPlayerHit = hit; }
 
-	void setEnemyAttack(int hp = 3)
+	void setEnemyAttack(int hp = 30)
 	{
 		if (_curHP <= 0)
 		{
@@ -149,13 +154,12 @@ public:
 			_saveHP = _bar.width;
 			if (_type != ENEMY_BOSS)
 			{
-				hp = 30;
 				_isHit = true;
 				_barAlpha = 1.0f;
 			}
-			_curHP -= hp;
 			if (_type == ENEMY_BOSS)
 			{
+				hp / 5;
 				if (_state == _idle)
 				{
 					_bossHitCount++;
@@ -166,18 +170,18 @@ public:
 					_state = _hit;
 				}
 			}
+			_curHP -= hp;
 		}
 		if (_curHP <= 0)
 		{
-			//if (_type == ENEMY_BOSS)
-			//{
-				if (_state != _dead)
-				{
-					_bossAni = ONE;
-					_onceAni = true;
-					_state = _dead;
-				}
-			//}
+
+			if (_state != _dead)
+			{
+				_bossAni = ONE;
+				_onceAni = true;
+				_state = _dead;
+			}
+			
 		}
 	}
 
@@ -205,6 +209,7 @@ public:
 	bool getIsPush() { return _isBossPush; }
 	bool getIsRockBottom() { return _isRockBottom; }
 	bool getOnceAni() { return _onceAni; }
+	bool getIsPlayerHit() { return _isPlayerHit; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }

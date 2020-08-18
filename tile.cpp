@@ -6,24 +6,16 @@ HRESULT tile::init()
 	_tileSize[0] = 100;
 	_tileSize[1] = 100;
 
-
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 	_objectManager = new objectManager;
 	_objectManager->init();
 
+	_miniMap1 = new miniMap;
+	_miniMap1->init(_tileSize[0],_tileSize[1]);
+
 	imageLoad();
 	_palette = new palette;
 	_palette->init();
-	_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
-	_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
-
-	for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
-	{
-		tagMiniMap* tempMini = new tagMiniMap;
-		tempMini->rc = RectMakePivot(Vector2(10 + (i % _tileSize[0]) * 2.5f, 10 + (int)(i / _tileSize[0]) * 2.5f), Vector2(2.5f, 2.5f), Pivot::LeftTop);
-		tempMini->isDraw = false;
-		_vMiniMap.push_back(tempMini);
-	}
 
 
 	_button = new button;
@@ -119,8 +111,10 @@ void tile::render()
 		CAMERAMANAGER->fillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
 
-
-	miniMapRender();
+	POINT pos;
+	pos.x = CAMERAMANAGER->getX();
+	pos.y = CAMERAMANAGER->getY();
+	_miniMap1->render(_objectManager, pos);
 
 
 
@@ -141,58 +135,6 @@ void tile::update()
 
 void tile::release()
 {
-}
-
-void tile::miniMapRender()
-{	// ¹Ì´Ï¸Ê
-	if (_miniMapImg == NULL)
-	{
-		D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
-		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
-	}
-	else
-	{
-		_miniMapImg->Render(Vector2(_miniMap.left, _miniMap.top), 0.05f);
-		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
-	}
-	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::White, 1, 2);
-
-	for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
-	{
-		if (_vMiniMap[i]->isDraw)
-		{
-			D2DRenderer::GetInstance()->FillRectangle(_vMiniMap[i]->rc, D2D1::ColorF::Black, 0.5f);
-
-			//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(Vector2(_vMiniMap[i]->rc.left, _vMiniMap[i]->rc.top), _vTile[i].terrainFrameX, _vTile[i].terrainFrameY,0.05f);
-		}
-		if (KEYMANAGER->isToggleKey('V'))
-		{
-			if (_vTile[i].terrain == TR_WALL || _vTile[i].isColTile)
-			{
-				D2DRenderer::GetInstance()->FillRectangle(_vMiniMap[i]->rc, D2D1::ColorF::Red, 1);
-			}
-		}
-
-	}
-	if (_mapImg != NULL)
-	{
-		for (int i = 0; i < _objectManager->getVObject().size(); i++) // ¿ÀºêÁ§Æ®µé ·»´õ
-		{
-			if (_objectManager->getVObject()[i].isFrameRender)
-			{
-				_objectManager->findImg(_objectManager->getVObject()[i].type,
-					_objectManager->getVObject()[i].imgNumber)->FrameRender(Vector2(10 + _objectManager->getVObject()[i].rc.left * 0.05f, 10 + _objectManager->getVObject()[i].rc.top* 0.05f
-					), 0, 0, _objectManager->getVObject()[i].scale * 0.05f);
-
-			}
-			else
-			{
-				_objectManager->findImg(_objectManager->getVObject()[i].type,
-					_objectManager->getVObject()[i].imgNumber)->Render(Vector2(10 + _objectManager->getVObject()[i].rc.left* 0.05f, 10 + _objectManager->getVObject()[i].rc.top* 0.05f
-					), _objectManager->getVObject()[i].scale * 0.05f);
-			}
-		}
-	}
 }
 
 void tile::drag()
@@ -270,14 +212,14 @@ void tile::drag()
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 					_vTile[i].pos = posSelect(_currentTile.x, _currentTile.y);
-					_vMiniMap[i]->isDraw = true;
+					_miniMap1->setIsDraw(i,true);
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
-					_vMiniMap[i]->isDraw = false;
+					_miniMap1->setIsDraw(i, false);
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
@@ -405,7 +347,7 @@ void tile::setMap()
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
-						_vMiniMap[index]->isDraw = true;
+						_miniMap1->setIsDraw(i, true);
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -414,8 +356,8 @@ void tile::setMap()
 					else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 					{
 						_vTile[index].terrain = TR_NONE;
-						_vTile[index].isColTile = false;
-						_vMiniMap[index]->isDraw = false;
+						_vTile[index].isColTile = false; 
+						_miniMap1->setIsDraw(i, false);
 					}
 
 					break;
@@ -448,8 +390,8 @@ void tile::setMap()
 
 void tile::saveLoad()
 {
-	saveMap(3);
-	loadMap(3);
+	saveMap(1);
+	loadMap(1);
 }
 
 void tile::imageLoad()
@@ -504,28 +446,28 @@ void tile::loadMap(int num)
 		{
 			_currentLoadType = 1;
 			_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
-			_miniMapImg = _mapImg;
+			_miniMap1->setImage(_mapImg);
 			fileName = "townMap.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_BOSS)
 		{
 			_currentLoadType = 2;
 			_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
-			_miniMapImg = _mapImg;
+			_miniMap1->setImage(_mapImg);
 			fileName = "boss.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_SHOP)
 		{
 			_currentLoadType = 3;
 			_mapImg = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
-			_miniMapImg = _mapImg;
+			_miniMap1->setImage(_mapImg);
 			fileName = "shop.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
 		{
 			_currentLoadType = 4;
-			_mapImg = NULL;
-			_miniMapImg = NULL;
+			_mapImg = NULL; 
+			_miniMap1->setImage(_mapImg);
 			if (num == 1)
 				fileName = "dungeon1.map";
 			if (num == 2)
@@ -536,8 +478,8 @@ void tile::loadMap(int num)
 		else if (_button->getType() == BUTTON_LOAD_ENTERENCE)
 		{
 			_currentLoadType = 5;
-			_mapImg = NULL;
-			_miniMapImg = NULL;
+			_mapImg = NULL; 
+			_miniMap1->setImage(_mapImg);
 			fileName = "dungeonEnterence.map";
 		}
 		if (_vTile.size() > 0)
@@ -561,18 +503,8 @@ void tile::loadMap(int num)
 
 		_objectManager->load(_button->getType(),num);
 
-		_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
-		_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
-		_vMiniMap.clear();
-		for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
-		{
-			tagMiniMap* tempMini = new tagMiniMap;
-			tempMini->rc = RectMakePivot(Vector2(10 + (i % _tileSize[0]) * 2.5f, 10 + (int)(i / _tileSize[0]) * 2.5f), Vector2(2.5f, 2.5f), Pivot::LeftTop);
-			tempMini->isDraw = false;
-			_vMiniMap.push_back(tempMini);
-		}
-
-
+		_miniMap1->release();
+		_miniMap1->init(_tileSize[0], _tileSize[1]);
 
 
 		CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
@@ -803,9 +735,7 @@ void tile::mapMove()
 	if (KEYMANAGER->isStayKeyDown('A'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() - 10);
 	if (KEYMANAGER->isStayKeyDown('D'))	CAMERAMANAGER->setX(CAMERAMANAGER->getX() + 10);
 
-	float x = CAMERAMANAGER->getLeft() * 0.05f;
-	float y = CAMERAMANAGER->getTop() * 0.05f;
-	_miniMapMove = RectMakePivot(Vector2(10 + x, 10 + y), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+	_miniMap1->update();
 }
 
 TERRAIN tile::terrainSelect(int frameX, int frameY)

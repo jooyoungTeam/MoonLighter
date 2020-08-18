@@ -73,10 +73,12 @@ public:
 	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기
 	int getLimit() { return _limitCount; }					//아이템 개수 한계치 가져가기
 	int getPrice() { return _price; }						//아이템 가격 가져가기
+	float getX() { return _x; }
+	float getY() { return _y; }
 
 public:
 	// ================== NPC =================
-	void setItemPos(float x, float y) { _x = x; _y = y; }	// NPC 머리위에 아이템 띄우기 위해 위치 재조정 Setter
+	void setItemPos(float x, float y) { _x = x; _y = y; _rc = RectMakePivot(Vector2(_x, _y), Vector2(30, 30), Pivot::Center); }	// NPC 머리위에 아이템 띄우기 위해 위치 재조정 Setter
 	void setShakeY(float y) { _shakeMaxY = y + 5; _shakeMinY = y; }
 	// ================== 인벤토리 =================
 	void setDrop(BOOL drop = FALSE) { _isDrop = drop; }

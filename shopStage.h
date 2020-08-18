@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "shopNPCManager.h"
+#include "display.h"
 #include "tile.h"
 #include "itemManager.h"
 #include "item.h"
@@ -19,51 +20,26 @@ enum doorState
 	DOOR_CLOSING,			// 닫히는 상태
 };
 
-struct tagDisplayStand
-{
-	Vector2 pos;			// 위치
-	FloatRect rc;			// 렉트
-
-	item* it;				// 아이템
-	int	  settingPrice;		// 플레이어 세팅 가격
-	int   rightPrice;		// 알맞은 가격
-	int	  count;			// 아이템 개수
-
-	bool  isActive;			// 진열대에 아이템이 있냐?
-	bool  isPeople;			// 진열대에 사람이 있냐?
-
-	void init(Vector2 mPos, item* mIt, int mPrice, int mCount, bool mIsActive)
-	{
-		pos = mPos;
-		int tempX = pos.x;
-		if (pos.y == 870)
-		{
-			rc = RectMakePivot(Vector2(tempX,830), Vector2(50, 50), Pivot::Center);
-		}
-		else
-		{
-			rc = RectMakePivot(Vector2(tempX, 1000), Vector2(50, 50), Pivot::Center);
-		}
-		it = mIt;
-		settingPrice = mPrice;
-		count = mCount;
-		isActive = mIsActive;
-	}
-};
-
 class shopStage : public gameNode
 {
 private:
 	// =============== 기본 ===============f
 	Image* _backGround;				// 배경 이미지
 	Image* _celler;					// 판매원 이미지
-	class player* _player;				// 플레이어
+	class player* _player;			// 플레이어
 	float _cellerFrameTimer;
 	int	  _cellerIndex;
 
+	bool  _isCeller;
+
 	// =========== 아이템 & 인벤 ===========
-	inventory* _inventory;				// 아이템 매니저
-	tagDisplayStand _display[4];	// 진열대
+	inventory* _inventory;			// 아이템 매니저
+	display* _display1;	// 진열대
+	display* _display2;	// 진열대
+	display* _display3;	// 진열대
+	display* _display4;	// 진열대
+
+	int _activeDisplayCount;		// 사용가능한 진열대 카운트
 
 	// =============== 문 =================
 	doorState _doorState;			// 문 상태
@@ -74,6 +50,9 @@ private:
 	// ============== NPC =================
 	shopNPCManager* _npcM;			// NPC 매니저
 	bool  _enterNPC;				// NPC 들어오는지 확인
+
+	float _npcAddCount;
+	bool  _isMaxNpc;
 
 	vector<POINT> _unMoveTile;
 
@@ -97,15 +76,15 @@ public:
 	void disPlaySet();				// 진열대 세팅
 	void disPlayUpdate();			// 진열대 업데이트
 	void doorUpdate();				// 문 업데이트
-	void npcProcess();					// 아이템 구매
+	void npcProcess();				// NPC 업데이트
+	void npcSet();					// NPC 행동 셋팅
 
 public:
 	//============================ Get ===========================
 
-	
-	void setPlayerLink(player* player) { _player = player; };
 public:
 	//============================ Set ===========================
+	void setPlayerLink(player* player) { _player = player; };
 
 };
 

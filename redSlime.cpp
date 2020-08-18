@@ -6,18 +6,20 @@ void redSlime::attack()
 	_isAttack = true;
 	_x += cosf(_attackAngle) * _speed;
 	_y += -sinf(_attackAngle) * _speed;
-	_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
-	
-	RECT temp2;
-	if (IntersectRect(&temp2, &_pRc.GetRect(), &_attackRc.GetRect()))
+	if (!_isPlayerHit)
 	{
-		_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+		_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 	}
+	//RECT temp2;
+	//if (IntersectRect(&temp2, &_pRc.GetRect(), &_attackRc.GetRect()))
+	//{
+	//	_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+	//}
 
 	RECT temp;
 	if (IntersectRect(&temp, &_rc.GetRect(), &_pRc.GetRect()) && !_isCol )
 	{
-		_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+		//_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 		_isCol = true;
 		_attackCount = 0;
 		_scale = 2.0f;

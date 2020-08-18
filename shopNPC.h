@@ -3,6 +3,8 @@
 #include "aStar.h"
 #include "item.h"
 
+class display;
+
 enum npcType			// NPC 종류 ENUM
 {
 	NPC_NOMAL,			// 일반 NPC - 아무거나 구매
@@ -44,7 +46,7 @@ class shopNPC : public gameNode
 {
 private:
 	aStar*				_aStar;				// A*
-	item*				_item;				// 들고있는 아이템
+	Image*				_itemImg;			// 들고있는 아이템
 	Image*				_img;				// NPC의 이미지
 	Image*				_emotionImg;		// 기분 이미지
 	npcType				_npcType;			// NPC의 종류
@@ -73,18 +75,20 @@ private:
 	int					_indexY;			// 프레임인덱스Y
 	int					_emotionIndexX;		// 이모션 프레임인덱스 X
 	int					_rndChoiceItem;		// 아이템 고르는 난수
+	int					_oldRndChoiceItem;  // 중복 방지 저장 수
 	int					_rndChoicePt;		// 배회 난수
 	int					_rightPrice;		// 물건의 적정가
 	int					_settingPrice;		// 플레이어가 정한 가격
 	int					_selectPrice;		// 고른 물건의 가격
 	int					_checkItemCount;	// 아이템 확인한 수
+	int					_idleCount;			// 배회 카운트
 
 	bool				_checkItem[4];		// 아이템 확인 여부(똑같은 아이템 안보기)
-	bool				_isAnotherPerson[4];// 다른사람이 자기가 고른 아이템을 보고있는지
+	bool				_isAnotherPerson[4];// 다른사람이 자기가 고른 아이템을 보고있는지'
 	bool				_isBuy;				// 구매했는지 확인
 	bool				_isAway;			// 떠나는지 확인
-	bool				_isCount;			// 계산중인지 확인
-	bool				_isCheckEnd;		// 아이템 확인이 끝났는지 확인			
+	bool				_isCount;			// 계산중인지 확인	
+	bool				_isExist;			// 아이템 있나?
 public:
 	shopNPC() {}
 	~shopNPC() {}
@@ -111,17 +115,15 @@ public:
 	FloatRect getNPCRect() { return _rc; }
 	int  getSelectPrice() { return _selectPrice; }
 	int  getRndItem() { return _rndChoiceItem; }
+	int  getOldRndItem() { return _oldRndChoiceItem; }
 	bool getIsBuy() { return _isBuy; }
 	bool getIsAway() { return _isAway; }
 	bool getIsCount() { return _isCount; }
-	bool getIsCheckEnd() { return _isCheckEnd; }
 public:
 	//============================ Set ===========================
 	void setSettingPrice(int price) { _settingPrice = price; }
 	void setRightPrice(int price) { _rightPrice = price; }
-	void setItem(ITEMTYPE _it) { _item->init(_it); }
 	void setIsCount(bool arg) { _isCount = arg; }
 	void setIsAnotherPerson(int index, bool arg) { _isAnotherPerson[index] = arg; }
-	void setIsCheckEnd(bool arg) { _isCheckEnd = arg; }
 };
 

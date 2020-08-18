@@ -8,6 +8,12 @@ HRESULT dungeonStage2::init()
 
 	_objectManager = new objectManager;
 	loadMap();
+	_enemy = new enemyManager;
+	_enemy->setPlayerLink(_player);
+
+	_enemy->setEnemy1();
+	_enemy->init();
+
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
@@ -20,6 +26,7 @@ void dungeonStage2::render()
 {
 	renderMap();
 	_player->render();
+	_enemy->render();
 
 }
 
@@ -31,7 +38,7 @@ void dungeonStage2::update()
 	{
 		_player->update();
 		_player->tileCollision(_attribute, _tile);
-		//_enemy->update();
+		_enemy->update();
 	}
 
 }

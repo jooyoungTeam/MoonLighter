@@ -53,7 +53,6 @@ private:
 	float _handAngle1;
 	float _handAngle2;
 	bool _isHandCol;
-	bool _patternCheck;
 	bool _playerCol;
 	int _cameraShake;
 	int _bossAttackCount;
@@ -61,6 +60,7 @@ private:
 	int _saveRandom;
 	int _exCount;
 	int _attackTimer;
+	int _hitTimer;
 
 public:
 	boss() {}
@@ -87,5 +87,6 @@ public:
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
+	bool getBossPlayerCol() { return _playerCol; }
 };
 

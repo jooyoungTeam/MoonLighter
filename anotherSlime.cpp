@@ -9,13 +9,16 @@ void anotherSlime::attack()
 		_isAttack = true;
 		_x += cosf(_attackAngle) * 3;
 		_y += -sinf(_attackAngle) * 3;
-		_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
-
-		RECT temp;
-		if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
+		if (!_isPlayerHit)
 		{
-			_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+			_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 		}
+
+		//RECT temp;
+		//if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
+		//{
+		//	_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+		//}
 
 		if (_attackCount > 25)
 		{
@@ -40,9 +43,10 @@ void anotherSlime::attack()
 				_once = true;
 				_pang = true;
 
-
-				_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(100, 100), Pivot::Center);
-
+				if (!_isPlayerHit)
+				{
+					_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(100, 100), Pivot::Center);
+				}
 			}
 		}
 
