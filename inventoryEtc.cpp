@@ -387,27 +387,31 @@ void inventory::renderInven()
 			if (_isSwap)
 			{
 				if (i == _selectCount && _isSetPrice)
-					ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_firstPrice[i].rc.left + 2, _firstPrice[i].rc.top));
-
-				/*if (_select == 1)
 				{
-					D2DRenderer::GetInstance()->DrawRectangle(_firstPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-				}
+					if (_select == 1)
+					{
+						//D2DRenderer::GetInstance()->DrawRectangle(_firstPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+						ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_firstPrice[i].rc.left + 2, _firstPrice[i].rc.top));
+					}
 
-				if (_select == 3)
-				{
-					D2DRenderer::GetInstance()->DrawRectangle(_secondPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-				}
+					if (_select == 3)
+					{
+						//D2DRenderer::GetInstance()->DrawRectangle(_secondPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+						ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_secondPrice[i].rc.left + 2, _secondPrice[i].rc.top));
+					}
 
-				if (_select == 5)
-				{
-					D2DRenderer::GetInstance()->DrawRectangle(_thirdPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-				}
+					if (_select == 5)
+					{
+						//D2DRenderer::GetInstance()->DrawRectangle(_thirdPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+						ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_thirdPrice[i].rc.left + 2, _thirdPrice[i].rc.top));
+					}
 
-				if (_select == 7)
-				{
-					D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
-				}*/
+					if (_select == 7)
+					{
+						//D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+						ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_fourthPrice[i].rc.left + 2, _fourthPrice[i].rc.top));
+					}
+				}				
 			}
 		}
 	}
