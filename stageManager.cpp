@@ -51,10 +51,12 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	_ui->render();
-	//_itemMg->render();
+	if (KEYMANAGER->isToggleKey('R'))
+	{
+		_ui->render();
+		_itemMg->render();
+	}
 	if (INVENTORY->getIsInven()) INVENTORY->render(); 
-
 }
 
 void stageManager::update()
@@ -65,15 +67,6 @@ void stageManager::update()
 	SCENEMANAGER->update();
 
 	KEYANIMANAGER->update();
-
-	if (KEYMANAGER->isOnceKeyDown('H'))
-	{
-		_player->setHitCondition(true);
-	}
-	if (KEYMANAGER->isOnceKeyUp('H'))
-	{
-		_player->setHitCondition(false);
-	}
 
 	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{

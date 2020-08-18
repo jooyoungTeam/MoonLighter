@@ -10,11 +10,10 @@ HRESULT UI::init()
 	_playerHpImg = ImageManager::GetInstance()->FindImage("HPbar");
 	_bossHpImg = ImageManager::GetInstance()->FindImage("boss_HP");
 
-	_hpWidth = 35;
 	_bossHpWidth = 38;
 
 	_backBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
-	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
+	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
 
 	_weapon = RectMakePivot(Vector2(1456, 119), Vector2(98, 98), Pivot::LeftTop);
 	_portal = RectMakePivot(Vector2(1458, 778), Vector2(100, 100), Pivot::LeftTop);
@@ -23,6 +22,7 @@ HRESULT UI::init()
 
 	_scene = CURRENT_SCENE::TEMP;
 
+	_hpWidth = (_HpBar.right - _HpBar.left) / 2;
 	_frameCount = 0;
 	_frameY = 0;
 
@@ -125,7 +125,7 @@ void UI::release()
 void UI::setPlayerHpBar()
 {	
 	//_width = (currentGauge / maxGauge) * _progressBarBottom->getWidth();
-	_hpWidth = (_player->getplayerCurrentHp() / 100) * _HpBar.GetWidth();
+	_hpWidth = (_player->getplayerCurrentHp() / 150) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar(int bossHp)
