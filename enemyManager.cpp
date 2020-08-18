@@ -278,22 +278,28 @@ void enemyManager::potBullet()
 void enemyManager::playerCol()
 {
 	RECT temp;
+
+	//검충돌
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getPlayerAttackRc().GetRect()))
 		{
+			EFFECTMANAGER->play("swordEffect1", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 			_vEnemy[i]->setEnemyAttack();
 			_player->setAttackRc(0, 0, 0, 0);
 
 		}
-		for (int i = 0; i < _player->getArrow()->getVArrow().size(); ++i)
-		{
-			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[i].rc.GetRect()))
-			{
-				_vEnemy[i]->setEnemyAttack();
-				//_player->se(0, 0, 0, 0);
-			}
-		}
+		//활충돌
+		//for (int i = 0; i < _player->getArrow()->getVArrow().size(); ++i)
+		//{
+		//	if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[i].rc.GetRect()))
+		//	{
+		//		_vEnemy[i]->setEnemyAttack();
+		//		_player->getArrow()->playerRemoveArrow(i);
+		//		break;
+		//		//_player->se(0, 0, 0, 0);
+		//	}
+		//}
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);

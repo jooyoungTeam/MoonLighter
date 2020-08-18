@@ -30,9 +30,10 @@ HRESULT player::init(float x, float y)
 	_playerY = _playerShadowY - 50;
 	_playerRcW = _playerRcH = 50;
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
-	_playerCurrentHp = 150;
+	_playerCurrentHp = _playerMaxHp = 150;
 	_SwordDamage = 30;
 	_hitAlpha = 0;
+	_enemyCol = false;
 	_hitCondition = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
@@ -329,6 +330,12 @@ void player::animationLoad()
 
 	//그림자
 	ImageManager::GetInstance()->AddImage("playerShadow", L"image/player/playerShadow.png");
+
+	//이펙트
+	ImageManager::GetInstance()->AddFrameImage("bowEffect", L"image/player/bowEffect.png", 3, 1);
+	ImageManager::GetInstance()->AddFrameImage("swordEffect1", L"image/player/swordEffect1.png", 3, 1);
+	ImageManager::GetInstance()->AddFrameImage("swordEffect2", L"image/player/swordEffect2.png", 3, 1);
+	EFFECTMANAGER->addEffect("swordEffect1", "swordEffect1", 384, 128, 128, 42, 1.0f, 0.2f, 10.0f, 1.0f);
 }
 
 //활나가는 방향
