@@ -90,6 +90,24 @@ void cameraManager::zOrderAniRender(Image * img, float x, float y, float z, anim
 	_vZorder.push_back(tempZorder);
 }
 
+void cameraManager::zOrderAniAlphaRender(Image * img, float x, float y, float z, animation * ani, float scale, float alpha)
+{
+	tagZoder tempZorder;
+
+	tempZorder.rendertype = renderType::ANI_ALPHARENDER;
+	tempZorder.img = img;
+	tempZorder.pt.x = x;
+	tempZorder.pt.y = y;
+	tempZorder.z = z;
+	tempZorder.frame.x = NULL;
+	tempZorder.frame.y = NULL;
+	tempZorder.ani = ani;
+	tempZorder.alpha = alpha;
+	tempZorder.scale = scale;
+
+	_vZorder.push_back(tempZorder);
+}
+
 void cameraManager::zOrderSort(int i, int j)
 {
 	if (i >= j) return;
@@ -130,6 +148,9 @@ void cameraManager::zOrderALLRender()
 			break;
 		case renderType::ANI_RENDER:
 			aniRender(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].ani, _vZorder[i].scale);
+			break;
+		case renderType::ANI_ALPHARENDER:
+			aniAlphaRender(_vZorder[i].img, _vZorder[i].pt.x, _vZorder[i].pt.y, _vZorder[i].ani, _vZorder[i].scale, _vZorder[i].alpha);
 			break;
 		}
 	}
@@ -380,5 +401,15 @@ void cameraManager::aniRender(Image * img, int destX, int destY, animation * ani
 	Vector2 pos;
 	pos.x = getRelativeLeft(destX);
 	pos.y = getRelativeTop(destY);
+	if (img) img->aniRender(pos, ani, scale);
+}
+
+void cameraManager::aniAlphaRender(Image * img, int destX, int destY, animation * ani, float scale, float alpha)
+{
+	Vector2 pos;
+	pos.x = getRelativeLeft(destX);
+	pos.y = getRelativeTop(destY);
+	img->SetAlpha(alpha);
+
 	if (img) img->aniRender(pos, ani, scale);
 }

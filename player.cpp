@@ -15,6 +15,7 @@ HRESULT player::init(float x, float y)
 	_swim = new playerSwimState();
 	_bow = new playerbowState();
 	_sword = new playerSwordState();
+	_hit = new playerHitState();
 	_broom = new playerBroomState();
 	_bed = new playerBedState();
 	_teleport = new playerTeleportState();
@@ -31,6 +32,8 @@ HRESULT player::init(float x, float y)
 	_playerAttackX = _playerAttackY = _playerAttackW = _playerAttackH = 0;
 	_playerCurrentHp = 150;
 	_SwordDamage = 30;
+	_hitAlpha = 0;
+	_hitCondition = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -49,7 +52,12 @@ HRESULT player::init(float x, float y)
 void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
-	if (_playerMotion == KEYANIMANAGER->findAnimation("playerBroom")
+	//플레이어 히트 상태일 경우 알파값줌
+	if (_hitCondition)
+	{
+		CAMERAMANAGER->zOrderAniAlphaRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f, _hitAlpha);
+	}
+	else if (_playerMotion == KEYANIMANAGER->findAnimation("playerBroom")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerBed")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportIn")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportOut"))
@@ -406,6 +414,7 @@ void player::arrowShoot()
 void player::tileCollision(DWORD* attribute, tagTile* tile)
 {
 	RECT rcCollision;	//임의의 충돌판정용 렉트
+	RECT probeLeft;
 	tileIndex[3];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
 	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
@@ -416,10 +425,10 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	rcCollision.bottom = _playerRc.bottom;
 
 	//렉트 크기 잘라주기
-	//rcCollision.left += 10;
-	//rcCollision.top += 10;
-	//rcCollision.right -= 10;
-	//rcCollision.bottom -= 10;
+	rcCollision.left += 2;
+	rcCollision.top += 2;
+	rcCollision.right -= 2;
+	rcCollision.bottom -= 2;
 
 	tileX = rcCollision.left / TILESIZE;
 	tileY = rcCollision.top / TILESIZE;
@@ -463,7 +472,11 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 		tileIndex[2] = (tileX + 1 + (tileY - 1) * 60) + 60;
 		break;
 	}
-
+	if (tileSceneChange(attribute, tile, rcCollision))
+	{
+		return;
+	}
+	
 	for (int i = 0; i < 3; i++)
 	{
 		RECT rc;
@@ -473,7 +486,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			switch (_playerDirection)
 			{
 			case DIRECTION::LEFT:
-				_tileColLeft = true;
+				_tileColLeft = true;				
 				return;
 				break;
 			case DIRECTION::UP:
@@ -517,4 +530,59 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	_tileColRightTop = false;
 	_tileColLeftBottom = false;
 	_tileColRightBottom = false;
+}
+bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
+{
+	RECT rc;
+	if (((attribute[tileIndex[0]] & TP_TOWN) == TP_TOWN) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		SCENEMANAGER->changeScene("마을씬");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_SHOP) == TP_SHOP) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2 + 80, 1100);
+		SCENEMANAGER->changeScene("샵씬");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_BOSS) == TP_BOSS) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		cout << "??? " << endl;
+		setPlayerPos(WINSIZEX / 2, 1100);
+		SCENEMANAGER->changeScene("보스씬");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_ENTERENCE) == TP_ENTERENCE) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 1100);
+		SCENEMANAGER->changeScene("던전입구씬");
+		return true;
+	}
+	if (((attribute[tileIndex[0]] & TP_DUN1) == TP_DUN1) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("던전씬");
+		return true;
+	}
+
+	if (((attribute[tileIndex[0]] & TP_DUN2) == TP_DUN2) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("던전씬2");
+		return true;
+	}
+
+	if (((attribute[tileIndex[0]] & TP_SPA) == TP_SPA) &&
+		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
+	{
+		setPlayerPos(WINSIZEX / 2, 800);
+		SCENEMANAGER->changeScene("스파씬");
+		return true;
+	}
 }

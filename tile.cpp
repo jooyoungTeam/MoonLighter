@@ -6,6 +6,7 @@ HRESULT tile::init()
 	_tileSize[0] = 100;
 	_tileSize[1] = 100;
 
+
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 	_objectManager = new objectManager;
 	_objectManager->init();
@@ -15,6 +16,15 @@ HRESULT tile::init()
 	_palette->init();
 	_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
 	_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+
+	for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
+	{
+		tagMiniMap* tempMini = new tagMiniMap;
+		tempMini->rc = RectMakePivot(Vector2(10 + (i % _tileSize[0]) * 2.5f, 10 + (int)(i / _tileSize[0]) * 2.5f), Vector2(2.5f, 2.5f), Pivot::LeftTop);
+		tempMini->isDraw = false;
+		_vMiniMap.push_back(tempMini);
+	}
+
 
 	_button = new button;
 	_button->init();
@@ -29,7 +39,6 @@ void tile::render()
 		CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	}
 
-	_objectManager->objectRender();
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)
@@ -41,18 +50,23 @@ void tile::render()
 				continue;
 
 			CAMERAMANAGER->rectangle(_vTile[index].rc, D2D1::ColorF::Black, 1.0f);
-			if (_vTile[index].terrain != TR_NONE)
+			if (_vTile[index].terrain != TR_NONE && _vTile[index].pos == POS_NONE)
 			{
 				Vector2 vec((_vTile[index].rc.left + _vTile[index].rc.right) * 0.5f, (_vTile[index].rc.top + _vTile[index].rc.bottom) * 0.5f);
-
 				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
-				//CAMERAMANAGER->addFrameRender(ImageManager::GetInstance()->FindImage("mapTiles"), )
 			}
+
 			if (KEYMANAGER->isToggleKey('V'))
 			{
+				if (_vTile[index].pos != POS_NONE)
+				{
+					Vector2 vec((_vTile[index].rc.left + _vTile[index].rc.right) * 0.5f, (_vTile[index].rc.top + _vTile[index].rc.bottom) * 0.5f);
+					CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _vTile[index].terrainFrameX, _vTile[index].terrainFrameY);
+				}
 				if (_vTile[index].terrain == TR_WALL || _vTile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_vTile[index].rc, D2D1::ColorF::Red, 0.5f);
+
 				}
 			}
 
@@ -67,6 +81,7 @@ void tile::render()
 	}
 
 
+	_objectManager->objectRender();
 	// 선택중인 렉트
 	{
 		CAMERAMANAGER->rectangle(_dragTile, D2D1::ColorF::LimeGreen, 1.0f, 5);
@@ -104,9 +119,10 @@ void tile::render()
 		CAMERAMANAGER->fillRectangle(_drag.rc, D2D1::ColorF::SteelBlue, 0.5f);
 	}
 
-	// 미니맵
-	D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
-	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::Black, 1, 2);
+
+	miniMapRender();
+
+
 
 	_objectManager->currentObjectRender();
 
@@ -125,6 +141,58 @@ void tile::update()
 
 void tile::release()
 {
+}
+
+void tile::miniMapRender()
+{	// 미니맵
+	if (_miniMapImg == NULL)
+	{
+		D2DRenderer::GetInstance()->FillRectangle(_miniMap, D2D1::ColorF::Silver, 0.5f);
+		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
+	}
+	else
+	{
+		_miniMapImg->Render(Vector2(_miniMap.left, _miniMap.top), 0.05f);
+		D2DRenderer::GetInstance()->DrawRectangle(_miniMap, D2D1::ColorF::Black, 1, 2);
+	}
+	D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::White, 1, 2);
+
+	for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
+	{
+		if (_vMiniMap[i]->isDraw)
+		{
+			D2DRenderer::GetInstance()->FillRectangle(_vMiniMap[i]->rc, D2D1::ColorF::Black, 0.5f);
+
+			//ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(Vector2(_vMiniMap[i]->rc.left, _vMiniMap[i]->rc.top), _vTile[i].terrainFrameX, _vTile[i].terrainFrameY,0.05f);
+		}
+		if (KEYMANAGER->isToggleKey('V'))
+		{
+			if (_vTile[i].terrain == TR_WALL || _vTile[i].isColTile)
+			{
+				D2DRenderer::GetInstance()->FillRectangle(_vMiniMap[i]->rc, D2D1::ColorF::Red, 1);
+			}
+		}
+
+	}
+	if (_mapImg != NULL)
+	{
+		for (int i = 0; i < _objectManager->getVObject().size(); i++) // 오브젝트들 렌더
+		{
+			if (_objectManager->getVObject()[i].isFrameRender)
+			{
+				_objectManager->findImg(_objectManager->getVObject()[i].type,
+					_objectManager->getVObject()[i].imgNumber)->FrameRender(Vector2(10 + _objectManager->getVObject()[i].rc.left * 0.05f, 10 + _objectManager->getVObject()[i].rc.top* 0.05f
+					), 0, 0, _objectManager->getVObject()[i].scale * 0.05f);
+
+			}
+			else
+			{
+				_objectManager->findImg(_objectManager->getVObject()[i].type,
+					_objectManager->getVObject()[i].imgNumber)->Render(Vector2(10 + _objectManager->getVObject()[i].rc.left* 0.05f, 10 + _objectManager->getVObject()[i].rc.top* 0.05f
+					), _objectManager->getVObject()[i].scale * 0.05f);
+			}
+		}
+	}
 }
 
 void tile::drag()
@@ -201,12 +269,15 @@ void tile::drag()
 					_vTile[i].terrainFrameY = _currentTile.y;
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+					_vTile[i].pos = posSelect(_currentTile.x, _currentTile.y);
+					_vMiniMap[i]->isDraw = true;
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
+					_vMiniMap[i]->isDraw = false;
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
@@ -245,6 +316,7 @@ void tile::setup()
 		_vTile[i].terrainFrameX = 8;
 		_vTile[i].terrainFrameY = 4;
 		_vTile[i].terrain = terrainSelect(_vTile[i].terrainFrameX, _vTile[i].terrainFrameY);
+		_vTile[i].pos = posSelect(_vTile[i].terrainFrameX, _vTile[i].terrainFrameY);
 	}
 }
 
@@ -332,6 +404,8 @@ void tile::setMap()
 						_vTile[index].terrainFrameX = _currentTile.x;
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
+						_vMiniMap[index]->isDraw = true;
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -341,6 +415,7 @@ void tile::setMap()
 					{
 						_vTile[index].terrain = TR_NONE;
 						_vTile[index].isColTile = false;
+						_vMiniMap[index]->isDraw = false;
 					}
 
 					break;
@@ -373,8 +448,8 @@ void tile::setMap()
 
 void tile::saveLoad()
 {
-	saveMap();
-	loadMap();
+	saveMap(3);
+	loadMap(3);
 }
 
 void tile::imageLoad()
@@ -416,7 +491,7 @@ void tile::imageLoad()
 
 }
 
-void tile::loadMap()
+void tile::loadMap(int num)
 {
 	if (_button->getType() == BUTTON_LOAD_TOWN || _button->getType() == BUTTON_LOAD_BOSS
 		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON || _button->getType() == BUTTON_LOAD_ENTERENCE)
@@ -429,30 +504,40 @@ void tile::loadMap()
 		{
 			_currentLoadType = 1;
 			_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/townMap.png");
+			_miniMapImg = _mapImg;
 			fileName = "townMap.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_BOSS)
 		{
 			_currentLoadType = 2;
 			_mapImg = ImageManager::GetInstance()->AddImage("bossRoom1", L"Image/map/bossRoom1.png");
+			_miniMapImg = _mapImg;
 			fileName = "boss.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_SHOP)
 		{
 			_currentLoadType = 3;
 			_mapImg = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
+			_miniMapImg = _mapImg;
 			fileName = "shop.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
 		{
 			_currentLoadType = 4;
 			_mapImg = NULL;
-			fileName = "dungeon1.map";
+			_miniMapImg = NULL;
+			if (num == 1)
+				fileName = "dungeon1.map";
+			if (num == 2)
+				fileName = "dungeon2.map";
+			if (num == 3)
+				fileName = "spa.map";
 		}
 		else if (_button->getType() == BUTTON_LOAD_ENTERENCE)
 		{
 			_currentLoadType = 5;
 			_mapImg = NULL;
+			_miniMapImg = NULL;
 			fileName = "dungeonEnterence.map";
 		}
 		if (_vTile.size() > 0)
@@ -474,17 +559,29 @@ void tile::loadMap()
 
 		CloseHandle(file);
 
-		_objectManager->load(_button->getType());
+		_objectManager->load(_button->getType(),num);
 
 		_miniMap = RectMakePivot(Vector2(10, 10), Vector2(_tileSize[0] * TILESIZE * 0.05f, _tileSize[1] * TILESIZE * 0.05f), Pivot::LeftTop);
 		_miniMapMove = RectMakePivot(Vector2(10, 10), Vector2(WINSIZEX * 0.05f, WINSIZEY * 0.05f), Pivot::LeftTop);
+		_vMiniMap.clear();
+		for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
+		{
+			tagMiniMap* tempMini = new tagMiniMap;
+			tempMini->rc = RectMakePivot(Vector2(10 + (i % _tileSize[0]) * 2.5f, 10 + (int)(i / _tileSize[0]) * 2.5f), Vector2(2.5f, 2.5f), Pivot::LeftTop);
+			tempMini->isDraw = false;
+			_vMiniMap.push_back(tempMini);
+		}
+
+
+
+
 		CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 		_button->setType(BUTTON_TERRAIN);
 
 	}
 }
 
-void tile::saveMap()
+void tile::saveMap(int num)
 {
 	if (_currentLoadType == 0) return;
 	if (_button->getType() == BUTTON_SAVE_TOWN || _button->getType() == BUTTON_SAVE_BOSS
@@ -548,8 +645,12 @@ void tile::saveMap()
 			}
 			_tileSize[0] = 32;
 			_tileSize[1] = 18;
-
-			fileName = "dungeon1.map";
+			if (num == 1)
+				fileName = "dungeon1.map";
+			if (num == 2)
+				fileName = "dungeon2.map";
+			if (num == 3)
+				fileName = "spa.map";
 		}
 		else if (_button->getType() == BUTTON_SAVE_ENTERENCE)
 		{
@@ -579,7 +680,7 @@ void tile::saveMap()
 		WriteFile(file, tempTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &write, NULL);
 
 		CloseHandle(file);
-		_objectManager->save(_button->getType());
+		_objectManager->save(_button->getType(),num);
 
 		_saveTime = 0;
 		_button->setType(BUTTON_TERRAIN);
@@ -727,8 +828,26 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 		// 다섯번째 줄
 		if (frameX == 8 && frameY == 4) return TR_NONE;
 		else if (frameX == i && frameY == 4) return TR_GRASS;
+
+		// 여섯번째 줄
+		if (frameX == i && frameY == 5) return TR_POS;
 	}
 
 	return TR_NONE;
+}
+
+ACTIVEPOS tile::posSelect(int frameX, int frameY)
+{
+	if (frameX == 0 && frameY == 5)      return POS_TOWN;
+	else if (frameX == 1 && frameY == 5) return POS_SHOP;
+	else if (frameX == 2 && frameY == 5) return POS_ENTERENCE;
+	else if (frameX == 3 && frameY == 5) return POS_DUN1;
+	else if (frameX == 4 && frameY == 5) return POS_DUN2;
+	else if (frameX == 5 && frameY == 5) return POS_DUN3;
+	else if (frameX == 6 && frameY == 5) return POS_SPA;
+	else if (frameX == 7 && frameY == 5) return POS_BOSS;
+	else if (frameX == 8 && frameY == 5) return POS_BOSS;
+
+	return POS_NONE;
 }
 

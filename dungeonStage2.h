@@ -7,18 +7,18 @@
 #define DUNTILEX 32
 #define DUNTILEY 18
 
-class dungeonStage : public gameNode
+class dungeonStage2 : public gameNode
 {
-private:
 	class player*     _player;
 	enemyManager*     _enemy;
 
 	DWORD             _attribute[DUNTILEX * DUNTILEY];
 	tagTile			  _tile[DUNTILEX * DUNTILEY];
 	objectManager*    _objectManager;
+
 public:
-	dungeonStage() {}
-	~dungeonStage() {}
+	dungeonStage2() {}
+	~dungeonStage2() {}
 public:
 	HRESULT init();
 	void render();
@@ -26,7 +26,7 @@ public:
 	void release();
 
 	void setPlayerLink(player* player) { _player = player; };
-	void loadDungeonMap();
-	void renderDungeonMap();
+	void loadMap();
+	void renderMap();
 };
 

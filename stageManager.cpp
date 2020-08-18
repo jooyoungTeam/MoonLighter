@@ -5,7 +5,7 @@
 HRESULT stageManager::init()
 {
 	_player = new player;
-	_player->init(500, 500);
+	_player->init(700, 500);
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -14,9 +14,13 @@ HRESULT stageManager::init()
 	_town = new townStage;
 	_boss = new bossStage;
 	_shop = new shopStage;
-
 	_dungeon = new dungeonStage;
+	_dungeon2 = new dungeonStage2;
+	_spa = new spaStage;
+	_enterence = new enterenceStage;
+
 	_ui->getPlayerMemoryAddressLink(_player);
+	//_ui->getBossMemoryAddressLink(_boss);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
@@ -26,10 +30,16 @@ HRESULT stageManager::init()
 	SCENEMANAGER->addScene("´øÀü¾À", _dungeon);
 	SCENEMANAGER->addScene("¸¶À»¾À",	_town);
 	SCENEMANAGER->addScene("º¸½º¾À", _boss);
+	SCENEMANAGER->addScene("´øÀü¾À2", _dungeon2);
+	SCENEMANAGER->addScene("½ºÆÄ¾À", _spa);
+	SCENEMANAGER->addScene("´øÀüÀÔ±¸¾À", _enterence);
 
 
 
 	_dungeon->setPlayerLink(_player);
+	_dungeon2->setPlayerLink(_player);
+	_spa->setPlayerLink(_player);
+	_enterence->setPlayerLink(_player);
 	_town->setPlayerLink(_player);
 	_boss->setPlayerLink(_player);
 	_shop->setPlayerLink(_player);
@@ -41,12 +51,11 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	//_ui->render();
+	_ui->render();
 	//_itemMg->render();
-	if (INVENTORY->getIsInven()) INVENTORY->render();
+	if (INVENTORY->getIsInven()) INVENTORY->render(); 
 
 }
-
 
 void stageManager::update()
 {
@@ -56,6 +65,15 @@ void stageManager::update()
 	SCENEMANAGER->update();
 
 	KEYANIMANAGER->update();
+
+	if (KEYMANAGER->isOnceKeyDown('H'))
+	{
+		_player->setHitCondition(true);
+	}
+	if (KEYMANAGER->isOnceKeyUp('H'))
+	{
+		_player->setHitCondition(false);
+	}
 
 	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 	{
@@ -82,7 +100,7 @@ void stageManager::update()
 
 	if (KEYMANAGER->isOnceKeyDown('Y'))
 	{
-		_itemMg->setItem(ITEMBUNDLE::SLIME_RED, 200 + RND->getInt(50), 200 + RND->getInt(50));
+		_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('U'))
@@ -96,6 +114,7 @@ void stageManager::update()
 	}
 
 	_itemMg->update();
+	_ui->update();
 
 	RECT temp;
 
@@ -136,6 +155,19 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		SCENEMANAGER->changeScene("º¸½º¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->changeScene("´øÀü¾À2");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->changeScene("½ºÆÄ¾À");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F8))
+	{
+		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
+		_player->setPlayerPos(WINSIZEX / 2, WINSIZEY / 2);
 	}
 }
 

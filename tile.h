@@ -19,9 +19,12 @@ private:
 	RECT              _dragTile;    // 마우스 포인터 마우스 안에있을 때
 	objectManager*    _objectManager;
 	palette*          _palette;
+
 	// --------- 미니맵 변수	
-	FloatRect     _miniMap;
-	FloatRect     _miniMapMove;
+	vector<tagMiniMap*>_vMiniMap;
+	Image*             _miniMapImg;
+	FloatRect          _miniMapMove;
+	FloatRect          _miniMap;
 	// --------- 미니맵 변수	
 
 	int           _saveTime;
@@ -39,6 +42,7 @@ public:
 	void    render();
 	void    update();
 	void    release();
+	void    miniMapRender();
 public:
 	void drag();
 	void setup();
@@ -50,12 +54,12 @@ public:
 	void autoTileType(int idx, TERRAIN type);
 	void mapMove();
 
-	void saveMap();
-	void loadMap();
+	void saveMap(int num);
+	void loadMap(int num);
 public:
 
 	TERRAIN terrainSelect(int frameX, int frameY);
-
+	ACTIVEPOS posSelect(int frameX, int frameY);
 };
 
 

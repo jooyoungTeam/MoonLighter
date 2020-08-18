@@ -174,8 +174,6 @@ void inventory::update()
 	if (_isSelect && _isSwap && _state == INVEN_STATE::NOTE) _selectItem.rc = RectMakePivot(Vector2(_gear[_select].rc.left - 5, _gear[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 	if (_isSelect && _isSwap && _state == INVEN_STATE::SHOP) _selectItem.rc = RectMakePivot(Vector2(_shop[_select].rc.left - 5, _shop[_select].rc.top - 70), Vector2(60, 60), Pivot::LeftTop);
 
-	//fullInven();
-
 	if (_state == INVEN_STATE::SHOP)
 	{
 		setPrice(_firstPrice, 0);	//가격 정하기
@@ -396,6 +394,10 @@ void inventory::moveItem()
 						_selectItem.item = nullptr;
 						_isSelect = false;
 					}
+
+					//가격을 정하지 않은 아이템이라도 가격을 정한 쇼케이스에 오면
+					//0으로 초기화되지 않고, 설정했던 가격이 그대로 남아있다
+					
 				}
 
 				//인덱스가 같으면
@@ -551,7 +553,6 @@ void inventory::moveItem()
 							if (_vPrice.size() < 0) continue;
 
 							//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-							//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
 							if (_select == 0) loadPrice(_firstPrice, _select);
 							if (_select == 2) loadPrice(_secondPrice, _select);
 							if (_select == 4) loadPrice(_thirdPrice, _select);
@@ -585,8 +586,6 @@ void inventory::moveItem()
 								if (_vPrice.size() < 0) continue;
 
 								//저장된 인덱스 값과 아이템 인덱스가 같으면 가격도 같게
-								//setPrice의 카운트와 연동 -> 그 다음이 쇼케이스 price	
-								//_selectNumber 와 _selectShopNumber의 위치에도 입력 시켜줘야 함
 								if (_select == 0) loadPrice(_firstPrice, _select);
 								if (_select == 2) loadPrice(_secondPrice, _select);
 								if (_select == 4) loadPrice(_thirdPrice, _select);
@@ -722,9 +721,6 @@ void inventory::moveItem()
 							if (_selectShopNumber == 2) loadPrice(_secondPrice, _selectShopNumber);
 							if (_selectShopNumber == 4) loadPrice(_thirdPrice, _selectShopNumber);
 							if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
-
-							_selectItem.item = nullptr;
-							_isSelect = false;
 						}
 					}
 				}

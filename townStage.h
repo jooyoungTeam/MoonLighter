@@ -10,7 +10,7 @@ class townStage : public gameNode
 private:
 	Image*            _mapImg;
 
-	DWORD             _townAttribute[TOWNTILEX * TOWNTILEY];
+	DWORD             _attribute[TOWNTILEX * TOWNTILEY];
 	tagTile			  _tile[TOWNTILEX * TOWNTILEY];
 	objectManager*    _objectManager;
 	class player*     _player;

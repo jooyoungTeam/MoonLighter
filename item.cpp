@@ -251,10 +251,6 @@ void item::category()
 			_limitCount = 5;
 			_price = 1500;
 			break;
-
-		default:
-
-			break;
 	}
 }
 
@@ -283,8 +279,8 @@ void item::setBundle(int count)
 
 	case ITEMBUNDLE::GOLEM_POT:
 		if (count >= 0 && count < 2) _type = ITEMTYPE::CRYSTAL_ENERGY;
-		if (count >= 2 && count < 3) _type = ITEMTYPE::REINFORCED_STEEL;
-		if (count >= 3 && count < 6) _type = ITEMTYPE::GOLEM_CORE;
+		if (count >= 2 && count < 4) _type = ITEMTYPE::REINFORCED_STEEL;
+		if (count >= 4 && count < 6) _type = ITEMTYPE::GOLEM_CORE;
 		break;
 
 	case ITEMBUNDLE::GOLEM_KING:

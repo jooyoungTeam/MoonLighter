@@ -18,7 +18,7 @@ void townStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		_player->tileCollision(_townAttribute, _tile);
+		_player->tileCollision(_attribute, _tile);
 	}
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
@@ -50,15 +50,17 @@ void townStage::loadMap()
 
 	ReadFile(file, _tile, sizeof(tagTile) * TOWNTILEX * TOWNTILEY, &read, NULL);
 
-	memset(_townAttribute, 0, sizeof(DWORD) * TOWNTILEX * TOWNTILEY);
+	memset(_attribute, 0, sizeof(DWORD) * TOWNTILEX * TOWNTILEY);
 	for (int i = 0; i < TOWNTILEX * TOWNTILEY; ++i)
 	{
-		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _townAttribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].pos == POS_SHOP)      _attribute[i] |= TP_SHOP;         // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_TOWN);
+	_objectManager->load(BUTTON_LOAD_TOWN,0);
 }
 
 
@@ -79,16 +81,8 @@ void townStage::mapToolRender()
 
 			if (KEYMANAGER->isToggleKey('V'))
 			{
-				POINT pos;
-				pos.x = _player->getShadowX();
-				pos.y = _player->getShadowY();
-				if (PtInRect(&_tile[index].rc, pos))
-				{
-				}
-				else
-				{
-					CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
-				}
+				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
+
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
@@ -96,6 +90,13 @@ void townStage::mapToolRender()
 				for (int i = 0; i < 3; i++)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[_player->getColTileIdx()[i]].rc, D2D1::ColorF::White, 1);
+				}
+
+				if (_tile[index].pos != POS_NONE)
+				{
+					Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
+
+					CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
 				}
 			}
 		}
