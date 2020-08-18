@@ -38,6 +38,7 @@ private:
 
 	int _count;								//펜던트 활성화될 때까지 시간
 	int _bossCount;							//보스 방 입장 한 후 시간
+	int _alphaCount;
 	int _frameCount;						//맞았을 때 HP바 프레임 돌릴 시간
 	int _frameY;							//HP바 프레임Y
 	int _bossFrameY;						//보스HP바 프레임Y
@@ -45,6 +46,7 @@ private:
 
 	float _hpWidth;
 	float _bossHpWidth;
+	float _alpha;
 
 	bool _isHit;							//플레이어 맞을 때
 	bool _bossHit;							//보스 맞을 때

@@ -91,10 +91,11 @@ void UI::render()
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 	}
 
-	if (_player->getHitCondition())
+	if (_alphaCount == 1 && _player->getHitCondition())
 	{
+		ImageManager::GetInstance()->FindImage("hit_screen")->SetAlpha(0.5);
 		ImageManager::GetInstance()->FindImage("hit_screen")->Render(Vector2(0, 0));
-	}
+	}	
 }
 
 void UI::update()
@@ -104,6 +105,16 @@ void UI::update()
 	if (_player->getHitCondition())
 	{
 		_isHit = true;
+	}
+
+	if (_player->getHitCondition())
+	{
+		_alphaCount++;
+	}
+
+	if (!_player->getHitCondition())
+	{
+		_alphaCount = 0;
 	}
 
 	/*if (º¸½º Èý)
