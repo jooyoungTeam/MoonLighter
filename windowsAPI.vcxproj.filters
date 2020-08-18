@@ -243,6 +243,18 @@
     <ClInclude Include="palette.h">
       <Filter>playGround\차주영</Filter>
     </ClInclude>
+    <ClInclude Include="dungeonStage2.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="spaStage.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="enterenceStage.h">
+      <Filter>playGround\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="miniMap.h">
+      <Filter>playGround\차주영</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -405,6 +417,18 @@
       <Filter>playGround\김지아</Filter>
     </ClCompile>
     <ClCompile Include="palette.cpp">
+      <Filter>playGround\차주영</Filter>
+    </ClCompile>
+    <ClCompile Include="dungeonStage2.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="spaStage.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="enterenceStage.cpp">
+      <Filter>playGround\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="miniMap.cpp">
       <Filter>playGround\차주영</Filter>
     </ClCompile>
   </ItemGroup>

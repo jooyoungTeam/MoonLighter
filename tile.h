@@ -20,14 +20,11 @@ private:
 	objectManager*    _objectManager;
 	palette*          _palette;
 
-
-
-
 	// --------- ¹Ì´Ï¸Ê º¯¼ö	
-	miniMap       _mini[100 * 100];
-	Image*        _miniMapImg;
-	FloatRect     _miniMapMove;
-	FloatRect     _miniMap;
+	vector<tagMiniMap*>_vMiniMap;
+	Image*             _miniMapImg;
+	FloatRect          _miniMapMove;
+	FloatRect          _miniMap;
 	// --------- ¹Ì´Ï¸Ê º¯¼ö	
 
 	int           _saveTime;
@@ -45,6 +42,7 @@ public:
 	void    render();
 	void    update();
 	void    release();
+	void    miniMapRender();
 public:
 	void drag();
 	void setup();
@@ -56,8 +54,8 @@ public:
 	void autoTileType(int idx, TERRAIN type);
 	void mapMove();
 
-	void saveMap();
-	void loadMap();
+	void saveMap(int num);
+	void loadMap(int num);
 public:
 
 	TERRAIN terrainSelect(int frameX, int frameY);

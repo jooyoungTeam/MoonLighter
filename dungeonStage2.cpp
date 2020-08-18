@@ -1,12 +1,13 @@
 #include "stdafx.h"
-#include "dungeonStage.h"
+#include "dungeonStage2.h"
+
 #include "player.h"
-HRESULT dungeonStage::init()
+HRESULT dungeonStage2::init()
 {
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
-	loadDungeonMap();
+	loadMap();
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
@@ -15,14 +16,14 @@ HRESULT dungeonStage::init()
 	return S_OK;
 }
 
-void dungeonStage::render()
+void dungeonStage2::render()
 {
-	renderDungeonMap();
+	renderMap();
 	_player->render();
 
 }
 
-void dungeonStage::update()
+void dungeonStage2::update()
 {
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
@@ -34,12 +35,12 @@ void dungeonStage::update()
 
 }
 
-void dungeonStage::release()
+void dungeonStage2::release()
 {
 
 }
 
-void dungeonStage::loadDungeonMap()
+void dungeonStage2::loadMap()
 {
 	HANDLE file;
 	DWORD read;
@@ -49,7 +50,7 @@ void dungeonStage::loadDungeonMap()
 
 	// ------------ Å¸ÀÏ
 
-	file = CreateFile("dungeon1.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("dungeon2.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tileSize, sizeof(int) * 2, &read, NULL);
@@ -66,10 +67,10 @@ void dungeonStage::loadDungeonMap()
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_DUNGEON,1);
+	_objectManager->load(BUTTON_LOAD_DUNGEON,2);
 }
 
-void dungeonStage::renderDungeonMap()
+void dungeonStage2::renderMap()
 {
 	for (int i = 0; i < 19; i++)
 	{

@@ -51,7 +51,7 @@ struct tagDragRect
 	POINT endPos;
 };
 
-struct miniMap
+struct tagMiniMap
 {
 	FloatRect     rc;
 	bool          isDraw;

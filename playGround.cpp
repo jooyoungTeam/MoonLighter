@@ -181,11 +181,19 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("UI_weapon_2", L"Image/UI/UI_weapon_2.png");
 	ImageManager::GetInstance()->AddImage("bow", L"Image/UI/Bow.png");
 	ImageManager::GetInstance()->AddImage("sword", L"Image/UI/Sword.png");
+	ImageManager::GetInstance()->AddImage("inven_bow", L"Image/UI/inven_Bow.png");
+	ImageManager::GetInstance()->AddImage("inven_sword", L"Image/UI/inven_Sword.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant", L"image/UI/UI_pendant.png");
 	ImageManager::GetInstance()->AddImage("UI_pendant_ring", L"Image/UI/UI_pendant_ring.png");
 	ImageManager::GetInstance()->AddImage("UI_front", L"Image/UI/UI_front.png");
 	ImageManager::GetInstance()->AddImage("note", L"image/UI/note.png");
 	ImageManager::GetInstance()->AddFrameImage("HPbar", L"Image/UI/HPbar.png", 1, 5);
+	ImageManager::GetInstance()->AddImage("boss_bar", L"Image/UI/Boss_bar.png");
+	ImageManager::GetInstance()->AddFrameImage("boss_HP", L"Image/UI/Boss_HP.png", 1, 5);
+	ImageManager::GetInstance()->AddFrameImage("boss_scroll", L"Image/UI/Boss_room.png", 1, 9);
+	ImageManager::GetInstance()->AddFrameImage("moneyBag", L"Image/UI/money_bag.png", 1, 6);
+	ImageManager::GetInstance()->AddImage("price_cursor", L"Image/UI/select_price.png");
+	ImageManager::GetInstance()->AddImage("hit_screen", L"Image/UI/player_hit_screen.png");
 }
 
 void playGround::cursor()

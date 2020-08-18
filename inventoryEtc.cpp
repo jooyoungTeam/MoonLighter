@@ -317,16 +317,26 @@ void inventory::renderInven()
 				D2DRenderer::GetInstance()->RenderText(_gear[i].rc.right - _gear[i].number.length() * 20, _gear[i].rc.bottom - 20, to_wstring(_gear[i].count), 20, D2DRenderer::DefaultBrush::Black);
 			}
 		}
-		ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[0].rc.GetCenter().x - 26, _gear[0].rc.GetCenter().y - 25));
-		ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[5].rc.GetCenter().x - 26, _gear[5].rc.GetCenter().y - 25));
+		//ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[0].rc.GetCenter().x - 26, _gear[0].rc.GetCenter().y - 25));
+		//ImageManager::GetInstance()->FindImage("empty_weapon")->Render(Vector2(_gear[5].rc.GetCenter().x - 26, _gear[5].rc.GetCenter().y - 25));
 		ImageManager::GetInstance()->FindImage("empty_helmet")->Render(Vector2(_gear[1].rc.GetCenter().x - 26, _gear[1].rc.GetCenter().y - 25));
 		ImageManager::GetInstance()->FindImage("empty_top")->Render(Vector2(_gear[2].rc.GetCenter().x - 26, _gear[2].rc.GetCenter().y - 25));
 		ImageManager::GetInstance()->FindImage("empty_shoes")->Render(Vector2(_gear[3].rc.GetCenter().x - 26, _gear[3].rc.GetCenter().y - 25));
 		if (_gear[4].item == nullptr) ImageManager::GetInstance()->FindImage("empty_potion")->Render(Vector2(_gear[4].rc.GetCenter().x - 26, _gear[4].rc.GetCenter().y - 25));
 
+		ImageManager::GetInstance()->FindImage("inven_sword")->Render(Vector2(_gear[0].rc.GetCenter().x - 30, _gear[0].rc.GetCenter().y - 30));
+		ImageManager::GetInstance()->FindImage("inven_bow")->Render(Vector2(_gear[5].rc.GetCenter().x - 30, _gear[5].rc.GetCenter().y - 30));
+
 		//장비 변경
-		if (!_player->getWeaponChange()) ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
-		if (_player->getWeaponChange())ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+		if (!_player->getWeaponChange())
+		{
+			ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+		}
+
+		if (_player->getWeaponChange())
+		{
+			ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+		}
 
 		if (_isSwap) ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_gear[_select].rc.left - 7, _gear[_select].rc.top - 7));
 	}
@@ -349,7 +359,7 @@ void inventory::renderInven()
 
 			//가격 적어두기
 			if (i % 2 != 0)
-				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x, _shop[i].rc.GetCenter().y + 45, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
+				D2DRenderer::GetInstance()->RenderText(_shop[i].rc.GetCenter().x - 5, _shop[i].rc.GetCenter().y + 40, to_wstring(_shop[i - 1].totalPrice), 20, D2DRenderer::DefaultBrush::White);
 
 			//선택 커서 띄어두기
 			if (i == _select && _isSwap)
@@ -369,36 +379,35 @@ void inventory::renderInven()
 		//가격설정칸 활성상태에 따른 렌더 변화
 		for (int i = 0; i < PRICESPACE; i++)
 		{
-			D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-			D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-			D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
-			D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_firstPrice[i].rc.GetCenter().x - 4, _firstPrice[i].rc.GetCenter().y, to_wstring(_firstPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_secondPrice[i].rc.GetCenter().x - 4, _secondPrice[i].rc.GetCenter().y, to_wstring(_secondPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_thirdPrice[i].rc.GetCenter().x - 4, _thirdPrice[i].rc.GetCenter().y, to_wstring(_thirdPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
+			D2DRenderer::GetInstance()->RenderText(_fourthPrice[i].rc.GetCenter().x - 4, _fourthPrice[i].rc.GetCenter().y, to_wstring(_fourthPrice[i].count), 10, D2DRenderer::DefaultBrush::Black);
 
 			if (_isSwap)
 			{
-				float line;
-				if (i == _selectCount && _isSetPrice) line = 2.f;
-				else line = 1.f;
+				if (i == _selectCount && _isSetPrice)
+					ImageManager::GetInstance()->FindImage("price_cursor")->Render(Vector2(_firstPrice[i].rc.left + 2, _firstPrice[i].rc.top));
 
-				if (_select == 1)
+				/*if (_select == 1)
 				{
-					D2DRenderer::GetInstance()->DrawRectangle(_firstPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
+					D2DRenderer::GetInstance()->DrawRectangle(_firstPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 				}
 
 				if (_select == 3)
 				{
-					D2DRenderer::GetInstance()->DrawRectangle(_secondPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
+					D2DRenderer::GetInstance()->DrawRectangle(_secondPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 				}
 
 				if (_select == 5)
 				{
-					D2DRenderer::GetInstance()->DrawRectangle(_thirdPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
+					D2DRenderer::GetInstance()->DrawRectangle(_thirdPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
 				}
 
 				if (_select == 7)
 				{
-					D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, line);
-				}
+					D2DRenderer::GetInstance()->DrawRectangle(_fourthPrice[i].rc, D2DRenderer::DefaultBrush::Green, 1.f);
+				}*/
 			}
 		}
 	}

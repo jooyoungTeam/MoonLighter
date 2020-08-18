@@ -56,11 +56,12 @@ void townStage::loadMap()
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _townAttribute[i] |= ATTR_UNMOVE;
 		if (_tile[i].pos == POS_SHOP)      _townAttribute[i] |= TP_SHOP;         // 씬 변경해줄 타일
 		if (_tile[i].pos == POS_ENTERENCE) _townAttribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+
 	}
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_TOWN);
+	_objectManager->load(BUTTON_LOAD_TOWN,0);
 }
 
 
