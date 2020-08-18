@@ -414,6 +414,7 @@ void player::arrowShoot()
 void player::tileCollision(DWORD* attribute, tagTile* tile)
 {
 	RECT rcCollision;	//임의의 충돌판정용 렉트
+	RECT probeLeft;
 	tileIndex[3];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
 	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
@@ -424,10 +425,10 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	rcCollision.bottom = _playerRc.bottom;
 
 	//렉트 크기 잘라주기
-	//rcCollision.left += 10;
-	//rcCollision.top += 10;
-	//rcCollision.right -= 10;
-	//rcCollision.bottom -= 10;
+	rcCollision.left += 2;
+	rcCollision.top += 2;
+	rcCollision.right -= 2;
+	rcCollision.bottom -= 2;
 
 	tileX = rcCollision.left / TILESIZE;
 	tileY = rcCollision.top / TILESIZE;
@@ -472,6 +473,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 		break;
 	}
 
+	
 	for (int i = 0; i < 3; i++)
 	{
 		RECT rc;
@@ -481,7 +483,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			switch (_playerDirection)
 			{
 			case DIRECTION::LEFT:
-				_tileColLeft = true;
+				_tileColLeft = true;				
 				return;
 				break;
 			case DIRECTION::UP:
