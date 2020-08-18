@@ -186,6 +186,10 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("UI_front", L"Image/UI/UI_front.png");
 	ImageManager::GetInstance()->AddImage("note", L"image/UI/note.png");
 	ImageManager::GetInstance()->AddFrameImage("HPbar", L"Image/UI/HPbar.png", 1, 5);
+	ImageManager::GetInstance()->AddImage("boss_bar", L"Image/UI/Boss_bar.png");
+	ImageManager::GetInstance()->AddFrameImage("boss_HP", L"Image/UI/Boss_HP.png", 1, 5);
+	ImageManager::GetInstance()->AddFrameImage("boss_scroll", L"Image/UI/Boss_room.png", 1, 9);
+	ImageManager::GetInstance()->AddFrameImage("moneyBag", L"Image/UI/money_bag.png", 1, 5);
 }
 
 void playGround::cursor()
