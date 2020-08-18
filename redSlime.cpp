@@ -20,11 +20,11 @@ void redSlime::attack()
 		_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 		_isCol = true;
 		_attackCount = 0;
-		_scale = 1.3f;
+		_scale = 2.0f;
 		_speed = 0;
 		_img = ImageManager::GetInstance()->FindImage("slimeAttack");
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "slimeAttack");
+		_motion = KEYANIMANAGER->findAnimation("slimeAttack");
 		_motion->start();
 		_x = _pX;
 		_y = _pY;
@@ -60,7 +60,7 @@ void redSlime::attack()
 	{
 		_img = ImageManager::GetInstance()->FindImage("redSlime");
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "redSlime");
+		_motion = KEYANIMANAGER->findAnimation("redSlime");
 		_motion->start();
 		_isAttack = false;
 		_state = _idle;
@@ -83,12 +83,13 @@ void redSlime::dead()
 	{
 		_img = ImageManager::GetInstance()->FindImage("redSlimeDead");
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "redSlimeDead");
+		_motion = KEYANIMANAGER->findAnimation("redSlimeDead");
 		_motion->start();
 		_onceAni = false;
 	}
-	if (!KEYANIMANAGER->findAnimation(  "redSlimeDead")->isPlay())
+	if (!_motion->isPlay() && !_realDead)
 	{
+		cout << " µé¾î¿È " << endl;
 		_realDead = true;
 	}
 }

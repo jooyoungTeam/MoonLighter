@@ -11,6 +11,7 @@ HRESULT bossStage::init()
 
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
+	_enemy->setBoss();
 
 	_enemy->init();
 

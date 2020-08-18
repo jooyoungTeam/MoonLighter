@@ -21,8 +21,12 @@ private:
 
 	FloatRect _rc;
 	float _x, _y;
+	float _angle;
+	float _bulletAngle;
 	int _bulletDelay;
+	int _bulletWait;
 	bool _test;
+
 
 
 
@@ -35,7 +39,9 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void setEnemy();
+	void setEnemy1();
+	void setEnemy2();
+	void setBoss();
 	void potBullet();
 	void playerCol();
 	void bulletCol();

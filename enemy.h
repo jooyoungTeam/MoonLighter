@@ -41,6 +41,7 @@ protected:
 	GOLEMDIR _golemDir;
 	POTDIR _potDir;
 	BOSS_ANI _bossAni;
+	BOSS_PATTERN _bossPattern;
 
 	tagBar _bar;
 	
@@ -56,7 +57,6 @@ protected:
 	FloatRect _attackRc;//공격렉트
 
 	int _maxHP, _curHP, _saveHP;			//에너미 HP
-	int _index;			//키애니에 사용하는 인덱스
 	int _attackDelay;	//공격 딜레이용
 	int _middleBarCut;	//미들바 점점 줄어들게...
 	int _rndX;			//astar 랜덤 값 준거
@@ -90,14 +90,14 @@ protected:
 
 public:
 
-	virtual HRESULT init(int index, float x, float y, float width, float height, ENEMYTYPE type);
+	virtual HRESULT init(float x, float y, float width, float height, ENEMYTYPE type);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 	void playerCheck(float x, float y, FloatRect rc); //나중에 여기에 렉트 추가해
 	virtual void attack() {}	//에너미 공격 넣을 곳
 	virtual void enemyMove() {}	// 움직임 넣을 곳
-	virtual void dead() {}		//에너미 죽는거
+	virtual void dead();		//에너미 죽는거
 	virtual void set() {}		//상속받아서 초기화 할 곳
 	virtual void enemyWay();	//방향 결정
 	virtual void move();		//astar
@@ -140,6 +140,10 @@ public:
 
 	void setEnemyAttack(int hp = 3)
 	{
+		if (_curHP <= 0)
+		{
+			return;
+		}
 		if (_state != _hit && _state != _dead)
 		{
 			_saveHP = _bar.width;
@@ -165,15 +169,15 @@ public:
 		}
 		if (_curHP <= 0)
 		{
-			_onceAni = true;
-			if (_type == ENEMY_BOSS)
-			{
+			//if (_type == ENEMY_BOSS)
+			//{
 				if (_state != _dead)
 				{
 					_bossAni = ONE;
+					_onceAni = true;
 					_state = _dead;
 				}
-			}
+			//}
 		}
 	}
 
@@ -190,7 +194,6 @@ public:
 	float getMoveAngle() { return _moveAngle; }
 	float getAttackAngle() { return _attackAngle; }
 
-	int getIndex() { return _index; }
 	int getAttackDelay() { return _attackDelay; }
 	int getCurHP() { return _curHP; }
 
@@ -201,6 +204,7 @@ public:
 	bool getIsPull() { return _isBossPull; }
 	bool getIsPush() { return _isBossPush; }
 	bool getIsRockBottom() { return _isRockBottom; }
+	bool getOnceAni() { return _onceAni; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }
@@ -211,6 +215,7 @@ public:
 	GOLEMDIR getGolDriection() { return _golemDir; }
 	POTDIR getPotDirection() { return _potDir; }
 	ENEMYTYPE getEnemyType() { return _type; }
+	BOSS_PATTERN getBossPattern() { return _bossPattern; }
 
 	enemyState* getState() { return _state; }
 	enemyState* getIdle() { return _idle; }			
