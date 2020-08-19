@@ -56,6 +56,7 @@ public:
 	HRESULT init(ITEMBUNDLE bundle, float x, float y, float endX, float endY, int count);
 	HRESULT init(ITEMTYPE type, float x, float y, float endX, float endY);
 	HRESULT init(ITEMTYPE type);
+	HRESULT init(int itemIndex);
 	void render();						//인벤토리용 랜더
 	void cameraRender();				//필드용 랜더
 	void update();						//인벤토리용 업데이트

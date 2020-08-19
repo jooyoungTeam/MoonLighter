@@ -124,7 +124,7 @@ public:
 
 	//===========================================↓↓포션 만들기↓↓===========================================//
 
-	void makePotion(int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
+	void makePotion(int selectPotionIndex, int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
 
 	//===========================================↑↑포션 만들기↑↑===========================================//
 

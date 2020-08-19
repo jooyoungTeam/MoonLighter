@@ -783,9 +783,10 @@ void inventory::moveItem()
 
 
 //===========================================↓↓포션 만들기↓↓===========================================//
-void inventory::makePotion(int index, int count, int gold)
+void inventory::makePotion(int selectPotionIndex, int index, int count, int gold)
 {
 	int maxCount = 0;
+	bool isEnd = false;
 
 	if (_gold >= gold) _gold -= gold;
 	else return;
@@ -797,7 +798,9 @@ void inventory::makePotion(int index, int count, int gold)
 			if (_inven[i].count >= count)
 			{
 				_inven[i].count -= count;
-				return;
+
+				isEnd = true;
+				break;
 			}				
 
 			if (_inven[i].count < count)
@@ -808,13 +811,22 @@ void inventory::makePotion(int index, int count, int gold)
 				{
 					maxCount -= count;
 					_inven[i].count = maxCount;
-				}
 
-				else return;
+					isEnd = true;
+				}
+				
 			}
 
 			if (_inven[i].count <= 0) _inven[i].item = nullptr;
 		}
+	}
+
+	if (isEnd)
+	{
+		item* temp = new item;
+		temp->init(selectPotionIndex);
+
+		putItem(temp);
 	}
 }
 //===========================================↑↑포션 만들기↑↑===========================================//
