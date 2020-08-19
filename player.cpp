@@ -585,13 +585,17 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		{
 			setPlayerPos(WINSIZEX / 2, 840);
 		}
-		if (SCENEMANAGER->getCurrentScene() == "带傈纠")
+		else if (SCENEMANAGER->getCurrentScene() == "带傈纠")
 		{
 			setPlayerPos(80, WINSIZEY / 2);
 		}
-		if (SCENEMANAGER->getCurrentScene() == "带傈纠2")
+		else if (SCENEMANAGER->getCurrentScene() == "带傈纠2")
 		{
 			setPlayerPos(WINSIZEX - 80, WINSIZEY / 2);
+		}
+		else if (SCENEMANAGER->getCurrentScene() == "胶颇纠")
+		{
+			setPlayerPos(WINSIZEX / 2, 80);
 		}
 
 		SCENEMANAGER->changeScene("带傈涝备纠");
