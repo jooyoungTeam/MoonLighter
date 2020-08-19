@@ -390,8 +390,8 @@ void tile::setMap()
 
 void tile::saveLoad()
 {
-	saveMap(1);
-	loadMap(1);
+	saveMap(3);
+	loadMap(3);
 }
 
 void tile::imageLoad()
@@ -466,7 +466,7 @@ void tile::loadMap(int num)
 		else if (_button->getType() == BUTTON_LOAD_DUNGEON)
 		{
 			_currentLoadType = 4;
-			_mapImg = NULL; 
+			_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
 			_miniMap1->setImage(_mapImg);
 			if (num == 1)
 				fileName = "dungeon1.map";
@@ -478,7 +478,7 @@ void tile::loadMap(int num)
 		else if (_button->getType() == BUTTON_LOAD_ENTERENCE)
 		{
 			_currentLoadType = 5;
-			_mapImg = NULL; 
+			_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
 			_miniMap1->setImage(_mapImg);
 			fileName = "dungeonEnterence.map";
 		}

@@ -175,11 +175,6 @@ void shopStage::renderMap()
 			int index = (i + cullY) * SHOPTILEX + (j + cullX);
 			if (index >= SHOPTILEX * SHOPTILEY)
 				continue;
-			if (_tile[index].terrain != TR_NONE)
-			{
-				Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
-				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
-			}
 			if (KEYMANAGER->isToggleKey('V'))
 			{
 				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);

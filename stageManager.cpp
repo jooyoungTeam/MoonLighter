@@ -5,7 +5,7 @@
 HRESULT stageManager::init()
 {
 	_player = new player;
-	_player->init(700, 500);
+	_player->init(981, 442);
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
@@ -52,7 +52,11 @@ void stageManager::render()
 {
 	SCENEMANAGER->render();
 	_itemMg->render();
-	_ui->render();
+	
+	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
+	{
+		_ui->render();
+	}
 	if (INVENTORY->getIsInven()) INVENTORY->render(); 
 }
 
@@ -115,7 +119,12 @@ void stageManager::update()
 	}
 
 	_itemMg->update();
-	_ui->update();
+	
+	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
+	{
+		_ui->update();
+	}
+
 
 	RECT temp;
 
