@@ -26,7 +26,7 @@ private:
 	int _bulletDelay;
 	int _bulletWait;
 	int _bulletTimer;	//얼마나 쏠지
-	bool _test;
+	bool _playerStop;
 
 
 
@@ -51,5 +51,6 @@ public:
 	enemy* getEnemy() { return _enemy; }
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
+	bool getPlayerStop() { return _playerStop; }
 };
 

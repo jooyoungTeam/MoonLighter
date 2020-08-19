@@ -45,6 +45,7 @@ void bullet::potRender()
 {
 	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
 	{
+		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _viBullet->x, _viBullet->y + 30, 0.3f, 0.2f);
 		CAMERAMANAGER->frameRender(_viBullet->img, _viBullet->x, _viBullet->y, _viBullet->index, 0);
 		_viBullet->img->SetScale(2.5f);
 		//_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
@@ -55,7 +56,8 @@ void bullet::bossRender()
 {
 	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
 	{
-		CAMERAMANAGER->render(_viBullet->img, _viBullet->x, _viBullet->y, 1.0f);
+		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _viBullet->x - 14, _viBullet->y + 40, 0.5f, 0.2f);
+		CAMERAMANAGER->render(_viBullet->img, _viBullet->x, _viBullet->y, 1.0f, 1.0f);
 		//_viBullet->img->SetScale(2.5f);
 		//_viBullet->img->FrameRender(Vector2(_viBullet->x, _viBullet->y), _viBullet->index, 0);
 		//D2DRenderer::GetInstance()->DrawRectangle(_viBullet->rc, D2DRenderer::DefaultBrush::Yellow, 1.0f);
@@ -69,6 +71,7 @@ void bullet::fire(float x, float y, float angle, float speed)
 	tagBullet bullet;
 	ZeroMemory(&bullet, sizeof(tagBullet));
 	bullet.img = ImageManager::GetInstance()->FindImage(_imageName);
+	bullet.shadow = ImageManager::GetInstance()->FindImage("shadow");
 	bullet.speed = speed;
 	bullet.x = bullet.sX = x;
 	bullet.y = bullet.sY = y;
