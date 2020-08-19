@@ -64,7 +64,7 @@ private:
 	bool				_tileColRightTop;					//타일 충돌 상태인지
 	bool				_tileColLeftBottom;					//타일 충돌 상태인지
 	bool				_tileColRightBottom;				//타일 충돌 상태인지
-
+	bool                _transForm;
 	//플레이어 상태 정의
 	playerState*	    _idle;
 	playerState*	    _walk;
@@ -133,7 +133,7 @@ public:
 	bool getTileColRightTop() { return _tileColRightTop; }
 	bool getTileColLeftBottom() { return _tileColLeftBottom; }
 	bool getTileColRightBottom() { return _tileColRightBottom; }
-
+	bool getTransform() { return _transForm; }
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	Image* getImage() { return _playerImg; }
@@ -179,6 +179,7 @@ public:
 	}
 	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
 	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
+	void setTransform(bool trans) { _transForm = trans; }
 
 public:
 	playerState* getIdleState()			{ return _idle; }
