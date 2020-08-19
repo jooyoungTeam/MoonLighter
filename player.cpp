@@ -352,12 +352,12 @@ void player::arrowShoot()
 
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40, false);
 			}
 		}
 	}
@@ -368,12 +368,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80,true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40,false);
 			}
 		}
 	}
@@ -384,12 +384,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40,false);
 			}
 		}
 	}
@@ -400,12 +400,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80,true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40,false);
 			}
 		}
 	}
@@ -544,35 +544,36 @@ void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 
 bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 {
+
 	RECT rc;
-	if (((attribute[tileIndex[0]] & TP_TOWN) == TP_TOWN) &&
+	if ((attribute[tileIndex[0]] == TP_TOWN) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		SCENEMANAGER->changeScene("¸¶À»¾À");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_SHOP) == TP_SHOP) &&
+	if ((attribute[tileIndex[0]] == TP_SHOP) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2 + 80, 1100);
 		SCENEMANAGER->changeScene("¼¥¾À");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_BOSS) == TP_BOSS) &&
+	if ((attribute[tileIndex[0]] == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 1100);
 		SCENEMANAGER->changeScene("º¸½º¾À");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_ENTERENCE) == TP_ENTERENCE) &&
+	if ((attribute[tileIndex[0]] == TP_ENTERENCE) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 1100);
 		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_DUN1) == TP_DUN1) &&
+	if ((attribute[tileIndex[0]] == TP_DUN1) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);
@@ -580,7 +581,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		return true;
 	}
 
-	if (((attribute[tileIndex[0]] & TP_DUN2) == TP_DUN2) &&
+	if ((attribute[tileIndex[0]] == TP_DUN2) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);
@@ -588,7 +589,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		return true;
 	}
 
-	if (((attribute[tileIndex[0]] & TP_SPA) == TP_SPA) &&
+	if ((attribute[tileIndex[0]] == TP_SPA) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);
