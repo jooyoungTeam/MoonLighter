@@ -122,11 +122,8 @@ public:
 	bool putItem(item* item);								//인벤에 아이템 넣기
 	int fullInven();										//인벤 가득 찼는지 확인하기
 
-	//===========================================↓↓포션 만들기↓↓===========================================//
-
-	void makePotion(int selectPotionIndex, int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
-
-	//===========================================↑↑포션 만들기↑↑===========================================//
+	// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
+	void makePotion(int selectPotionIndex, int index, int count, int gold);		
 
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
@@ -156,7 +153,7 @@ public:
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
-	void resetShowCase(int index) 
+	void resetShowCase(int index)							//아이템 팔린 후 쇼케이스 리셋
 	{ 
 		_shop[index].count = 0;
 		_shop[index].countNum = L"";
@@ -164,7 +161,23 @@ public:
 		_shop[index].originalPrice = 0;
 		_shop[index].price = 0;
 		_shop[index].totalPrice = 0;
-	}					//아이템 팔린 후 쇼케이스 리셋
+	}					
+
+	int countOfPotion()										//포션 개수 세는 함수
+	{
+		for (int i = 0; i < INVENSPACE; i++)
+		{
+			if (_inven[i].item == nullptr) continue;
+
+			int count;
+
+			if (_inven[i].item->getIndex() > 1000)
+			{
+				count++;
+			}
+			return count;
+		}
+	}
 
 public:
 	//플레이어 참조용
