@@ -340,6 +340,7 @@ void inventory::moveItem()
 						_gold += _selectItem.item->getPrice() * _selectItem.count;
 						_inven[_select].item = nullptr;
 						_selectItem.item = nullptr;
+						_selectItem.count = 0;
 						_isSelect = false;
 					}
 
@@ -353,8 +354,8 @@ void inventory::moveItem()
 
 						_inven[_select].item = select;
 						_inven[_select].count = _selectItem.count;
-						_selectItem.count = 0;
 						_selectItem.item = nullptr;
+						_selectItem.count = 0;
 						_isSelect = false;
 					}
 				}
@@ -376,6 +377,7 @@ void inventory::moveItem()
 					_saleImg = ImageManager::GetInstance()->FindImage("mirror_sale");
 					_gold += _inven[_select].item->getPrice() * _inven[_select].count;
 					_inven[_select].item = nullptr;
+					_inven[_select].count = 0;
 					_isSelect = false;
 					return;
 				}
@@ -393,6 +395,7 @@ void inventory::moveItem()
 						_inven[_select].count = _selectItem.count;
 						_inven[_select].price = _selectItem.price;
 						_selectItem.item = nullptr;
+						_selectItem.count = 0;
 						_isSelect = false;
 					}
 
@@ -418,6 +421,7 @@ void inventory::moveItem()
 						}
 
 						_selectItem.item = nullptr;
+						_selectItem.count = 0;
 						_isSelect = false;
 					}	
 				}
@@ -445,6 +449,7 @@ void inventory::moveItem()
 							_inven[_select].item = _selectItem.item;
 							_inven[_select].count = _selectItem.count;
 							_selectItem.item = nullptr;
+							_selectItem.count = 0;
 							_isSelect = false;
 						}						
 					}
@@ -502,6 +507,7 @@ void inventory::moveItem()
 							_gear[_select].item = select;
 							_gear[_select].count = _selectItem.count;
 							_selectItem.item = nullptr;
+							_selectItem.count = 0;
 							_isSelect = false;
 						}
 
@@ -568,6 +574,7 @@ void inventory::moveItem()
 						_shop[_select].item = select;
 						_shop[_select].count = _selectItem.count;
 						_selectItem.item = nullptr;
+						_selectItem.count = 0;
 
 						//설정했었던 아이템 가격 불러오기
 						for (int i = 0; i < _vPrice.size(); ++i)
@@ -600,6 +607,7 @@ void inventory::moveItem()
 								_shop[_selectShopNumber].count += _selectItem.count;
 							}
 							_selectItem.item = nullptr;
+							_selectItem.count = 0;
 							_isSelect = false;
 
 							//설정했었던 아이템 가격 불러오기
@@ -619,6 +627,7 @@ void inventory::moveItem()
 								if (_selectShopNumber == 6) loadPrice(_fourthPrice, _selectShopNumber);
 
 								_selectItem.item = nullptr;
+								_selectItem.count = 0;
 								_isSelect = false;
 							}
 						}		
@@ -720,6 +729,7 @@ void inventory::moveItem()
 							}
 
 							_selectItem.item = nullptr;
+							_selectItem.count = 0;
 							_isSelect = false;
 						}
 
@@ -743,6 +753,7 @@ void inventory::moveItem()
 							}
 
 							_selectItem.item = nullptr;
+							_selectItem.count = 0;
 							_isSelect = false;
 						}		
 
@@ -774,18 +785,20 @@ void inventory::moveItem()
 //===========================================↓↓포션 만들기↓↓===========================================//
 void inventory::makePotion(int index, int count, int gold)
 {
+	int maxCount = 0;
+
 	if (_gold >= gold) _gold -= gold;
 	else return;
 
 	for (int i = 0; i < INVENSPACE; i++)
 	{
-		int maxCount;
-
 		if (_inven[i].item->getIndex() == index)
 		{
 			if (_inven[i].count >= count)
+			{
 				_inven[i].count -= count;
-			return;
+				return;
+			}				
 
 			if (_inven[i].count < count)
 			{

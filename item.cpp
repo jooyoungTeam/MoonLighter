@@ -255,7 +255,7 @@ void item::category()
 			_img = ImageManager::GetInstance()->FindImage("golemKing_Energy");
 			_name = L"°ñ·½¿ÕÀÇ ¿¡³ÊÁö";
 			_itemIndex = 901;
-			_limitCount = 1;
+			_limitCount = 5;
 			_price = 3000;
 			break;
 
@@ -337,8 +337,8 @@ void item::setBundle(int count)
 	case ITEMBUNDLE::GOLEM_KING:
 		if (count >= 0 && count < 2) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
 		if (count >= 2 && count < 3) _type = ITEMTYPE::GOLEMKING_RECORD;
-		if (count >= 3 && count < 4) _type = ITEMTYPE::FABRIC;
-		if (count >= 4 && count < 6) _type = ITEMTYPE::SLIME_RED;
+		if (count >= 3 && count < 5) _type = ITEMTYPE::FABRIC;
+		if (count >= 5 && count < 6) _type = ITEMTYPE::SLIME_RED;
 		break;
 	}
 }

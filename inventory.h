@@ -133,7 +133,7 @@ public:
 
 	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void closeInven();										//인벤 닫으면
-	void popInven();								//인벤 비우기
+	void popInven();										//인벤 비우기
 	void putType();
 
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
