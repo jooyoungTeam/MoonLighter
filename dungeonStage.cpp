@@ -36,7 +36,7 @@ void dungeonStage::update()
 	{
 		_player->update();
 		_enemy->update();
-		_player->tileCollision(_attribute, _tile);
+		_player->tileCollision(_attribute, _tile, DUNTILEX);
 		//_enemy->update();
 	}
 
