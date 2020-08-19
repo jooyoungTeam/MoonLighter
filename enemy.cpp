@@ -148,7 +148,7 @@ void enemy::render()
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);
-	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato, 0.8f);
+	//CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato, 0.8f);
 
 	/*D2DRenderer::GetInstance()->FillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	D2DRenderer::GetInstance()->FillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);

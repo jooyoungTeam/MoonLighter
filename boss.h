@@ -44,8 +44,8 @@ private:
 	tagAttack1 _attack1;
 	tagAttack1 _attack2;
 	tagAttack1 _attack3;
-	tagAttackRect _attack3Rc[13];
-	tagAttackRect _attack3Rc2[13];
+	tagAttackRect _attack3Rc[17];
+	tagAttackRect _attack3Rc2[15];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 
 	Image* _effectImage;
