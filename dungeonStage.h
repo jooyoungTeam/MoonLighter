@@ -12,6 +12,7 @@ class dungeonStage : public gameNode
 private:
 	class player*     _player;
 	enemyManager*     _enemy;
+	Image*            _mapImg;
 
 	DWORD             _attribute[DUNTILEX * DUNTILEY];
 	tagTile			  _tile[DUNTILEX * DUNTILEY];

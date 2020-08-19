@@ -64,6 +64,7 @@ protected:
 	int _hitCount;		//맞을때 반짝
 	int _bossHitCount;
 	int _isHitCount;	//isHit의 카운트임
+	int _startDelay;
 
 
 	float _x, _y, _z;		//에너미 중심
@@ -87,6 +88,8 @@ protected:
 	bool _isBossPush;	//보스 밈
 	bool _isRockBottom;
 	bool _patternCheck;
+	bool _isStart;
+	bool _onceEffect;
 		
 
 
@@ -142,6 +145,7 @@ public:
 	void setIsRockBottom(bool bottom) { _isRockBottom = bottom; }
 	void setPatternCheck(bool pattern) { _patternCheck = pattern; }
 	void setIsPlayerHit(bool hit) { _isPlayerHit = hit; }
+	void setOnceEffect(bool onceEffect) { _onceEffect = onceEffect; }
 
 	void setEnemyAttack(int hp = 30)
 	{
@@ -159,7 +163,7 @@ public:
 			}
 			if (_type == ENEMY_BOSS)
 			{
-				hp / 5;
+				hp = hp / 5;
 				if (_state == _idle)
 				{
 					_bossHitCount++;
@@ -210,6 +214,7 @@ public:
 	bool getIsRockBottom() { return _isRockBottom; }
 	bool getOnceAni() { return _onceAni; }
 	bool getIsPlayerHit() { return _isPlayerHit; }
+	bool getOnceEffect() { return _onceEffect; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }

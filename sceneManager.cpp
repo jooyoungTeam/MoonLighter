@@ -70,6 +70,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 	{
 		//어떤 씬의 정보가 들어있기 때문에 릴리즈 먼저 해주고
 		if (_currentScene) _currentScene->release();
+		_currectSceneName = sceneName;
 
 		CAMERAMANAGER->fadeInOut(FADETYPE::FADEOUT);
 		//현재 씬에 바꾸려는 씬을 담는다

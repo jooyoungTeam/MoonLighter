@@ -55,8 +55,8 @@ void effect::update()
 void effect::render()
 {
 	if (!_isRunning) return;
-
-	_effectImage->aniRender(Vector2(_x, _y), _effectAnimation,_scale);
+	CAMERAMANAGER->aniRender(_effectImage, _x, _y, _effectAnimation, _scale);
+	//_effectImage->aniRender(Vector2(_x, _y), _effectAnimation,_scale);
 }
 
 void effect::startEffect(int x, int y)

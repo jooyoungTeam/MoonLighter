@@ -4,6 +4,7 @@
 struct tagBullet
 {
 	Image* img;
+	Image* shadow;
 	FloatRect rc;
 	float x, y;
 	float sX, sY;

@@ -188,6 +188,7 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("bulletCollision", L"image/enemy/bullet_collision.png", 5, 1);
 	ImageManager::GetInstance()->AddFrameImage("bullet", L"image/enemy/enemy_bullet.png", 6, 1);
 	ImageManager::GetInstance()->AddFrameImage("pot", L"image/enemy/pot.png", 11, 4);
+	ImageManager::GetInstance()->AddFrameImage("potDead", L"image/enemy/potDead.png", 18, 1);
 	EFFECTMANAGER->addEffect("bulletCollision", "bulletCollision", 90, 18, 18, 18, 1.0f, 0.2f, 10.0f, 1.5f);
 
 	//°ñ·½
@@ -219,9 +220,9 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
 	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
+	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png",16,1);
 	EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
-
-
+	EFFECTMANAGER->addEffect("bossTornadoEffect", "bossTornadoEffect", 2112, 221, 132, 221, 1.0f, 0.2f, 10.0f, 1.0f);
 
 	//·¹µå ½½¶óÀÓ
 	int slimeIlde[] = { 0,1,2,3,4,5,6,7,8,9 };
@@ -264,7 +265,8 @@ void enemy::ani()
 	int downPot[] = { 33,34,35,36,37,38,39,40,41,42,43 };
 	KEYANIMANAGER->addArrayFrameAnimation("potDown", "pot", downPot, 11, 7, true);
 
-
+	int potDead[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 };
+	KEYANIMANAGER->addArrayFrameAnimation("potDead", "potDead", potDead, 18, 15, false);
 
 
 	//°ñ·½
@@ -372,21 +374,24 @@ void enemy::enemyWay()
 
 void enemy::move()
 {
-	switch (_type)
+	_startDelay++;
+	if (_startDelay > 300)
 	{
-	case ENEMY_RED_SLIME:
-		_speed = 1.5f;
-		break;
-	case ENEMY_BLUE_SLIME:
-		_speed = 0.7f;
-		break;
-	case ENEMY_YELLOW_SLIME:
-		_speed = 0.7f;
-		break;
-	case ENEMY_GOLEM:
-		_speed = 2.f;
-		break;
-
+		switch (_type)
+		{
+		case ENEMY_RED_SLIME:
+			_speed = 1.5f;
+			break;
+		case ENEMY_BLUE_SLIME:
+			_speed = 0.7f;
+			break;
+		case ENEMY_YELLOW_SLIME:
+			_speed = 0.7f;
+			break;
+		case ENEMY_GOLEM:
+			_speed = 2.f;
+			break;
+		}
 	}
 	if (_aStar->getVShortest().size() > 0)
 	{

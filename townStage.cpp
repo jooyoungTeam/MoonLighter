@@ -8,7 +8,6 @@ HRESULT townStage::init()
 	_objectManager = new objectManager;
 	_objectManager->init();
 
-	_player->setPlayerPos(1000, 700);
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
 
@@ -66,12 +65,11 @@ void townStage::loadMap()
 	for (int i = 0; i < TOWNTILEX * TOWNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
-		if (_tile[i].pos == POS_SHOP)      _attribute[i] |= TP_SHOP;         // 씬 변경해줄 타일
-		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_SHOP)      _attribute[i] = TP_SHOP;         // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] = TP_ENTERENCE;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
-
 	_objectManager->load(BUTTON_LOAD_TOWN,0);
 }
 

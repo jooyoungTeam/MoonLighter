@@ -327,6 +327,22 @@ void objectManager::selectObject()
 			else if (_currentSampleObject == OBJ_NPC)
 			{
 				_currentObject.isFrameRender = true;
+				if (i == 0)
+				{
+					_currentObject.scale = 0.3f;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 0.6f;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 0.3f;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 0.6f;
+				}
 				break;
 			}
 			else if (_currentSampleObject == OBJ_SPA)

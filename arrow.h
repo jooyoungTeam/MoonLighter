@@ -22,8 +22,6 @@ struct tagArrow
 	float		shootX, shootY;			//총알 발사된 위치
 	float		arrowDamage;			//화살 데미지
 	bool		shoot;					//발사할건지
-	bool		arrowCol;
-	int			colCount;
 	int			count;
 	bool        isPowerShot;
 
