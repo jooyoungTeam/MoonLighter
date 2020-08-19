@@ -800,7 +800,6 @@ void inventory::makePotion(int selectPotionIndex, int index, int count, int gold
 				_inven[i].count -= count;
 
 				isEnd = true;
-				break;
 			}				
 
 			if (_inven[i].count < count)
