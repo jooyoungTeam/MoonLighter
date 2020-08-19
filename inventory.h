@@ -96,7 +96,6 @@ private:
 	int _count;							//미러 딜레이
 	int _selectCount;					//가격 선택
 	int _gold;							//소지금
-	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
 
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값(미러사용)
@@ -104,7 +103,8 @@ private:
 	bool _isSetPrice;					//가격 설정할 거니
 	bool _isInven;						//인벤토리 열었니?
 
-	vector<ITEMTYPE> _vType;
+	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
+	vector<ITEMTYPE> _vType;			//아이템 타입 저장할 벡터
 
 	player* _player;
 	UI* _ui;
@@ -151,14 +151,6 @@ public:
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
-
-	/*ITEMTYPE getInvenType() {
-		for (int i = 0; i < INVENSPACE; i++)
-		{
-			if (_inven[i].item != nullptr)
-			return _inven[i].item->getType();
-		}
-	}*/
 	vector<ITEMTYPE> getVType() { return _vType; }
 
 public:
