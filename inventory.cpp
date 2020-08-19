@@ -163,7 +163,7 @@ void inventory::render()
 	{
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
-
+	
 	//아이템 이름 띄우기
 	if (_inven[_select].item != nullptr && !_isSwap)
 	{

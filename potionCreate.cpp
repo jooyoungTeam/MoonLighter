@@ -5,7 +5,7 @@ HRESULT potionCreate::init()
 {
 	ImageManager::GetInstance()->AddImage("potion_shop_bg", L"Image/potionShop/potion_shop_background.png");
 	ImageManager::GetInstance()->AddImage("alphaBlack", L"Image/UI/alphaBlack.png");
-	_selectPotion = ImageManager::GetInstance()->AddImage("select_potion", L"Image/potionShop/select_potion.png");
+	_select = ImageManager::GetInstance()->AddImage("select_potion", L"Image/potionShop/select_potion.png");
 
 	ImageManager::GetInstance()->AddImage("potion_size", L"Image/potionShop/potion_size.png");
 	ImageManager::GetInstance()->AddImage("potion_size_left", L"Image/potionShop/size_select_left.png");
@@ -21,10 +21,12 @@ HRESULT potionCreate::init()
 	_pt[2] = Vector2(806, 259);
 	_pt[3] = Vector2(916, 259);
 
-	_isSizeLeft = false;
+	_isSizeLeft = true;
 	_isSizeRight = true;
 	_isPotionCheck = true;
+	_isActive = false;
 
+	potionSet();
 	
 	return S_OK;
 }
@@ -32,6 +34,8 @@ HRESULT potionCreate::init()
 void potionCreate::update()
 {
 	_selectPt = _pt[_selectIndex];
+	indexSet();
+
 	switch (_state)
 	{
 	case POTION_INIT:
@@ -50,6 +54,18 @@ void potionCreate::update()
 		}
 		break;
 	case POTION_SIZE:
+		if (KEYMANAGER->isOnceKeyDown('A'))
+		{
+			if(_isSizeLeft)
+				_makeCount--;
+			// 포션 개수 마이너스
+		}
+		if (KEYMANAGER->isOnceKeyDown('D'))
+		{
+			if (_isSizeRight)
+				_makeCount++;
+			// 포션 개수 플러스	
+		}
 		break;
 	case POTION_CHECK:
 		if (KEYMANAGER->isOnceKeyDown('A'))
@@ -91,12 +107,30 @@ void potionCreate::update()
 		case POTION_CHECK:
 			if (_isPotionCheck)
 			{
-
+				INVENTORY->makePotion(1001, 101, 1, 0);
+				// 포션 만들기 함수
+				_isActive = false;
 			}
 			else
 			{
 				_state = POTION_SIZE;
 			}
+			break;
+		}
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('K'))
+	{
+		switch (_state)
+		{
+		case POTION_INIT:
+			_isActive = false;
+			break;
+		case POTION_SIZE:
+			_state = POTION_INIT;
+			break;
+		case POTION_CHECK:
+			_state = POTION_SIZE;
 			break;
 		}
 	}
@@ -107,6 +141,7 @@ void potionCreate::render()
 {
 	ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
 	ImageManager::GetInstance()->FindImage("potion_shop_bg")->Render(Vector2(0,0));
+	_select->Render(_selectPt);
 	
 	switch (_state)
 	{
@@ -114,46 +149,57 @@ void potionCreate::render()
 		break;
 	case POTION_SIZE:
 		ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
-		ImageManager::GetInstance()->FindImage("potion_size")->Render(Vector2(0, 0));
+		ImageManager::GetInstance()->FindImage("potion_size")->Render(Vector2(550, 300));
 
 		if (_isSizeLeft)
 		{
-			ImageManager::GetInstance()->FindImage("potion_size_left")->Render(Vector2(0, 0));
+			ImageManager::GetInstance()->FindImage("potion_size_left")->Render(Vector2(601, WINSIZEY / 2 + 24));
 		}
 		if (_isSizeRight)
 		{
-			ImageManager::GetInstance()->FindImage("potion_size_right")->Render(Vector2(0, 0));
+			ImageManager::GetInstance()->FindImage("potion_size_right")->Render(Vector2(733, WINSIZEY / 2 + 24));
 		}
 		break;
 	case POTION_CHECK:
 		ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
 		ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
-		ImageManager::GetInstance()->FindImage("potion_size")->Render(Vector2(0, 0));
-
-		if (_isSizeLeft)
-		{
-			ImageManager::GetInstance()->FindImage("potion_size_left")->Render(Vector2(0, 0));
-		}
-		if (_isSizeRight)
-		{
-			ImageManager::GetInstance()->FindImage("potion_size_right")->Render(Vector2(0, 0));
-		}
-
 		if (_isPotionCheck)
 		{
-			ImageManager::GetInstance()->FindImage("potion_check_yes")->Render(Vector2(0, 0));
+			ImageManager::GetInstance()->FindImage("potion_check_yes")->Render(Vector2(450, 50));
 		}
 		else
 		{
-			ImageManager::GetInstance()->FindImage("potion_check_no")->Render(Vector2(0, 0));
+			ImageManager::GetInstance()->FindImage("potion_check_no")->Render(Vector2(450, 50));
 		}
 		break;
 	}
-	_selectPotion->Render(_selectPt);
 }
 
 void potionCreate::release()
 {
+	
+}
+
+void potionCreate::indexSet()
+{
+	switch (_selectIndex)
+	{
+	case 0:
+		_selectPotion = _potion[0];
+		break;
+
+	case 1:
+		_selectPotion = _potion[1];
+		break;
+
+	case 2:
+		_selectPotion = _potion[2];
+		break;
+
+	case 3:
+		_selectPotion = _potion[3];
+		break;
+	}
 
 }
 
@@ -182,4 +228,26 @@ void potionCreate::potionSet()
 	_potion[3].img = ImageManager::GetInstance()->FindImage("potion_S");
 	_potion[3].name = L"포션(특대)";
 	_potion[3].discription = L"체력을 100 회복한다. 마녀가 드디어 스스로의 능력을 뛰어넘는 물건을 만들어 냈다.";
-}			
+}
+
+void potionCreate::reset()
+{
+	_state = POTION_INIT;
+	_selectIndex = 0;
+	_isSizeLeft = false;
+	_isSizeRight = true;
+	_isPotionCheck = true;
+	_isActive = false;
+}
+
+void potionCreate::isSizeUpdate()
+{
+	if (_makeCount == 1)
+	{
+		_isSizeLeft = false;
+	}
+	else
+	{
+		_isSizeLeft = true;
+	}
+}

@@ -46,6 +46,10 @@ public:
 		const DefaultBrush& defaultBrush = DefaultBrush::Black,
 		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING, 
 		const wstring& font = L"아임크리수진");
+	void RenderText(const int x, const int y, const wstring& text, const int size, const int textLength,
+		const DefaultBrush& defaultBrush = DefaultBrush::Black,
+		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING,
+		const wstring& font = L"아임크리수진");
 	//텍스트 출력 (원하는 색상과 알파값으로 브러쉬 생성해서 출력)
 	void RenderText(const int x, const int y, const wstring& text, const COLORREF& color, const float alpha, const int size,
 		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING, 
