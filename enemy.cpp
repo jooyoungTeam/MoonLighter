@@ -115,7 +115,7 @@ void enemy::release()
 void enemy::update()
 {
 	//cout << _bossHitCount << endl;
-	if (_type != ENEMY_BOSS)
+	if (_type != ENEMY_BOSS && _type != ENEMY_POT)
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
 	}
@@ -339,6 +339,9 @@ void enemy::ani()
 	int attack3_2[]{ 8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossAttack22", "bossHandFly", attack3_2, 9, 7, false);
 
+
+	//____________________________________________
+	SOUNDMANAGER->addSound("bullet", "enemySound/bullet.wav", true, false);
 }
 
 

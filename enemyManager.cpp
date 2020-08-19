@@ -164,6 +164,13 @@ void enemyManager::setEnemy1()
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
 
+	enemy* gost;
+	gost = new pot;
+	gost->playerCheck(_x, _y, _rc);
+	gost->init(-300, -300, 50, 50, ENEMY_POT);
+	gost->setPotDirection(POT_RIGHT);
+	_vEnemy.push_back(gost);
+
 
 }
 
@@ -228,7 +235,6 @@ void enemyManager::potBullet()
 			{
 				_bullet->fire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), PI *3.5, 3.f);
 			}
-
 		}
 		//cout << _bulletTimer << endl;
 		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
@@ -242,7 +248,7 @@ void enemyManager::potBullet()
 				{
 					_bullet->getVBullet().clear();
 					//cout << " = ==" << endl;
-
+					SOUNDMANAGER->play("bullet", 1.0f);
 					//b->setPatternCheck(false);
 					_vEnemy[i]->setPatternCheck(false);
 					_vEnemy[i]->setState(_vEnemy[i]->getIdle());
@@ -256,6 +262,7 @@ void enemyManager::potBullet()
 				_bulletTimer++;
 				if (_bulletTimer > 20)
 				{
+					SOUNDMANAGER->play("bullet", 1.0f);
 					_bullet->getVBullet().clear();
 					//b->setPatternCheck(false);
 					_vEnemy[i]->setPatternCheck(false);
