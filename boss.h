@@ -88,7 +88,7 @@ public:
 	void attack2Angle();
 	void setRock();
 	bool playerCol();
-	bool playerStop();
+	bool playerStop(RECT& rc);
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }

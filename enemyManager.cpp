@@ -364,10 +364,13 @@ void enemyManager::playerCol()
 			}
 			_player->setEnemyCol(true);
 		}
-		if (b->playerStop())
+		RECT tempRc = _player->getShadowRc().GetRect();
+		if (b->playerStop(tempRc))
 		{
-			_player->setX(_player->getX() + 0);
-			_player->setY(_player->getY() + 0);
+			float x = (tempRc.right + tempRc.left) * 0.5f;
+			float y = (tempRc.bottom + tempRc.top) * 0.5f;
+			_player->setPlayerPos(x, y);
+
 		}
 
 	}
