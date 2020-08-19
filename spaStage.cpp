@@ -9,7 +9,7 @@ HRESULT spaStage::init()
 
 	_objectManager = new objectManager;
 	loadMap();
-	
+
 	_maxHp = 100;
 	_curHp = 0;
 
@@ -43,11 +43,15 @@ void spaStage::update()
 	{
 		_player->setTransform(true);
 		_spaCount++;
-		if (_spaCount % 10 == 0 && _curHp < _maxHp)
+		if (_spaCount > 1 && _curHp < _maxHp)
 		{
+			_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + 1);
+			_curHp += 1;
 			_spaCount = 0;
-			_player->setPlayerCurrentHp(10);
-			_curHp += 10;
+			if (_player->getPlayerMaxHp() <= _player->getplayerCurrentHp())
+			{
+				_player->setPlayerCurrentHp(_player->getPlayerMaxHp());
+			}
 		}
 
 	}
