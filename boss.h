@@ -89,6 +89,8 @@ public:
 	void setRock();
 	bool playerCol();
 	bool playerStop(RECT& rc);
+	bool playerStop();
+	void effect();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }

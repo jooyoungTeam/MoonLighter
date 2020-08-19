@@ -59,9 +59,10 @@ void boss::render()
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
-	CAMERAMANAGER->frameRender(_effectImage, _eX, _eY, _index, 0);
+	CAMERAMANAGER->frameRender(_effectImage, _eX , _eY - 80, _index, 0);
+	//CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
 
-	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
+	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index, 0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
 	//CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
 	//CAMERAMANAGER->line(_leftTop, _rightTop, D2D1::ColorF::Black, 2.0f);
@@ -78,6 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
+	_bossPattern = PLAYER_PULL;
 	//attack3();
 	if (_isPlayerHit)
 	{
@@ -91,6 +93,7 @@ void boss::attack()
 	_playerCol = playerCol();
 	if (!_patternCheck)
 	{
+		_index = 0;
 		_attackTimer = 0;
 		_patternRandom = 1;
 
@@ -502,20 +505,7 @@ void boss::attack4()
 
 		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 		{
-			_effectImage = ImageManager::GetInstance()->FindImage("bossPullEffect");
-			_aniCount++;
-			_eX = _pX;
-			_eY = _pY;
-			if (_aniCount > 4)
-			{
-				_index++;
-				_aniCount = 0;
-				if (_index >= 11)
-				{
-					_index = 0;
-				}
-
-			}
+			effect();
 		}
 	
 
@@ -792,20 +782,7 @@ void boss::attack3_3()
 {
 	if ((getDistance(_pX, _pY, _x, _y)) >= 400)
 	{
-		_effectImage = ImageManager::GetInstance()->FindImage("bossTornadoEffect");
-		_aniCount++;
-		_eX = _pX;
-		_eY = _pY;
-		if (_aniCount > 2)
-		{
-			_index++;
-			_aniCount = 0;
-			if (_index >= 15)
-			{
-				_index = 15;
-			}
-
-		}
+		effect();
 		_isBossPull = true;
 	}
 	else
@@ -950,4 +927,43 @@ bool boss::playerStop(RECT& rc)
 	}
 
 	return false;
+}
+
+void boss::effect()
+{
+	if (_bossPattern == PLAYER_PULL)
+	{
+		_effectImage = ImageManager::GetInstance()->FindImage("bossTornadoEffect");
+		_aniCount++;
+		_eX = _pX;
+		_eY = _pY;
+		if (_aniCount > 2)
+		{
+			_index++;
+			_aniCount = 0;
+			if (_index >= 15)
+			{
+				_index = 15;
+			}
+
+		}
+	}
+	if (_bossPattern == EXPLOSION)
+	{
+		_effectImage = ImageManager::GetInstance()->FindImage("bossPullEffect");
+		_aniCount++;
+		_eX = _pX;
+		_eY = _pY;
+		if (_aniCount > 4)
+		{
+			_index++;
+			_aniCount = 0;
+			if (_index >= 11)
+			{
+				_index = 0;
+			}
+
+		}
+	}
+	
 }

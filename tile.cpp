@@ -212,14 +212,14 @@ void tile::drag()
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 					_vTile[i].pos = posSelect(_currentTile.x, _currentTile.y);
-					_miniMap1->setIsDraw(i,true);
+					_miniMap1->setIsDraw(i, true);
 				}
 
 				else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 				{
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
-					_miniMap1->setIsDraw(i, false);
+					_miniMap1->setIsDraw(i,false);
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
@@ -347,7 +347,7 @@ void tile::setMap()
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
-						_miniMap1->setIsDraw(i, true);
+						_miniMap1->setIsDraw(index,true);
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -357,7 +357,7 @@ void tile::setMap()
 					{
 						_vTile[index].terrain = TR_NONE;
 						_vTile[index].isColTile = false; 
-						_miniMap1->setIsDraw(i, false);
+						_miniMap1->setIsDraw(index,false);
 					}
 
 					break;

@@ -281,6 +281,7 @@ void enemyManager::playerCol()
 		{
 			EFFECTMANAGER->play("swordEffect1", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 			_vEnemy[i]->setEnemyAttack(30);
+		//	CAMERAMANAGER->shakeCamera(5, 10);
 			_player->setAttackRc(0, 0, 0, 0);
 
 		}
@@ -298,6 +299,7 @@ void enemyManager::playerCol()
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_player->getArrow()->playerRemoveArrow(j);
 				}
+				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
 				break;
 			}

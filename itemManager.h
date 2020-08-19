@@ -5,7 +5,6 @@
 class itemManager :	public gameNode
 {
 private:
-	item* _item;
 	vector<item*> _vItem;
 
 public:
@@ -23,4 +22,3 @@ public:
 
 	vector<item*> getVItem() { return _vItem; }
 };
-

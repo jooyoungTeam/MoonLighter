@@ -242,11 +242,13 @@ bool inventory::putItem(item* item)
 			{
 				if (_inven[i].item->getIndex() == item->getIndex())
 				{
-					_inven[i].count++;
-					return true;
+					if (_inven[i].count <= _inven[i].item->getLimit())
+					{
+						_inven[i].count++;
+						return true;
+					}
+					
 				}
-				else
-					continue;
 			}
 
 			if (_inven[i].item == nullptr && i < 20)
@@ -573,11 +575,15 @@ void inventory::popInven()
 	for (int i = 0; i < INVENSPACE; i++)
 	{
 		if (_inven[i].item == nullptr) continue;
-
+		
+		_inven[i].isFull = false;
+		_inven[i].count = 0;
+		_inven[i].price = 0;
 		SAFE_DELETE(_inven[i].item);
 	}
 	_vType.clear();
 }
+
 void inventory::putType()
 {
 	for (int i = 0; i < INVENSPACE; i++)

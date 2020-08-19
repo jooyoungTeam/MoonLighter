@@ -258,6 +258,9 @@
     <ClInclude Include="display.h">
       <Filter>playGround\송용은</Filter>
     </ClInclude>
+    <ClInclude Include="potionCreate.h">
+      <Filter>playGround\송용은</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -435,6 +438,9 @@
       <Filter>playGround\차주영</Filter>
     </ClCompile>
     <ClCompile Include="display.cpp">
+      <Filter>playGround\송용은</Filter>
+    </ClCompile>
+    <ClCompile Include="potionCreate.cpp">
       <Filter>playGround\송용은</Filter>
     </ClCompile>
   </ItemGroup>

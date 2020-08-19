@@ -188,6 +188,7 @@
     <ClInclude Include="playerState.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="pot.h" />
+    <ClInclude Include="potionCreate.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="redSlime.h" />
     <ClInclude Include="Resource.h" />
@@ -256,6 +257,7 @@
     <ClCompile Include="playerState.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="pot.cpp" />
+    <ClCompile Include="potionCreate.cpp" />
     <ClCompile Include="redSlime.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="shopNPC.cpp" />

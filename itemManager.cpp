@@ -34,10 +34,11 @@ void itemManager::release()
 void itemManager::setItem(ITEMBUNDLE bundle, float x, float y)
 {
 	int count = RND->getFromIntTo(2, 3);
-	int rnd = RND->getInt(10);
-	if (rnd >= 6) return;
 	for (int i = 0; i < count; i++)
 	{
+		int rnd = RND->getInt(10);
+		if (rnd >= 6) continue;
+
 		item* material;
 		material = new item;
 		material->init(bundle, x, y, x + RND->getFromIntTo(-50, 50), y + RND->getInt(50), rnd);
@@ -50,7 +51,7 @@ void itemManager::popItem(ITEMTYPE type, float x, float y)
 {
 	item* material;
 	material = new item;
-	material->init(type, x, y, x + RND->getFromIntTo(-50, 50), y + RND->getInt(50));
+	material->init(type, x, y, x + RND->getFromIntTo(-50, 50), y + RND->getFromIntTo(-50, 50));
 	
 	_vItem.push_back(material);
 }
