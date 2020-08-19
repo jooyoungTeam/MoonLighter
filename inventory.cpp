@@ -758,3 +758,39 @@ void inventory::moveItem()
 	}
 }
 //===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
+
+
+//===========================================↓↓포션 만들기↓↓===========================================//
+void inventory::makePotion(int index, int count, int gold)
+{
+	if (_gold >= gold) _gold -= gold;
+	else return;
+
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		int maxCount;
+
+		if (_inven[i].item->getIndex() == index)
+		{
+			if (_inven[i].count >= count)
+				_inven[i].count -= count;
+			return;
+
+			if (_inven[i].count < count)
+			{
+				maxCount += _inven[i].count;
+
+				if (maxCount >= count)
+				{
+					maxCount -= count;
+					_inven[i].count = maxCount;
+				}
+
+				else return;
+			}
+
+			if (_inven[i].count <= 0) _inven[i].item = nullptr;
+		}
+	}
+}
+//===========================================↑↑포션 만들기↑↑===========================================//
