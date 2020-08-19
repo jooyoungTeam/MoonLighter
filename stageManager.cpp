@@ -68,9 +68,9 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown('Z'))
 	{
 		if (INVENTORY->getInven()->item == nullptr) return;
-		for (int i = 0; i < 5; i++)
+			INVENTORY->putType();
+		for (int i = 0; i < INVENTORY->getVType().size(); i++)
 		{
-			INVENTORY->test();
 			_itemMg->popItem(INVENTORY->getVType()[i], WINSIZEX / 2, WINSIZEY / 2);
 		}
 		INVENTORY->popInven();
