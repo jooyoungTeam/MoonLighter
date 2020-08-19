@@ -351,10 +351,12 @@ void enemyManager::playerCol()
 		{
 			_player->setEnemyCol(true);
 		}
-		if (IntersectRect(&temp, &b->getBAttack3()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
+		if (b->playerStop())
 		{
-
+			_player->setX(_player->getX() + 0);
+			_player->setY(_player->getY() + 0);
 		}
+
 	}
 
 }

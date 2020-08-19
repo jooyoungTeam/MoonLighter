@@ -89,6 +89,7 @@ void boss::attack()
 		}
 	}
 	_playerCol = playerCol();
+	_playerStop = playerStop();
 	if (!_patternCheck)
 	{
 		_attackTimer = 0;
@@ -900,7 +901,6 @@ bool boss::playerCol()
 	RECT temp;
 	for (int i = 0; i < 13; i++)
 	{
-		
 		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;
@@ -908,13 +908,6 @@ bool boss::playerCol()
 			cout << "돌 1이랑 맞음" << endl;
 			return true;
 		}
-
-		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
-		{
-			cout << "돌 1" << endl;
-			return false;
-		}
-
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;
@@ -938,3 +931,17 @@ bool boss::playerCol()
 	return false;
 }
 
+bool boss::playerStop()
+{
+	for (int i = 0; i < 13; i++)
+	{
+		RECT temp;
+		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
+		{
+			cout << "em fadsffdsafa" << endl;
+			return true;
+		}
+	}
+
+	return false;
+}

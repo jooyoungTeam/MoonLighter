@@ -93,7 +93,7 @@ public:
 	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
 	void tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX);
 	void arrowShoot();
-	void playerHp();
+	void playerHp(float enemy);
 
 public:
 	int getIndex() { return _index; }

@@ -419,9 +419,9 @@ void player::arrowShoot()
 	}
 }
 
-void player::playerHp()
+void player::playerHp(float enemy)
 {
-
+	_playerCurrentHp -= enemy;
 }
 
 //타일 충돌용
