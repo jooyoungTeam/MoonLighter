@@ -110,7 +110,7 @@ void stageManager::update()
 
 		if (KEYMANAGER->isOnceKeyDown('Y'))
 		{
-			_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
+			_itemMg->setItem(ITEMBUNDLE::SLIME_RED, WINSIZEX / 2, WINSIZEY / 2);
 		}
 
 		if (KEYMANAGER->isOnceKeyDown('U'))

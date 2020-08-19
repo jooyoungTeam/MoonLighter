@@ -34,15 +34,25 @@ void townStage::update()
 	if (KEYMANAGER->isOnceKeyDown('Q'))
 	{
 		if (!_isPotionShop)
+		{
 			_isPotionShop = true;
+			_potionShop->setIsActive(true);
+		}
 		else
+		{
 			_isPotionShop = false;
+			_potionShop->setIsActive(false);
+		}
 	}
 
 
 	if (_isPotionShop)
 	{
 		_potionShop->update();
+	}
+	if (!_potionShop->getIsActive())
+	{
+		_potionShop->reset();
 	}
 
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
