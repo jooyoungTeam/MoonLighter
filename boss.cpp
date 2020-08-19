@@ -59,8 +59,8 @@ void boss::render()
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
-	//CAMERAMANAGER->frameRender(_effectImage, _eX , _eY - 80, _index, 0);
-	CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
+	CAMERAMANAGER->frameRender(_effectImage, _eX , _eY - 80, _index, 0);
+	//CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
 
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index, 0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
