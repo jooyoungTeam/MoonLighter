@@ -27,6 +27,13 @@ void playerIdleState::update(player & player)
 		player.setCurrentState(player.getHitState());
 	}
 
+	//죽은상태로 넘어가기~
+	if (player.getDeadState())
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
+	}
+
 	if (!player.getTransform())
 	{
 		//걷기
@@ -93,10 +100,9 @@ void playerIdleState::update(player & player)
 
 	//플레이어 사망 <-- 임시
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	if (KEYMANAGER->isOnceKeyDown('0'))
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
-		player.setCurrentState(player.getDieState());
+		player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
@@ -802,6 +808,15 @@ void playerWalkState::update(player & player)
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	//죽은상태로 넘어가기~
+	if (player.getDeadState())
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 	//플레이어 구르기
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -1170,22 +1185,8 @@ void playerRollState::update(player & player)
 void playerDieState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
-	//아무키도 안누르면 Idle 상태로 전환
-	if (KEYMANAGER->isOnceKeyUp('0'))
-	{
-		if (KEYMANAGER->getKeyUp() == NULL)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
-			player.setCurrentState(player.getIdleState());
-		}
-		//아래키를 누르면 다시 이동
-		else if (GetAsyncKeyState('S') & 0x8000)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
-			player.setCurrentState(player.getWalkState());
-			player.setDirection(DIRECTION::DOWN);
-		}
-	}
+
+
 }
 
 //shield 상태
@@ -1984,5 +1985,11 @@ void playerHitState::update(player & player)
 	{
 		player.setHitAlpha(player.getHitAlpha() == 1.0f);
 		player.setCurrentState(player.getWalkState());
+	}
+
+	if (player.getplayerCurrentHp() <= 0)
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 }
