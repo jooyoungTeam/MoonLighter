@@ -792,6 +792,16 @@ void playerWalkState::update(player & player)
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
+	//수영상태
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	if (player.getTransform())
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownSwim"), ImageManager::GetInstance()->FindImage("playerDownSwim"));
+		player.setCurrentState(player.getSwimState());
+		player.setDirection(DIRECTION::DOWN);
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 	//플레이어 구르기
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -1364,6 +1374,10 @@ void playerShieldState::update(player & player)
 void playerIdleSwimState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
+	if (!player.getTransform())
+	{
+		player.setCurrentState(player.getIdleState());
+	}
 	//위
 	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
@@ -1402,7 +1416,12 @@ void playerIdleSwimState::update(player & player)
 void playerSwimState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
-	//위 
+
+	if (!player.getTransform())
+	{
+		player.setCurrentState(player.getIdleState());
+	}
+	//위
 	if (player.getDirection() == DIRECTION::UP)
 	{
 		if (KEYMANAGER->isStayKeyDown('W'))
