@@ -221,8 +221,8 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
 	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
 	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png",16,1);
-	EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
-	EFFECTMANAGER->addEffect("bossTornadoEffect", "bossTornadoEffect", 2112, 221, 132, 221, 1.0f, 0.2f, 10.0f, 1.0f);
+	//EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
+	//EFFECTMANAGER->addEffect("bossTornadoEffect", "bossTornadoEffect", 2112, 221, 132, 221, 1.0f, 0.2f, 10.0f, 1.0f);
 
 	//레드 슬라임
 	int slimeIlde[] = { 0,1,2,3,4,5,6,7,8,9 };

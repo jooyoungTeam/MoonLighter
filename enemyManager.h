@@ -26,6 +26,7 @@ private:
 	int _bulletDelay;
 	int _bulletWait;
 	int _bulletTimer;	//얼마나 쏠지
+	int _index;
 	bool _playerStop;
 
 

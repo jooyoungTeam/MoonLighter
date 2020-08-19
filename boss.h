@@ -48,10 +48,11 @@ private:
 	tagAttackRect _attack3Rc2[13];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 
-
+	Image* _effectImage;
 	FloatRect _attackRc;
 	float _handAngle1;
 	float _handAngle2;
+	float _eX, _eY;
 	bool _isHandCol;
 	bool _playerCol;
 	int _cameraShake;
@@ -61,6 +62,9 @@ private:
 	int _exCount;
 	int _attackTimer;
 	int _hitTimer;
+	int _index;
+	int _aniCount;
+
 
 public:
 	boss() {}
