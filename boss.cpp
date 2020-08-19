@@ -90,7 +90,7 @@ void boss::attack()
 	if (!_patternCheck)
 	{
 		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(0,7);
+		_patternRandom = RND->getFromIntTo(3,5);
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)

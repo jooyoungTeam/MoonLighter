@@ -4,6 +4,7 @@
 #include "player.h"
 HRESULT enterenceStage::init()
 {
+	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/dungeon_background.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
@@ -62,9 +63,10 @@ void enterenceStage::loadMap()
 	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
-		if (_tile[i].pos == POS_DUN1) _attribute[i] |= TP_DUN1;	 // 씬 변경해줄 타일
-		if (_tile[i].pos == POS_DUN2) _attribute[i] |= TP_DUN2;	 // 씬 변경해줄 타일
-		if (_tile[i].pos == POS_SPA)  _attribute[i] |= TP_SPA;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_TOWN) _attribute[i] = TP_TOWN;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_DUN1) _attribute[i] = TP_DUN1;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_DUN2) _attribute[i] = TP_DUN2;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_SPA)  _attribute[i] = TP_SPA;	 // 씬 변경해줄 타일
 	}
 
 	CloseHandle(file);
@@ -74,6 +76,7 @@ void enterenceStage::loadMap()
 
 void enterenceStage::renderMap()
 {
+	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)

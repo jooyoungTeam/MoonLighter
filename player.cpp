@@ -544,12 +544,20 @@ void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 
 bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 {
-
 	RECT rc;
 	if ((attribute[tileIndex[0]] == TP_TOWN) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
+		if (SCENEMANAGER->getCurrentScene() == "¼¥¾À")
+		{
+			setPlayerPos(WINSIZEX + 330, 500);
+		}
+		else if (SCENEMANAGER->getCurrentScene() == "´øÀüÀÔ±¸¾À")
+		{
+			setPlayerPos(800, 200);
+		}
 		SCENEMANAGER->changeScene("¸¶À»¾À");
+
 		return true;
 	}
 	if ((attribute[tileIndex[0]] == TP_SHOP) &&
@@ -562,21 +570,24 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 1100);
+		setPlayerPos(WINSIZEX, 2000);
 		SCENEMANAGER->changeScene("º¸½º¾À");
 		return true;
 	}
 	if ((attribute[tileIndex[0]] == TP_ENTERENCE) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 1100);
+		if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À")
+		{
+			setPlayerPos(WINSIZEX / 2, 850);
+		}
 		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		return true;
 	}
 	if ((attribute[tileIndex[0]] == TP_DUN1) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 800);
+		setPlayerPos(WINSIZEX / 2, 2000);
 		SCENEMANAGER->changeScene("´øÀü¾À");
 		return true;
 	}
@@ -584,7 +595,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_DUN2) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 800);
+		setPlayerPos(50, WINSIZEY/2);
 		SCENEMANAGER->changeScene("´øÀü¾À2");
 		return true;
 	}
@@ -596,4 +607,5 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		SCENEMANAGER->changeScene("½ºÆÄ¾À");
 		return true;
 	}
+	return false;
 }
