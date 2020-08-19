@@ -97,7 +97,7 @@ void shopStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		
+		_player->tileCollision(_attribute, _tile, SHOPTILEX);
 		_npcM->update();
 
 		disPlayUpdate();

@@ -4,6 +4,7 @@
 #include "player.h"
 HRESULT dungeonStage2::init()
 {
+	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/dungeon_background.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
@@ -80,6 +81,7 @@ void dungeonStage2::loadMap()
 
 void dungeonStage2::renderMap()
 {
+	CAMERAMANAGER->render(_mapImg, 0, 0, 1);
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 33; j++)

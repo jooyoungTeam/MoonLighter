@@ -4,14 +4,14 @@
 
 #define ATTR_UNMOVE		0x00000001
 #define ATTR_SWAMP		0x00000002
-#define TP_TOWN         0x00000004
-#define TP_SHOP         0x00000008
-#define TP_ENTERENCE    0x00000016
-#define TP_DUN1         0x00000032
-#define TP_DUN2         0x00000064
-#define TP_DUN3         0x00000128
-#define TP_SPA          0x00000256
-#define TP_BOSS         0x00000512
+#define TP_TOWN         10000
+#define TP_SHOP         10001
+#define TP_ENTERENCE    10002
+#define TP_DUN1         10003
+#define TP_DUN2         10004
+#define TP_DUN3         10005
+#define TP_SPA          10006
+#define TP_BOSS         10007
 
 enum TERRAIN
 {

@@ -8,6 +8,7 @@
 class spaStage : public gameNode
 {
 	class player*     _player;
+	Image*            _mapImg;
 
 	DWORD             _attribute[DUNTILEX * DUNTILEY];
 	tagTile			  _tile[DUNTILEX * DUNTILEY];
