@@ -51,6 +51,13 @@ void anotherSlime::attack()
 		}
 
 	}
+	else
+	{
+		if (!KEYANIMANAGER->findAnimation("yellowSlimePang")->isPlay())
+		{
+			_realDead = true;
+		}
+	}
 	//if (_pang)
 	//{
 	//	if (!_motion->isPlay())
