@@ -119,10 +119,8 @@ void enemy::update()
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
 	}
-	if (_type == ENEMY_BOSS)
-	{
-		//cout << _isHit << endl;
-	}
+
+
 	_state->update(*this,  _type);
 	enemyWay();
 	checkBoolCount();
@@ -341,7 +339,22 @@ void enemy::ani()
 
 
 	//____________________________________________
-	SOUNDMANAGER->addSound("bullet", "enemySound/bullet.wav", true, false);
+	//팟
+	SOUNDMANAGER->addSound("총알쏘기", "enemySound/에너미/폿/총알쏘기.wav", true, false);
+	SOUNDMANAGER->addSound("총알장전", "enemySound/에너미/폿/총알장전.wav", true, false);	//얘는 안쓸듯
+	SOUNDMANAGER->addSound("총알터짐", "enemySound/에너미/폿/총알터짐.wav", true, false);
+
+	//슬라임
+	SOUNDMANAGER->addSound("슬라임맞음", "enemySound/에너미/슬라임/슬라임맞음.wav", true, false);
+	SOUNDMANAGER->addSound("슬라임어텍", "enemySound/에너미/슬라임/슬라임어텍.wav", true, false);
+	SOUNDMANAGER->addSound("슬라임죽음", "enemySound/에너미/슬라임/슬라임죽음.wav", true, false);
+	SOUNDMANAGER->addSound("슬라임펑", "enemySound/에너미/슬라임/슬라임터트리는공격.wav", true, false);
+	SOUNDMANAGER->addSound("레드슬라임공격", "enemySound/에너미/슬라임/레드슬라임공격.wav", true, false);
+
+	//골렘
+	SOUNDMANAGER->addSound("골렘공격", "enemySound/에너미/골렘/골렘공격.wav", true, false);
+	SOUNDMANAGER->addSound("골렘맞음", "enemySound/에너미/골렘/골렘맞음.wav", true, false);
+
 }
 
 
