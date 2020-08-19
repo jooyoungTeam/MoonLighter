@@ -24,7 +24,7 @@ void townStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		_player->tileCollision(_attribute, _tile);
+		_player->tileCollision(_attribute, _tile, TOWNTILEX);
 	}
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }

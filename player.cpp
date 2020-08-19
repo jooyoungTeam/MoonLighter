@@ -419,13 +419,14 @@ void player::arrowShoot()
 	}
 }
 
+
 //타일 충돌용
-void player::tileCollision(DWORD* attribute, tagTile* tile)
+void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 {
-	RECT rcCollision;	//임의의 충돌판정용 렉트
+	RECT rcCollision;   //임의의 충돌판정용 렉트
 	RECT probeLeft;
-	tileIndex[3];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
-	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
+	tileIndex[3];   //이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
+	int tileX, tileY;   //실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
 	//임의 충돌판정용 렉트에 대입 먼저
 	rcCollision.left = _playerRc.left;
@@ -445,47 +446,47 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	switch (_playerDirection)
 	{
 	case DIRECTION::LEFT:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = tileX + (tileY + 1) * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = tileX + (tileY + 1) * tileSizeX;
 		break;
 	case DIRECTION::UP:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = (tileX + 1) + tileY * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = (tileX + 1) + tileY * tileSizeX;
 		break;
 	case DIRECTION::RIGHT:
-		tileIndex[0] = (tileX + tileY * 60) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * tileSizeX) + 1;
 		break;
 	case DIRECTION::DOWN:
-		tileIndex[0] = (tileX + tileY * 60) + 60;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
 		break;
 	case DIRECTION::LEFTTOP:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = tileX + (tileY + 1) * 60;
-		tileIndex[2] = (tileX + 1) + tileY * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = tileX + (tileY + 1) * tileSizeX;
+		tileIndex[2] = (tileX + 1) + tileY * tileSizeX;
 		break;
 	case DIRECTION::RIGHTTOP:
-		tileIndex[0] = (tileX + tileY * 60) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
-		tileIndex[2] = tileX + tileY * 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * tileSizeX) + 1;
+		tileIndex[2] = tileX + tileY * tileSizeX;
 		break;
 	case DIRECTION::LEFTBOTTOM:
-		tileIndex[0] = (tileX + tileY * 60) + 60;
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
-		tileIndex[2] = (tileX + (tileY - 1) * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
+		tileIndex[2] = (tileX + (tileY - 1) * tileSizeX) + tileSizeX;
 		break;
 	case DIRECTION::RIGHTBOTTOM:
-		tileIndex[0] = (tileX + tileY * 60) + 60;
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
-		tileIndex[2] = (tileX + 1 + (tileY - 1) * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
+		tileIndex[2] = (tileX + 1 + (tileY - 1) * tileSizeX) + tileSizeX;
 		break;
 	}
 	if (tileSceneChange(attribute, tile, rcCollision))
 	{
 		return;
 	}
-	
+
 	for (int i = 0; i < 3; i++)
 	{
 		RECT rc;
@@ -495,7 +496,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			switch (_playerDirection)
 			{
 			case DIRECTION::LEFT:
-				_tileColLeft = true;				
+				_tileColLeft = true;
 				return;
 				break;
 			case DIRECTION::UP:
@@ -540,6 +541,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	_tileColLeftBottom = false;
 	_tileColRightBottom = false;
 }
+
 bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 {
 	RECT rc;
