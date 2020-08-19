@@ -8,23 +8,43 @@ HRESULT townStage::init()
 	_objectManager = new objectManager;
 	_objectManager->init();
 
+	_potionShop = new potionCreate;
+	_potionShop->init();
+
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _mapImg->GetSize().x - WINSIZEX, _mapImg->GetSize().y - WINSIZEY);
 	loadMap();
 
 	_miniMap = new miniMap;
     _miniMap->init(TOWNTILEX, TOWNTILEY);
 	_miniMap->setImage(_mapImg);
+
+	_isPotionShop = false;
 	return S_OK;
 }
 
 void townStage::update()
 {
 	_miniMap->update();
-	if (!INVENTORY->getIsInven())
+	if (!INVENTORY->getIsInven() && !_isPotionShop)
 	{
 		_player->update();
 		_player->tileCollision(_attribute, _tile, TOWNTILEX);
 	}
+
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		if (!_isPotionShop)
+			_isPotionShop = true;
+		else
+			_isPotionShop = false;
+	}
+
+
+	if (_isPotionShop)
+	{
+		_potionShop->update();
+	}
+
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
 
@@ -33,16 +53,21 @@ void townStage::render()
 	mapToolRender();
 	_player->render();
 
-
 	POINT pos;
 	pos.x = _player->getX();
 	pos.y = _player->getY();
 	_miniMap->render(_objectManager, pos);
+
+	if (_isPotionShop)
+	{
+		_potionShop->render();
+	}
 }
 
 void townStage::release()
 {
 	//_miniMap->release();
+	_potionShop->release();
 }
 void townStage::loadMap()
 {

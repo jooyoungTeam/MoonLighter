@@ -124,7 +124,7 @@ public:
 
 	//===========================================↓↓포션 만들기↓↓===========================================//
 
-	void makePotion(int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
+	void makePotion(int selectPotionIndex, int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
 
 	//===========================================↑↑포션 만들기↑↑===========================================//
 
@@ -133,7 +133,7 @@ public:
 
 	void renderInven();										//인벤 상태에 따른 렌더 조정
 	void closeInven();										//인벤 닫으면
-	void popInven();								//인벤 비우기
+	void popInven();										//인벤 비우기
 	void putType();
 
 	void setCount(tagSetPrice p[PRICESPACE], wstring d);	//가격 설정하기
