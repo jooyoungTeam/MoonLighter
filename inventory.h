@@ -175,8 +175,8 @@ public:
 			{
 				count++;
 			}
-			return count;
 		}
+		return count;
 	}
 
 public:
