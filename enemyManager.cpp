@@ -308,7 +308,6 @@ void enemyManager::playerCol()
 				break;
 			}
 		}
-
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
@@ -354,7 +353,7 @@ void enemyManager::playerCol()
 		}
 		if (IntersectRect(&temp, &b->getBAttack3()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
 		{
-			cout << "µé¿À¤Ã" << endl;
+
 		}
 	}
 

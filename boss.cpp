@@ -52,7 +52,7 @@ void boss::render()
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
 			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
 	}
 	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
@@ -77,7 +77,7 @@ void boss::render()
 
 void boss::attack()
 {
-	//_bossPattern = PLAYER_PULL;
+	_bossPattern = ARM_LONG;
 	//attack3();
 	if (_isPlayerHit)
 	{
@@ -170,18 +170,18 @@ void boss::attack()
 			attack2();
 		}
 	}
-	if (_bossPattern == ROCK_FALL)
-	{
-		attack3();
-	}
-	if (_bossPattern == PLAYER_PULL)
-	{
-		attack3();
-	}
-	if (_bossPattern == EXPLOSION)
-	{
-		attack4();
-	}
+	//if (_bossPattern == ROCK_FALL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == PLAYER_PULL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == EXPLOSION)
+	//{
+	//	attack4();
+	//}
 }
 
 void boss::dead()
@@ -908,6 +908,13 @@ bool boss::playerCol()
 			cout << "돌 1이랑 맞음" << endl;
 			return true;
 		}
+
+		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
+		{
+			cout << "돌 1" << endl;
+			return false;
+		}
+
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;
