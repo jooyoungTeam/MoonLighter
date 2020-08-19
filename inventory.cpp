@@ -801,6 +801,7 @@ void inventory::makePotion(int selectPotionIndex, int index, int count, int gold
 				_inven[i].count -= count;
 
 				isEnd = true;
+				break;
 			}				
 
 			if (_inven[i].count < count)
@@ -815,14 +816,18 @@ void inventory::makePotion(int selectPotionIndex, int index, int count, int gold
 					isEnd = true;
 				}				
 			}
-
-			if (_inven[i].count <= 0)
-			{
-				_inven[i].isFull = false;
-				_inven[i].item = nullptr;
-			}
 		}
 	}
+
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		if (_inven[i].count <= 0)
+		{
+			_inven[i].isFull = false;
+			_inven[i].item = nullptr;
+		}
+	}
+
 
 	if (isEnd)
 	{

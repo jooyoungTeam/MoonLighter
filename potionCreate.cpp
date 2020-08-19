@@ -152,6 +152,8 @@ void potionCreate::render()
 
 	D2DRenderer::GetInstance()->RenderText(1350, 450, to_wstring(_selectPotion.price), 25, D2DRenderer::DefaultBrush::Gray);
 
+	D2DRenderer::GetInstance()->RenderText(1350, 250, to_wstring(INVENTORY->countOfPotion(_selectPotion.index)), 25, D2DRenderer::DefaultBrush::Gray);
+
 	switch (_state)
 	{
 	case POTION_INIT:

@@ -165,7 +165,7 @@ public:
 
 	int countOfPotion(int index)										//포션 개수 세는 함수
 	{
-		int count;
+		int count = 0;
 
 		for (int i = 0; i < INVENSPACE; i++)
 		{
@@ -174,7 +174,7 @@ public:
 
 			if (_inven[i].item->getIndex() == index)
 			{
-				count++;
+				count += _inven[i].count;
 			}
 		}
 		return count;
