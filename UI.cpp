@@ -85,8 +85,8 @@ void UI::render()
 	{
 		//보스 hp바
 		//D2DRenderer::GetInstance()->DrawRectangle(_bossHpBar, D2DRenderer::DefaultBrush::White, 1.f);
-		ImageManager::GetInstance()->FindImage("boss_bar")->Render(Vector2(_bossHpBar.left, _bossHpBar.top));
-		ImageManager::GetInstance()->FindImage("boss_HP")->FrameRender(Vector2(_bossBackBar.GetCenter().x - 2, _bossBackBar.GetCenter().y), 0, _bossFrameY);
+		ImageManager::GetInstance()->FindImage("boss_bar")->Render(Vector2(_bossBackBar.left, _bossBackBar.top));
+		ImageManager::GetInstance()->FindImage("boss_HP")->FrameRender(Vector2(_bossBackBar.GetCenter().x - 2, _bossBackBar.GetCenter().y), 0, _bossFrameY, _bossHpWidth, 38);
 	}	
 
 	//장비창 포션 자리가 비어있지 않다면
@@ -113,8 +113,11 @@ void UI::render()
 
 void UI::update()
 {
+	_frameCount++;
+	draw();	
+
 	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
-	//_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::Center);
+	//_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::LeftTop);
 
 	if (_player->getHitCondition())
 	{
@@ -132,8 +135,15 @@ void UI::update()
 		_bossHit = true;
 	}*/
 
-	_frameCount++;
-	draw();	
+	if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+	{
+		_bossCount++;
+	}
+
+	if (_bossCount > 500)
+	{
+		_bossStage = BOSS_STAGE::STAGE_START;
+	}
 
 	setPlayerHpBar();
 	//setBossHpBar();
@@ -145,16 +155,25 @@ void UI::release()
 }
 
 void UI::setPlayerHpBar()
-{	
-	//_width = (currentGauge / maxGauge) * _progressBarBottom->getWidth();
-	if (_player->getplayerCurrentHp() >= 0)
+{
+	if (_player->getplayerCurrentHp() <= 0) _hpWidth = 0;
 	_hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar()
 {
-	if (_boss->getCurHP() >= 0)
+	if (_boss->getCurHP() <= 0) _bossHpWidth = 0;
 	_bossHpWidth = (_boss->getCurHP() / 100) * _bossHpWidth;
+}
+
+void UI::setMoneyBag()
+{
+	if (INVENTORY->getGold() >= 0 && INVENTORY->getGold() < 5000) _moneyFrameY = 0;
+	if (INVENTORY->getGold() >= 5000 && INVENTORY->getGold() < 20000) _moneyFrameY = 1;
+	if (INVENTORY->getGold() >= 20000 && INVENTORY->getGold() < 50000) _moneyFrameY = 2;
+	if (INVENTORY->getGold() >= 50000 && INVENTORY->getGold() < 100000) _moneyFrameY = 3;
+	if (INVENTORY->getGold() >= 100000 && INVENTORY->getGold() < 200000) _moneyFrameY = 4;
+	if (INVENTORY->getGold() >= 200000 && INVENTORY->getGold() < 500000) _moneyFrameY = 5;
 }
 
 void UI::draw()
@@ -201,14 +220,4 @@ void UI::draw()
 		}
 		_frameCount = 0;
 	}
-}
-
-void UI::setMoneyBag()
-{
-	if (INVENTORY->getGold() >= 0 && INVENTORY->getGold() < 5000) _moneyFrameY = 0;
-	if (INVENTORY->getGold() >= 5000 && INVENTORY->getGold() < 20000) _moneyFrameY = 1;
-	if (INVENTORY->getGold() >= 20000 && INVENTORY->getGold() < 50000) _moneyFrameY = 2;
-	if (INVENTORY->getGold() >= 50000 && INVENTORY->getGold() < 100000) _moneyFrameY = 3;
-	if (INVENTORY->getGold() >= 100000 && INVENTORY->getGold() < 200000) _moneyFrameY = 4;
-	if (INVENTORY->getGold() >= 200000 && INVENTORY->getGold() < 500000) _moneyFrameY = 5;
 }

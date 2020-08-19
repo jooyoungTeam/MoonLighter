@@ -96,7 +96,6 @@ private:
 	int _count;							//미러 딜레이
 	int _selectCount;					//가격 선택
 	int _gold;							//소지금
-	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
 
 	bool _isSelect;						//아이템 선택하는 불 값
 	bool _isSale;						//아이템 판매하는 불 값(미러사용)
@@ -104,7 +103,8 @@ private:
 	bool _isSetPrice;					//가격 설정할 거니
 	bool _isInven;						//인벤토리 열었니?
 
-	vector<ITEMTYPE> _vType;
+	vector<tagSavePrice> _vPrice;		//아이템 가격 저장할 벡터
+	vector<ITEMTYPE> _vType;			//아이템 타입 저장할 벡터
 
 	player* _player;
 	UI* _ui;
@@ -122,11 +122,8 @@ public:
 	bool putItem(item* item);								//인벤에 아이템 넣기
 	int fullInven();										//인벤 가득 찼는지 확인하기
 
-	//===========================================↓↓포션 만들기↓↓===========================================//
-
-	void makePotion(int selectPotionIndex, int index, int count, int gold);		// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
-
-	//===========================================↑↑포션 만들기↑↑===========================================//
+	// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
+	void makePotion(int selectPotionIndex, int index, int count, int gold);		
 
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
@@ -151,20 +148,12 @@ public:
 	tagShop* getShowCase() { return _shop; }				//상점 배열 가져가기
 	INVEN_STATE getState() { return _state; }				//어떤 인벤 열었는지 가져가기
 	bool getIsInven() { return _isInven; }
-
-	/*ITEMTYPE getInvenType() {
-		for (int i = 0; i < INVENSPACE; i++)
-		{
-			if (_inven[i].item != nullptr)
-			return _inven[i].item->getType();
-		}
-	}*/
 	vector<ITEMTYPE> getVType() { return _vType; }
 
 public:
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
-	void resetShowCase(int index) 
+	void resetShowCase(int index)							//아이템 팔린 후 쇼케이스 리셋
 	{ 
 		_shop[index].count = 0;
 		_shop[index].countNum = L"";
@@ -172,7 +161,23 @@ public:
 		_shop[index].originalPrice = 0;
 		_shop[index].price = 0;
 		_shop[index].totalPrice = 0;
-	}					//아이템 팔린 후 쇼케이스 리셋
+	}					
+
+	int countOfPotion()										//포션 개수 세는 함수
+	{
+		for (int i = 0; i < INVENSPACE; i++)
+		{
+			if (_inven[i].item == nullptr) continue;
+
+			int count;
+
+			if (_inven[i].item->getIndex() > 1000)
+			{
+				count++;
+			}
+			return count;
+		}
+	}
 
 public:
 	//플레이어 참조용

@@ -48,6 +48,37 @@ void D2DRenderer::RenderText(const int x, const int y, const wstring& text, cons
 	NEW_SAFE_RELEASE(layout);
 }
 
+void D2DRenderer::RenderText(const int x, const int y, const wstring & text, const int size, const int textLength, const DefaultBrush & defaultBrush, const DWRITE_TEXT_ALIGNMENT & align, const wstring & font)
+{
+	Vector2 pos(x, y);
+
+	IDWriteTextLayout* layout = nullptr;
+	HRESULT hr = this->mDWFactory->CreateTextLayout
+	(
+		text.c_str(),
+		textLength,
+		this->mFontList[font],
+		(float)text.length() * size,
+		(float)size,
+		&layout
+	);
+	assert(SUCCEEDED(hr));
+
+	DWRITE_TEXT_RANGE range;
+	range.startPosition = 0;
+	range.length = text.length();
+
+	layout->SetFontSize((float)size, range);
+	layout->SetTextAlignment(align);
+
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	mD2DRenderTarget->DrawTextLayout(D2D1::Point2F(pos.x, pos.y), layout,
+		mDefaultBrushList[(UINT)defaultBrush]);
+
+	NEW_SAFE_RELEASE(layout);
+}
+
 /**********************************************************************************************
 ## RenderText ##
 @@ int x : ±×¸±ÁÂÇ¥

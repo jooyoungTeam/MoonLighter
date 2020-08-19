@@ -98,7 +98,7 @@ void player::update()
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
 	//arrowShoot();
-	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
+	//_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 }
@@ -585,13 +585,17 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		{
 			setPlayerPos(WINSIZEX / 2, 840);
 		}
-		if (SCENEMANAGER->getCurrentScene() == "带傈纠")
+		else if (SCENEMANAGER->getCurrentScene() == "带傈纠")
 		{
 			setPlayerPos(80, WINSIZEY / 2);
 		}
-		if (SCENEMANAGER->getCurrentScene() == "带傈纠2")
+		else if (SCENEMANAGER->getCurrentScene() == "带傈纠2")
 		{
 			setPlayerPos(WINSIZEX - 80, WINSIZEY / 2);
+		}
+		else if (SCENEMANAGER->getCurrentScene() == "胶颇纠")
+		{
+			setPlayerPos(WINSIZEX / 2, 80);
 		}
 
 		SCENEMANAGER->changeScene("带傈涝备纠");

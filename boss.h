@@ -88,6 +88,7 @@ public:
 	void attack2Angle();
 	void setRock();
 	bool playerCol();
+	bool playerStop(RECT& rc);
 	bool playerStop();
 	void effect();
 

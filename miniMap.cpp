@@ -44,7 +44,6 @@ void miniMap::render(objectManager* obj, POINT playerPos)
 			if (_vMiniMap[i]->isDraw)
 			{
 				D2DRenderer::GetInstance()->FillRectangle(_vMiniMap[i]->rc, D2D1::ColorF::Black, 0.5f);
-		
 				//if (_miniMapImg == NULL)
 				//{
 				//	ImageManager::GetInstance()->FindImage("mapTiles")->FrameRender(Vector2(_vMiniMap[i]->rc.left, _vMiniMap[i]->rc.top), _vTile[i].terrainFrameX, _vTile[i].terrainFrameY,_scale);

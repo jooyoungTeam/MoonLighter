@@ -53,7 +53,7 @@ void boss::render()
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
 			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
+			CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
 	}
 	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
@@ -91,12 +91,11 @@ void boss::attack()
 		}
 	}
 	_playerCol = playerCol();
-	_playerStop = playerStop();
 	if (!_patternCheck)
 	{
 		_index = 0;
 		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(0,7);
+		_patternRandom = RND->getFromIntTo(0, 7);
 
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
@@ -157,7 +156,6 @@ void boss::attack()
 		_patternCheck = true;
 		_attack3.isAttack = false;
 	}
-	cout << _patternRandom << endl;
 	if (_bossPattern == HAND_FALL)
 	{
 		attack1();
@@ -918,14 +916,12 @@ bool boss::playerCol()
 	return false;
 }
 
-bool boss::playerStop()
+bool boss::playerStop(RECT& rc)
 {
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < 17; i++)
 	{
-		RECT temp;
-		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
+		if (isCollisionReaction(_attack3Rc[i].rc.GetRect(), rc))
 		{
-			cout << "em fadsffdsafa" << endl;
 			return true;
 		}
 	}

@@ -21,14 +21,17 @@ class potionCreate : public gameNode
 {
 private:
 	potionMakeState _state;
-	Image* _selectPotion;
+	Image* _select;
 
 	Vector2 _selectPt;
 	Vector2 _pt[4];
 
+	tagPotionInfo _selectPotion;
 	tagPotionInfo _potion[4];
 
 	int _selectIndex;
+
+	int _makeCount;
 
 	bool _isSizeLeft;
 	bool _isSizeRight;
@@ -45,7 +48,17 @@ public:
 	void update();
 	void render();
 	void release();
+	void indexSet();
 	void potionSet();
+	void reset();
+	void isSizeUpdate();
+
+public:
+	void setIsActive(bool active) { _isActive = active; }
+	
+
+public:
+	bool getIsActive() { return _isActive; }
 
 
 };

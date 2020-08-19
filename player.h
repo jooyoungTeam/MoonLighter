@@ -136,11 +136,13 @@ public:
 	bool getTransform() { return _transForm; }
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
+	FloatRect getShadowRc() { return _playerShadowRc; }
 	Image* getImage() { return _playerImg; }
 	animation* getPlayerMotion() { return _playerMotion; }
 	playerState* getCurrectState() { return _CurrentState; }
 	DIRECTION getDirection() { return _playerDirection; }
 	arrow* getArrow() { return _arrow; }
+	
 
 	void setBedCount(int bedCount) { _bedCount = bedCount; }
 	void setBowChargeCount(int bowChargeCount) { _bowChargeCount = bowChargeCount; }
@@ -150,6 +152,7 @@ public:
 	void setY(float playerY) { _playerY = playerY; }
 	void setShadowX(float shadowX) { _playerShadowX = shadowX; }
 	void setShadowY(float shadowY) { _playerShadowY = shadowY; }
+	void setShadowRC(FloatRect rc) { _playerShadowRc = rc; }
 	void setPlayerCurrentHp(float playerCurrentHp) { _playerCurrentHp = playerCurrentHp; }
 	void setPlayerMaxHp(float playerMaxHp) { _playerMaxHp = playerMaxHp; }
 	void setHitAlpha(float hitAlpha) { _hitAlpha = hitAlpha; }

@@ -41,9 +41,14 @@ void bossStage::render()
 void bossStage::update()
 {
 	_miniMap->update();
-	_player->update();
-	//_player->tileCollision(_attribute, _tile, BOSSTILEX);
-	_enemy->update();
+
+	if (!INVENTORY->getIsInven())
+	{
+		_player->update();
+		//_player->tileCollision(_attribute, _tile, BOSSTILEX);
+		_enemy->update();
+	}	
+	
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 }
 
