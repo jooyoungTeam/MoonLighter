@@ -9,6 +9,9 @@ HRESULT spaStage::init()
 
 	_objectManager = new objectManager;
 	loadMap();
+	
+	_maxHp = 100;
+	_curHp = 0;
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
@@ -26,7 +29,6 @@ void spaStage::render()
 
 void spaStage::update()
 {
-
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 	if (!INVENTORY->getIsInven())
 	{
@@ -40,6 +42,14 @@ void spaStage::update()
 	if (_objectManager->isPlayerSpaIn(p))
 	{
 		_player->setTransform(true);
+		_spaCount++;
+		if (_spaCount % 10 == 0 && _curHp < _maxHp)
+		{
+			_spaCount = 0;
+			_player->setPlayerCurrentHp(10);
+			_curHp += 10;
+		}
+
 	}
 	else
 	{
