@@ -20,6 +20,7 @@ HRESULT enemyManager::init()
 	_bulletDelay = 0;
 	_bulletWait = 0;
 	_bulletTimer = 0;
+	_index = 0;
 	_bullet = new bullet;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -317,12 +318,12 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPull())
 		{
-			if (_vEnemy[i]->getOnceEffect())
+		/*	if (_vEnemy[i]->getOnceEffect())
 			{
 				EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
 				_vEnemy[i]->setOnceEffect(false);
 				cout << "¤§¤©" << endl;
-			}
+			}*/
 			_player->setX(_player->getX() + cosf(_angle) * 10);
 			_player->setY(_player->getY() - sinf(_angle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
@@ -330,12 +331,12 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPush())
 		{
-			if (_vEnemy[i]->getOnceEffect())
+			/*if (_vEnemy[i]->getOnceEffect())
 			{
 				EFFECTMANAGER->play("bossPullEffect", _player->getX(), _player->getY());
 				_vEnemy[i]->setOnceEffect(false);
 				cout << "¿Ö.." << endl;
-			}
+			}*/
 			_player->setX(_player->getX() + cosf(_bulletAngle) * 10);
 			_player->setY(_player->getY() - sinf(_bulletAngle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_bulletAngle) * 10);
@@ -381,8 +382,6 @@ void enemyManager::bulletCol()
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect()))
 				{
-					ImageManager::GetInstance()->FindImage("redSlimeDead")->SetScale(1.5f);
-					EFFECTMANAGER->play("redSlimeDead", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 					_player->setEnemyCol(true);
 					_bullet->remove(i);
 				}

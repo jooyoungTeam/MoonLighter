@@ -26,6 +26,8 @@ void boss::set()
 	_saveRandom = -1;
 	_bossAni = ONE;
 	_maxHP = _curHP= 1000;
+	_index = 0;
+	_aniCount = 0;
 	for (int i = 0; i < 13; ++i)
 	{
 		_attack3Rc[i].rc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
@@ -56,6 +58,7 @@ void boss::render()
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
+	CAMERAMANAGER->frameRender(_effectImage, _eX, _eY, _index, 0);
 
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
@@ -76,84 +79,85 @@ void boss::attack()
 {
 	_bossPattern = ARM_LONG;
 	//attack3();
-	//if (_isPlayerHit)
-	//{
-	//	_hitTimer++;
-	//	if (_hitTimer > 60)
-	//	{
-	//		_isPlayerHit = false;
-	//		_hitTimer = 0;
-	//	}
-	//}
-	//cout << _onceEffect << endl;
-	//_playerCol = playerCol();
-	//if (!_patternCheck)
-	//{
-	//	_attackTimer = 0;
-	//	_patternRandom = RND->getFromIntTo(3,5);
-	////	랜덤으로 공격 받는데 
-	////	전에 했던 공격이면 리턴. 다시 받아와라
-	//	if (_patternRandom == _saveRandom)
-	//	{
-	//		attack();
-	//		return;
-	//	}
+	if (_isPlayerHit)
+	{
+		_hitTimer++;
+		if (_hitTimer > 60)
+		{
+			_isPlayerHit = false;
+			_hitTimer = 0;
+		}
+	}
+	_playerCol = playerCol();
+	if (!_patternCheck)
+	{
+		_attackTimer = 0;
+		_patternRandom = RND->getFromIntTo(0,7);
+		//_patternRandom = 1;
+	//	랜덤으로 공격 받는데 
+	//	전에 했던 공격이면 리턴. 다시 받아와라
+		if (_patternRandom == _saveRandom)
+		{
+			attack();
+			return;
+		}
 
-	//	if (_patternRandom == 0)
-	//	{
-	//		_bossPattern = HAND_FALL;
-	//	}
-	//	if (_patternRandom == 1)
-	//	{
-	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
-	//		{
-	//			attack();
-	//			return;
-	//		}
-	//		_bossPattern = ARM_LONG;
-	//	}
-	//	if (_patternRandom == 2)
-	//	{
-	//		_bossPattern = ROCK_FALL;
-	//	}
-	//	if (_patternRandom == 3)
-	//	{
-	//		if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
-	//		{
-	//			attack();
-	//			return;
-	//		}
-	//		_bossPattern = PLAYER_PULL;
-	//		_onceEffect = true;
-	//	}
-	//	if (_patternRandom == 4)
-	//	{
-	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
-	//		{
-	//			attack();
-	//			return;
-	//		}
-	//		_bossPattern = EXPLOSION;
-	//	}
-	//	if (_patternRandom == 5)
-	//	{
-	//		_bossPattern = BOSS_BULLET_FIRE;
-	//	}
-	//	if (_patternRandom == 6)
-	//	{
-	//		_bossPattern = BOSS_BULLET_PFIRE;
-	//	}
-	//	//공격 뭐할지 결정됐음 나가
-	//	_saveRandom = _patternRandom;
-	//	_bossAni = ONE;
-	//	_patternCheck = true;
-	//	_attack3.isAttack = false;
-	//}
-	////cout << _patternRandom << endl;
-	//if (_bossPattern == HAND_FALL)
-	//{
-	//	attack1();
-	//}
+		if (_patternRandom == 0)
+		{
+			_bossPattern = HAND_FALL;
+		}
+		if (_patternRandom == 1)
+		{
+			if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
+			{
+				attack();
+				return;
+			}
+			_bossPattern = ARM_LONG;
+		}
+		if (_patternRandom == 2)
+		{
+			_bossPattern = ROCK_FALL;
+		}
+		if (_patternRandom == 3)
+		{
+			if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
+			{
+				attack();
+				return;
+			}
+			_bossPattern = PLAYER_PULL;
+			_index = 0;
+		}
+		if (_patternRandom == 4)
+		{
+			if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
+			{
+				attack();
+				return;
+			}
+			_bossPattern = EXPLOSION;
+			_index = 0;
+		}
+		if (_patternRandom == 5)
+		{
+			_bossPattern = BOSS_BULLET_FIRE;
+		}
+		if (_patternRandom == 6)
+		{
+			_bossPattern = BOSS_BULLET_PFIRE;
+		}
+		//공격 뭐할지 결정됐음 나가
+		_saveRandom = _patternRandom;
+		_bossAni = ONE;
+		_patternCheck = true;
+		_attack3.isAttack = false;
+	}
+	//cout << _patternRandom << endl;
+	if (_bossPattern == HAND_FALL)
+	{
+		attack1();
+	}
 	if (_bossPattern == ARM_LONG)
 	{
 		
@@ -454,8 +458,8 @@ void boss::attack4()
 		_motion->stop();
 		_motion = KEYANIMANAGER->findAnimation(  "bossLight");
 		_motion->start();
-		_onceEffect = true;
 		_bossAni = TWO;
+		_index = 0;
 	}
 	if (_exCount > 50)
 	{
@@ -485,16 +489,35 @@ void boss::attack4()
 	RECT temp;
 	if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
 	{
-		if (((getDistance(_pX, _pY, _x, _y)) < 500))
+		if (((getDistance(_pX, _pY, _x, _y)) < 600))
 		{
 			_isBossPush = true;
 		}
 	}
-		if ((getDistance(_pX, _pY, _x, _y)) >= 1000)
+		if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 		{
+			_eX = -100;
+			_eY = -100;
 			_isBossPush = false;
 		}
 
+		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
+		{
+			_effectImage = ImageManager::GetInstance()->FindImage("bossPullEffect");
+			_aniCount++;
+			_eX = _pX;
+			_eY = _pY;
+			if (_aniCount > 4)
+			{
+				_index++;
+				_aniCount = 0;
+				if (_index >= 11)
+				{
+					_index = 0;
+				}
+
+			}
+		}
 	
 
 }
@@ -770,10 +793,26 @@ void boss::attack3_3()
 {
 	if ((getDistance(_pX, _pY, _x, _y)) >= 400)
 	{
+		_effectImage = ImageManager::GetInstance()->FindImage("bossTornadoEffect");
+		_aniCount++;
+		_eX = _pX;
+		_eY = _pY;
+		if (_aniCount > 2)
+		{
+			_index++;
+			_aniCount = 0;
+			if (_index >= 15)
+			{
+				_index = 15;
+			}
+
+		}
 		_isBossPull = true;
 	}
 	else
 	{
+		_eX = -100;
+		_eY = -100;
 		_isBossPull = false;
 		_state = _idle;
 		_bossAni = ONE;
@@ -861,6 +900,7 @@ bool boss::playerCol()
 	RECT temp;
 	for (int i = 0; i < 13; i++)
 	{
+		
 		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;

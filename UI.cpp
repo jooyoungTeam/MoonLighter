@@ -127,7 +127,7 @@ void UI::update()
 		_alphaCount = 0;
 	}
 
-	/*if (º¸½º Èý)
+	/*if (_boss->getIsHit())
 	{
 		_bossHit = true;
 	}*/
@@ -136,7 +136,7 @@ void UI::update()
 	draw();	
 
 	setPlayerHpBar();
-	setBossHpBar();
+	//setBossHpBar();
 	setMoneyBag();
 }
 
@@ -147,12 +147,14 @@ void UI::release()
 void UI::setPlayerHpBar()
 {	
 	//_width = (currentGauge / maxGauge) * _progressBarBottom->getWidth();
+	if (_player->getplayerCurrentHp() >= 0)
 	_hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar()
 {
-
+	if (_boss->getCurHP() >= 0)
+	_bossHpWidth = (_boss->getCurHP() / 100) * _bossHpWidth;
 }
 
 void UI::draw()

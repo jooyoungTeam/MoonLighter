@@ -164,12 +164,13 @@ void inventory::render()
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
 
-	if (_inven[_select].item != nullptr)
+	//아이템 이름 띄우기
+	if (_inven[_select].item != nullptr && !_isSwap)
 	{
 		ImageManager::GetInstance()->FindImage("item_tag")->Render(Vector2(WINSIZEX / 2 - 350, 750));
 		wstring name;
 		name = _inven[_select].item->getName();
-		D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - name.length() * 13, 750, name, 30);
+		D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - name.length() * 13, 760, name, 30);
 	}
 
 	if (fullInven() >= 19)
