@@ -11,7 +11,7 @@ enum class ITEMTYPE
 	BROKEN_SWORD, GOLEM_CORE,
 	FABRIC, GOLEM_PIECES,
 	GOLEMKING_CRYSTAL, GOLEMKING_RECORD,
-	POTION_S,
+	POTION_S, POTION_M, POTION_B, POTION_L
 };
 
 enum class ITEMBUNDLE
@@ -31,6 +31,8 @@ private:
 	ITEMBUNDLE _bundle;					//에너미에 따른 묶음
 	FloatRect _rc;						//아이템 렉트
 	Image* _img;						//아이템 이미지
+	wstring _name;						//아이템 이름
+
 	float _x, _y;						//아이템 렉트 x, y 좌표
 	float _shakeMaxY;					//상점 아이템 둥실둥실 최대 y좌표
 	float _shakeMinY;					//상점 아이템 둥실둥실 최소 y좌표
@@ -42,6 +44,7 @@ private:
 	int _limitCount;					//아이템 들고 있을 수 있는 최대 개수
 	int _price;							//아이템 원가
 	int _count;							//아이템 랜덤으로 골라내는 숫자
+	int _fillHp;						//hp 채우는 정도
 
 	bool _isShake;						//둥실둥실
 	bool _isDrop;						//아이템 드랍
@@ -70,9 +73,11 @@ public:
 	ITEMTYPE getType() { return _type; }					//아이템 타입 가져가기
 	FloatRect getRc() { return _rc; }						//아이템 렉트 가져가기
 	Image* getImg() { return _img; }						//아이템 이미지 가져가기
+	wstring getName() { return _name; }						//아이템 이름 가져가기
 	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기
 	int getLimit() { return _limitCount; }					//아이템 개수 한계치 가져가기
 	int getPrice() { return _price; }						//아이템 가격 가져가기
+	int getFillHp() { return _fillHp; }						//물약 피 채우는 정도 가져가기
 	float getX() { return _x; }
 	float getY() { return _y; }
 

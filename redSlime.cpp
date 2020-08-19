@@ -57,7 +57,6 @@ void redSlime::attack()
 		_speed = 5;
 		_attackCount++;
 	}
-	//if ()
 	if (_attackCount > 50)
 	{
 		_img = ImageManager::GetInstance()->FindImage("redSlime");

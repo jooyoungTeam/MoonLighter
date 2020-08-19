@@ -25,6 +25,7 @@ void boss::set()
 	_rightBottom.y = 1185;
 	_saveRandom = -1;
 	_bossAni = ONE;
+	_maxHP = _curHP= 1000;
 	for (int i = 0; i < 13; ++i)
 	{
 		_attack3Rc[i].rc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
@@ -37,9 +38,6 @@ void boss::set()
 
 void boss::render()
 {
-	//_img->aniRender(Vector2(_x, _y), _motion, 1.25f);
-//	if (KEYANIMANAGER->findAnimation(""))
-	//CAMERAMANAGER->aniRender(_img, _x, _y, _motion, 2.5f);
 	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
 	
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
@@ -51,17 +49,17 @@ void boss::render()
 		{
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
-			CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
 	}
-	CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
-	CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
+	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
+	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
 
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
-	CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
+	//CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
 	//CAMERAMANAGER->line(_leftTop, _rightTop, D2D1::ColorF::Black, 2.0f);
 	//CAMERAMANAGER->line(_rightTop, _rightBottom, D2D1::ColorF::Black, 2.0f);
 	//CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
@@ -76,6 +74,8 @@ void boss::render()
 
 void boss::attack()
 {
+	//_bossPattern = PLAYER_PULL;
+	//attack3();
 	if (_isPlayerHit)
 	{
 		_hitTimer++;
@@ -85,7 +85,7 @@ void boss::attack()
 			_hitTimer = 0;
 		}
 	}
-	cout << _hitTimer << endl;
+	cout << _onceEffect << endl;
 	_playerCol = playerCol();
 	if (!_patternCheck)
 	{
@@ -124,6 +124,7 @@ void boss::attack()
 				return;
 			}
 			_bossPattern = PLAYER_PULL;
+			_onceEffect = true;
 		}
 		if (_patternRandom == 4)
 		{
@@ -148,7 +149,7 @@ void boss::attack()
 		_patternCheck = true;
 		_attack3.isAttack = false;
 	}
-//	cout << _patternRandom << endl;
+	//cout << _patternRandom << endl;
 	if (_bossPattern == HAND_FALL)
 	{
 		attack1();
@@ -453,12 +454,15 @@ void boss::attack4()
 		_motion->stop();
 		_motion = KEYANIMANAGER->findAnimation(  "bossLight");
 		_motion->start();
+		_onceEffect = true;
 		_bossAni = TWO;
 	}
 	if (_exCount > 50)
 	{
 		if (!_isPlayerHit)
+		{
 			_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(800, 900), Pivot::Center);
+		}
 	}
 	if (_bossAni == TWO)
 	{
@@ -469,7 +473,7 @@ void boss::attack4()
 			_motion = KEYANIMANAGER->findAnimation(  "boss");
 			_motion->start();
 			_y = 500;
-			EFFECTMANAGER->play("bossPullEffect", _pX + 135, _pY  + 90);
+			//EFFECTMANAGER->play("bossPullEffect", _pX + 135, _pY  + 90);
 			_state = _idle;
 			//_bossAni = ONE;
 			_exCount = 0;
@@ -515,6 +519,7 @@ void boss::attack1_1()
 		}
 		else
 		{
+			CAMERAMANAGER->shakeCamera(5, 20);
 			_attack1.index = 2;
 			_attack1.isAttack = true;
 			_attack1.speed = 8.0f;

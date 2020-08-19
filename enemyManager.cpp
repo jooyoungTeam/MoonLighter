@@ -33,7 +33,7 @@ HRESULT enemyManager::init()
 		}
 	}
 
-	_test = false;
+	_playerStop = false;
 
 
 	return S_OK;
@@ -48,6 +48,7 @@ void enemyManager::update()
 {
 	_x = _player->getX();
 	_y = _player->getY();
+	//EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
 	_rc = _player->getPlayerRc();
 	_bulletDelay++;
 	for (int i = 0; i < _vEnemy.size(); ++i)
@@ -63,11 +64,11 @@ void enemyManager::update()
 		{
 			if (_vEnemy[i]->getIsCol())
 			{
-				_test = true;
+				_playerStop = true;
 			}
 			if (!_vEnemy[i]->getIsCol())
 			{
-				_test = false;
+				_playerStop = false;
 			}
 		}
 
@@ -103,7 +104,6 @@ void enemyManager::update()
 			break;
 		}
 	}
-
 	EFFECTMANAGER->update();
 }
 
@@ -317,6 +317,12 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPull())
 		{
+			if (_vEnemy[i]->getOnceEffect())
+			{
+				EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
+				_vEnemy[i]->setOnceEffect(false);
+				cout << "¤§¤©" << endl;
+			}
 			_player->setX(_player->getX() + cosf(_angle) * 10);
 			_player->setY(_player->getY() - sinf(_angle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
@@ -324,6 +330,12 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPush())
 		{
+			if (_vEnemy[i]->getOnceEffect())
+			{
+				EFFECTMANAGER->play("bossPullEffect", _player->getX(), _player->getY());
+				_vEnemy[i]->setOnceEffect(false);
+				cout << "¿Ö.." << endl;
+			}
 			_player->setX(_player->getX() + cosf(_bulletAngle) * 10);
 			_player->setY(_player->getY() - sinf(_bulletAngle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_bulletAngle) * 10);
@@ -337,6 +349,10 @@ void enemyManager::playerCol()
 		if (b->playerCol())
 		{
 			_player->setEnemyCol(true);
+		}
+		if (IntersectRect(&temp, &b->getBAttack3()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
+		{
+
 		}
 	}
 

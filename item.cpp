@@ -162,117 +162,145 @@ void item::category()
 
 	switch (_type)
 	{
-		//Ç³ºÎÇÑ Á©¸®(»¡°­)
 		case ITEMTYPE::SLIME_RED:
 			_img = ImageManager::GetInstance()->FindImage("slime_red");
+			_name = L"Ç³ºÎÇÑ Á©¸®(»¡°­)";
 			_itemIndex = 101;
 			_limitCount = 10;
 			_price = 600;
 			break;
 
-		//Ç³ºÎÇÑ Á©¸®(ÆÄ¶û)
 		case ITEMTYPE::SLIME_BLUE:
 			_img = ImageManager::GetInstance()->FindImage("slime_blue");
+			_name = L"Ç³ºÎÇÑ Á©¸®(ÆÄ¶û)";
 			_itemIndex = 102;
 			_limitCount = 10;
 			_price = 600;
 			break;
 
-		//Ç³ºÎÇÑ Á©¸®(³ë¶û)
 		case ITEMTYPE::SLIME_YELLOW:
 			_img = ImageManager::GetInstance()->FindImage("slime_yellow");
+			_name = L"Ç³ºÎÇÑ Á©¸®(³ë¶û)";
 			_itemIndex = 103;
 			_limitCount = 10;
 			_price = 600;
 			break;
 
-		//Ãµ
 		case ITEMTYPE::FABRIC:
 			_img = ImageManager::GetInstance()->FindImage("fabric");
+			_name = L"Ãµ";
 			_itemIndex = 201;
 			_limitCount = 10;
 			_price = 3000;
 			break;
 
-		////µ¢±¼
 		//case ITEMTYPE::VINE:
 		//	_img = ImageManager::GetInstance()->FindImage("vine");
+		//	_name = L"µ¢±¼";
 		//	_itemIndex = 202;
 		//	_limitCount = 10;
 		//	_price = 200;
 		//	break;
 
-		////»Ñ¸®
 		//case ITEMTYPE::WOOD:
 		//	_img = ImageManager::GetInstance()->FindImage("wood");
+		//	_name = L"»Ñ¸®";
 		//	_itemIndex = 203;
 		//	_limitCount = 5;
 		//	_price = 500;
 		//	break;
 
-		//ÁÖ¹° ÀÜÇØ
 		case ITEMTYPE::GOLEM_PIECES:
 			_img = ImageManager::GetInstance()->FindImage("golem_pieces");
+			_name = L"ÁÖ¹° ÀÜÇØ";
 			_itemIndex = 204;
 			_limitCount = 10;
 			_limitCount = 5;
 			_price = 1500;
 			break;
 
-		//ºÎ·¯Áø °Ë
 		case ITEMTYPE::BROKEN_SWORD:
 			_img = ImageManager::GetInstance()->FindImage("broken_sword");
+			_name = L"ºÎ·¯Áø °Ë";
 			_itemIndex = 301;
 			_limitCount = 5;
 			_price = 1800;
 			break;
 
-		//¼öÁ¤È­µÈ ¿¡³ÊÁö
 		case ITEMTYPE::CRYSTAL_ENERGY:
 			_img = ImageManager::GetInstance()->FindImage("crystal_energy");
+			_name = L"¼öÁ¤È­µÈ ¿¡³ÊÁö";
 			_itemIndex = 302;
 			_limitCount = 5;
 			_price = 1000;
 			break;
 
-		//´ÜÁ¶µÈ °­Ã¶
 		case ITEMTYPE::REINFORCED_STEEL:
 			_img = ImageManager::GetInstance()->FindImage("reinforced_steel");
+			_name = L"´ÜÁ¶µÈ °­Ã¶";
 			_itemIndex = 303;
 			_limitCount = 5;
 			_price = 300;
 			break;
 
-		//°ñ·½ ÄÚ¾î
 		case ITEMTYPE::GOLEM_CORE:
 			_img = ImageManager::GetInstance()->FindImage("golem_core");
+			_name = L"°ñ·½ ÄÚ¾î";
 			_itemIndex = 304;
 			_limitCount = 5;
 			_price = 1200;
 			break;
 
-		//°ñ·½¿ÕÀÇ ¿¡³ÊÁö
 		case ITEMTYPE::GOLEMKING_CRYSTAL:
 			_img = ImageManager::GetInstance()->FindImage("golemKing_Energy");
+			_name = L"°ñ·½¿ÕÀÇ ¿¡³ÊÁö";
 			_itemIndex = 901;
 			_limitCount = 1;
 			_price = 3000;
 			break;
 
-		//°ñ·½¿ÕÀÇ ±â·Ï
 		case ITEMTYPE::GOLEMKING_RECORD:
 			_img = ImageManager::GetInstance()->FindImage("golemKing_record");
+			_name = L"°ñ·½¿ÕÀÇ ±â·Ï";
 			_itemIndex = 902;
 			_limitCount = 1;
 			_price = 3000;
 			break;
 
-		//Æ÷¼Ç(¼Ò)
 		case ITEMTYPE::POTION_S:
 			_img = ImageManager::GetInstance()->FindImage("potion_S");
+			_name = L"Æ÷¼Ç(¼Ò)";
 			_itemIndex = 1001;
 			_limitCount = 5;
 			_price = 1500;
+			_fillHp = 40;
+			break;
+
+		case ITEMTYPE::POTION_M:
+			_img = ImageManager::GetInstance()->FindImage("potion_M");
+			_name = L"Æ÷¼Ç(Áß)";
+			_itemIndex = 1002;
+			_limitCount = 5;
+			_price = 2000;
+			_fillHp = 60;
+			break;
+
+		case ITEMTYPE::POTION_B:
+			_img = ImageManager::GetInstance()->FindImage("potion_B");
+			_name = L"Æ÷¼Ç(´ë)";
+			_itemIndex = 1003;
+			_limitCount = 5;
+			_price = 2500;
+			_fillHp = 80;
+			break;
+
+		case ITEMTYPE::POTION_L:
+			_img = ImageManager::GetInstance()->FindImage("potion_L");
+			_name = L"Æ÷¼Ç(Æ¯´ë)";
+			_itemIndex = 1004;
+			_limitCount = 5;
+			_price = 3000;
+			_fillHp = 100;
 			break;
 	}
 }

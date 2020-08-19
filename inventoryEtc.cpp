@@ -574,12 +574,11 @@ void inventory::popInven()
 	{
 		if (_inven[i].item == nullptr) continue;
 
-		_vType.clear();
 		SAFE_DELETE(_inven[i].item);
-		_inven[i].item = nullptr;
 	}
+	_vType.clear();
 }
-void inventory::test()
+void inventory::putType()
 {
 	for (int i = 0; i < INVENSPACE; i++)
 	{

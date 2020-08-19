@@ -87,6 +87,7 @@ public:
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
+	tagAttack1* getBAttack3() { return &_attack3; }
 	bool getBossPlayerCol() { return _playerCol; }
 };
 

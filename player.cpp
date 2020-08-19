@@ -352,12 +352,12 @@ void player::arrowShoot()
 
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::UP, 40, false);
 			}
 		}
 	}
@@ -368,12 +368,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80,true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40,false);
 			}
 		}
 	}
@@ -384,12 +384,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40,false);
 			}
 		}
 	}
@@ -400,12 +400,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80,true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40,false);
 			}
 		}
 	}
@@ -419,13 +419,14 @@ void player::arrowShoot()
 	}
 }
 
+
 //타일 충돌용
-void player::tileCollision(DWORD* attribute, tagTile* tile)
+void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 {
-	RECT rcCollision;	//임의의 충돌판정용 렉트
+	RECT rcCollision;   //임의의 충돌판정용 렉트
 	RECT probeLeft;
-	tileIndex[3];	//이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
-	int tileX, tileY;	//실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
+	tileIndex[3];   //이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
+	int tileX, tileY;   //실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
 	//임의 충돌판정용 렉트에 대입 먼저
 	rcCollision.left = _playerRc.left;
@@ -445,47 +446,47 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	switch (_playerDirection)
 	{
 	case DIRECTION::LEFT:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = tileX + (tileY + 1) * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = tileX + (tileY + 1) * tileSizeX;
 		break;
 	case DIRECTION::UP:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = (tileX + 1) + tileY * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = (tileX + 1) + tileY * tileSizeX;
 		break;
 	case DIRECTION::RIGHT:
-		tileIndex[0] = (tileX + tileY * 60) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * tileSizeX) + 1;
 		break;
 	case DIRECTION::DOWN:
-		tileIndex[0] = (tileX + tileY * 60) + 60;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
 		break;
 	case DIRECTION::LEFTTOP:
-		tileIndex[0] = tileX + tileY * 60;
-		tileIndex[1] = tileX + (tileY + 1) * 60;
-		tileIndex[2] = (tileX + 1) + tileY * 60;
+		tileIndex[0] = tileX + tileY * tileSizeX;
+		tileIndex[1] = tileX + (tileY + 1) * tileSizeX;
+		tileIndex[2] = (tileX + 1) + tileY * tileSizeX;
 		break;
 	case DIRECTION::RIGHTTOP:
-		tileIndex[0] = (tileX + tileY * 60) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * 60) + 1;
-		tileIndex[2] = tileX + tileY * 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * tileSizeX) + 1;
+		tileIndex[2] = tileX + tileY * tileSizeX;
 		break;
 	case DIRECTION::LEFTBOTTOM:
-		tileIndex[0] = (tileX + tileY * 60) + 60;
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
-		tileIndex[2] = (tileX + (tileY - 1) * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
+		tileIndex[2] = (tileX + (tileY - 1) * tileSizeX) + tileSizeX;
 		break;
 	case DIRECTION::RIGHTBOTTOM:
-		tileIndex[0] = (tileX + tileY * 60) + 60;
-		tileIndex[1] = (tileX + 1 + tileY * 60) + 60;
-		tileIndex[2] = (tileX + 1 + (tileY - 1) * 60) + 60;
+		tileIndex[0] = (tileX + tileY * tileSizeX) + tileSizeX;
+		tileIndex[1] = (tileX + 1 + tileY * tileSizeX) + tileSizeX;
+		tileIndex[2] = (tileX + 1 + (tileY - 1) * tileSizeX) + tileSizeX;
 		break;
 	}
 	if (tileSceneChange(attribute, tile, rcCollision))
 	{
 		return;
 	}
-	
+
 	for (int i = 0; i < 3; i++)
 	{
 		RECT rc;
@@ -495,7 +496,7 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 			switch (_playerDirection)
 			{
 			case DIRECTION::LEFT:
-				_tileColLeft = true;				
+				_tileColLeft = true;
 				return;
 				break;
 			case DIRECTION::UP:
@@ -540,37 +541,39 @@ void player::tileCollision(DWORD* attribute, tagTile* tile)
 	_tileColLeftBottom = false;
 	_tileColRightBottom = false;
 }
+
 bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 {
+
 	RECT rc;
-	if (((attribute[tileIndex[0]] & TP_TOWN) == TP_TOWN) &&
+	if ((attribute[tileIndex[0]] == TP_TOWN) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		SCENEMANAGER->changeScene("마을씬");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_SHOP) == TP_SHOP) &&
+	if ((attribute[tileIndex[0]] == TP_SHOP) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2 + 80, 1100);
 		SCENEMANAGER->changeScene("샵씬");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_BOSS) == TP_BOSS) &&
+	if ((attribute[tileIndex[0]] == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 1100);
 		SCENEMANAGER->changeScene("보스씬");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_ENTERENCE) == TP_ENTERENCE) &&
+	if ((attribute[tileIndex[0]] == TP_ENTERENCE) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 1100);
 		SCENEMANAGER->changeScene("던전입구씬");
 		return true;
 	}
-	if (((attribute[tileIndex[0]] & TP_DUN1) == TP_DUN1) &&
+	if ((attribute[tileIndex[0]] == TP_DUN1) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);
@@ -578,7 +581,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		return true;
 	}
 
-	if (((attribute[tileIndex[0]] & TP_DUN2) == TP_DUN2) &&
+	if ((attribute[tileIndex[0]] == TP_DUN2) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);
@@ -586,7 +589,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 		return true;
 	}
 
-	if (((attribute[tileIndex[0]] & TP_SPA) == TP_SPA) &&
+	if ((attribute[tileIndex[0]] == TP_SPA) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
 		setPlayerPos(WINSIZEX / 2, 800);

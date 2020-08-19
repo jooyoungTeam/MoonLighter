@@ -55,6 +55,7 @@ private:
 	bool				_hitCondition;						//히트 상태인지
 	bool				_enemyCol;							//에너미와 충돌상태
 	bool				_colVoid;							//충돌 회피상태
+	bool				_deadState;							//캐릭터 죽은상태
 	bool				_tileColLeft;						//타일 충돌 상태인지
 	bool				_tileColRight;						//타일 충돌 상태인지
 	bool				_tileColTop;						//타일 충돌 상태인지
@@ -89,7 +90,8 @@ public:
 
 public:
 	void animationLoad();
-	void tileCollision(DWORD* attribute, tagTile* tile);
+	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
+	void tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX);
 	void arrowShoot();
 
 public:
@@ -121,6 +123,7 @@ public:
 	bool getHitCondition() { return _hitCondition; }
 	bool getEnemyCol() { return _enemyCol; }
 	bool getColVoid() { return _colVoid; }
+	bool getDeadState() { return _deadState; }
 	bool getTileColLeft() { return _tileColLeft; }
 	bool getTileColTop() { return _tileColTop; }
 	bool getTileColRight() { return _tileColRight; }
@@ -129,7 +132,6 @@ public:
 	bool getTileColRightTop() { return _tileColRightTop; }
 	bool getTileColLeftBottom() { return _tileColLeftBottom; }
 	bool getTileColRightBottom() { return _tileColRightBottom; }
-	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
 
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
@@ -162,6 +164,7 @@ public:
 	void setHitCondition(bool hitCondition) { _hitCondition = hitCondition; }
 	void setEnemyCol(bool enemyCol) { _enemyCol = enemyCol; }
 	void setColVoid(bool colVoid) { _colVoid = colVoid; }
+	void setDeadState(bool deadState) { _deadState = deadState;}
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }

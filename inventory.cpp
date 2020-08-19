@@ -93,6 +93,8 @@ HRESULT inventory::init()
 	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
 	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 
+	ImageManager::GetInstance()->AddImage("item_tag", L"Image/UI/item_name.png");
+
 	//인벤 상태
 	_state = INVEN_STATE::TEMP;
 	//미러 상태
@@ -160,6 +162,14 @@ void inventory::render()
 	if (!_isSwap)
 	{
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
+	}
+
+	if (_inven[_select].item != nullptr)
+	{
+		ImageManager::GetInstance()->FindImage("item_tag")->Render(Vector2(WINSIZEX / 2 - 350, 750));
+		wstring name;
+		name = _inven[_select].item->getName();
+		D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - name.length() * 13, 750, name, 30);
 	}
 
 	if (fullInven() >= 19)
@@ -758,3 +768,39 @@ void inventory::moveItem()
 	}
 }
 //===========================================↑↑아이템 인벤에서 옮기기↑↑===========================================//
+
+
+//===========================================↓↓포션 만들기↓↓===========================================//
+void inventory::makePotion(int index, int count, int gold)
+{
+	if (_gold >= gold) _gold -= gold;
+	else return;
+
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		int maxCount;
+
+		if (_inven[i].item->getIndex() == index)
+		{
+			if (_inven[i].count >= count)
+				_inven[i].count -= count;
+			return;
+
+			if (_inven[i].count < count)
+			{
+				maxCount += _inven[i].count;
+
+				if (maxCount >= count)
+				{
+					maxCount -= count;
+					_inven[i].count = maxCount;
+				}
+
+				else return;
+			}
+
+			if (_inven[i].count <= 0) _inven[i].item = nullptr;
+		}
+	}
+}
+//===========================================↑↑포션 만들기↑↑===========================================//

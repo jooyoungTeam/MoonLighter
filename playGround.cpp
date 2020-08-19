@@ -152,6 +152,9 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("golemKing_Energy", L"Image/Item/Energy_Crystal.png");
 	ImageManager::GetInstance()->AddImage("golemKing_record", L"Image/Item/Golem_King_design.png");
 	ImageManager::GetInstance()->AddImage("potion_S", L"Image/Item/Potion_S.png");
+	ImageManager::GetInstance()->AddImage("potion_M", L"Image/Item/Potion_M.png");
+	ImageManager::GetInstance()->AddImage("potion_B", L"Image/Item/Potion_B.png");
+	ImageManager::GetInstance()->AddImage("potion_L", L"Image/Item/Potion_L.png");
 
 	//===========================================↓↓인벤토리↓↓===========================================//
 	ImageManager::GetInstance()->AddImage("bagMirror", L"image/UI/bagMirror.png");
