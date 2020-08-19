@@ -294,19 +294,20 @@ void enemyManager::playerCol()
 		{
 			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()))
 			{
-				if (_player->getBowChargeState() == true)
+				if (_player->getArrow()->getVArrow()[j].isPowerShot)
 				{
-					_vEnemy[i]->setEnemyAttack(80);
+					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 				}
 				else
 				{
-					_vEnemy[i]->setEnemyAttack(40);
+					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_player->getArrow()->playerRemoveArrow(j);
 				}
 				//_player->se(0, 0, 0, 0);
 				break;
 			}
 		}
+
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
@@ -352,7 +353,7 @@ void enemyManager::playerCol()
 		}
 		if (IntersectRect(&temp, &b->getBAttack3()->rc.GetRect(), &_player->getPlayerRc().GetRect()))
 		{
-
+			cout << "µé¿À¤Ã" << endl;
 		}
 	}
 
