@@ -278,7 +278,7 @@ void item::category()
 
 			//포션중)
 		case ITEMTYPE::POTION_M:
-			_img = ImageManager::GetInstance()->FindImage("potion_S");
+			_img = ImageManager::GetInstance()->FindImage("potion_M");
 			_itemIndex = 1002;
 			_limitCount = 5;
 			_price = 2000;
@@ -287,7 +287,7 @@ void item::category()
 
 			//포션(대)
 		case ITEMTYPE::POTION_B:
-			_img = ImageManager::GetInstance()->FindImage("potion_S");
+			_img = ImageManager::GetInstance()->FindImage("potion_B");
 			_itemIndex = 1003;
 			_limitCount = 5;
 			_price = 2500;
@@ -296,7 +296,7 @@ void item::category()
 
 			//포션(특대)
 		case ITEMTYPE::POTION_L:
-			_img = ImageManager::GetInstance()->FindImage("potion_S");
+			_img = ImageManager::GetInstance()->FindImage("potion_L");
 			_itemIndex = 1004;
 			_limitCount = 5;
 			_price = 3000;
