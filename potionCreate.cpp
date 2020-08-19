@@ -25,8 +25,10 @@ HRESULT potionCreate::init()
 	_isSizeRight = true;
 	_isPotionCheck = true;
 	_isActive = false;
+	_makeCount = 1;
 
 	potionSet();
+
 	
 	return S_OK;
 }
@@ -35,6 +37,7 @@ void potionCreate::update()
 {
 	_selectPt = _pt[_selectIndex];
 	indexSet();
+	isSizeUpdate();
 
 	switch (_state)
 	{
@@ -127,6 +130,7 @@ void potionCreate::update()
 			_isActive = false;
 			break;
 		case POTION_SIZE:
+			_makeCount = 1;
 			_state = POTION_INIT;
 			break;
 		case POTION_CHECK:
@@ -143,6 +147,11 @@ void potionCreate::render()
 	ImageManager::GetInstance()->FindImage("potion_shop_bg")->Render(Vector2(0,0));
 	_select->Render(_selectPt);
 	
+	D2DRenderer::GetInstance()->RenderTextField(1170, 100, _selectPotion.discription, 25, 300, 400, D2DRenderer::DefaultBrush::Black);
+	D2DRenderer::GetInstance()->RenderText(1250, 30, _selectPotion.name, 30, D2DRenderer::DefaultBrush::Gray);
+
+	D2DRenderer::GetInstance()->RenderText(1350, 450, to_wstring(_selectPotion.price), 25, D2DRenderer::DefaultBrush::Gray);
+
 	switch (_state)
 	{
 	case POTION_INIT:
@@ -159,6 +168,8 @@ void potionCreate::render()
 		{
 			ImageManager::GetInstance()->FindImage("potion_size_right")->Render(Vector2(733, WINSIZEY / 2 + 24));
 		}
+		_selectPotion.img->Render(Vector2(659, 465),1.5f);
+		D2DRenderer::GetInstance()->RenderText(700, 500, to_wstring(_makeCount), 30);
 		break;
 	case POTION_CHECK:
 		ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
@@ -213,19 +224,19 @@ void potionCreate::potionSet()
 
 	_potion[1].index = 1002;
 	_potion[1].price = 500;
-	_potion[1].img = ImageManager::GetInstance()->FindImage("potion_S");
+	_potion[1].img = ImageManager::GetInstance()->FindImage("potion_M");
 	_potion[1].name = L"포션(중)";
 	_potion[1].discription = L"체력을 60 회복한다. 제값을 톡톡히 하는 제품이다. ";
 
 	_potion[2].index = 1003;
 	_potion[2].price = 1000;
-	_potion[2].img = ImageManager::GetInstance()->FindImage("potion_S");
+	_potion[2].img = ImageManager::GetInstance()->FindImage("potion_B");
 	_potion[2].name = L"포션(대)";
 	_potion[2].discription = L"체력을 80 회복한다. 그 괴물과 맞닥뜨렸을 때 하나 가지고 있었다면 좋았겠지만...";
 
 	_potion[3].index = 1004;
 	_potion[3].price = 2000;
-	_potion[3].img = ImageManager::GetInstance()->FindImage("potion_S");
+	_potion[3].img = ImageManager::GetInstance()->FindImage("potion_L");
 	_potion[3].name = L"포션(특대)";
 	_potion[3].discription = L"체력을 100 회복한다. 마녀가 드디어 스스로의 능력을 뛰어넘는 물건을 만들어 냈다.";
 }
@@ -238,6 +249,7 @@ void potionCreate::reset()
 	_isSizeRight = true;
 	_isPotionCheck = true;
 	_isActive = false;
+	_makeCount = 1;
 }
 
 void potionCreate::isSizeUpdate()
