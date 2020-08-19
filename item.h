@@ -11,7 +11,7 @@ enum class ITEMTYPE
 	BROKEN_SWORD, GOLEM_CORE,
 	FABRIC, GOLEM_PIECES,
 	GOLEMKING_CRYSTAL, GOLEMKING_RECORD,
-	POTION_S,
+	POTION_S, POTION_M, POTION_B, POTION_L
 };
 
 enum class ITEMBUNDLE
@@ -42,6 +42,7 @@ private:
 	int _limitCount;					//아이템 들고 있을 수 있는 최대 개수
 	int _price;							//아이템 원가
 	int _count;							//아이템 랜덤으로 골라내는 숫자
+	int _fillHp;						//hp 채우는 정도
 
 	bool _isShake;						//둥실둥실
 	bool _isDrop;						//아이템 드랍
@@ -73,6 +74,7 @@ public:
 	int getIndex() { return _itemIndex; }					//아이템 인덱스 번호 가져가기
 	int getLimit() { return _limitCount; }					//아이템 개수 한계치 가져가기
 	int getPrice() { return _price; }						//아이템 가격 가져가기
+	int getFillHp() { return _fillHp; }						//물약 피 채우는 정도 가져가기
 	float getX() { return _x; }
 	float getY() { return _y; }
 
