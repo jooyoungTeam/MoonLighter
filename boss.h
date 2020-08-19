@@ -1,8 +1,6 @@
 #pragma once
 #include"enemy.h"
 
-
-
 struct tagAttack1
 {
 	FloatRect rc;
@@ -44,16 +42,19 @@ private:
 	tagAttack1 _attack1;
 	tagAttack1 _attack2;
 	tagAttack1 _attack3;
-	tagAttackRect _attack3Rc[13];
-	tagAttackRect _attack3Rc2[13];
+	tagAttackRect _attack3Rc[17];
+	tagAttackRect _attack3Rc2[15];
 	Vector2 _leftTop, _leftBottom, _rightTop, _rightBottom;
 
-
+	player* _player;
+	Image* _effectImage;
 	FloatRect _attackRc;
 	float _handAngle1;
 	float _handAngle2;
+	float _eX, _eY;
 	bool _isHandCol;
 	bool _playerCol;
+	bool _playerStop;
 	int _cameraShake;
 	int _bossAttackCount;
 	int _patternRandom;
@@ -61,6 +62,9 @@ private:
 	int _exCount;
 	int _attackTimer;
 	int _hitTimer;
+	int _index;
+	int _aniCount;
+
 
 public:
 	boss() {}
@@ -84,10 +88,13 @@ public:
 	void attack2Angle();
 	void setRock();
 	bool playerCol();
+	bool playerStop();
 
 
 	tagAttack1* getBAttack2() { return &_attack2; }
 	tagAttack1* getBAttack3() { return &_attack3; }
+	tagAttackRect* getBAttack3Rc() { return _attack3Rc; }
 	bool getBossPlayerCol() { return _playerCol; }
+	bool getBPlayerStop() { return _playerStop; }
 };
 

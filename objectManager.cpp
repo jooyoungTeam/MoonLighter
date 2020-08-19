@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "objectManager.h"
+#include "player.h"
 
 HRESULT objectManager::init()
 {
@@ -117,6 +118,7 @@ void objectManager::release()
 {
 	_vObject.clear();
 }
+
 
 void objectManager::sampleObjectPage()
 {
@@ -255,6 +257,11 @@ void objectManager::setObject(POINT pt)
 			tempObject.rc.right = tempObject.rc.left + findImg(tempObject.type, tempObject.imgNumber)->GetWidth() * tempObject.scale;
 			tempObject.rc.bottom = tempObject.rc.top + findImg(tempObject.type, tempObject.imgNumber)->GetHeight() * tempObject.scale;
 		}
+		if (tempObject.type == OBJ_SPA)
+		{
+			tempObject.rc.bottom = tempObject.rc.top + 10;
+		}
+
 		_vObject.push_back(tempObject);
 		_isSelectObject = false;
 	}
@@ -442,4 +449,17 @@ Image * objectManager::findImg(OBJECT type, int imgNum)
 	}
 
 	return img;
+}
+
+bool objectManager::isPlayerSpaIn(POINT playerPos)
+{
+	float x = WINSIZEX / 2;
+	float y = WINSIZEY / 2;
+	float r = 200;
+	if (checkPointInCircle(x, y, r, playerPos))
+	{
+		return true;
+	}
+
+	return false;
 }

@@ -28,8 +28,6 @@ class objectManager : public gameNode
 {
 private:
 	vector<tagObject>  _vObject;
-
-
 	OBJECT 	           _currentSampleObject;    //현재 보고있는 오브젝트 넘버
 	tagObject          _currentObject;          //선택한 오브젝트
 	bool               _isSelectObject;         //잡고있는지
@@ -56,6 +54,9 @@ public:
 	void selectObject();
 	void eraseObject(POINT pt);
 	Image* findImg(OBJECT type, int imgNum);
+public:
+	bool isPlayerSpaIn(POINT playerPos);
+
 public:
 	vector<tagObject> getVObject() { return _vObject; }
 };

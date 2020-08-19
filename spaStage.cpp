@@ -4,7 +4,7 @@
 #include "player.h"
 HRESULT spaStage::init()
 {
-	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/dungeon_background.png");
+	_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
@@ -34,7 +34,17 @@ void spaStage::update()
 		_player->tileCollision(_attribute, _tile, DUNTILEX);
 		//_enemy->update();
 	}
-
+	POINT p;
+	p.x = _player->getX();
+	p.y = _player->getY();
+	if (_objectManager->isPlayerSpaIn(p))
+	{
+		_player->setTransform(true);
+	}
+	else
+	{
+		_player->setTransform(false);
+	}
 }
 
 void spaStage::release()

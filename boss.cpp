@@ -26,6 +26,8 @@ void boss::set()
 	_saveRandom = -1;
 	_bossAni = ONE;
 	_maxHP = _curHP= 1000;
+	_index = 0;
+	_aniCount = 0;
 	for (int i = 0; i < 13; ++i)
 	{
 		_attack3Rc[i].rc = RectMakePivot(Vector2(-300, -300), Vector2(0, 0), Pivot::Center);
@@ -41,21 +43,23 @@ void boss::render()
 	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
 	
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
-	for (int i = 0; i < 13; ++i)
+	for (int i = 0; i < 17; ++i)
 	{
 		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock0"), _attack3Rc[i].rc.left, _attack3Rc[i].rc.top, _attack3Rc[i].rc.bottom, _attack3Rc[i].alpha, 1.5f);
 		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock1"), _attack3Rc2[i].rc.left, _attack3Rc2[i].rc.top, _attack3Rc2[i].rc.bottom, _attack3Rc2[i].rockAlpha, 1.5f);
+
 		if (_attack3Rc2[i].rackFall)
 		{
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
 			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
 	}
 	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
+	CAMERAMANAGER->frameRender(_effectImage, _eX, _eY, _index, 0);
 
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index,0, 2.5f, 1.0f);
 	_attack2.img->SetAngle(_attack2.angle);
@@ -74,7 +78,6 @@ void boss::render()
 
 void boss::attack()
 {
-	//_bossPattern = PLAYER_PULL;
 	//attack3();
 	if (_isPlayerHit)
 	{
@@ -85,12 +88,13 @@ void boss::attack()
 			_hitTimer = 0;
 		}
 	}
-	cout << _onceEffect << endl;
 	_playerCol = playerCol();
+	_playerStop = playerStop();
 	if (!_patternCheck)
 	{
 		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(3,5);
+		_patternRandom = RND->getFromIntTo(0,7);
+
 	//	랜덤으로 공격 받는데 
 	//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
@@ -124,7 +128,7 @@ void boss::attack()
 				return;
 			}
 			_bossPattern = PLAYER_PULL;
-			_onceEffect = true;
+			_index = 0;
 		}
 		if (_patternRandom == 4)
 		{
@@ -134,6 +138,7 @@ void boss::attack()
 				return;
 			}
 			_bossPattern = EXPLOSION;
+			_index = 0;
 		}
 		if (_patternRandom == 5)
 		{
@@ -149,7 +154,7 @@ void boss::attack()
 		_patternCheck = true;
 		_attack3.isAttack = false;
 	}
-	//cout << _patternRandom << endl;
+	cout << _patternRandom << endl;
 	if (_bossPattern == HAND_FALL)
 	{
 		attack1();
@@ -454,8 +459,8 @@ void boss::attack4()
 		_motion->stop();
 		_motion = KEYANIMANAGER->findAnimation(  "bossLight");
 		_motion->start();
-		_onceEffect = true;
 		_bossAni = TWO;
+		_index = 0;
 	}
 	if (_exCount > 50)
 	{
@@ -485,16 +490,35 @@ void boss::attack4()
 	RECT temp;
 	if (IntersectRect(&temp, &_pRc.GetRect(), &_attackRc.GetRect()))
 	{
-		if (((getDistance(_pX, _pY, _x, _y)) < 500))
+		if (((getDistance(_pX, _pY, _x, _y)) < 600))
 		{
 			_isBossPush = true;
 		}
 	}
-		if ((getDistance(_pX, _pY, _x, _y)) >= 1000)
+		if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 		{
+			_eX = -100;
+			_eY = -100;
 			_isBossPush = false;
 		}
 
+		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
+		{
+			_effectImage = ImageManager::GetInstance()->FindImage("bossPullEffect");
+			_aniCount++;
+			_eX = _pX;
+			_eY = _pY;
+			if (_aniCount > 4)
+			{
+				_index++;
+				_aniCount = 0;
+				if (_index >= 11)
+				{
+					_index = 0;
+				}
+
+			}
+		}
 	
 
 }
@@ -629,7 +653,7 @@ void boss::attack2_1()
 
 void boss::attack3_1()
 {
-	for (int i = 0; i < 13; ++i)
+	for (int i = 0; i < 17; ++i)
 	{
 		if (!_attack3Rc[i].rackFall)
 		{
@@ -638,7 +662,7 @@ void boss::attack3_1()
 			_isRockBottom = false;
 		}
 	}
-	for (int i = 0; i < 13; ++i)
+	for (int i = 0; i < 17; ++i)
 	{
 		if (_attack3Rc[i].rackFall)
 		{
@@ -719,7 +743,7 @@ void boss::attack3_2()
 			{
 				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 			}
-			if (_attack3Rc2[i].mY >= _attack3Rc2[i].y)
+			if (_attack3Rc2[0].mY >= _attack3Rc2[0].y)
 			{
 				_attackTimer++;
 				if (_attackTimer < 100)
@@ -770,10 +794,26 @@ void boss::attack3_3()
 {
 	if ((getDistance(_pX, _pY, _x, _y)) >= 400)
 	{
+		_effectImage = ImageManager::GetInstance()->FindImage("bossTornadoEffect");
+		_aniCount++;
+		_eX = _pX;
+		_eY = _pY;
+		if (_aniCount > 2)
+		{
+			_index++;
+			_aniCount = 0;
+			if (_index >= 15)
+			{
+				_index = 15;
+			}
+
+		}
 		_isBossPull = true;
 	}
 	else
 	{
+		_eX = -100;
+		_eY = -100;
 		_isBossPull = false;
 		_state = _idle;
 		_bossAni = ONE;
@@ -805,7 +845,7 @@ void boss::attack2Angle()
 
 void boss::setRock()
 {
-	for (int i = 0; i < 13; ++i)
+	for (int i = 0; i < 17; ++i)
 	{
 		_attack3Rc[i].alpha = 1;
 		_attack3Rc[0].x = 960;
@@ -847,10 +887,20 @@ void boss::setRock()
 		_attack3Rc[12].x = 2150;
 		_attack3Rc[12].y = 788;
 
+		_attack3Rc[13].x = 1100;
+		_attack3Rc[13].y = 700;
+
+		_attack3Rc[14].x = 2000;
+		_attack3Rc[14].y = 700;
+
+		_attack3Rc[15].x = 1250;
+		_attack3Rc[15].y = 700;
+
+		_attack3Rc[16].x = 1850;
+		_attack3Rc[16].y = 700;
 		_attack3Rc[i].width = 120;
 
 		_attack3Rc[i].mY = 0;
-
 
 		_attack3Rc[i].rc = RectMakePivot(Vector2(_attack3Rc[i].x, _attack3Rc[i].mY), Vector2(_attack3Rc[i].width, _attack3Rc[i].width), Pivot::Center);
 	}
@@ -859,7 +909,7 @@ void boss::setRock()
 bool boss::playerCol()
 {
 	RECT temp;
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < 17; i++)
 	{
 		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
@@ -891,3 +941,17 @@ bool boss::playerCol()
 	return false;
 }
 
+bool boss::playerStop()
+{
+	for (int i = 0; i < 13; i++)
+	{
+		RECT temp;
+		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
+		{
+			cout << "em fadsffdsafa" << endl;
+			return true;
+		}
+	}
+
+	return false;
+}
