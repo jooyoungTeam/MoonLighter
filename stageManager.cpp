@@ -51,13 +51,13 @@ HRESULT stageManager::init()
 void stageManager::render()
 {
 	SCENEMANAGER->render();
-	_itemMg->render();
 	
-	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
+	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÌÆ²¾À" && SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
 	{
+		_itemMg->render();
 		_ui->render();
+		if (INVENTORY->getIsInven()) INVENTORY->render(); 
 	}
-	if (INVENTORY->getIsInven()) INVENTORY->render(); 
 }
 
 void stageManager::update()
@@ -69,77 +69,75 @@ void stageManager::update()
 
 	KEYANIMANAGER->update();
 
-	if (KEYMANAGER->isOnceKeyDown('Z'))
+	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÌÆ²¾À" && SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
 	{
-		if (INVENTORY->getInven()->item == nullptr) return;
-			INVENTORY->putType();
-		for (int i = 0; i < INVENTORY->getVType().size(); i++)
+		if (INVENTORY->getIsInven()) INVENTORY->update();
+
+		if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 		{
-			_itemMg->popItem(INVENTORY->getVType()[i], WINSIZEX / 2, WINSIZEY / 2);
+			INVENTORY->setIsInven(true);
+			_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
+			INVENTORY->setState(INVEN_STATE::NOTE);
 		}
-		INVENTORY->popInven();
-	}
 
-	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
-	{
-		INVENTORY->setIsInven(true);
-		_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
-		INVENTORY->setState(INVEN_STATE::NOTE);
-	}
-
-	if (INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
-	{
-		INVENTORY->setIsInven(false);
-		_ui->setUIScene(CURRENT_SCENE::TEMP);
-		INVENTORY->closeInven();
-	}
-
-	if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
-	{
-		INVENTORY->setIsInven(true);
-		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
-		INVENTORY->setState(INVEN_STATE::SHOP);
-	}
-
-	if (INVENTORY->getIsInven()) INVENTORY->update();
-
-	if (KEYMANAGER->isOnceKeyDown('Y'))
-	{
-		_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('U'))
-	{
-		_itemMg->setItem(ITEMBUNDLE::GOLEM_POT, WINSIZEX / 2, WINSIZEY / 2);
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('T'))
-	{
-		_itemMg->setItem(ITEMBUNDLE::GOLEM_KING, WINSIZEX / 2, WINSIZEY / 2);
-	}
-
-	_itemMg->update();
-	
-	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
-	{
-		_ui->update();
-	}
-
-
-	RECT temp;
-
-	for (int i = 0; i < _itemMg->getVItem().size(); ++i)
-	{
-		_itemMg->getVItem()[i]->update();
-		_itemMg->getVItem()[i]->follow(_test);
-
-		if (IntersectRect(&temp, &_test.GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
+		if (INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 		{
-			if (INVENTORY->putItem(_itemMg->getVItem()[i]))
+			INVENTORY->setIsInven(false);
+			_ui->setUIScene(CURRENT_SCENE::TEMP);
+			INVENTORY->closeInven();
+		}
+
+		if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
+		{
+			INVENTORY->setIsInven(true);
+			_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
+			INVENTORY->setState(INVEN_STATE::SHOP);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown('Z'))
+		{
+			if (INVENTORY->getInven()->item == nullptr) return;
+			INVENTORY->putType();
+			for (int i = 0; i < INVENTORY->getVType().size(); i++)
 			{
-				_itemMg->erase(i);
+				_itemMg->popItem(INVENTORY->getVType()[i], WINSIZEX / 2, WINSIZEY / 2);
 			}
-			return;
+			INVENTORY->popInven();
+		}
+
+		_itemMg->update();
+		_ui->update();
+
+		if (KEYMANAGER->isOnceKeyDown('Y'))
+		{
+			_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown('U'))
+		{
+			_itemMg->setItem(ITEMBUNDLE::GOLEM_POT, WINSIZEX / 2, WINSIZEY / 2);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown('T'))
+		{
+			_itemMg->setItem(ITEMBUNDLE::GOLEM_KING, WINSIZEX / 2, WINSIZEY / 2);
+		}
+
+		RECT temp;
+
+		for (int i = 0; i < _itemMg->getVItem().size(); ++i)
+		{
+			_itemMg->getVItem()[i]->update();
+			_itemMg->getVItem()[i]->follow(_test);
+
+			if (IntersectRect(&temp, &_test.GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
+			{
+				if (INVENTORY->putItem(_itemMg->getVItem()[i]))
+				{
+					_itemMg->erase(i);
+				}
+				return;
+			}
 		}
 	}
 

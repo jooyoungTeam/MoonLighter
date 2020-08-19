@@ -76,7 +76,10 @@ void townStage::loadMap()
 
 	int _tileSize[2];
 	int size[2];
-
+//		^	^
+//	\	\ 0 0
+//   \     ^ 
+//	  \	   \ \
 	// ------------ ≈∏¿œ
 
 	file = CreateFile("townMap.map", GENERIC_READ, NULL, NULL,

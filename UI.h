@@ -48,7 +48,7 @@ private:
 
 	float _hpWidth;							//플레이어 체력바 너비
 	float _bossHpWidth;						//보스 체력바 너비
-	float _alpha;
+	float _alpha;							//보스 방 인트로 두루마리
 
 	bool _isHit;							//플레이어 맞을 때
 	bool _bossHit;							//보스 맞을 때

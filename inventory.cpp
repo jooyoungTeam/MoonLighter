@@ -163,7 +163,7 @@ void inventory::render()
 	{
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
-
+	
 	//아이템 이름 띄우기
 	if (_inven[_select].item != nullptr && !_isSwap)
 	{
@@ -378,6 +378,7 @@ void inventory::moveItem()
 					_gold += _inven[_select].item->getPrice() * _inven[_select].count;
 					_inven[_select].item = nullptr;
 					_inven[_select].count = 0;
+					_inven[_select].isFull = false;
 					_isSelect = false;
 					return;
 				}
@@ -813,13 +814,20 @@ void inventory::makePotion(int selectPotionIndex, int index, int count, int gold
 					_inven[i].count = maxCount;
 
 					isEnd = true;
-				}
-				
+				}				
 			}
-
-			if (_inven[i].count <= 0) _inven[i].item = nullptr;
 		}
 	}
+
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		if (_inven[i].count <= 0)
+		{
+			_inven[i].isFull = false;
+			_inven[i].item = nullptr;
+		}
+	}
+
 
 	if (isEnd)
 	{
