@@ -163,7 +163,7 @@ public:
 		_shop[index].totalPrice = 0;
 	}					
 
-	int countOfPotion()										//포션 개수 세는 함수
+	int countOfPotion(int index)										//포션 개수 세는 함수
 	{
 		int count;
 
@@ -172,7 +172,7 @@ public:
 			if (_inven[i].item == nullptr) continue;
 
 
-			if (_inven[i].item->getIndex() > 1000)
+			if (_inven[i].item->getIndex() == index)
 			{
 				count++;
 			}
