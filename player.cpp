@@ -37,6 +37,7 @@ HRESULT player::init(float x, float y)
 	_enemyCol = false;
 	_bowChargeState = false;
 	_hitCondition = false;
+	_deadState = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -99,6 +100,13 @@ void player::update()
 	_playerY = _playerShadowY - 50;
 	//arrowShoot();
 	//_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
+
+	//플레이어 HP가 0이하가 되면 Die 상태로 넘어감
+	if (_playerCurrentHp <= 0)
+	{
+		_deadState = true;
+	}
+
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 }
