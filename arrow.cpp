@@ -64,7 +64,7 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float d
 
 	arrow.isPowerShot = isPower;
 	if (arrow.isPowerShot)
-		arrow.arrowDamage = RND->getFromIntTo(1, 3);
+		arrow.arrowDamage = RND->getFromIntTo(15, 16);
 	else
 		arrow.arrowDamage = RND->getFromIntTo(10, 20);
 	arrow.rc = RectMakePivot(Vector2(arrow.x, arrow.y), Vector2(30, 30), Pivot::Center);
@@ -100,16 +100,6 @@ void arrow::arrowMove()
 			break;
 		}
 		
-		if (_viArrow->arrowCol == true)
-		{
-			_viArrow->colCount++;
-			if (_viArrow->colCount > 1000)
-			{
-				_viArrow->colCount = 0;
-				_viArrow->arrowCol = false;
-			}
-		}
-
 		_viArrow->rc = RectMakePivot(Vector2(_viArrow->x, _viArrow->y), Vector2(30, 30), Pivot::Center);
 
 		if ((1600 < getDistance(_viArrow->x, _viArrow->y, _viArrow->shootX, _viArrow->shootY)))

@@ -161,7 +161,7 @@ public:
 			}
 			if (_type == ENEMY_BOSS)
 			{
-				hp / 5;
+				hp = hp / 5;
 				if (_state == _idle)
 				{
 					_bossHitCount++;
