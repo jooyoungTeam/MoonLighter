@@ -121,7 +121,7 @@ void playGround::imageLoad()
 
 	ImageManager::GetInstance()->AddFrameImage("npc_1", L"Object/npc_1.png", 17, 1);
 	ImageManager::GetInstance()->AddFrameImage("npc_2", L"Object/npc_2.png", 54, 1);
-	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 26, 1);
 	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
 
 	ImageManager::GetInstance()->AddImage("objectDungeon1", L"Object/objectDungeon1.png");
