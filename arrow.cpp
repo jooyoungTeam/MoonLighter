@@ -25,7 +25,7 @@ void arrow::update()
 
 void arrow::render()
 {
-	for (int i= 0; i < _vArrow.size(); i++)
+	for (int i = 0; i < _vArrow.size(); i++)
 	{
 		switch (_vArrow[i].arrowDirection)
 		{
@@ -49,20 +49,24 @@ void arrow::render()
 	}
 }
 
-void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage)
+void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage, bool isPower)
 {
 	tagArrow arrow;
 	ZeroMemory(&arrow, sizeof(tagArrow));
 
 	arrow.arrowImage = ImageManager::GetInstance()->FindImage("playerArrow");
-	
+
 	arrow.speed = 17.0f;
 	arrow.x = arrow.shootX = x;
 	arrow.y = arrow.shootY = y;
 
 	arrow.arrowDirection = arrowDirection;
-	arrow.arrowDamage = damage;
 
+	arrow.isPowerShot = isPower;
+	if (arrow.isPowerShot)
+		arrow.arrowDamage = RND->getFromIntTo(1, 3);
+	else
+		arrow.arrowDamage = RND->getFromIntTo(10, 20);
 	arrow.rc = RectMakePivot(Vector2(arrow.x, arrow.y), Vector2(30, 30), Pivot::Center);
 	_vArrow.push_back(arrow);
 }
@@ -94,6 +98,16 @@ void arrow::arrowMove()
 			_viArrow->x += cosf(_viArrow->angle * 2) * _viArrow->speed;
 			_viArrow->y += -sinf(_viArrow->angle * 2) * _viArrow->speed;
 			break;
+		}
+		
+		if (_viArrow->arrowCol == true)
+		{
+			_viArrow->colCount++;
+			if (_viArrow->colCount > 1000)
+			{
+				_viArrow->colCount = 0;
+				_viArrow->arrowCol = false;
+			}
 		}
 
 		_viArrow->rc = RectMakePivot(Vector2(_viArrow->x, _viArrow->y), Vector2(30, 30), Pivot::Center);

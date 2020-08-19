@@ -22,7 +22,10 @@ struct tagArrow
 	float		shootX, shootY;			//총알 발사된 위치
 	float		arrowDamage;			//화살 데미지
 	bool		shoot;					//발사할건지
+	bool		arrowCol;
+	int			colCount;
 	int			count;
+	bool        isPowerShot;
 
 	ARROWDIRECTION arrowDirection;
 };
@@ -42,7 +45,7 @@ public:
 	virtual void update();
 	virtual void render();
 	
-	void IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage);
+	void IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage, bool isPower);
 	void arrowMove();
 	void playerRemoveArrow(int index);
 
