@@ -419,9 +419,9 @@ void player::arrowShoot()
 	}
 }
 
-void player::playerHp()
+void player::playerHp(float enemy)
 {
-
+	_playerCurrentHp -= enemy;
 }
 
 //Å¸ÀÏ Ãæµ¹¿ë
@@ -583,15 +583,24 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	{
 		if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À")
 		{
-			setPlayerPos(WINSIZEX / 2, 850);
+			setPlayerPos(WINSIZEX / 2, 840);
 		}
+		if (SCENEMANAGER->getCurrentScene() == "´øÀü¾À")
+		{
+			setPlayerPos(80, WINSIZEY / 2);
+		}
+		if (SCENEMANAGER->getCurrentScene() == "´øÀü¾À2")
+		{
+			setPlayerPos(WINSIZEX - 80, WINSIZEY / 2);
+		}
+
 		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		return true;
 	}
 	if ((attribute[tileIndex[0]] == TP_DUN1) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 2000);
+		setPlayerPos(WINSIZEX - 80, WINSIZEY / 2);
 		SCENEMANAGER->changeScene("´øÀü¾À");
 		return true;
 	}
@@ -599,7 +608,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_DUN2) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(50, WINSIZEY/2);
+		setPlayerPos(80, WINSIZEY/2);
 		SCENEMANAGER->changeScene("´øÀü¾À2");
 		return true;
 	}
@@ -607,7 +616,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_SPA) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2, 800);
+		setPlayerPos(WINSIZEX / 2, 840);
 		SCENEMANAGER->changeScene("½ºÆÄ¾À");
 		return true;
 	}

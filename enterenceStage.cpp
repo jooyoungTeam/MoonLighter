@@ -4,7 +4,7 @@
 #include "player.h"
 HRESULT enterenceStage::init()
 {
-	_mapImg = ImageManager::GetInstance()->AddImage("townMap", L"Image/Map/dungeon_background.png");
+	_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
@@ -86,11 +86,7 @@ void enterenceStage::renderMap()
 			int index = (i + cullY) * 32 + (j + cullX);
 			if (index >= 32 * 18)
 				continue;
-			if (_tile[index].terrain != TR_NONE)
-			{
-				Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
-				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y, _tile[index].terrainFrameX, _tile[index].terrainFrameY);
-			}
+
 			if (KEYMANAGER->isToggleKey('V'))
 			{
 				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);

@@ -97,10 +97,6 @@ void townStage::mapToolRender()
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);
 				}
-				for (int i = 0; i < 3; i++)
-				{
-					CAMERAMANAGER->fillRectangle(_tile[_player->getColTileIdx()[i]].rc, D2D1::ColorF::White, 1);
-				}
 
 				if (_tile[index].pos != POS_NONE)
 				{
@@ -112,4 +108,12 @@ void townStage::mapToolRender()
 		}
 	}
 
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			CAMERAMANAGER->fillRectangle(_tile[_player->getColTileIdx()[i]].rc, D2D1::ColorF::White, 1);
+		}
+	}
+	
 }
