@@ -95,6 +95,7 @@ void player::update()
 	
 	_arrow->update();
 	arrowShoot();
+	playerAlphaState();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
@@ -430,6 +431,34 @@ void player::arrowShoot()
 void player::playerHp(float enemy)
 {
 	_playerCurrentHp -= enemy;
+}
+
+//피격시 알파 상태변경
+void player::playerAlphaState()
+{
+	if (_enemyCol)
+	{
+		//플레이어 알파값 true
+		_hitCondition = true;
+		_hitAlphaCount++;
+		cout << _hitAlphaCount << endl;
+		if (_hitAlphaCount >= 10)
+		{
+			_hitCondition = false;
+			_enemyCol = false;
+			_hitAlphaCount = 0;
+		}
+
+		if (_hitCondition)
+		{
+			_hitAlpha = 0;
+			_hitAlpha += 0.2f;
+		}
+		else
+		{
+			_hitAlpha = 1.0f;
+		}
+	}
 }
 
 //타일 충돌용

@@ -94,6 +94,7 @@ public:
 	void tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX);
 	void arrowShoot();
 	void playerHp(float enemy);
+	void playerAlphaState();
 
 public:
 	int getIndex() { return _index; }

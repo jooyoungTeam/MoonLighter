@@ -21,12 +21,6 @@ void playerIdleState::update(player & player)
 		player.setBedCount(player.getBedCount() == 0);
 	}
 
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
-	{
-		player.setCurrentState(player.getHitState());
-	}
-
 	//죽은상태로 넘어가기~
 	if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
 	{
@@ -353,12 +347,6 @@ void playerIdleState::update(player & player)
 void playerWalkState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
-
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
-	{
-		player.setCurrentState(player.getHitState());
-	}
 
 	if (player.getplayerCurrentHp() <= 0)
 	{
@@ -1693,12 +1681,6 @@ void playerSwimState::update(player & player)
 //bow 상태
 void playerbowState::update(player & player)
 {
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
-	{
-		player.setCurrentState(player.getHitState());
-	}
-
 	//HP가 0이하가 되면 Die 상태로 넘어가기
 	if (player.getplayerCurrentHp() <= 0)
 	{
@@ -1777,12 +1759,6 @@ void playerbowState::update(player & player)
 //sword 상태
 void playerSwordState::update(player & player)
 {
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
-	{
-		player.setCurrentState(player.getHitState());
-	}
-
 	//HP가 0이하가 되면 Die 상태로 넘어가기
 	if (player.getplayerCurrentHp() <= 0)
 	{
@@ -1921,12 +1897,6 @@ void playerSwordState::update(player & player)
 void playerBroomState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
-
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
-	{
-		player.setCurrentState(player.getHitState());
-	}
 
 	//HP가 0이하가 되면 Die 상태로 넘어가기
 	if (player.getplayerCurrentHp() <= 0)
