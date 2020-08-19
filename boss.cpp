@@ -50,7 +50,7 @@ void boss::render()
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
 			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			//CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			CAMERAMANAGER->fillRectangle(_attack3Rc[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
 	}
 	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
@@ -74,86 +74,86 @@ void boss::render()
 
 void boss::attack()
 {
-	//_bossPattern = PLAYER_PULL;
+	_bossPattern = ARM_LONG;
 	//attack3();
-	if (_isPlayerHit)
-	{
-		_hitTimer++;
-		if (_hitTimer > 60)
-		{
-			_isPlayerHit = false;
-			_hitTimer = 0;
-		}
-	}
-	cout << _onceEffect << endl;
-	_playerCol = playerCol();
-	if (!_patternCheck)
-	{
-		_attackTimer = 0;
-		_patternRandom = RND->getFromIntTo(3,5);
-	//	랜덤으로 공격 받는데 
-	//	전에 했던 공격이면 리턴. 다시 받아와라
-		if (_patternRandom == _saveRandom)
-		{
-			attack();
-			return;
-		}
+	//if (_isPlayerHit)
+	//{
+	//	_hitTimer++;
+	//	if (_hitTimer > 60)
+	//	{
+	//		_isPlayerHit = false;
+	//		_hitTimer = 0;
+	//	}
+	//}
+	//cout << _onceEffect << endl;
+	//_playerCol = playerCol();
+	//if (!_patternCheck)
+	//{
+	//	_attackTimer = 0;
+	//	_patternRandom = RND->getFromIntTo(3,5);
+	////	랜덤으로 공격 받는데 
+	////	전에 했던 공격이면 리턴. 다시 받아와라
+	//	if (_patternRandom == _saveRandom)
+	//	{
+	//		attack();
+	//		return;
+	//	}
 
-		if (_patternRandom == 0)
-		{
-			_bossPattern = HAND_FALL;
-		}
-		if (_patternRandom == 1)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = ARM_LONG;
-		}
-		if (_patternRandom == 2)
-		{
-			_bossPattern = ROCK_FALL;
-		}
-		if (_patternRandom == 3)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = PLAYER_PULL;
-			_onceEffect = true;
-		}
-		if (_patternRandom == 4)
-		{
-			if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
-			{
-				attack();
-				return;
-			}
-			_bossPattern = EXPLOSION;
-		}
-		if (_patternRandom == 5)
-		{
-			_bossPattern = BOSS_BULLET_FIRE;
-		}
-		if (_patternRandom == 6)
-		{
-			_bossPattern = BOSS_BULLET_PFIRE;
-		}
-		//공격 뭐할지 결정됐음 나가
-		_saveRandom = _patternRandom;
-		_bossAni = ONE;
-		_patternCheck = true;
-		_attack3.isAttack = false;
-	}
-	//cout << _patternRandom << endl;
-	if (_bossPattern == HAND_FALL)
-	{
-		attack1();
-	}
+	//	if (_patternRandom == 0)
+	//	{
+	//		_bossPattern = HAND_FALL;
+	//	}
+	//	if (_patternRandom == 1)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 600)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = ARM_LONG;
+	//	}
+	//	if (_patternRandom == 2)
+	//	{
+	//		_bossPattern = ROCK_FALL;
+	//	}
+	//	if (_patternRandom == 3)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) <= 600)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = PLAYER_PULL;
+	//		_onceEffect = true;
+	//	}
+	//	if (_patternRandom == 4)
+	//	{
+	//		if (abs(getDistance(_pX, _pY, _x, _y)) >= 550)
+	//		{
+	//			attack();
+	//			return;
+	//		}
+	//		_bossPattern = EXPLOSION;
+	//	}
+	//	if (_patternRandom == 5)
+	//	{
+	//		_bossPattern = BOSS_BULLET_FIRE;
+	//	}
+	//	if (_patternRandom == 6)
+	//	{
+	//		_bossPattern = BOSS_BULLET_PFIRE;
+	//	}
+	//	//공격 뭐할지 결정됐음 나가
+	//	_saveRandom = _patternRandom;
+	//	_bossAni = ONE;
+	//	_patternCheck = true;
+	//	_attack3.isAttack = false;
+	//}
+	////cout << _patternRandom << endl;
+	//if (_bossPattern == HAND_FALL)
+	//{
+	//	attack1();
+	//}
 	if (_bossPattern == ARM_LONG)
 	{
 		
@@ -166,18 +166,18 @@ void boss::attack()
 			attack2();
 		}
 	}
-	if (_bossPattern == ROCK_FALL)
-	{
-		attack3();
-	}
-	if (_bossPattern == PLAYER_PULL)
-	{
-		attack3();
-	}
-	if (_bossPattern == EXPLOSION)
-	{
-		attack4();
-	}
+	//if (_bossPattern == ROCK_FALL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == PLAYER_PULL)
+	//{
+	//	attack3();
+	//}
+	//if (_bossPattern == EXPLOSION)
+	//{
+	//	attack4();
+	//}
 }
 
 void boss::dead()
@@ -868,6 +868,13 @@ bool boss::playerCol()
 			cout << "돌 1이랑 맞음" << endl;
 			return true;
 		}
+
+		if (IntersectRect(&temp, &_attack3Rc[i].rc.GetRect(), &_pRc.GetRect()))
+		{
+			cout << "돌 1" << endl;
+			return false;
+		}
+
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;

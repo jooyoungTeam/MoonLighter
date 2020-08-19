@@ -419,6 +419,10 @@ void player::arrowShoot()
 	}
 }
 
+void player::playerHp()
+{
+
+}
 
 //타일 충돌용
 void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
