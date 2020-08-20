@@ -24,7 +24,7 @@ struct tagArrow
 	bool		shoot;					//발사할건지
 	int			count;
 	bool        isPowerShot;
-
+	bool        isActive;
 	ARROWDIRECTION arrowDirection;
 };
 
@@ -33,7 +33,6 @@ class arrow : public gameNode
 private:
 	vector<tagArrow>				_vArrow;
 	vector<tagArrow>::iterator		_viArrow;
-
 public:
 	arrow();
 	~arrow();
@@ -46,7 +45,9 @@ public:
 	void IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float damage, bool isPower);
 	void arrowMove();
 	void playerRemoveArrow(int index);
+	void arrowIsActive(int index, bool active);
 
 	vector<tagArrow> getVArrow()	{ return _vArrow; }
+
 };
 
