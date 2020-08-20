@@ -12,6 +12,7 @@ enum potionEffectState
 {
 	POTION_E_NULL,
 	POTION_E_INIT,
+	POTION_E_START,
 	POTION_E_MID,
 	POTION_E_END
 };
@@ -35,6 +36,7 @@ private:
 	potionMakeState _state;
 	potionEffectState _effectState;
 	Image* _select;
+	Image* _makeMaterial;
 	Image* _makeItem;
 	Image* _effectImg;
 
@@ -45,6 +47,7 @@ private:
 	tagPotionInfo _potion[4];
 
 	int _makeItemY;
+	int _makeMaterialY;
 
 	int _selectIndex;
 

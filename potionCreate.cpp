@@ -36,6 +36,7 @@ HRESULT potionCreate::init()
 	_makeCount = 1;
 	_isBuy = false;
 	_makeItemY = 580;
+	_makeMaterialY = 510;
 	potionSet();
 
 	
@@ -48,7 +49,7 @@ void potionCreate::update()
 	{
 		_effectTimer++;
 
-		if (_effectState == POTION_E_INIT || _effectState == POTION_E_MID)
+		if (_effectState == POTION_E_START || _effectState == POTION_E_MID)
 		{
 			if (_effectTimer > 5)
 			{
@@ -56,7 +57,7 @@ void potionCreate::update()
 				{
 					switch (_effectState)
 					{
-					case POTION_E_INIT:
+					case POTION_E_START:
 						_effectIndex = 0;
 						_effectState = POTION_E_MID;
 						_effectImg = ImageManager::GetInstance()->FindImage("potion_complete_effect");
@@ -72,6 +73,18 @@ void potionCreate::update()
 
 				_effectTimer = 0;
 			}
+		}
+		else if (_effectState == POTION_E_INIT)
+		{
+			_makeMaterialY++;
+			if (_effectTimer > 50)
+			{
+				_effectIndex = 0;
+				_effectState = POTION_E_START;
+
+				_effectTimer = 0;
+			}
+
 		}
 		else if (_effectState == POTION_E_END)
 		{
@@ -160,7 +173,7 @@ void potionCreate::update()
 		switch (_state)
 		{
 		case POTION_INIT:
-			if (_isBuy)
+			if (_isBuy && _effectState == POTION_E_NULL)
 				_state = POTION_SIZE;
 			break;
 		case POTION_SIZE:
@@ -171,6 +184,7 @@ void potionCreate::update()
 			{
 				INVENTORY->makePotion(_selectPotion.index, _makeCount, 101, _selectPotion.needCount * _makeCount, _selectPotion.price * _makeCount);
 				// 포션 만들기 함수
+				_makeMaterial = _selectPotion.needItem;
 				_makeItem = _selectPotion.img;
 				_state = POTION_INIT;
 				_effectImg = ImageManager::GetInstance()->FindImage("potion_make_effect");
@@ -214,6 +228,10 @@ void potionCreate::render()
 	switch (_effectState)
 	{
 	case POTION_E_INIT:
+		// 아이템 넣기
+		_makeMaterial->Render(Vector2(WINSIZEX / 2 - 40, _makeMaterialY), 2.f);
+		break;
+	case POTION_E_START:
 		// 항아리 젓기
 		ImageManager::GetInstance()->FindImage("potion_make_effect")->FrameRender(Vector2(WINSIZEX / 2 - 10, 588), _effectIndex, 0, 2.f);
 		break;
@@ -374,6 +392,7 @@ void potionCreate::reset()
 	//_isActive = false;
 	_makeCount = 1;
 	_makeItemY = 580;
+	_makeMaterialY = 510;
 }
 
 void potionCreate::isSizeUpdate()
