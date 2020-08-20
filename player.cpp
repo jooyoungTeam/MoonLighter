@@ -33,7 +33,7 @@ HRESULT player::init(float x, float y)
 	_playerCurrentHp = _playerMaxHp = 150;
 	_SwordDamage = 30;
 	_hitAlpha = 0;
-	_playerMoveTrap = true;
+	_playerMoveTrap = false;
 	_colVoid = true;
 	_enemyCol = false;
 	_bowChargeState = false;
@@ -99,6 +99,7 @@ void player::update()
 	_arrow->update();
 	arrowShoot();
 	playerAlphaState();
+	playerMoveTrapState();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;

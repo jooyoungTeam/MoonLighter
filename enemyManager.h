@@ -14,7 +14,6 @@ class enemyManager : public gameNode
 private:
 	vector<enemy*> _vEnemy;
 	vector<enemy*>::iterator _viEnemy;
-	enemy* _enemy;
 	player* _player;
 
 	bullet* _bullet;
@@ -49,9 +48,10 @@ public:
 	void bulletCol();
 	void enemyDead(int arr);
 
-	enemy* getEnemy() { return _enemy; }
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
 	bool getPlayerStop() { return _playerStop; }
+
+	vector<enemy*> _getVEnemy() { return _vEnemy; }
 };
 

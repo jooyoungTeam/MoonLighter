@@ -89,6 +89,7 @@ protected:
 	bool _isRockBottom;
 	bool _patternCheck;
 	bool _isStart;
+	bool _playerStop;
 		
 
 
@@ -98,7 +99,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	void playerCheck(float x, float y, FloatRect rc); //나중에 여기에 렉트 추가해
+	void playerCheck(float x, float y, FloatRect rc, bool playerStop); //나중에 여기에 렉트 추가해
 	virtual void attack() {}	//에너미 공격 넣을 곳
 	virtual void enemyMove() {}	// 움직임 넣을 곳
 	virtual void dead();		//에너미 죽는거
@@ -212,6 +213,7 @@ public:
 	bool getIsRockBottom() { return _isRockBottom; }
 	bool getOnceAni() { return _onceAni; }
 	bool getIsPlayerHit() { return _isPlayerHit; }
+	bool getPlayerStop() { return _playerStop; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }

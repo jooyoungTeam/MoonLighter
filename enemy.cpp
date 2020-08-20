@@ -110,7 +110,7 @@ void enemy::release()
 	SAFE_DELETE(_attack);
 	SAFE_DELETE(_hit);
 	SAFE_DELETE(_dead);
-	SOUNDMANAGER->release();
+	//SOUNDMANAGER->release();
 }
 
 void enemy::update()
@@ -157,11 +157,13 @@ void enemy::render()
 
 }
 
-void enemy::playerCheck(float x, float y, FloatRect rc)
+void enemy::playerCheck(float x, float y, FloatRect rc, bool playerStop)
 {
 	_pX = x;
 	_pY = y;
 	_pRc = rc;
+	_playerStop = playerStop;
+
 	//cout << _pX << endl;
 }
 

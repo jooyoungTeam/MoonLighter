@@ -43,11 +43,19 @@ HRESULT enemyManager::init()
 void enemyManager::release()
 {
 	SAFE_DELETE(_bullet);
-	SOUNDMANAGER->release();
+	//SOUNDMANAGER->release();
 }
 
 void enemyManager::update()
 {
+	if (_player->getPlayerMoveTrap())
+	{
+		cout << "플레이어 멈춰" << endl;
+	}
+	if (!_player->getPlayerMoveTrap())
+	{
+		cout << "플레이어 움직 움직" << endl;
+	}
 	_x = _player->getX();
 	_y = _player->getY();
 	//EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
@@ -56,7 +64,8 @@ void enemyManager::update()
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
 		_vEnemy[i]->update();
-		_vEnemy[i]->playerCheck(_x, _y, _rc);
+		_vEnemy[i]->playerCheck(_x, _y, _rc, _player->getPlayerMoveTrap());
+
 	}
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -66,12 +75,13 @@ void enemyManager::update()
 		{
 			if (_vEnemy[i]->getIsCol())
 			{
-				_playerStop = true;
+				_player->setPlayerMoveTrap(true);
+				//_player->getPlayerMoveTrap() = true;
 			}
-			if (!_vEnemy[i]->getIsCol())
+			/*if (!_vEnemy[i]->getIsCol())
 			{
-				_playerStop = false;
-			}
+				_player->setPlayerMoveTrap(false);
+			}*/
 		}
 
 		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
@@ -134,25 +144,25 @@ void enemyManager::setEnemy1()
 {
 	enemy* gol1;
 	gol1 = new golem;
-	gol1->playerCheck(_x, _y, _rc);
+	//gol1->playerCheck(_x, _y, _rc);
 	gol1->init(700, 500, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
 	enemy* gol12;
 	gol12 = new golem;
-	gol12->playerCheck(_x, _y, _rc);
+	//gol12->playerCheck(_x, _y, _rc);
 	gol12->init(800, 500, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;
-	pot1->playerCheck(_x, _y, _rc);
+	//pot1->playerCheck(_x, _y, _rc);
 	pot1->init(1200, 500, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot1);
 
 	enemy* pot22;
 	pot22 = new pot;
-	pot22->playerCheck(_x, _y, _rc);
+	//pot22->playerCheck(_x, _y, _rc);
 	pot22->init(1200, 700, 50, 50, ENEMY_POT);
 	_vEnemy.push_back(pot22);
 
@@ -160,14 +170,14 @@ void enemyManager::setEnemy1()
 
 	enemy* pot2;
 	pot2 = new pot;
-	pot2->playerCheck(_x, _y, _rc);
+	//pot2->playerCheck(_x, _y, _rc);
 	pot2->init(200, 300, 50, 50, ENEMY_POT);
 	pot2->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(pot2);
 
 	enemy* gost;
 	gost = new pot;
-	gost->playerCheck(_x, _y, _rc);
+	//gost->playerCheck(_x, _y, _rc);
 	gost->init(-300, -300, 50, 50, ENEMY_POT);
 	gost->setPotDirection(POT_RIGHT);
 	_vEnemy.push_back(gost);
@@ -182,21 +192,21 @@ void enemyManager::setEnemy2()
 
 	enemy* redS1;
 	redS1 = new redSlime;
-	redS1->playerCheck(_x, _y, _rc);
+	//redS1->playerCheck(_x, _y, _rc);
 	redS1->init(200, 200, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS1);
 
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
-	yelS1->playerCheck(_x, _y, _rc);
+	//yelS1->playerCheck(_x, _y, _rc);
 	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
-	bleS1->playerCheck(_x, _y, _rc);
+	//bleS1->playerCheck(_x, _y, _rc);
 	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
@@ -208,7 +218,7 @@ void enemyManager::setBoss()
 {
 	enemy* boss1;
 	boss1 = new boss;
-	boss1->playerCheck(_x, _y, _rc);
+	//boss1->playerCheck(_x, _y, _rc);
 	boss1->init(1360, 300, 590, 650, ENEMY_BOSS);
 	_vEnemy.push_back(boss1);
 }

@@ -31,13 +31,12 @@ void redSlime::attack()
 		_motion->start();
 		_x = _pX;
 		_y = _pY;
-
 	}
 	if (_isCol)
 	{
-		_bigSlimeCount++;
-		if (_bigSlimeCount > 100)
+		if (_playerStop)
 		{
+			cout << "e" << endl;
 			_img = ImageManager::GetInstance()->FindImage("redSlime");
 			_motion->stop();
 			_motion = KEYANIMANAGER->findAnimation(  "redSlime");
