@@ -400,14 +400,9 @@ void playerWalkState::update(player & player)
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
 				player.setCurrentState(player.getRollState());
 			}
-			if (!player.getTileColTop())
-			{
-				y = -1;
-			}
-			else
-			{
-				y = 0;
-			}
+
+			y = -1;
+
 		}
 	}
 
@@ -453,10 +448,9 @@ void playerWalkState::update(player & player)
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
 				player.setCurrentState(player.getRollState());
 			}
-			if (!player.getTileColBottom())
-				y = 1;
-			else
-				y = 0;
+
+			y = 1;
+
 		}
 	}
 
@@ -502,10 +496,9 @@ void playerWalkState::update(player & player)
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftRoll"), ImageManager::GetInstance()->FindImage("playerLeftRoll"));
 				player.setCurrentState(player.getRollState());
 			}
-			if (!player.getTileColLeft())
-				x = -1;
-			else
-				x = 0;
+
+			x = -1;
+
 		}
 	}
 
@@ -552,26 +545,18 @@ void playerWalkState::update(player & player)
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
 				player.setCurrentState(player.getRollState());
 			}
-			if (!player.getTileColRight())
-				x = 1;
-			else
-				x = 0;
+
+			x = 1;
 		}
 	}
 
 	//오른쪽위 이동
 	if (player.getDirection() == DIRECTION::RIGHTTOP)
 	{
-		if (!player.getTileColRightTop())
-		{
-			x = 1;
-			y = -1;
-		}
-		else
-		{
-			x = 0;
-			y = 0;
-		}
+
+		x = 1;
+		y = -1;
+
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -587,16 +572,10 @@ void playerWalkState::update(player & player)
 	//왼쪽위 이동
 	if (player.getDirection() == DIRECTION::LEFTTOP)
 	{
-		if (!player.getTileColLeftTop())
-		{
-			x = -1;
-			y = -1;
-		}
-		else
-		{
-			x = 0;
-			y = 0;
-		}
+
+		x = -1;
+		y = -1;
+
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -612,16 +591,11 @@ void playerWalkState::update(player & player)
 	//왼쪽아래 이동
 	if (player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
-		if (!player.getTileColLeftBottom())
-		{
-			x = -1;
-			y = 1;
-		}
-		else
-		{
-			x = 0;
-			y = 0;
-		}
+
+		x = -1;
+		y = 1;
+
+
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -637,16 +611,10 @@ void playerWalkState::update(player & player)
 	//오른쪽아래 이동
 	if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
-		if (!player.getTileColRightBottom())
-		{
-			x = 1;
-			y = 1;
-		}
-		else
-		{
-			x = 0;
-			y = 0;
-		}
+
+		x = 1;
+		y = 1;
+
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -664,17 +632,13 @@ void playerWalkState::update(player & player)
 	if (Vector2::Length(&vec) > 1) // 대각선일 때
 	{
 		player.setShadowX(player.getShadowX() + (diagonal.x * MOVESPPED));
-		//player.setX(player.getX() + (diagonal.x * MOVESPPED));
 		player.setShadowY(player.getShadowY() + (diagonal.y * MOVESPPED));
-		//player.setY(player.getY() + (diagonal.y * MOVESPPED));
 	}
 	else
 	{
 		//대각선 아닐때
 		player.setShadowX(player.getShadowX() + (vec.x * MOVESPPED));
-		//player.setX(player.getX() + (vec.x * MOVESPPED));
 		player.setShadowY(player.getShadowY() + (vec.y * MOVESPPED));
-		//player.setY(player.getY() + (vec.y * MOVESPPED));
 	}
 
 	//위쪽키 떼면
@@ -1057,66 +1021,50 @@ void playerRollState::update(player & player)
 	//위로 구르기 
 	if (player.getDirection() == DIRECTION::UP)
 	{
-		if (!player.getTileColTop())
-			player.setShadowY(player.getShadowY() - 7);
+		player.setShadowY(player.getShadowY() - 7);
 	}
 	//아래로 구르기
 	if (player.getDirection() == DIRECTION::DOWN)
 	{
-		if (!player.getTileColBottom())
-			player.setShadowY(player.getShadowY() + 7);
+		player.setShadowY(player.getShadowY() + 7);
 	}
 	//왼쪽으로 구르기
 	if (player.getDirection() == DIRECTION::LEFT)
 	{
-		if (!player.getTileColLeft())
-			player.setShadowX(player.getShadowX() - 7);
+		player.setShadowX(player.getShadowX() - 7);
 	}
 	//오른쪽으로 구르기
 	if (player.getDirection() == DIRECTION::RIGHT)
 	{
-		if (!player.getTileColRight())
-			player.setShadowX(player.getShadowX() + 7);
+		player.setShadowX(player.getShadowX() + 7);
 	}
 
 	//오른쪽위 구르기
 	if (player.getDirection() == DIRECTION::RIGHTTOP)
 	{
-		if (!player.getTileColRightTop())
-		{
-			player.setShadowY(player.getShadowY() - 7);
-			player.setShadowX(player.getShadowX() + 5);
-		}
+		player.setShadowY(player.getShadowY() - 7);
+		player.setShadowX(player.getShadowX() + 5);
 	}
 
 	//왼쪽위 구르기
 	if (player.getDirection() == DIRECTION::LEFTTOP)
 	{
-		if (!player.getTileColLeftTop())
-		{
-			player.setShadowY(player.getShadowY() - 7);
-			player.setShadowX(player.getShadowX() - 5);
-		}
+		player.setShadowY(player.getShadowY() - 7);
+		player.setShadowX(player.getShadowX() - 5);
 	}
 
 	//왼쪽아래 구르기
 	if (player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
-		if (!player.getTileColLeftBottom())
-		{
-			player.setShadowY(player.getShadowY() + 7);
-			player.setShadowX(player.getShadowX() - 5);
-		}
+		player.setShadowY(player.getShadowY() + 7);
+		player.setShadowX(player.getShadowX() - 5);
 	}
 
 	//오른쪽아래 구르기
 	if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
-		if (!player.getTileColRightBottom())
-		{
-			player.setShadowY(player.getShadowY() + 7);
-			player.setShadowX(player.getShadowX() + 5);
-		}
+		player.setShadowY(player.getShadowY() + 7);
+		player.setShadowX(player.getShadowX() + 5);
 	}
 
 	//애니메이션 재생이 끝나면 

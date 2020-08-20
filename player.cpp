@@ -58,6 +58,7 @@ void player::render()
 {
 	//CAMERAMANAGER->fillRectangle(_playerRc, D2D1::ColorF::Black, 1.f);
 	//플레이어 히트 상태일 경우 알파값줌
+	CAMERAMANAGER->zOrderRender(_playerShadowImg, _playerShadowX - 35, _playerShadowRc.bottom - 30, _playerShadowY - 100, 0.3f, 1.0f);
 	if (_hitCondition)
 	{
 		CAMERAMANAGER->zOrderAniAlphaRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f, _hitAlpha);
@@ -67,18 +68,16 @@ void player::render()
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportIn")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportOut"))
 	{
-		CAMERAMANAGER->zOrderRender(_playerShadowImg, _playerShadowX -35, _playerShadowY - 50, _playerShadowY - 100, 0.3f, 1.0f);
 		//CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
-		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 2.63f);
+		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowRc.bottom, _playerMotion, 2.63f);
 	}
 	else
 	{
-		CAMERAMANAGER->zOrderRender(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, _playerShadowY - 100, 0.3f, 1.0f);
 		//CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
 		//D2DRenderer::GetInstance()->FillRectangle(_playerRc , D2D1::ColorF::Tomato, 1.0f);
-		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f);
+		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowRc.bottom, _playerMotion, 1.3f);
 	}
 	_arrow->render();
 	if (KEYMANAGER->isToggleKey('V'))
@@ -100,9 +99,9 @@ void player::update()
 	arrowShoot();
 	playerAlphaState();
 	playerMoveTrapState();
-	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
+	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 50), Pivot::Center);
 	_playerX = _playerShadowX;
-	_playerY = _playerShadowY - 50;
+	_playerY = _playerShadowY;
 	//arrowShoot();
 	//_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
 
@@ -484,21 +483,14 @@ void player::playerMoveTrapState()
 void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 {
 	RECT rcCollision;   //임의의 충돌판정용 렉트
-	RECT probeLeft;
 	tileIndex[3];   //이동방향에 따라 타일속성 검출계산용(타일 인덱스가 몇 번인지)
 	int tileX, tileY;   //실제 플레이어가 어디 타일에 있는지 좌표 계산용 (left, top)
 
 	//임의 충돌판정용 렉트에 대입 먼저
-	rcCollision.left = _playerRc.left;
-	rcCollision.right = _playerRc.right;
-	rcCollision.top = _playerRc.top;
-	rcCollision.bottom = _playerRc.bottom;
-
-	//렉트 크기 잘라주기
-	rcCollision.left += 2;
-	rcCollision.top += 2;
-	rcCollision.right -= 2;
-	rcCollision.bottom -= 2;
+	rcCollision.left = _playerShadowRc.left;
+	rcCollision.right = _playerShadowRc.right;
+	rcCollision.top = _playerShadowRc.top;
+	rcCollision.bottom = _playerShadowRc.bottom;
 
 	tileX = rcCollision.left / TILESIZE;
 	tileY = rcCollision.top / TILESIZE;
@@ -547,59 +539,18 @@ void player::tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX)
 		return;
 	}
 
-	for (int i = 0; i < 3; i++)
+	bool first = false;
+
+
+	RECT rc = _playerShadowRc.GetRect();
+	for (int i = 0; i < 3; ++i)
 	{
-		RECT rc;
-		if (((attribute[tileIndex[i]] & ATTR_UNMOVE) == ATTR_UNMOVE) &&
-			IntersectRect(&rc, &tile[tileIndex[i]].rc, &rcCollision))
+		if (((attribute[tileIndex[i]] & ATTR_UNMOVE) == ATTR_UNMOVE) && isCollisionReaction(tile[tileIndex[i]].rc, rc))
 		{
-			switch (_playerDirection)
-			{
-			case DIRECTION::LEFT:
-				_tileColLeft = true;
-				return;
-				break;
-			case DIRECTION::UP:
-				_tileColTop = true;
-				return;
-				break;
-			case DIRECTION::RIGHT:
-				_tileColRight = true;
-				return;
-				break;
-			case DIRECTION::DOWN:
-				_tileColBottom = true;
-				return;
-				break;
-			case DIRECTION::LEFTTOP:
-				_tileColLeftTop = true;
-				return;
-				break;
-			case DIRECTION::RIGHTTOP:
-				_tileColRightTop = true;
-				return;
-				break;
-			case DIRECTION::LEFTBOTTOM:
-				_tileColLeftBottom = true;
-				return;
-				break;
-			case DIRECTION::RIGHTBOTTOM:
-				_tileColRightBottom = true;
-				return;
-				break;
-			}
+			_playerShadowX = (rc.left + rc.right) / 2;
+			_playerShadowY = (rc.top + rc.bottom) / 2;
 		}
 	}
-	//_playerRc = rcCollision;
-
-	_tileColLeft = false;
-	_tileColTop = false;
-	_tileColRight = false;
-	_tileColBottom = false;
-	_tileColLeftTop = false;
-	_tileColRightTop = false;
-	_tileColLeftBottom = false;
-	_tileColRightBottom = false;
 }
 
 bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
@@ -623,7 +574,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_SHOP) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX / 2 + 80, 1100);
+		setPlayerPos(WINSIZEX / 2 + 80, 1000);
 		SCENEMANAGER->changeScene("샵씬");
 		return true;
 	}
