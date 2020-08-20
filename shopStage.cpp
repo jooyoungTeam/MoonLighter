@@ -26,6 +26,8 @@ HRESULT shopStage::init()
 	_cellerFrameTimer = 0;
 	_cellerIndex = _celler->GetMaxFrameX() - 1;
 
+	_interactionRC = RectMakePivot(Vector2(670,920),Vector2(200,200),Pivot::Center);
+
 	return S_OK;
 }
 
@@ -43,6 +45,7 @@ void shopStage::render()
 	_display4->render();
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
+	CAMERAMANAGER->rectangle(_interactionRC, D2D1::ColorF::AliceBlue, 1.f, 2.f);
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 8, 605,800, 1.f, 1.3f);    
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 2, 1158,1300, 1.f, 1.3f);
 	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);

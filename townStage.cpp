@@ -18,6 +18,8 @@ HRESULT townStage::init()
     _miniMap->init(TOWNTILEX, TOWNTILEY);
 	_miniMap->setImage(_mapImg);
 
+	_potionShopRc = RectMakePivot(Vector2(550, (int)_mapImg->GetSize().y - 330), Vector2(200, 200), Pivot::Center);
+
 	_isPotionShop = false;
 	return S_OK;
 }
@@ -31,7 +33,7 @@ void townStage::update()
 		_player->tileCollision(_attribute, _tile, TOWNTILEX);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('Q'))
+	if (KEYMANAGER->isOnceKeyDown('J'))
 	{
 		if (!_isPotionShop)
 		{
@@ -73,6 +75,8 @@ void townStage::render()
 	{
 		_potionShop->render();
 	}
+	
+	CAMERAMANAGER->rectangle(_potionShopRc, D2D1::ColorF::AliceBlue, 1.f, 2.f);
 }
 
 void townStage::release()

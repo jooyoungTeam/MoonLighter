@@ -18,6 +18,8 @@ private:
 	objectManager*    _objectManager;
 	class player*     _player;
 
+	FloatRect		  _potionShopRc;
+
 	bool			  _isPotionShop;
 public:
 	townStage() {}
@@ -34,5 +36,6 @@ public:
 
 public:
 	bool getIsPotionShop() { return _isPotionShop; }
+	FloatRect getPotionShopRc() { return _potionShopRc; }
 };
 
