@@ -136,6 +136,65 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
 
 
+	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+
+	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
+	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
+	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
+	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
+	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
+	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
+	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
+	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
+	ImageManager::GetInstance()->AddImage("object_rock1", L"Object/objectRock1.png");
+	ImageManager::GetInstance()->AddImage("object_rock2", L"Object/objectRock2.png");
+	ImageManager::GetInstance()->AddImage("object_tile1", L"Object/object_Tile1.png");
+	ImageManager::GetInstance()->AddImage("object_tile2", L"Object/object_Tile2.png");
+	ImageManager::GetInstance()->AddImage("object_tile3", L"Object/object_Tile3.png");
+
+
+
+	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_fountain1", L"Object/plant_fountain1.png", 9, 1);
+	ImageManager::GetInstance()->AddFrameImage("Object_build_Bottom1", L"Object/Object_build_Bottom1.png", 53, 1);
+
+	ImageManager::GetInstance()->AddFrameImage("npc_1", L"Object/npc_1.png", 17, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_2", L"Object/npc_2.png", 54, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
+
+	ImageManager::GetInstance()->AddImage("objectDungeon1", L"Object/objectDungeon1.png");
+	ImageManager::GetInstance()->AddImage("objectDungeon2", L"Object/objectDungeon2.png");
+	ImageManager::GetInstance()->AddImage("object_skull1", L"Object/skull1.png");
+	ImageManager::GetInstance()->AddImage("object_skull2", L"Object/skull2.png");
+	ImageManager::GetInstance()->AddImage("object_skull3", L"Object/skull3.png");
+	ImageManager::GetInstance()->AddImage("object_pot", L"Object/pot.png");
+	ImageManager::GetInstance()->AddImage("object_pot_slime", L"Object/pot_slime.png");
+	ImageManager::GetInstance()->AddImage("object_pillar", L"Object/pillar.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock", L"Object/smallRock.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
+	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
+	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
+	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
+	ImageManager::GetInstance()->AddImage("objectTile4", L"Object/objectTile4.png");
+	ImageManager::GetInstance()->AddImage("objectTile5", L"Object/objectTile5.png");
+	ImageManager::GetInstance()->AddImage("objectTile6", L"Object/objectTile6.png");
+	ImageManager::GetInstance()->AddImage("objectTile7", L"Object/objectTile7.png");
+	ImageManager::GetInstance()->AddImage("objectTile8", L"Object/objectTile8.png");
+	ImageManager::GetInstance()->AddImage("objectTile9", L"Object/objectTile9.png");
+	ImageManager::GetInstance()->AddImage("objectTile10", L"Object/objectTile10.png");
+	ImageManager::GetInstance()->AddImage("objectTile11", L"Object/objectTile11.png");
+	ImageManager::GetInstance()->AddImage("objectTile12", L"Object/objectTile12.png");
+	ImageManager::GetInstance()->AddImage("rock1", L"Object/rock1.png");
+	ImageManager::GetInstance()->AddImage("rock2", L"Object/rock2.png");
+	ImageManager::GetInstance()->AddImage("rock3", L"Object/rock3.png");
+	ImageManager::GetInstance()->AddImage("rock4", L"Object/rock4.png");
+	ImageManager::GetInstance()->AddImage("rock5", L"Object/rock5.png");
+	ImageManager::GetInstance()->AddImage("root1", L"Object/root1.png");
+	ImageManager::GetInstance()->AddImage("root2", L"Object/root2.png");
+
+
 
 	//===========================================¡é¡é¾ÆÀÌÅÛ¡é¡é===========================================//
 	ImageManager::GetInstance()->AddImage("slime_red", L"Image/Item/slime_jelly.png");
