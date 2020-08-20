@@ -65,7 +65,7 @@ void timeManager::render()
 #else
 	{
 		sprintf_s(str, "framePerSecond(FPS) : %d", _timer->getFrameRate());
-		TextOut(hdc, 0, 0, str, strlen(str));
+		//TextOut(hdc, 0, 0, str, strlen(str));
 	}
 #endif
 
