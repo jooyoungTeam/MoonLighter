@@ -296,9 +296,17 @@ void enemyManager::playerCol()
 			_vEnemy[i]->setEnemyAttack(30);
 		//	CAMERAMANAGER->shakeCamera(5, 10);
 			_player->setAttackRc(0, 0, 0, 0);
-			if (_enemy->getEnemyType() == ENEMY_BLUE_SLIME || _enemy->getEnemyType() == ENEMY_RED_SLIME || _enemy->getEnemyType() == ENEMY_YELLOW_SLIME)
+			if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
 			{
 				SOUNDMANAGER->play("슬라임맞음", 1.0f);
+			}
+			if (_vEnemy[i]->getEnemyType() == ENEMY_GOLEM)
+			{
+				SOUNDMANAGER->play("골렘맞음", 1.0f);
+			}
+			if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+			{
+				SOUNDMANAGER->play("총알장전", 1.0f);
 			}
 		}
 		//활충돌
@@ -314,6 +322,10 @@ void enemyManager::playerCol()
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_player->getArrow()->playerRemoveArrow(j);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
+				{
+					SOUNDMANAGER->play("슬라임맞음", 1.0f);
 				}
 				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
