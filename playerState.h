@@ -14,9 +14,9 @@ class playerIdleSwimState;
 class playerSwimState;
 class playerbowState;
 class playerSwordState;
-class playerHitState;
 class playerbroomState;
 class playerBedState;
+class playerTrapState;
 class playerTeleportState;
 class playerTeleportInState;
 class playerTeleportOutState;
@@ -40,6 +40,7 @@ public:
 	static playerSwordState* sword;
 	static playerbroomState* broom;
 	static playerBedState* bed;
+	static playerTrapState* trap;
 	static playerTeleportState* teleport;
 	static playerTeleportInState* teleportIn;
 	static playerTeleportOutState* teleportOut;
@@ -107,12 +108,6 @@ public:
 	virtual void update(player& player) override;
 };
 
-class playerHitState : public playerState
-{
-public:
-	virtual void update(player& player) override;
-};
-
 class playerBroomState : public playerState
 {
 public:
@@ -120,6 +115,12 @@ public:
 };
 
 class playerBedState : public playerState
+{
+public:
+	virtual void update(player& player) override;
+};
+
+class playerTrapState : public playerState
 {
 public:
 	virtual void update(player& player) override;

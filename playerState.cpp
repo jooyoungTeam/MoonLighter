@@ -1987,34 +1987,13 @@ void playerTeleportOutState::update(player & player)
 	}
 }
 
-//플레이어 Hit 상태
-void playerHitState::update(player & player)
+//플레이어 레드슬라임한테 잡힌상태
+void playerTrapState::update(player & player)
 {
-	//플레이어 알파값 true
-	player.setHitCondition(true);
-	player.setHitAlphaCount(player.getHitAlphaCount() + 1);
-	//Count가 20이 넘어가면 다시 알파값 false 줘서 원래대로
-	if (player.getHitAlphaCount() >= 20)
-	{
-		player.setHitCondition(false);
-		player.setEnemyCol(false);
-		player.setHitAlphaCount(player.getHitAlphaCount() == 0);
-	}
+	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 
-	if (player.getHitCondition())
+	if (!player.getPlayerMoveTrap())
 	{
-		player.setHitAlpha(player.getHitAlpha() + 0.02f);
-	}
-	if (!player.getHitCondition())
-	{
-		player.setHitAlpha(player.getHitAlpha() == 1.0f);
 		player.setCurrentState(player.getWalkState());
-	}
-
-	//HP가 0이하가 되면 Die 상태로 넘어가기
-	if (player.getplayerCurrentHp() <= 0)
-	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
-		player.setCurrentState(player.getDieState());
 	}
 }
