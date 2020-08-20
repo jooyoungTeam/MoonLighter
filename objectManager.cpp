@@ -351,28 +351,108 @@ void objectManager::selectObject()
 			else if (_currentSampleObject == OBJ_ROCK1)
 			{
 				_currentObject.isFrameRender = false;
+				if (i == 0)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 3;
+				}
 				break;
 			}
 
 			else if (_currentSampleObject == OBJ_ROCK2)
 			{
 				_currentObject.isFrameRender = false;
+				if (i == 0)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 3;
+				}
 				break;
 			}
 
 			else if (_currentSampleObject == OBJ_TILE1)
 			{
 			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
 			break;
 			}
 			else if (_currentSampleObject == OBJ_TILE2)
 			{
 			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
 			break;
 			}
 			else if (_currentSampleObject == OBJ_TILE3)
 			{
 			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
 			break;
 			}
 		}

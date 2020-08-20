@@ -196,18 +196,18 @@ void enemyManager::setEnemy2()
 	_vEnemy.push_back(redS1);
 
 
-	//enemy* yelS1;
-	//yelS1 = new anotherSlime;
-	////yelS1->playerCheck(_x, _y, _rc);
-	//yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	//_vEnemy.push_back(yelS1);
+	enemy* yelS1;
+	yelS1 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	_vEnemy.push_back(yelS1);
 
 
-	//enemy* bleS1;
-	//bleS1 = new anotherSlime;
-	////bleS1->playerCheck(_x, _y, _rc);
-	//bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	//_vEnemy.push_back(bleS1);
+	enemy* bleS1;
+	bleS1 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	_vEnemy.push_back(bleS1);
 
 
 

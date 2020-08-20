@@ -448,8 +448,8 @@ void tile::setMap()
 
 void tile::saveLoad()
 {
-	saveMap(3);
-	loadMap(3);
+	saveMap(1);
+	loadMap(1);
 }
 
 void tile::imageLoad()
