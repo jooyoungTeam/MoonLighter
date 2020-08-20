@@ -8,6 +8,7 @@
 #include "shopStage.h"
 #include "townStage.h"
 #include "dungeonStage2.h"
+#include "boss.h"
 #include "spaStage.h"
 #include "enterenceStage.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
@@ -20,7 +21,7 @@ private:
 	shopStage*      _shop;
 	townStage*      _town;
 	bossStage*      _boss;
-
+	boss* _b;
 	dungeonStage2*  _dungeon2;
 	spaStage*       _spa;
 	enterenceStage* _enterence;

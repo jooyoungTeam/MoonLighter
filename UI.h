@@ -73,6 +73,7 @@ public:
 public:
 	CURRENT_SCENE getUIScene() { return _scene; }							//현재 UI 씬 가져가기
 	BOSS_STAGE getBossScene() { return _bossStage; }						//현재 보스 씬 가져가기
+	int getMonveBagFrame() { return _moneyFrameY; }
 
 public:
 	void setUIScene(CURRENT_SCENE scene) { _scene = scene; }				//현재 UI 씬 정해주기

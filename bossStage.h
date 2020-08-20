@@ -15,7 +15,6 @@ private:
 	class player*  _player;
 	enemyManager* _enemy;
 	miniMap*          _miniMap;
-
 	objectManager* _objectManager;
 	DWORD             _attribute[BOSSTILEX * BOSSTILEY];
 	tagTile			  _tile[BOSSTILEX * BOSSTILEY];
@@ -31,4 +30,5 @@ public:
 	void loadMap();
 	void renderMap();
 	void setPlayerLink(player* player) { _player = player; };
+	enemyManager* getEnemyManager() { return _enemy; }
 };

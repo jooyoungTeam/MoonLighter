@@ -124,6 +124,7 @@ public:
 
 	// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
 	void makePotion(int selectPotionIndex, int makeCount, int itemIndex, int itemTotalCount, int totalGold);
+	void usePotion();
 
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
