@@ -6,11 +6,10 @@ HRESULT stageManager::init()
 {
 	_player = new player;
 	_player->init(981, 442);
+	INVENTORY->init();
 	_ui = new UI;
 	_ui->init();
 	_itemMg = new itemManager;
-	INVENTORY->init();
-
 	_town = new townStage;
 	_boss = new bossStage;
 	_shop = new shopStage;
@@ -18,32 +17,22 @@ HRESULT stageManager::init()
 	_dungeon2 = new dungeonStage2;
 	_spa = new spaStage;
 	_enterence = new enterenceStage;
-	_b = new boss;
 
 	_ui->getPlayerMemoryAddressLink(_player);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
-
-	SCENEMANAGER->addScene("≈∏¿Ã∆≤æ¿", new title);
-
-	SCENEMANAGER->addScene("≈∏¿œæ¿", new tile);
-	SCENEMANAGER->addScene("º•æ¿", _shop);
-	SCENEMANAGER->addScene("¥¯¿¸æ¿", _dungeon);
-	SCENEMANAGER->addScene("∏∂¿ªæ¿",	_town);
-	SCENEMANAGER->addScene("∫∏Ω∫æ¿", _boss);
-	SCENEMANAGER->addScene("¥¯¿¸æ¿2", _dungeon2);
-	SCENEMANAGER->addScene("Ω∫∆ƒæ¿", _spa);
-	SCENEMANAGER->addScene("¥¯¿¸¿‘±∏æ¿", _enterence);
-
-
-
 	_dungeon->setPlayerLink(_player);
+	_dungeon->setItemManagerLink(_itemMg);
 	_dungeon2->setPlayerLink(_player);
+	_dungeon2->setItemManagerLink(_itemMg);
 	_spa->setPlayerLink(_player);
 	_enterence->setPlayerLink(_player);
 	_town->setPlayerLink(_player);
 	_boss->setPlayerLink(_player);
+	_boss->setUILink(_ui);
+	_boss->setItemManagerLink(_itemMg);
 	_shop->setPlayerLink(_player);
-	SCENEMANAGER->changeScene("≈∏¿Ã∆≤æ¿");
+
+	addStage();
 
 	return S_OK;
 }
@@ -52,9 +41,29 @@ void stageManager::render()
 {
 	SCENEMANAGER->render();
 	
+	uiRender();
+}
+
+void stageManager::update()
+{
+	SCENEMANAGER->update();
+
+	KEYANIMANAGER->update();
+
+	uiUpdate();
+	tempSceneChange();
+}
+
+void stageManager::release()
+{
+	SCENEMANAGER->release();
+}
+
+void stageManager::uiRender()
+{
 	if (SCENEMANAGER->getCurrentScene() != "≈∏¿Ã∆≤æ¿" && SCENEMANAGER->getCurrentScene() != "≈∏¿œæ¿")
 	{
-		if (!_town->getIsPotionShop()) 
+		if (!_town->getIsPotionShop())
 		{
 			_ui->render();
 		}
@@ -65,16 +74,12 @@ void stageManager::render()
 		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
 
 		_itemMg->render();
-		if (INVENTORY->getIsInven()) INVENTORY->render(); 
+		if (INVENTORY->getIsInven()) INVENTORY->render();
 	}
 }
 
-void stageManager::update()
+void stageManager::uiUpdate()
 {
-	SCENEMANAGER->update();
-
-	KEYANIMANAGER->update();
-
 	if (SCENEMANAGER->getCurrentScene() != "≈∏¿Ã∆≤æ¿" && SCENEMANAGER->getCurrentScene() != "≈∏¿œæ¿")
 	{
 		if (INVENTORY->getIsInven()) INVENTORY->update();
@@ -126,7 +131,7 @@ void stageManager::update()
 			_itemMg->getVItem()[i]->update();
 			_itemMg->getVItem()[i]->follow(_player->getPlayerRc());
 
-			if (!_player->getDeadState() && 
+			if (!_player->getDeadState() &&
 				IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
 			{
 				if (INVENTORY->putItem(_itemMg->getVItem()[i]))
@@ -138,6 +143,10 @@ void stageManager::update()
 		}
 	}
 
+}
+
+void stageManager::tempSceneChange()
+{
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
 		SCENEMANAGER->changeScene("≈∏¿œæ¿");
@@ -160,17 +169,6 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		SCENEMANAGER->changeScene("∫∏Ω∫æ¿");
-
-		for (int i = 0; i < _boss->getEnemyManager()->_getVEnemy().size(); ++i)
-		{
-			if (_boss->getEnemyManager()->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
-			{
-				_b = dynamic_cast<boss*>(_boss->getEnemyManager()->_getVEnemy()[i]);
-
-				_ui->getBossMemoryAddressLink(_b);
-				break;
-			}
-		}
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
@@ -187,7 +185,17 @@ void stageManager::update()
 	}
 }
 
-void stageManager::release()
+void stageManager::addStage()
 {
-	SCENEMANAGER->release();
+	SCENEMANAGER->addScene("≈∏¿Ã∆≤æ¿", new title);
+	SCENEMANAGER->addScene("≈∏¿œæ¿", new tile);
+	SCENEMANAGER->addScene("º•æ¿", _shop);
+	SCENEMANAGER->addScene("¥¯¿¸æ¿", _dungeon);
+	SCENEMANAGER->addScene("∏∂¿ªæ¿", _town);
+	SCENEMANAGER->addScene("∫∏Ω∫æ¿", _boss);
+	SCENEMANAGER->addScene("¥¯¿¸æ¿2", _dungeon2);
+	SCENEMANAGER->addScene("Ω∫∆ƒæ¿", _spa);
+	SCENEMANAGER->addScene("¥¯¿¸¿‘±∏æ¿", _enterence);
+
+	SCENEMANAGER->changeScene("≈∏¿Ã∆≤æ¿");
 }

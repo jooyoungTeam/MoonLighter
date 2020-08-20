@@ -11,14 +11,11 @@ HRESULT dungeonStage2::init()
 	loadMap();
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
-
+	_enemy->setItemManagerLink(_itemManager);
 	_enemy->setEnemy2();
 	_enemy->init();
 
-
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
-
-
 
 	return S_OK;
 }

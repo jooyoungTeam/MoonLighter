@@ -2,7 +2,7 @@
 #include "enemyManager.h"
 #include "player.h"
 #include "boss.h"
-
+#include "itemManager.h"
 
 enemyManager::enemyManager()
 {
@@ -108,9 +108,10 @@ void enemyManager::update()
 	bulletCol();
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-
 		if (_vEnemy[i]->getRealDead())
 		{
+			_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+			cout << " ddddd " << endl;
 			enemyDead(i);
 			break;
 		}

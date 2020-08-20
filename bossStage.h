@@ -11,13 +11,15 @@
 class bossStage : public gameNode
 {
 private:
-	Image*  _mapImg;
-	class player*  _player;
-	enemyManager* _enemy;
+	Image*            _mapImg;
+	class player*     _player;
+	enemyManager*     _enemy;
 	miniMap*          _miniMap;
-	objectManager* _objectManager;
+	objectManager*    _objectManager;
 	DWORD             _attribute[BOSSTILEX * BOSSTILEY];
 	tagTile			  _tile[BOSSTILEX * BOSSTILEY];
+	class UI*         _ui;
+	class itemManager* _itemManager;
 public:
 	bossStage() {}
 	~bossStage() {}
@@ -29,6 +31,7 @@ public:
 public:
 	void loadMap();
 	void renderMap();
-	void setPlayerLink(player* player) { _player = player; };
-	enemyManager* getEnemyManager() { return _enemy; }
+	void setPlayerLink(player* player) { _player = player; }
+	void setItemManagerLink(itemManager* im) { _itemManager = im; }
+	void setUILink(UI* ui) { _ui = ui; }
 };

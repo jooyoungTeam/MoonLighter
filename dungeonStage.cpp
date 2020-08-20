@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "dungeonStage.h"
 #include "player.h"
+#include "itemManager.h"
+
 HRESULT dungeonStage::init()
 {
 	_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
@@ -11,9 +13,10 @@ HRESULT dungeonStage::init()
 
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
-	
+	_enemy->setItemManagerLink(_itemManager);
 	_enemy->setEnemy1();
 	_enemy->init();
+	
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
 
@@ -75,7 +78,7 @@ void dungeonStage::loadDungeonMap()
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_DUNGEON,1);
+	_objectManager->load(BUTTON_LOAD_DUNGEON, 1);
 }
 
 void dungeonStage::renderDungeonMap()

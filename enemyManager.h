@@ -8,10 +8,12 @@
 #include "bullet.h"
 
 class player;
-
+class itemManager;
 class enemyManager : public gameNode
 {
 private:
+
+	itemManager* _itemManager;
 	vector<enemy*> _vEnemy;
 	vector<enemy*>::iterator _viEnemy;
 	player* _player;
@@ -51,9 +53,11 @@ public:
 
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
+	void setItemManagerLink(itemManager* im) { _itemManager = im; }
 	bool getPlayerStop() { return _playerStop; }
 	bool getBossHit() { return _bossHit; }
 
 	vector<enemy*> _getVEnemy() { return _vEnemy; }
+
 };
 
