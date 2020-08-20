@@ -61,12 +61,13 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float d
 	arrow.y = arrow.shootY = y;
 
 	arrow.arrowDirection = arrowDirection;
-
+	arrow.isActive = true;
 	arrow.isPowerShot = isPower;
 	if (arrow.isPowerShot)
-		arrow.arrowDamage = RND->getFromIntTo(15, 16);
+		arrow.arrowDamage = RND->getFromIntTo(60, 80);
 	else
-		arrow.arrowDamage = RND->getFromIntTo(10, 20);
+		arrow.arrowDamage = RND->getFromIntTo(20, 40);
+
 	arrow.rc = RectMakePivot(Vector2(arrow.x, arrow.y), Vector2(30, 30), Pivot::Center);
 	_vArrow.push_back(arrow);
 }
@@ -99,8 +100,9 @@ void arrow::arrowMove()
 			_viArrow->y += -sinf(_viArrow->angle * 2) * _viArrow->speed;
 			break;
 		}
-		
+
 		_viArrow->rc = RectMakePivot(Vector2(_viArrow->x, _viArrow->y), Vector2(30, 30), Pivot::Center);
+
 
 		if ((1600 < getDistance(_viArrow->x, _viArrow->y, _viArrow->shootX, _viArrow->shootY)))
 		{
@@ -113,4 +115,9 @@ void arrow::arrowMove()
 void arrow::playerRemoveArrow(int index)
 {
 	_vArrow.erase(_vArrow.begin() + index);
+}
+
+void arrow::arrowIsActive(int index, bool active)
+{
+	_vArrow[index].isActive = active;
 }

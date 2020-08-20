@@ -337,7 +337,6 @@ void enemyManager::playerCol()
 	{
 		_player->setPlayerCurrentHp(0);
 	}
-
 	//검충돌
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -359,31 +358,40 @@ void enemyManager::playerCol()
 			{
 				SOUNDMANAGER->play("총알장전", 1.0f);
 			}
-			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS	)
+			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
 			{
-				SOUNDMANAGER->play("보스맞음", 1.0f);
-				_bossHit = true;
+				if (!SOUNDMANAGER->isPlaySound("보스맞음"))
+					SOUNDMANAGER->play("보스맞음", 1.0f);
 			}
 		}
-		else
-		{
-			_bossHit = false;
-		}
-		
+
 		//활충돌
+
+		int idx = 0;
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
 		{
+			if (idx != i)
+			{
+				_player->getArrow()->arrowIsActive(j, true);
+			}
+			if (!_player->getArrow()->getVArrow()[j].isActive) continue;
 			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()))
 			{
+				idx = i;
+
 				if (_player->getArrow()->getVArrow()[j].isPowerShot)
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
+					_player->getArrow()->arrowIsActive(j, false);
+					break;
 				}
 				else
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_player->getArrow()->playerRemoveArrow(j);
+					break;
 				}
+
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
 				{
 					SOUNDMANAGER->play("슬라임맞음", 1.0f);
