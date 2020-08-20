@@ -17,6 +17,7 @@ HRESULT bossStage::init()
 
 	loadMap();
 
+	//SOUNDMANAGER->play("bgm2", 1.0f);
 
 	_miniMap = new miniMap;
 	_miniMap->init(BOSSTILEX, BOSSTILEY);

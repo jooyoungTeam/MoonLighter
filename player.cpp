@@ -66,13 +66,15 @@ void player::render()
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportIn")
 		|| _playerMotion == KEYANIMANAGER->findAnimation("playerTeleportOut"))
 	{
-		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
+		CAMERAMANAGER->zOrderRender(_playerShadowImg, _playerShadowX -35, _playerShadowY - 50, _playerShadowY - 100, 0.3f, 1.0f);
+		//CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 2.63f);
 		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 2.63f);
 	}
 	else
 	{
-		CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
+		CAMERAMANAGER->zOrderRender(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, _playerShadowY - 100, 0.3f, 1.0f);
+		//CAMERAMANAGER->render(_playerShadowImg, _playerShadowX - 35, _playerShadowY - 50, 0.3f);
 		//CAMERAMANAGER->aniRender(_playerImg, _playerX, _playerY, _playerMotion, 1.3f);
 		//D2DRenderer::GetInstance()->FillRectangle(_playerRc , D2D1::ColorF::Tomato, 1.0f);
 		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowY, _playerMotion, 1.3f);

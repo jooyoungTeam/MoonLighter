@@ -10,7 +10,7 @@ void itemManager::render()
 {
 	for (int i = 0; i < _vItem.size(); ++i)
 	{
-		_vItem[i]->render();
+		_vItem[i]->cameraRender();
 	}
 }
 

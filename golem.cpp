@@ -66,6 +66,7 @@ void golem::attack()
 			_attackRc = RectMakePivot(Vector2(_x, _y + 80), Vector2(_width - 30, _height - 30), Pivot::Center);
 			break;
 		}
+		SOUNDMANAGER->play("°ñ·½°ø°Ý", 1.0f);
 		_isAttack = true;
 		_state = _attack;
 

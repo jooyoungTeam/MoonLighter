@@ -6,12 +6,16 @@ void anotherSlime::attack()
 	if (!_pang)
 	{
 		_attackCount++;
-		_isAttack = true;
 		_x += cosf(_attackAngle) * 3;
 		_y += -sinf(_attackAngle) * 3;
 		if (!_isPlayerHit)
 		{
 			_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
+		}
+		if (!_isAttack && _type == ENEMY_BLUE_SLIME)
+		{
+			SOUNDMANAGER->play("슬라임어텍", 0.3f);
+			_isAttack = true;
 		}
 
 		//RECT temp;
@@ -33,7 +37,6 @@ void anotherSlime::attack()
 		if (((getDistance(_x, _y, _pX, _pY)) < 200) && _type == ENEMY_YELLOW_SLIME && !_once)
 		{
 			_yRandom = RND->getFromIntTo(0, 30);
-
 			if (_yRandom == 4)
 			{
 				_img = ImageManager::GetInstance()->FindImage("yellowSlimePang");
@@ -42,6 +45,7 @@ void anotherSlime::attack()
 				_motion->start();
 				_once = true;
 				_pang = true;
+				SOUNDMANAGER->play("슬라임펑", 1.0f);
 
 				if (!_isPlayerHit)
 				{
@@ -82,6 +86,7 @@ void anotherSlime::dead()
 			_motion->stop();
 			_motion = KEYANIMANAGER->findAnimation("yellowSlimeDead");
 			_motion->start();
+			SOUNDMANAGER->play("슬라임죽음", 1.0f);
 			_onceAni = false;
 		}
 		if (_type == ENEMY_BLUE_SLIME)
@@ -90,6 +95,7 @@ void anotherSlime::dead()
 			_motion->stop();
 			_motion = KEYANIMANAGER->findAnimation("blueSlimeDead");
 			_motion->start();
+			SOUNDMANAGER->play("슬라임죽음", 1.0f);
 			_onceAni = false;
 		}
 

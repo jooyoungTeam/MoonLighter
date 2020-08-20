@@ -79,7 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
-	_bossPattern = PLAYER_PULL;
+	//_bossPattern = PLAYER_PULL;
 	//attack3();
 	if (_isPlayerHit)
 	{
@@ -506,6 +506,7 @@ void boss::attack4()
 		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 		{
 			effect();
+			SOUNDMANAGER->play("explo", 1.0f);
 		}
 	
 
@@ -525,6 +526,7 @@ void boss::attack1_1()
 		_attack1.yRandom = RND->getFromIntTo(-50, 50);
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{
+			SOUNDMANAGER->play("bossFallHand", 1.0f);
 			_attack1.y += _attack1.speed;
 			_attack1.speed += 0.9f;
 			_attack1.rc = RectMakePivot(Vector2(_attack1.x, _attack1.y), Vector2(50, 50), Pivot::Center);
@@ -556,6 +558,7 @@ void boss::attack1_1()
 		{
 			if (_attack1.y > -40)
 			{
+				SOUNDMANAGER->stop("bossFallHand");
 				_attack1.y -= _attack1.speed;
 				_attack1.speed += 0.9f;
 				_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(50, 50), Pivot::Center);
@@ -687,7 +690,6 @@ void boss::attack3_1()
 
 void boss::attack3_2()
 {
-
 	for (int i = 0; i < 13; ++i)
 	{ 
 		if (!_attack3Rc2[i].rackFall)
@@ -731,12 +733,16 @@ void boss::attack3_2()
 			{
 				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 			}
-			if (_attack3Rc2[0].mY >= _attack3Rc2[0].y)
+			if (_attack3Rc2[i].mY >= _attack3Rc2[i].y)
 			{
 				_attackTimer++;
 				if (_attackTimer < 100)
 				{
-					_isRockBottom = true;
+					if (_attack3Rc[0].mY >= _attack3Rc[i].y)
+					{
+						_isRockBottom = true;
+
+					}
 				}
 				else
 				{
@@ -783,6 +789,7 @@ void boss::attack3_3()
 	if ((getDistance(_pX, _pY, _x, _y)) >= 400)
 	{
 		effect();
+		SOUNDMANAGER->play("pull", 1.0f);
 		_isBossPull = true;
 	}
 	else

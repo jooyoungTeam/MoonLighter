@@ -27,6 +27,7 @@ void redSlime::attack()
 		_img = ImageManager::GetInstance()->FindImage("slimeAttack");
 		_motion->stop();
 		_motion = KEYANIMANAGER->findAnimation("slimeAttack");
+		SOUNDMANAGER->play("레드슬라임공격", 1.0f);
 		_motion->start();
 		_x = _pX;
 		_y = _pY;
@@ -87,6 +88,7 @@ void redSlime::dead()
 		_motion = KEYANIMANAGER->findAnimation("redSlimeDead");
 		_motion->start();
 		_onceAni = false;
+		SOUNDMANAGER->play("슬라임죽음", 1.0f);
 	}
 	if (!_motion->isPlay() && !_realDead)
 	{
