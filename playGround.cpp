@@ -177,6 +177,7 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddFrameImage("mirror_sale", L"Image/UI/inven_sale.png", 29, 1);
 	ImageManager::GetInstance()->AddFrameImage("inven_sale", L"Image/UI/mirror_sale.png", 8, 1);
 	ImageManager::GetInstance()->AddImage("showcase", L"Image/UI/showcase.png");
+	ImageManager::GetInstance()->AddImage("item_tag", L"Image/UI/item_name.png");
 
 	//===========================================¡é¡éUI¡é¡é===========================================//
 	ImageManager::GetInstance()->AddImage("UI_base", L"Image/UI/UI_base.png");
@@ -197,6 +198,7 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddFrameImage("moneyBag", L"Image/UI/money_bag.png", 1, 6);
 	ImageManager::GetInstance()->AddImage("price_cursor", L"Image/UI/select_price.png");
 	ImageManager::GetInstance()->AddImage("hit_screen", L"Image/UI/player_hit_screen.png");
+	ImageManager::GetInstance()->AddImage("UI_gold", L"Image/UI/UI_gold.png");
 }
 
 void playGround::cursor()

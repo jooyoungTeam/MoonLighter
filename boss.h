@@ -35,7 +35,7 @@ struct tagAttackRect
 	int rackCount;
 	int random;
 };
-class boss : public enemy	
+class boss : public enemy
 {
 private:
 	//vector<tagAttack1> _vAttack1;
@@ -76,7 +76,7 @@ public:
 	virtual void attack();
 	virtual void dead();
 	virtual void enemyHit();
-	void attack1();	
+	void attack1();
 	void attack2();
 	void attack3();
 	void attack4();

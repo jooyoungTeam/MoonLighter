@@ -92,7 +92,7 @@ void item::render()
 
 void item::cameraRender()
 {
-	CAMERAMANAGER->render(_img, _rc.left, _rc.top, 1.f);
+	CAMERAMANAGER->zOrderRender(_img, _rc.left, _rc.top, _rc.bottom,1.0f, 1.f);
 }
 
 void item::update()
