@@ -119,11 +119,6 @@ void stageManager::update()
 		_itemMg->update();
 		_ui->update();
 
-		if (KEYMANAGER->isOnceKeyDown('Y'))
-		{
-			_itemMg->setItem(ITEMBUNDLE::SLIME_RED, WINSIZEX / 2, WINSIZEY / 2);
-		}
-
 		RECT temp;
 
 		for (int i = 0; i < _itemMg->getVItem().size(); ++i)

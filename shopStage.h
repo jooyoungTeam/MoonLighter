@@ -55,7 +55,7 @@ private:
 	bool  _isMaxNpc;
 
 	vector<POINT> _unMoveTile;
-
+	
 
 
 	DWORD             _attribute[SHOPTILEX * SHOPTILEY];

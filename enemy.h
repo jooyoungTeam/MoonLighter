@@ -203,6 +203,7 @@ public:
 
 	int getAttackDelay() { return _attackDelay; }
 	int getCurHP() { return _curHP; }
+	int getSaveHP() { return _saveHP; }
 
 	bool getIsAttack() { return _isAttack; }
 	bool getIsCol() { return _isCol; }
