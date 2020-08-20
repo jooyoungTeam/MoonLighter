@@ -43,6 +43,7 @@ HRESULT enemyManager::init()
 void enemyManager::release()
 {
 	SAFE_DELETE(_bullet);
+	SOUNDMANAGER->release();
 }
 
 void enemyManager::update()
@@ -245,7 +246,7 @@ void enemyManager::potBullet()
 				float random = RND->getFromFloatTo(2.5, 3.8);
 				_bullet->manyFire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), random, 5.f, 10);
 				_bulletTimer++;
-				SOUNDMANAGER->play("bullet", 1.0f);
+				SOUNDMANAGER->play("레드슬라임공격", 1.0f);
 				if (_bulletTimer > 10)
 				{
 					_bullet->getVBullet().clear();
@@ -261,7 +262,7 @@ void enemyManager::potBullet()
 			{
 				_bullet->fire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _bulletAngle, 10.0f);
 				_bulletTimer++;
-				SOUNDMANAGER->play("bullet", 1.0f);
+				SOUNDMANAGER->play("레드슬라임공격", 1.0f);
 				if (_bulletTimer > 20)
 				{
 					_bullet->getVBullet().clear();
@@ -294,7 +295,7 @@ void enemyManager::playerCol()
 		{
 			EFFECTMANAGER->play("swordEffect1", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 			_vEnemy[i]->setEnemyAttack(30);
-		//	CAMERAMANAGER->shakeCamera(5, 10);
+			//	CAMERAMANAGER->shakeCamera(5, 10);
 			_player->setAttackRc(0, 0, 0, 0);
 			if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
 			{
@@ -307,6 +308,10 @@ void enemyManager::playerCol()
 			if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
 			{
 				SOUNDMANAGER->play("총알장전", 1.0f);
+			}
+			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+			{
+				SOUNDMANAGER->play("보스맞음", 1.0f);
 			}
 		}
 		//활충돌
@@ -326,6 +331,18 @@ void enemyManager::playerCol()
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
 				{
 					SOUNDMANAGER->play("슬라임맞음", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_GOLEM)
+				{
+					SOUNDMANAGER->play("골렘맞음", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+				{
+					SOUNDMANAGER->play("총알장전", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+				{
+					SOUNDMANAGER->play("보스맞음", 1.0f);
 				}
 				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
@@ -347,19 +364,19 @@ void enemyManager::playerCol()
 				_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 10);
 			}
 
-		
+
 			_player->setEnemyCol(true);
-			
+
 			_vEnemy[i]->setAttackRect(0, 0, 0, 0);
 		}
 		if (_vEnemy[i]->getIsPull())
 		{
-		/*	if (_vEnemy[i]->getOnceEffect())
-			{
-				EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
-				_vEnemy[i]->setOnceEffect(false);
-				cout << "ㄷㄹ" << endl;
-			}*/
+			/*	if (_vEnemy[i]->getOnceEffect())
+				{
+					EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
+					_vEnemy[i]->setOnceEffect(false);
+					cout << "ㄷㄹ" << endl;
+				}*/
 			_player->setX(_player->getX() + cosf(_angle) * 10);
 			_player->setY(_player->getY() - sinf(_angle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
@@ -395,7 +412,7 @@ void enemyManager::playerCol()
 				_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 20);
 			}
 
-		
+
 			_player->setEnemyCol(true);
 		}
 		RECT tempRc = _player->getShadowRc().GetRect();
@@ -428,16 +445,16 @@ void enemyManager::bulletCol()
 					EFFECTMANAGER->play("bulletCollision", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
 					_player->setEnemyCol(true);
 					SOUNDMANAGER->play("총알터짐", 1.0f);
-	
-				if (_player->getCurrectState() == _player->getShieldState())
-				{
-					_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 5);
-				}
-				else
-				{
-					_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 10);
-				}
-	
+
+					if (_player->getCurrectState() == _player->getShieldState())
+					{
+						_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 5);
+					}
+					else
+					{
+						_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 10);
+					}
+
 					_bullet->remove(i);
 				}
 			}
@@ -447,7 +464,7 @@ void enemyManager::bulletCol()
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
 					&& _player->getCurrectState() != _player->getRollState())
 				{
-
+					SOUNDMANAGER->play("총알터짐", 1.0f);
 					if (_player->getCurrectState() == _player->getShieldState())
 					{
 						_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 10);
@@ -457,7 +474,7 @@ void enemyManager::bulletCol()
 						_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 20);
 					}
 
-				
+
 					_player->setEnemyCol(true);
 					_bullet->remove(i);
 				}
