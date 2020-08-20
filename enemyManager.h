@@ -27,6 +27,7 @@ private:
 	int _bulletTimer;	//얼마나 쏠지
 	int _index;
 	bool _playerStop;
+	bool _bossHit;
 
 
 
@@ -51,6 +52,7 @@ public:
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
 	bool getPlayerStop() { return _playerStop; }
+	bool getBossHit() { return _bossHit; }
 
 	vector<enemy*> _getVEnemy() { return _vEnemy; }
 };

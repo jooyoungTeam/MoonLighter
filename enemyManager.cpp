@@ -21,6 +21,7 @@ HRESULT enemyManager::init()
 	_bulletWait = 0;
 	_bulletTimer = 0;
 	_index = 0;
+	_bossHit = false;
 	_bullet = new bullet;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -48,6 +49,7 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
+	//cout << _bossHit << endl;
 	_x = _player->getX();
 	_y = _player->getY();
 	//EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
@@ -319,8 +321,14 @@ void enemyManager::playerCol()
 			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS	)
 			{
 				SOUNDMANAGER->play("보스맞음", 1.0f);
+				_bossHit = true;
 			}
 		}
+		else
+		{
+			_bossHit = false;
+		}
+		
 		//활충돌
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
 		{
@@ -349,11 +357,16 @@ void enemyManager::playerCol()
 				}
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
 				{
+					_bossHit = true;
 					SOUNDMANAGER->play("보스맞음", 1.0f);
 				}
 				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
 				break;
+			}
+			else
+			{
+				_bossHit = false;
 			}
 		}
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack()
