@@ -52,6 +52,7 @@ void townStage::update()
 	}
 	if (!_potionShop->getIsActive())
 	{
+		_isPotionShop = false;
 		_potionShop->reset();
 	}
 

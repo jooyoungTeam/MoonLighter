@@ -30,7 +30,7 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_bar.y = _y - (_height / 2) - 15;
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
-	
+
 	_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 
 	switch (_type)
@@ -97,7 +97,7 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_isHitCount = 0;
 
 	vector<POINT> tempV;
-	_aStar->init(38, 18 , _x / 50 , _y / 50 , _pX / 50, _pY / 50, tempV, false);
+	_aStar->init(38, 18, _x / 50, _y / 50, _pX / 50, _pY / 50, tempV, false);
 
 	return S_OK;
 }
@@ -110,6 +110,7 @@ void enemy::release()
 	SAFE_DELETE(_attack);
 	SAFE_DELETE(_hit);
 	SAFE_DELETE(_dead);
+	SOUNDMANAGER->release();
 }
 
 void enemy::update()
@@ -121,7 +122,7 @@ void enemy::update()
 	}
 
 
-	_state->update(*this,  _type);
+	_state->update(*this, _type);
 	enemyWay();
 	checkBoolCount();
 	setGauge(_curHP, _maxHP);
@@ -153,7 +154,7 @@ void enemy::render()
 	D2DRenderer::GetInstance()->FillRectangle(_bar.front, D2D1::ColorF::Tomato, _barAlpha);*/
 	//FloatRect rc = (RectMakePivot(Vector2(_x, _z), Vector2(10, 10), Pivot::Center));
 	//D2DRenderer::GetInstance()->FillRectangle(_rc, D2D1::ColorF::Brown, 0.5f);
-	
+
 }
 
 void enemy::playerCheck(float x, float y, FloatRect rc)
@@ -191,7 +192,7 @@ void enemy::ani()
 
 	//°ñ·½
 	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
-	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8,4);
+	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8, 4);
 	ImageManager::GetInstance()->AddFrameImage("golemAttackRed", L"image/enemy/GolemAttack_Red.png", 13, 4);
 	ImageManager::GetInstance()->AddFrameImage("golemAttackWhite", L"image/enemy/GolemAttack_White.png", 13, 4);
 	ImageManager::GetInstance()->AddFrameImage("golemRed", L"image/enemy/GolemMove_Red.png", 8, 4);
@@ -218,7 +219,7 @@ void enemy::ani()
 	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
 	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
 	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
-	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png",16,1);
+	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png", 16, 1);
 	//EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
 	//EFFECTMANAGER->addEffect("bossTornadoEffect", "bossTornadoEffect", 2112, 221, 132, 221, 1.0f, 0.2f, 10.0f, 1.0f);
 
@@ -254,7 +255,7 @@ void enemy::ani()
 
 
 	//ÆÌ
-	int leftPot[] = { 0,1,2,3,4,5,6,7,8,9,10 }; 
+	int leftPot[] = { 0,1,2,3,4,5,6,7,8,9,10 };
 	KEYANIMANAGER->addArrayFrameAnimation("potLeft", "pot", leftPot, 11, 7, true);
 	int rightPot[] = { 11,12,13,14,15,16,17,18,19,20,21 };
 	KEYANIMANAGER->addArrayFrameAnimation("potRight", "pot", rightPot, 11, 7, true);
@@ -277,7 +278,7 @@ void enemy::ani()
 	int goUpAttack[] = { 26,27,28,29,30,31,32,33,34,35,36,37,38 };
 	KEYANIMANAGER->addArrayFrameAnimation("golemUpAttack", "golemAttack", goUpAttack, 13, 13, false);
 
-	int goDownAttack[] = {39,40,41,42,43,44,45,46,47,48,49,50,51 };
+	int goDownAttack[] = { 39,40,41,42,43,44,45,46,47,48,49,50,51 };
 	KEYANIMANAGER->addArrayFrameAnimation("golemDownAttack", "golemAttack", goDownAttack, 13, 13, false);
 
 	int goLeft[] = { 0,1,2,3,4,5,6,7 };
@@ -300,7 +301,7 @@ void enemy::ani()
 	int BossDown[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("BossDown", "BossUp", BossDown, 32, 13, false);
 
-	int BossLight[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,10,9,8,7,6,5,4,3,2,1,0};
+	int BossLight[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,10,9,8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossLight", "bossHit", BossLight, 39, 13, false);
 
 	int dead1[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 };
@@ -325,11 +326,11 @@ void enemy::ani()
 
 	int shoot1[] = { 0,1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,16,15,14,13,13,14,15,16,16,15,14,13,13 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossHandFly1", "bossHandFly", shoot1, 30, 8, false);
-	
+
 	int shoot2[] = { 44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59, 54,55,56,57,58,59,54,55,56,57,58,59, 54,55,56,57,58,59, 59, 58,57,56,55,54,53,52,51,50,49,/*48,47,46,45,44*/ };
 	KEYANIMANAGER->addArrayFrameAnimation("bossHandFly2", "bossHandFly", shoot2, 45, 7, false);
 
-	int shoot3[] = { 48,47,46,45,44,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
+	int shoot3[] = { 48,47,46,45,44,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossHandFly3", "bossHandFly", shoot3, 44, 7, false);
 
 	int attack3_1[]{ 0,1,2,3,4,5,6,7,8 };
@@ -341,7 +342,7 @@ void enemy::ani()
 	//____________________________________________
 	//ÆÌ
 	SOUNDMANAGER->addSound("ÃÑ¾Ë½î±â", "enemySound/¿¡³Ê¹Ì/Æý/ÃÑ¾Ë½î±â.wav", true, false);
-	SOUNDMANAGER->addSound("ÃÑ¾ËÀåÀü", "enemySound/¿¡³Ê¹Ì/Æý/ÃÑ¾ËÀåÀü.wav", true, false);	//¾ê´Â ¾È¾µµí
+	SOUNDMANAGER->addSound("ÃÑ¾ËÀåÀü", "enemySound/¿¡³Ê¹Ì/Æý/ÃÑ¾ËÀåÀü.wav", true, false);
 	SOUNDMANAGER->addSound("ÃÑ¾ËÅÍÁü", "enemySound/¿¡³Ê¹Ì/Æý/ÃÑ¾ËÅÍÁü.wav", true, false);
 
 	//½½¶óÀÓ
@@ -355,6 +356,17 @@ void enemy::ani()
 	SOUNDMANAGER->addSound("°ñ·½°ø°Ý", "enemySound/¿¡³Ê¹Ì/°ñ·½/°ñ·½°ø°Ý.wav", true, false);
 	SOUNDMANAGER->addSound("°ñ·½¸ÂÀ½", "enemySound/¿¡³Ê¹Ì/°ñ·½/°ñ·½¸ÂÀ½.wav", true, false);
 
+	//º¸½º
+	SOUNDMANAGER->addSound("²ø¾î´ç±è", "enemySound/¿¡³Ê¹Ì/º¸½º/²ø¾î´ç±è.wav", true, false);
+	SOUNDMANAGER->addSound("µ¹¶³¾îÁü", "enemySound/¿¡³Ê¹Ì/º¸½º/µ¹¶³¾îÁü.wav", true, false);
+	SOUNDMANAGER->addSound("µ¹¶³¾îÁü2", "enemySound/¿¡³Ê¹Ì/º¸½º/µ¹¶³¾îÁü2.wav", true, false);
+	SOUNDMANAGER->addSound("º¸½ºÃ³À½µîÀå", "enemySound/¿¡³Ê¹Ì/º¸½º/º¸½ºÃ³À½µîÀå.wav", true, false);
+	SOUNDMANAGER->addSound("º¸½º¸ÂÀ½", "enemySound/¿¡³Ê¹Ì/º¸½º/º¸½º¸ÂÀ½.wav", true, false);
+	SOUNDMANAGER->addSound("º¸½ºÁ×À½", "enemySound/¿¡³Ê¹Ì/º¸½º/º¸½ºÁ×À½.wav", true, false);
+	SOUNDMANAGER->addSound("¼Õ¶³¾îÁü", "enemySound/¿¡³Ê¹Ì/º¸½º/¼Õ¶³¾îÁü.wav", true, false);
+	SOUNDMANAGER->addSound("¼Õ•ÂÀ½", "enemySound/¿¡³Ê¹Ì/º¸½º/¼Õ•ÂÀ½.wav", true, false);
+	SOUNDMANAGER->addSound("Æø¹ß", "enemySound/¿¡³Ê¹Ì/º¸½º/Æø¹ß.wav", true, false);
+	SOUNDMANAGER->addSound("µ¹»ç¶óÁü", "enemySound/¿¡³Ê¹Ì/º¸½º/µ¹»ç¶óÁü.wav", true, false);
 }
 
 
@@ -418,7 +430,7 @@ void enemy::move()
 
 		if (getDistance(_x, _y, _aStar->getVShortest()[_aStar->getMoveIndex()]->center.x + _aStar->getRndX(), _aStar->getVShortest()[_aStar->getMoveIndex()]->center.y + _aStar->getRndY()) < 1)
 		{
-			if(_aStar->getMoveIndex() > 0)
+			if (_aStar->getMoveIndex() > 0)
 				_aStar->setMoveIndex(_aStar->getMoveIndex() - 1);
 		}
 
@@ -443,13 +455,13 @@ void enemy::hitMove()
 		break;
 
 	}
-	
+
 	_moveAngle = getAngle(_x, _y, _pX, _pY);
 
 	_x += cosf(_moveAngle) * _speed;
 	_y -= sinf(_moveAngle) * _speed;
 
-	
+
 }
 
 void enemy::setBar()
@@ -492,11 +504,11 @@ void enemy::checkBoolCount()
 		_state = _hit;
 		_isHit = false;
 	}
-/*	if (_curHP <= 0)
-	{
-		_curHP = 0;
-		_state = _dead;
-	}*/
+	/*	if (_curHP <= 0)
+		{
+			_curHP = 0;
+			_state = _dead;
+		}*/
 	if (_type != ENEMY_BOSS && _isHit)
 	{
 		_isHitCount++;

@@ -35,7 +35,7 @@ struct tagAttackRect
 	int rackCount;
 	int random;
 };
-class boss : public enemy	
+class boss : public enemy
 {
 private:
 	//vector<tagAttack1> _vAttack1;
@@ -55,6 +55,7 @@ private:
 	bool _isHandCol;
 	bool _playerCol;
 	bool _playerStop;
+	bool _onceSound;
 	int _cameraShake;
 	int _bossAttackCount;
 	int _patternRandom;
@@ -75,7 +76,7 @@ public:
 	virtual void attack();
 	virtual void dead();
 	virtual void enemyHit();
-	void attack1();	
+	void attack1();
 	void attack2();
 	void attack3();
 	void attack4();
@@ -89,7 +90,6 @@ public:
 	void setRock();
 	bool playerCol();
 	bool playerStop(RECT& rc);
-	bool playerStop();
 	void effect();
 
 
