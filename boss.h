@@ -55,6 +55,7 @@ private:
 	bool _isHandCol;
 	bool _playerCol;
 	bool _playerStop;
+	bool _onceSound;
 	int _cameraShake;
 	int _bossAttackCount;
 	int _patternRandom;
@@ -89,7 +90,6 @@ public:
 	void setRock();
 	bool playerCol();
 	bool playerStop(RECT& rc);
-	bool playerStop();
 	void effect();
 
 

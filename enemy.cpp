@@ -341,7 +341,7 @@ void enemy::ani()
 	//____________________________________________
 	//팟
 	SOUNDMANAGER->addSound("총알쏘기", "enemySound/에너미/폿/총알쏘기.wav", true, false);
-	SOUNDMANAGER->addSound("총알장전", "enemySound/에너미/폿/총알장전.wav", true, false);	//얘는 안쓸듯
+	SOUNDMANAGER->addSound("총알장전", "enemySound/에너미/폿/총알장전.wav", true, false);
 	SOUNDMANAGER->addSound("총알터짐", "enemySound/에너미/폿/총알터짐.wav", true, false);
 
 	//슬라임
@@ -355,6 +355,17 @@ void enemy::ani()
 	SOUNDMANAGER->addSound("골렘공격", "enemySound/에너미/골렘/골렘공격.wav", true, false);
 	SOUNDMANAGER->addSound("골렘맞음", "enemySound/에너미/골렘/골렘맞음.wav", true, false);
 
+	//보스
+	SOUNDMANAGER->addSound("끌어당김", "enemySound/에너미/보스/끌어당김.wav", true, false);
+	SOUNDMANAGER->addSound("돌떨어짐", "enemySound/에너미/보스/돌떨어짐.wav", true, false);
+	SOUNDMANAGER->addSound("돌떨어짐2", "enemySound/에너미/보스/돌떨어짐2.wav", true, false);
+	SOUNDMANAGER->addSound("보스처음등장", "enemySound/에너미/보스/보스처음등장.wav", true, false);
+	SOUNDMANAGER->addSound("보스맞음", "enemySound/에너미/보스/보스맞음.wav", true, false);
+	SOUNDMANAGER->addSound("보스죽음", "enemySound/에너미/보스/보스죽음.wav", true, false);
+	SOUNDMANAGER->addSound("손떨어짐", "enemySound/에너미/보스/손떨어짐.wav", true, false);
+	SOUNDMANAGER->addSound("손빧음", "enemySound/에너미/보스/손빧음.wav", true, false);
+	SOUNDMANAGER->addSound("폭발", "enemySound/에너미/보스/폭발.wav", true, false);
+	SOUNDMANAGER->addSound("돌사라짐", "enemySound/에너미/보스/돌사라짐.wav", true, false);
 }
 
 

@@ -79,6 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
+//	_bossPattern = ARM_LONG;
 	//_bossPattern = PLAYER_PULL;
 	//attack3();
 	if (_isPlayerHit)
@@ -190,6 +191,7 @@ void boss::dead()
 {
 	if (_bossAni == ONE)
 	{
+		SOUNDMANAGER->play("º¸½ºÁ×À½", 1.0f);
 		_y = 625;
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_motion->stop();
@@ -320,6 +322,7 @@ void boss::attack2()
 			_motion = KEYANIMANAGER->findAnimation(  "bossHandFly2");
 			_motion->start();
 			_bossAni = THREE;
+			SOUNDMANAGER->play("¼Õ»¸À½", 1.0f);
 		}
 		
 	}
@@ -404,6 +407,10 @@ void boss::attack3()
 	{
 		if (!_motion->isPlay())
 		{
+			if (_bossPattern == ROCK_FALL || _bossPattern == ARM_LONG)
+			{
+				SOUNDMANAGER->play("µ¹¶³¾îÁü2", 1.0f);
+			}
 			_motion->stop();
 			_motion = KEYANIMANAGER->findAnimation(  "bossAttack22");
 			_motion->start();
@@ -422,6 +429,11 @@ void boss::attack3()
 			_motion->start();
 			_attackDelay = 0;
 			_bossAni = FOUR;
+			if (_bossPattern == PLAYER_PULL)
+			{
+				SOUNDMANAGER->play("²ø¾î´ç±è", 1.0f);
+			}
+
 		}
 
 	}
@@ -455,6 +467,7 @@ void boss::attack4()
 	_exCount++;
 	if (_bossAni == ONE)
 	{
+		SOUNDMANAGER->play("Æø¹ß", 1.0f);
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_y = 625;
 		_motion->stop();
@@ -506,7 +519,6 @@ void boss::attack4()
 		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
 		{
 			effect();
-			SOUNDMANAGER->play("explo", 1.0f);
 		}
 	
 
@@ -524,6 +536,11 @@ void boss::attack1_1()
 	{
 		_attack1.xRandom = RND->getFromIntTo(-50, 50);
 		_attack1.yRandom = RND->getFromIntTo(-50, 50);
+		if (!_onceSound)
+		{
+			SOUNDMANAGER->play("¼Õ¶³¾îÁü", 1.0f);
+			_onceSound = true;
+		}
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{
 			SOUNDMANAGER->play("bossFallHand", 1.0f);
@@ -558,7 +575,6 @@ void boss::attack1_1()
 		{
 			if (_attack1.y > -40)
 			{
-				SOUNDMANAGER->stop("bossFallHand");
 				_attack1.y -= _attack1.speed;
 				_attack1.speed += 0.9f;
 				_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(50, 50), Pivot::Center);
@@ -570,6 +586,7 @@ void boss::attack1_1()
 				_attack1.speed = 8.0f;
 				_attack1.isAttack = false;
 				_attack1.count++;
+				_onceSound = false;
 				_attack1.delay = 0;
 
 			}
@@ -869,18 +886,18 @@ void boss::setRock()
 		_attack3Rc[12].x = 2150;
 		_attack3Rc[12].y = 788;
 
-		_attack3Rc[13].x = 1100;
-		_attack3Rc[13].y = 700;
+		_attack3Rc[13].x = 900;
+		_attack3Rc[13].y = 680;
 
-		_attack3Rc[14].x = 2000;
-		_attack3Rc[14].y = 700;
+		_attack3Rc[14].x = 2200;
+		_attack3Rc[14].y = 680;
 
-		_attack3Rc[15].x = 1250;
-		_attack3Rc[15].y = 700;
+		_attack3Rc[15].x = 890;
+		_attack3Rc[15].y = 600;
 
-		_attack3Rc[16].x = 1850;
-		_attack3Rc[16].y = 700;
-		_attack3Rc[i].width = 120;
+		_attack3Rc[16].x = 2210;
+		_attack3Rc[16].y = 600;
+		_attack3Rc[i].width = 160;
 
 		_attack3Rc[i].mY = 0;
 

@@ -245,7 +245,7 @@ void enemyManager::potBullet()
 				float random = RND->getFromFloatTo(2.5, 3.8);
 				_bullet->manyFire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), random, 5.f, 10);
 				_bulletTimer++;
-				SOUNDMANAGER->play("bullet", 1.0f);
+				SOUNDMANAGER->play("레드슬라임공격", 1.0f);
 				if (_bulletTimer > 10)
 				{
 					_bullet->getVBullet().clear();
@@ -261,7 +261,7 @@ void enemyManager::potBullet()
 			{
 				_bullet->fire(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _bulletAngle, 10.0f);
 				_bulletTimer++;
-				SOUNDMANAGER->play("bullet", 1.0f);
+				SOUNDMANAGER->play("레드슬라임공격", 1.0f);
 				if (_bulletTimer > 20)
 				{
 					_bullet->getVBullet().clear();
@@ -308,6 +308,10 @@ void enemyManager::playerCol()
 			{
 				SOUNDMANAGER->play("총알장전", 1.0f);
 			}
+			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS	)
+			{
+				SOUNDMANAGER->play("보스맞음", 1.0f);
+			}
 		}
 		//활충돌
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
@@ -326,6 +330,18 @@ void enemyManager::playerCol()
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
 				{
 					SOUNDMANAGER->play("슬라임맞음", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_GOLEM)
+				{
+					SOUNDMANAGER->play("골렘맞음", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+				{
+					SOUNDMANAGER->play("총알장전", 1.0f);
+				}
+				if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
+				{
+					SOUNDMANAGER->play("보스맞음", 1.0f);
 				}
 				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
@@ -447,7 +463,7 @@ void enemyManager::bulletCol()
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect()) && _player->getCurrectState() != _player->getHitState()
 					&& _player->getCurrectState() != _player->getRollState())
 				{
-
+					SOUNDMANAGER->play("총알터짐", 1.0f);
 					if (_player->getCurrectState() == _player->getShieldState())
 					{
 						_player->setPlayerCurrentHp(_player->getplayerCurrentHp() - 10);

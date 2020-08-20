@@ -45,10 +45,11 @@ void anotherSlime::attack()
 				_motion->start();
 				_once = true;
 				_pang = true;
-				SOUNDMANAGER->play("ΩΩ∂Û¿”∆„", 1.0f);
+				//SOUNDMANAGER->play("ΩΩ∂Û¿”∆„", 1.0f);
 
 				if (!_isPlayerHit)
 				{
+					//SOUNDMANAGER->play("ΩΩ∂Û¿”∆„", 1.0f);
 					_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(100, 100), Pivot::Center);
 				}
 			}
