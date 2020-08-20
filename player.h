@@ -35,6 +35,7 @@ private:
 	int					_bowChargeCount;					//활 충전 카운트
 	int					_bowAlphaCount;						//활 충전 알파 카운트
 	int					_hitAlphaCount;						//히트 알파 카운트
+	int					_escapeCount;						//레드슬라임한테 잡혔을때 탈출카운트
 	int					tileIndex[3];
 	float			    _playerX, _playerY;					//플레이어 중점
 	float				_playerRcW, _playerRcH;				//플레이어 RC 크기
@@ -57,6 +58,7 @@ private:
 	bool				_colVoid;							//충돌 회피상태
 	bool				_deadState;							//캐릭터 죽은상태
 	bool                _transForm;							//온천 변신상태
+	bool				_playerMoveTrap;					//플레이어가 레드슬라임한테 잡힌상태
 	bool				_tileColLeft;						//타일 충돌 상태인지
 	bool				_tileColRight;						//타일 충돌 상태인지
 	bool				_tileColTop;						//타일 충돌 상태인지
@@ -75,9 +77,9 @@ private:
 	playerState*	    _swim;
 	playerState*	    _bow;
 	playerState*	    _sword;
-	playerState*		_hit;
 	playerState*	    _broom;
 	playerState*		_bed;
+	playerState*		_trap;
 	playerState*		_teleport;
 	playerState*		_teleportIn;
 	playerState*		_teleportOut;
@@ -93,8 +95,8 @@ public:
 	bool tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol);
 	void tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX);
 	void arrowShoot();
-	void playerHp(float enemy);
 	void playerAlphaState();
+	void playerMoveTrapState();
 
 public:
 	int getIndex() { return _index; }
@@ -126,6 +128,7 @@ public:
 	bool getEnemyCol() { return _enemyCol; }
 	bool getColVoid() { return _colVoid; }
 	bool getDeadState() { return _deadState; }
+	bool getPlayerMoveTrap() { return _playerMoveTrap; }
 	bool getTileColLeft() { return _tileColLeft; }
 	bool getTileColTop() { return _tileColTop; }
 	bool getTileColRight() { return _tileColRight; }
@@ -144,7 +147,6 @@ public:
 	DIRECTION getDirection() { return _playerDirection; }
 	arrow* getArrow() { return _arrow; }
 	
-
 	void setBedCount(int bedCount) { _bedCount = bedCount; }
 	void setBowChargeCount(int bowChargeCount) { _bowChargeCount = bowChargeCount; }
 	void setBowAlphaCount(int bowAlphaCount) { _bowAlphaCount = bowAlphaCount; }
@@ -170,6 +172,7 @@ public:
 	void setEnemyCol(bool enemyCol) { _enemyCol = enemyCol; }
 	void setColVoid(bool colVoid) { _colVoid = colVoid; }
 	void setDeadState(bool deadState) { _deadState = deadState;}
+	void setPlayerMoveTrap(bool playerMoveTrap) { _playerMoveTrap = playerMoveTrap; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }
@@ -195,9 +198,9 @@ public:
 	playerState* getSwimState()			{ return _swim; }
 	playerState* getBowState()			{ return _bow; }
 	playerState* getSwordState()		{ return _sword; }
-	playerState* getHitState()			{ return _hit; }
 	playerState* getBroomState()		{ return _broom; }
 	playerState* getBedState()			{ return _bed; }
+	playerState* getTrapState()			{ return _trap; }
 	playerState* getTeleportState()		{ return _teleport; }
 	playerState* getTeleportInState()	{ return _teleportIn; }
 	playerState* getTeleportOutState()	{ return _teleportOut; }

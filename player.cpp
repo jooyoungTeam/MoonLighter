@@ -15,9 +15,9 @@ HRESULT player::init(float x, float y)
 	_swim = new playerSwimState();
 	_bow = new playerbowState();
 	_sword = new playerSwordState();
-	_hit = new playerHitState();
 	_broom = new playerBroomState();
 	_bed = new playerBedState();
+	_trap = new playerTrapState();
 	_teleport = new playerTeleportState();
 	_teleportIn = new playerTeleportInState();
 	_teleportOut = new playerTeleportOutState();
@@ -33,6 +33,7 @@ HRESULT player::init(float x, float y)
 	_playerCurrentHp = _playerMaxHp = 150;
 	_SwordDamage = 30;
 	_hitAlpha = 0;
+	_playerMoveTrap = true;
 	_colVoid = true;
 	_enemyCol = false;
 	_bowChargeState = false;
@@ -430,11 +431,6 @@ void player::arrowShoot()
 	}
 }
 
-void player::playerHp(float enemy)
-{
-	_playerCurrentHp -= enemy;
-}
-
 //피격시 알파 상태변경
 void player::playerAlphaState()
 {
@@ -459,6 +455,26 @@ void player::playerAlphaState()
 		else
 		{
 			_hitAlpha = 1.0f;
+		}
+	}
+}
+
+//플레이어가 레드슬라임한테 잡힌상태
+void player::playerMoveTrapState()
+{
+	if (_playerMoveTrap)
+	{
+		_CurrentState = _trap;
+
+		if (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('D'))
+		{
+			_escapeCount++;
+
+			if (_escapeCount > 7)
+			{
+				_playerMoveTrap = false;
+				_escapeCount = 0;
+			}
 		}
 	}
 }
