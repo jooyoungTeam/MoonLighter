@@ -8,6 +8,14 @@ enum potionMakeState
 	POTION_CHECK
 };
 
+enum potionEffectState
+{
+	POTION_E_NULL,
+	POTION_E_INIT,
+	POTION_E_MID,
+	POTION_E_END
+};
+
 struct tagPotionInfo
 {
 	int index;
@@ -25,13 +33,18 @@ class potionCreate : public gameNode
 {
 private:
 	potionMakeState _state;
+	potionEffectState _effectState;
 	Image* _select;
+	Image* _makeItem;
+	Image* _effectImg;
 
 	Vector2 _selectPt;
 	Vector2 _pt[4];
 
 	tagPotionInfo _selectPotion;
 	tagPotionInfo _potion[4];
+
+	int _makeItemY;
 
 	int _selectIndex;
 
@@ -40,11 +53,12 @@ private:
 	int _effectIndex;
 	float _effectTimer;
 
-	bool _isSizeLeft;
-	bool _isSizeRight;
-	bool _isPotionCheck;
-	bool _isActive;
-	bool _isBuy;
+	bool _isSizeLeft;		// 개수 줄이기
+	bool _isSizeRight;		// 개수 늘리기
+	bool _isPotionCheck;	// 
+	bool _isActive;			// 상점 활성화
+	bool _isBuy;			// 살 수 있는지?
+	bool _isEnd;			// 끝났는지?
 
 public:
 	potionCreate() {}

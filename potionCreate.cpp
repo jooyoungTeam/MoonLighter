@@ -16,9 +16,13 @@ HRESULT potionCreate::init()
 	ImageManager::GetInstance()->AddImage("buy_true", L"Image/potionShop/buy_true.png");
 
 	ImageManager::GetInstance()->AddFrameImage("potion_make_effect", L"Image/potionShop/potion_make_effect.png", 30, 1);
+	ImageManager::GetInstance()->AddFrameImage("potion_complete_effect", L"Image/potionShop/potion_complete_effect.png", 18, 1);
+
+	_effectImg = ImageManager::GetInstance()->FindImage("potion_make_effect");
 
 	_selectIndex = 0;
 	_state = POTION_INIT;
+	_effectState = POTION_E_NULL;
 
 	_selectPt = _pt[0] = Vector2(585, 259);
 	_pt[1] = Vector2(695, 259);
@@ -31,7 +35,7 @@ HRESULT potionCreate::init()
 	_isActive = false;
 	_makeCount = 1;
 	_isBuy = false;
-
+	_makeItemY = 580;
 	potionSet();
 
 	
@@ -40,16 +44,45 @@ HRESULT potionCreate::init()
 
 void potionCreate::update()
 {
-	_effectTimer++;
-
-	if (_effectTimer > 5)
+	if (_effectState != POTION_E_NULL)
 	{
-		if (_effectIndex >= ImageManager::GetInstance()->FindImage("potion_make_effect")->GetMaxFrameX() - 1)
-			_effectIndex = -1;
+		_effectTimer++;
 
-		_effectIndex++;
+		if (_effectState == POTION_E_INIT || _effectState == POTION_E_MID)
+		{
+			if (_effectTimer > 5)
+			{
+				if (_effectIndex >= _effectImg->GetMaxFrameX() - 1)
+				{
+					switch (_effectState)
+					{
+					case POTION_E_INIT:
+						_effectIndex = 0;
+						_effectState = POTION_E_MID;
+						_effectImg = ImageManager::GetInstance()->FindImage("potion_complete_effect");
+						break;
+					case POTION_E_MID:
+						_effectIndex = 0;
+						_effectState = POTION_E_END;
+						break;
+					}
+				}
 
-		_effectTimer = 0;
+				_effectIndex++;
+
+				_effectTimer = 0;
+			}
+		}
+		else if (_effectState == POTION_E_END)
+		{
+			_makeItemY--;
+			if (_effectTimer > 50)
+			{
+				reset();
+				_effectTimer = 0;
+			}
+
+		}
 	}
 
 
@@ -64,18 +97,21 @@ void potionCreate::update()
 	switch (_state)
 	{
 	case POTION_INIT:
-		if (KEYMANAGER->isOnceKeyDown('A'))
+		if (_effectState == POTION_E_NULL)
 		{
-			_selectIndex--;
-			if (_selectIndex == -1)
-				_selectIndex = 3;
-		}
+			if (KEYMANAGER->isOnceKeyDown('A'))
+			{
+				_selectIndex--;
+				if (_selectIndex == -1)
+					_selectIndex = 3;
+			}
 
-		if (KEYMANAGER->isOnceKeyDown('D'))
-		{
-			_selectIndex++;
-			if (_selectIndex == 4)
-				_selectIndex = 0;
+			if (KEYMANAGER->isOnceKeyDown('D'))
+			{
+				_selectIndex++;
+				if (_selectIndex == 4)
+					_selectIndex = 0;
+			}
 		}
 		break;
 	case POTION_SIZE:
@@ -133,9 +169,12 @@ void potionCreate::update()
 		case POTION_CHECK:
 			if (_isPotionCheck)
 			{
-				INVENTORY->makePotion(_selectPotion.index, _makeCount, 101, _selectPotion.needCount * _makeCount, 0);
+				INVENTORY->makePotion(_selectPotion.index, _makeCount, 101, _selectPotion.needCount * _makeCount, _selectPotion.price * _makeCount);
 				// 포션 만들기 함수
-				_isActive = false;
+				_makeItem = _selectPotion.img;
+				_state = POTION_INIT;
+				_effectImg = ImageManager::GetInstance()->FindImage("potion_make_effect");
+				_effectState = POTION_E_INIT;
 			}
 			else
 			{
@@ -150,7 +189,8 @@ void potionCreate::update()
 		switch (_state)
 		{
 		case POTION_INIT:
-			_isActive = false;
+			if(_effectState == POTION_E_NULL)
+				_isActive = false;
 			break;
 		case POTION_SIZE:
 			_makeCount = 1;
@@ -170,8 +210,23 @@ void potionCreate::render()
 	ImageManager::GetInstance()->FindImage("potion_shop_bg")->Render(Vector2(0,0));
 	_select->Render(_selectPt);
 
-	ImageManager::GetInstance()->FindImage("potion_make_effect")->SetAlpha(1.f);
-	ImageManager::GetInstance()->FindImage("potion_make_effect")->FrameRender(Vector2(WINSIZEX/2 - 10, 588), _effectIndex, 0, 2.f);
+
+	switch (_effectState)
+	{
+	case POTION_E_INIT:
+		// 항아리 젓기
+		ImageManager::GetInstance()->FindImage("potion_make_effect")->FrameRender(Vector2(WINSIZEX / 2 - 10, 588), _effectIndex, 0, 2.f);
+		break;
+	case POTION_E_MID:
+		// 항아리 터지기
+		ImageManager::GetInstance()->FindImage("potion_complete_effect")->FrameRender(Vector2(WINSIZEX / 2 - 20, 530), _effectIndex, 0, 1.3f);
+		break;
+	case POTION_E_END:
+		// 아이템 떠오르기
+		_makeItem->Render(Vector2(WINSIZEX / 2 - 20, _makeItemY),2.f);
+		break;
+
+	}
 	
 	// 포션 설명
 	D2DRenderer::GetInstance()->RenderTextField(1170, 100, _selectPotion.discription, 25, 300, 400, D2DRenderer::DefaultBrush::Black);
@@ -215,6 +270,15 @@ void potionCreate::render()
 		}
 		_selectPotion.img->Render(Vector2(659, 465),1.5f);
 		D2DRenderer::GetInstance()->RenderText(700, 500, to_wstring(_makeCount), 30);
+
+
+		// 필요한 최종 아이템
+		_selectPotion.needItem->Render(Vector2(WINSIZEX - 630, 482), 1.3f);
+		// 필요한 최종 아이템 개수
+		D2DRenderer::GetInstance()->RenderText(WINSIZEX - 590, 510, to_wstring(_selectPotion.needCount * _makeCount), 15, D2DRenderer::DefaultBrush::Black);
+		// 필요한 최종 돈
+		D2DRenderer::GetInstance()->RenderText(WINSIZEX - 660, 420, to_wstring(_selectPotion.price * _makeCount), 25, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_LEADING);
+
 		break;
 	case POTION_CHECK:
 		ImageManager::GetInstance()->FindImage("alphaBlack")->Render(Vector2(0, 0));
@@ -300,13 +364,16 @@ void potionCreate::potionSet()
 
 void potionCreate::reset()
 {
+	_effectImg = ImageManager::GetInstance()->FindImage("potion_make_effect");
 	_state = POTION_INIT;
+	_effectState = POTION_E_NULL;
 	_selectIndex = 0;
 	_isSizeLeft = false;
 	_isSizeRight = true;
-	_isPotionCheck = true;
-	_isActive = false;
+	_isPotionCheck = false;
+	//_isActive = false;
 	_makeCount = 1;
+	_makeItemY = 580;
 }
 
 void potionCreate::isSizeUpdate()
@@ -318,6 +385,16 @@ void potionCreate::isSizeUpdate()
 	else
 	{
 		_isSizeLeft = true;
+	}
+
+
+	if ((INVENTORY->getGold() > _selectPotion.price * _makeCount) && INVENTORY->countOfItem(_selectPotion.needIndex) > _selectPotion.needCount * _makeCount)
+	{
+		_isSizeRight = true;
+	}
+	else
+	{
+		_isSizeRight = false;
 	}
 }
 

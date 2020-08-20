@@ -104,7 +104,7 @@ HRESULT inventory::init()
 	_mirrorBallFrameX = 0;
 	_saleFrameX = 0;
 
-	_gold = 0;
+	_gold = 1000;
 	_select = 0;
 	_selectCount = 4;
 
@@ -789,11 +789,15 @@ void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, 
 	int maxCount = 0;
 	bool isEnd = false;
 
+	vector<int> tempMoney;
+
 	if (_gold >= totalGold) _gold -= totalGold;
 	else return;
 
 	for (int i = 0; i < INVENSPACE; i++)
 	{
+		if (_inven[i].item == NULL) continue;
+
 		if (_inven[i].item->getIndex() == itemIndex)
 		{
 			if (_inven[i].count >= itemTotlaCount)
@@ -814,8 +818,35 @@ void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, 
 					_inven[i].count = maxCount;
 
 					isEnd = true;
-				}				
+					break;
+				}		
+				else
+				{
+					tempMoney.push_back(i);
+				}
 			}
+		}
+	}
+
+	if (isEnd)
+	{
+		if (tempMoney.size() > 0)
+		{
+			for (int i = 0; i < tempMoney.size(); ++i)
+			{
+				_inven[tempMoney[i]].count = 0;
+			}
+		}
+
+		for (int i = 0; i < makeCount; ++i)
+		{
+			if (fullInven() >= 19)
+				break;
+
+			item* temp = new item;
+			temp->init(selectPotionIndex);
+
+			putItem(temp);
 		}
 	}
 
@@ -829,17 +860,21 @@ void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, 
 	}
 
 
-	if (isEnd)
+	for (int i = 0; i < INVENSPACE; i++)
 	{
-		for (int i = 0; i < makeCount; ++i)
+		if (_inven[i].item == NULL) continue;
+		for (int j = 0; j < INVENSPACE; j++)
 		{
-			if (fullInven() >= 19)
+			if (_inven[j].item == NULL)
+			{
+				_inven[j].item = _inven[i].item;
+				_inven[j].isFull = _inven[i].isFull;
+				_inven[j].count = _inven[i].count;
+
+				_inven[i].isFull = false;
+				_inven[i].item = nullptr;
 				break;
-
-			item* temp = new item;
-			temp->init(selectPotionIndex);
-
-			putItem(temp);
+			}
 		}
 	}
 }
