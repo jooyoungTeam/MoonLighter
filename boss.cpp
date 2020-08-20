@@ -25,7 +25,7 @@ void boss::set()
 	_rightBottom.y = 1185;
 	_saveRandom = -1;
 	_bossAni = ONE;
-	_maxHP = _curHP= 1000;
+	_maxHP = _curHP = 1000;
 	_index = 0;
 	_aniCount = 0;
 	for (int i = 0; i < 13; ++i)
@@ -41,7 +41,7 @@ void boss::set()
 void boss::render()
 {
 	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
-	
+
 	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
 	for (int i = 0; i < 17; ++i)
 	{
@@ -52,14 +52,14 @@ void boss::render()
 		{
 			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 		}
-			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-			CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
+		//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+		CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
 	}
 	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
 	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
 	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
 	_attack1.img->SetScale(2.5f);
-	CAMERAMANAGER->frameRender(_effectImage, _eX , _eY - 80, _index, 0);
+	CAMERAMANAGER->frameRender(_effectImage, _eX, _eY - 80, _index, 0);
 	//CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
 
 	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index, 0, 2.5f, 1.0f);
@@ -69,7 +69,7 @@ void boss::render()
 	//CAMERAMANAGER->line(_rightTop, _rightBottom, D2D1::ColorF::Black, 2.0f);
 	//CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
 	//CAMERAMANAGER->line(_leftBottom, _leftTop, D2D1::ColorF::Black, 2.0f);
-	
+
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, 1.0f);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, 1.0f);
 	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, 1.0f);
@@ -79,8 +79,9 @@ void boss::render()
 
 void boss::attack()
 {
-	//_bossPattern = PLAYER_PULL;
-	//attack3();
+	//	_bossPattern = ARM_LONG;
+		//_bossPattern = PLAYER_PULL;
+		//attack3();
 	if (_isPlayerHit)
 	{
 		_hitTimer++;
@@ -97,8 +98,8 @@ void boss::attack()
 		_attackTimer = 0;
 		_patternRandom = RND->getFromIntTo(0, 7);
 
-	//	랜덤으로 공격 받는데 
-	//	전에 했던 공격이면 리턴. 다시 받아와라
+		//	랜덤으로 공격 받는데 
+		//	전에 했던 공격이면 리턴. 다시 받아와라
 		if (_patternRandom == _saveRandom)
 		{
 			attack();
@@ -162,7 +163,7 @@ void boss::attack()
 	}
 	if (_bossPattern == ARM_LONG)
 	{
-		
+
 		if (!_attack3.isAttack)
 		{
 			attack3();
@@ -190,10 +191,11 @@ void boss::dead()
 {
 	if (_bossAni == ONE)
 	{
+		SOUNDMANAGER->play("보스죽음", 1.0f);
 		_y = 625;
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "bossHit");
+		_motion = KEYANIMANAGER->findAnimation("bossHit");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -204,7 +206,7 @@ void boss::dead()
 			_y = 650;
 			_img = ImageManager::GetInstance()->FindImage("bossDead");
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "bossDead");
+			_motion = KEYANIMANAGER->findAnimation("bossDead");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -217,7 +219,7 @@ void boss::enemyHit()
 	{
 		_img = ImageManager::GetInstance()->FindImage("BossUp");
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "BossDown");
+		_motion = KEYANIMANAGER->findAnimation("BossDown");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -227,7 +229,7 @@ void boss::enemyHit()
 		{
 			_img = ImageManager::GetInstance()->FindImage("BossUp");
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "BossUp");
+			_motion = KEYANIMANAGER->findAnimation("BossUp");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -237,7 +239,7 @@ void boss::enemyHit()
 		if (!_motion->isPlay())
 		{
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "boss");
+			_motion = KEYANIMANAGER->findAnimation("boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_state = _idle;
@@ -253,7 +255,7 @@ void boss::attack1()
 	{
 		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossAttack");
-		_motion = KEYANIMANAGER->findAnimation(  "bossAttack");
+		_motion = KEYANIMANAGER->findAnimation("bossAttack");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -263,7 +265,7 @@ void boss::attack1()
 		{
 			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossAttackIdle");
-			_motion = KEYANIMANAGER->findAnimation(  "bossAttackIdle");
+			_motion = KEYANIMANAGER->findAnimation("bossAttackIdle");
 			_motion->start();
 			_bossAni = THREE;
 		}
@@ -280,7 +282,7 @@ void boss::attack1()
 	{
 		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandCome");
-		_motion = KEYANIMANAGER->findAnimation(  "bossHandCome");
+		_motion = KEYANIMANAGER->findAnimation("bossHandCome");
 		_motion->start();
 		_bossAni = FIVE;
 	}
@@ -289,7 +291,7 @@ void boss::attack1()
 		if (!_motion->isPlay())
 		{
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "boss");
+			_motion = KEYANIMANAGER->findAnimation("boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_state = _idle;
@@ -307,7 +309,7 @@ void boss::attack2()
 	{
 		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-		_motion = KEYANIMANAGER->findAnimation(  "bossHandFly1");
+		_motion = KEYANIMANAGER->findAnimation("bossHandFly1");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -317,11 +319,12 @@ void boss::attack2()
 		{
 			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-			_motion = KEYANIMANAGER->findAnimation(  "bossHandFly2");
+			_motion = KEYANIMANAGER->findAnimation("bossHandFly2");
 			_motion->start();
 			_bossAni = THREE;
+			SOUNDMANAGER->play("손뻗음", 1.0f);
 		}
-		
+
 	}
 	if (_bossAni == THREE)
 	{
@@ -330,12 +333,12 @@ void boss::attack2()
 		{
 			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-			_motion = KEYANIMANAGER->findAnimation(  "bossHandFly3");
+			_motion = KEYANIMANAGER->findAnimation("bossHandFly3");
 			_motion->start();
 			_bossAttackCount = 0;
 			_bossAni = FOUR;
 		}
-		
+
 	}
 	if (_bossAni == FOUR)
 	{
@@ -360,7 +363,7 @@ void boss::attack2()
 		if (!_motion->isPlay())
 		{
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "boss");
+			_motion = KEYANIMANAGER->findAnimation("boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
 			_bossAni = FIVE;
@@ -385,7 +388,7 @@ void boss::attack2()
 				_cameraShake = 0;
 			}
 		}
-		
+
 	}
 }
 
@@ -396,7 +399,7 @@ void boss::attack3()
 	{
 		_motion->stop();
 		_img = ImageManager::GetInstance()->FindImage("bossHandFly");
-		_motion = KEYANIMANAGER->findAnimation(  "bossAttack11");
+		_motion = KEYANIMANAGER->findAnimation("bossAttack11");
 		_motion->start();
 		_bossAni = TWO;
 	}
@@ -404,8 +407,12 @@ void boss::attack3()
 	{
 		if (!_motion->isPlay())
 		{
+			if (_bossPattern == ROCK_FALL || _bossPattern == ARM_LONG)
+			{
+				SOUNDMANAGER->play("돌떨어짐2", 1.0f);
+			}
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "bossAttack22");
+			_motion = KEYANIMANAGER->findAnimation("bossAttack22");
 			_motion->start();
 			_onceAni = true;
 			_bossAni = THREE;
@@ -418,10 +425,15 @@ void boss::attack3()
 		{
 			_motion->stop();
 			_img = ImageManager::GetInstance()->FindImage("boss");
-			_motion = KEYANIMANAGER->findAnimation(  "boss");
+			_motion = KEYANIMANAGER->findAnimation("boss");
 			_motion->start();
 			_attackDelay = 0;
 			_bossAni = FOUR;
+			if (_bossPattern == PLAYER_PULL)
+			{
+				SOUNDMANAGER->play("끌어당김", 1.0f);
+			}
+
 		}
 
 	}
@@ -455,10 +467,11 @@ void boss::attack4()
 	_exCount++;
 	if (_bossAni == ONE)
 	{
+		SOUNDMANAGER->play("폭발", 1.0f);
 		_img = ImageManager::GetInstance()->FindImage("bossHit");
 		_y = 625;
 		_motion->stop();
-		_motion = KEYANIMANAGER->findAnimation(  "bossLight");
+		_motion = KEYANIMANAGER->findAnimation("bossLight");
 		_motion->start();
 		_bossAni = TWO;
 		_index = 0;
@@ -476,7 +489,7 @@ void boss::attack4()
 		{
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "boss");
+			_motion = KEYANIMANAGER->findAnimation("boss");
 			_motion->start();
 			_y = 500;
 			//EFFECTMANAGER->play("bossPullEffect", _pX + 135, _pY  + 90);
@@ -496,19 +509,18 @@ void boss::attack4()
 			_isBossPush = true;
 		}
 	}
-		if ((getDistance(_pX, _pY, _x, _y)) >= 600)
-		{
-			_eX = -100;
-			_eY = -100;
-			_isBossPush = false;
-		}
+	if ((getDistance(_pX, _pY, _x, _y)) >= 600)
+	{
+		_eX = -100;
+		_eY = -100;
+		_isBossPush = false;
+	}
 
-		else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
-		{
-			effect();
-			SOUNDMANAGER->play("explo", 1.0f);
-		}
-	
+	else if ((getDistance(_pX, _pY, _x, _y)) >= 600)
+	{
+		effect();
+	}
+
 
 }
 
@@ -519,11 +531,16 @@ void boss::attack5()
 
 void boss::attack1_1()
 {
-	
+
 	if (!_attack1.isAttack)
 	{
 		_attack1.xRandom = RND->getFromIntTo(-50, 50);
 		_attack1.yRandom = RND->getFromIntTo(-50, 50);
+		if (!_onceSound)
+		{
+			SOUNDMANAGER->play("손떨어짐", 1.0f);
+			_onceSound = true;
+		}
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{
 			SOUNDMANAGER->play("bossFallHand", 1.0f);
@@ -558,7 +575,6 @@ void boss::attack1_1()
 		{
 			if (_attack1.y > -40)
 			{
-				SOUNDMANAGER->stop("bossFallHand");
 				_attack1.y -= _attack1.speed;
 				_attack1.speed += 0.9f;
 				_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(50, 50), Pivot::Center);
@@ -570,6 +586,7 @@ void boss::attack1_1()
 				_attack1.speed = 8.0f;
 				_attack1.isAttack = false;
 				_attack1.count++;
+				_onceSound = false;
 				_attack1.delay = 0;
 
 			}
@@ -581,7 +598,7 @@ void boss::attack2_1()
 {
 	_attack2.delay = 0;
 	_attack2.aniDelayCount++;
-	if (_attack2.aniDelayCount >4)
+	if (_attack2.aniDelayCount > 4)
 	{
 		_attack2.index--;
 		_attack2.aniDelayCount = 0;
@@ -591,7 +608,7 @@ void boss::attack2_1()
 		_attack2.index = 0;
 
 		attack2Angle();
-		
+
 	}
 
 	_attack2.x = _x - 140;
@@ -604,8 +621,8 @@ void boss::attack2_1()
 	if (!_attack2.isAttack)
 	{
 		_attack2.angle = 360 - getAngle((_leftTop.x + _rightTop.x) / 2, (_leftTop.y + _rightTop.y) / 2, (_leftBottom.x + _rightBottom.x) / 2, (_leftBottom.y + _rightBottom.y) / 2) * 180 / PI - 90;
-		_leftBottom.x+=14.5;
-		_rightBottom.x+=14.5;
+		_leftBottom.x += 14.5;
+		_rightBottom.x += 14.5;
 
 
 		if (_leftBottom.x > 2000)
@@ -624,7 +641,7 @@ void boss::attack2_1()
 			_attack2.isAttack = false;
 			_attack2.count++;
 		}
-		
+
 	}
 	if (_attack2.count > 2)
 	{
@@ -674,9 +691,9 @@ void boss::attack3_1()
 				_cameraShake++;
 				_attack3Rc[i].mY = _attack3Rc[i].y;
 			}
-			if (_cameraShake > 5 && _cameraShake <= 6 )
+			if (_cameraShake > 5 && _cameraShake <= 6)
 			{
-				 CAMERAMANAGER->shakeCamera(5, 50);
+				CAMERAMANAGER->shakeCamera(5, 50);
 			}
 			_attack3Rc[i].rc = RectMakePivot(Vector2(_attack3Rc[i].x, _attack3Rc[i].mY), Vector2(_attack3Rc[i].width, _attack3Rc[i].width), Pivot::Center);
 			if (!_isPlayerHit)
@@ -691,7 +708,7 @@ void boss::attack3_1()
 void boss::attack3_2()
 {
 	for (int i = 0; i < 13; ++i)
-	{ 
+	{
 		if (!_attack3Rc2[i].rackFall)
 		{
 			_attack3Rc2[i].width = 150;
@@ -749,7 +766,7 @@ void boss::attack3_2()
 					_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 					_isRockBottom = false;
 				}
-				
+
 				CAMERAMANAGER->shakeCamera(3, 2);
 				_attack3Rc2[i].mY = _attack3Rc2[i].y;
 				if (_attack3Rc2[i].rackCount > 150)
@@ -773,7 +790,7 @@ void boss::attack3_2()
 						_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 
 						_attack3Rc2[i].rackFall = false;
-						
+
 					}
 				}
 
@@ -820,7 +837,7 @@ void boss::attack2Angle()
 	{
 		_isHandCol = false;
 	}
-	
+
 
 
 }
@@ -869,18 +886,18 @@ void boss::setRock()
 		_attack3Rc[12].x = 2150;
 		_attack3Rc[12].y = 788;
 
-		_attack3Rc[13].x = 1100;
-		_attack3Rc[13].y = 700;
+		_attack3Rc[13].x = 900;
+		_attack3Rc[13].y = 680;
 
-		_attack3Rc[14].x = 2000;
-		_attack3Rc[14].y = 700;
+		_attack3Rc[14].x = 2200;
+		_attack3Rc[14].y = 680;
 
-		_attack3Rc[15].x = 1250;
-		_attack3Rc[15].y = 700;
+		_attack3Rc[15].x = 890;
+		_attack3Rc[15].y = 600;
 
-		_attack3Rc[16].x = 1850;
-		_attack3Rc[16].y = 700;
-		_attack3Rc[i].width = 120;
+		_attack3Rc[16].x = 2210;
+		_attack3Rc[16].y = 600;
+		_attack3Rc[i].width = 160;
 
 		_attack3Rc[i].mY = 0;
 
@@ -972,5 +989,5 @@ void boss::effect()
 
 		}
 	}
-	
+
 }
