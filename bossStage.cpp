@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "bossStage.h"
+#include "itemManager.h"
 #include "player.h"
 #include "UI.h"
 
@@ -74,6 +75,7 @@ void bossStage::update()
 
 void bossStage::release()
 {
+	_itemManager->release();
 }
 
 void bossStage::loadMap()
