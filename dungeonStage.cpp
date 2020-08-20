@@ -9,11 +9,11 @@ HRESULT dungeonStage::init()
 	_objectManager = new objectManager;
 	loadDungeonMap();
 
-	//_enemy = new enemyManager;
-	//_enemy->setPlayerLink(_player);
-	//
-	//_enemy->setEnemy2();
-	//_enemy->init();
+	_enemy = new enemyManager;
+	_enemy->setPlayerLink(_player);
+	
+	_enemy->setEnemy1();
+	_enemy->init();
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
 
@@ -25,7 +25,7 @@ void dungeonStage::render()
 {
 	renderDungeonMap();
 	_player->render();
-	//_enemy->render();
+	_enemy->render();
 
 }
 
@@ -36,9 +36,9 @@ void dungeonStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
-		//_enemy->update();
+		_enemy->update();
 		_player->tileCollision(_attribute, _tile, DUNTILEX);
-		//_enemy->update();
+		_enemy->update();
 	}
 
 }
