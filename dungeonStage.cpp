@@ -48,7 +48,7 @@ void dungeonStage::update()
 
 void dungeonStage::release()
 {
-
+	_itemManager->release();
 }
 
 void dungeonStage::loadDungeonMap()

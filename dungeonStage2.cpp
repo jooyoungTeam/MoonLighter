@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "dungeonStage2.h"
-
+#include "itemManager.h"
 #include "player.h"
 HRESULT dungeonStage2::init()
 {
@@ -43,7 +43,7 @@ void dungeonStage2::update()
 
 void dungeonStage2::release()
 {
-
+	_itemManager->release();
 }
 
 void dungeonStage2::loadMap()

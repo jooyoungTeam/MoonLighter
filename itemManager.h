@@ -19,6 +19,5 @@ public:
 	void setItem(ITEMBUNDLE bundle, float x, float y);
 	void popItem(ITEMTYPE type, float x, float y);
 	void erase(int arrNum);
-
 	vector<item*> getVItem() { return _vItem; }
 };
