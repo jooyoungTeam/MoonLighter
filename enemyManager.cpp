@@ -110,8 +110,28 @@ void enemyManager::update()
 	{
 		if (_vEnemy[i]->getRealDead())
 		{
-			_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
-			cout << " ddddd " << endl;
+			switch (_vEnemy[i]->getEnemyType())
+			{
+			case ENEMY_RED_SLIME:
+				_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			case ENEMY_BLUE_SLIME:
+				_itemManager->setItem(ITEMBUNDLE::SLIME_BLUE, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			case ENEMY_YELLOW_SLIME:
+				_itemManager->setItem(ITEMBUNDLE::SLIME_YELLOW, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			case ENEMY_GOLEM:
+				_itemManager->setItem(ITEMBUNDLE::GOLEM_KNIGHT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			case ENEMY_POT:
+				_itemManager->setItem(ITEMBUNDLE::GOLEM_POT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			case ENEMY_BOSS:
+				_itemManager->setItem(ITEMBUNDLE::GOLEM_KING, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				break;
+			}
+			
 			enemyDead(i);
 			break;
 		}

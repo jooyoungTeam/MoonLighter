@@ -29,6 +29,7 @@ HRESULT UI::init()
 
 	_alpha = 1.f;
 	_bossHpWidth = 0;
+	_bossHp = 1000;
 
 	_isHit = false;
 	_bossHit = false;
@@ -147,16 +148,6 @@ void UI::update()
 			_bossStage = BOSS_STAGE::STAGE_START;
 		}
 
-		if (_bossStage == BOSS_STAGE::STAGE_START)
-		{
-			_bossCount = 0;
-			//if (_boss->getCurHP() != _bossHp)
-			//{
-			//	_bossHit = true;
-			//	_bossHp = _boss->getCurHP();
-			//}
-		} 
-
 		if (_alpha <= 0) _alpha = 0;
 	}	
 }
@@ -169,12 +160,23 @@ void UI::setPlayerHpBar()
 {
 	if (_player->getplayerCurrentHp() <= 0) _hpWidth = 0;
 	else _hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _backBar.GetWidth();
+
 }
 
 void UI::setBossHpBar(int curHp)
 {	
 	if (curHp <= 0) _bossHpWidth = 0;
 	else _bossHpWidth = ((float)curHp / 1000.f) * 1065;
+
+	if (_bossStage == BOSS_STAGE::STAGE_START)
+	{
+		_bossCount = 0;
+		if (curHp != _bossHp)
+		{
+			_bossHit = true;
+			_bossHp = curHp;
+		}
+	}
 }
 
 void UI::setMoneyBag()

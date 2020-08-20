@@ -103,7 +103,6 @@ void item::update()
 
 void item::fieldUpdate()
 {
-	//cout << _shake << endl;
 	if (_y > _shakeMaxY)
 	{
 		_isShake = false;
@@ -113,7 +112,6 @@ void item::fieldUpdate()
 	if (_y < _shakeMinY)
 	{
 		_isShake = true;
-		//_shake = 0;
 	}
 
 	if (_isShake)
@@ -168,7 +166,7 @@ void item::follow(FloatRect rc)
 	float distance = getDistance(_x, _y, rc.GetCenter().x, rc.GetCenter().y);
 	float angle = getAngle(_x, _y, rc.GetCenter().x, rc.GetCenter().y);
 
-	if (distance <= 100)
+	if (distance <= 150)
 	{
 		_x += cosf(angle) * 1;
 		_y -= sinf(angle) * 1;
