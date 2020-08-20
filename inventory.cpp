@@ -784,52 +784,63 @@ void inventory::moveItem()
 
 
 //===========================================↓↓포션 만들기↓↓===========================================//
-void inventory::makePotion(int selectPotionIndex, int index, int count, int gold)
+void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, int itemTotlaCount, int totalGold)
 {
 	int maxCount = 0;
 	bool isEnd = false;
 
-	if (_gold >= gold) _gold -= gold;
+	if (_gold >= totalGold) _gold -= totalGold;
 	else return;
 
 	for (int i = 0; i < INVENSPACE; i++)
 	{
-		if (_inven[i].item->getIndex() == index)
+		if (_inven[i].item->getIndex() == itemIndex)
 		{
-			if (_inven[i].count >= count)
+			if (_inven[i].count >= itemTotlaCount)
 			{
-				_inven[i].count -= count;
+				_inven[i].count -= itemTotlaCount;
 
 				isEnd = true;
+				break;
 			}				
 
-			if (_inven[i].count < count)
+			if (_inven[i].count < itemTotlaCount)
 			{
 				maxCount += _inven[i].count;
 
-				if (maxCount >= count)
+				if (maxCount >= itemTotlaCount)
 				{
-					maxCount -= count;
+					maxCount -= itemTotlaCount;
 					_inven[i].count = maxCount;
 
 					isEnd = true;
 				}				
 			}
-
-			if (_inven[i].count <= 0)
-			{
-				_inven[i].isFull = false;
-				_inven[i].item = nullptr;
-			}
 		}
 	}
 
+	for (int i = 0; i < INVENSPACE; i++)
+	{
+		if (_inven[i].count <= 0)
+		{
+			_inven[i].isFull = false;
+			_inven[i].item = nullptr;
+		}
+	}
+
+
 	if (isEnd)
 	{
-		item* temp = new item;
-		temp->init(selectPotionIndex);
+		for (int i = 0; i < makeCount; ++i)
+		{
+			if (fullInven() >= 19)
+				break;
 
-		putItem(temp);
+			item* temp = new item;
+			temp->init(selectPotionIndex);
+
+			putItem(temp);
+		}
 	}
 }
 //===========================================↑↑포션 만들기↑↑===========================================//

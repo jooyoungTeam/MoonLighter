@@ -123,7 +123,7 @@ public:
 	int fullInven();										//인벤 가득 찼는지 확인하기
 
 	// 만드는데 필요한 아이템 인덱스(index), 개수(count), 금액(gold)
-	void makePotion(int selectPotionIndex, int index, int count, int gold);		
+	void makePotion(int selectPotionIndex, int makeCount, int itemIndex, int itemTotalCount, int totalGold);
 
 	void selectItem();										//아이템 선택하기
 	void moveItem();										//아이템 옮기기
@@ -163,20 +163,21 @@ public:
 		_shop[index].totalPrice = 0;
 	}					
 
-	int countOfPotion()										//포션 개수 세는 함수
+	int countOfItem(int index)										//포션 개수 세는 함수
 	{
+		int count = 0;
+
 		for (int i = 0; i < INVENSPACE; i++)
 		{
 			if (_inven[i].item == nullptr) continue;
 
-			int count;
 
-			if (_inven[i].item->getIndex() > 1000)
+			if (_inven[i].item->getIndex() == index)
 			{
-				count++;
+				count += _inven[i].count;
 			}
-			return count;
 		}
+		return count;
 	}
 
 public:

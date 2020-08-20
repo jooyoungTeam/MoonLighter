@@ -37,6 +37,7 @@ HRESULT player::init(float x, float y)
 	_enemyCol = false;
 	_bowChargeState = false;
 	_hitCondition = false;
+	_deadState = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -94,11 +95,19 @@ void player::update()
 	
 	_arrow->update();
 	arrowShoot();
+	playerAlphaState();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY - 50;
 	//arrowShoot();
 	//_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(70, 20), Pivot::Center);
+
+	//플레이어 HP가 0이하가 되면 Die 상태로 넘어감
+	if (_playerCurrentHp <= 0)
+	{
+		_deadState = true;
+	}
+
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
 	_playerAttackRc = RectMakePivot(Vector2(_playerAttackX, _playerAttackY), Vector2(_playerAttackW, _playerAttackH), Pivot::Center);
 }
@@ -422,6 +431,34 @@ void player::arrowShoot()
 void player::playerHp(float enemy)
 {
 	_playerCurrentHp -= enemy;
+}
+
+//피격시 알파 상태변경
+void player::playerAlphaState()
+{
+	if (_enemyCol)
+	{
+		//플레이어 알파값 true
+		_hitCondition = true;
+		_hitAlphaCount++;
+		cout << _hitAlphaCount << endl;
+		if (_hitAlphaCount >= 10)
+		{
+			_hitCondition = false;
+			_enemyCol = false;
+			_hitAlphaCount = 0;
+		}
+
+		if (_hitCondition)
+		{
+			_hitAlpha = 0;
+			_hitAlpha += 0.2f;
+		}
+		else
+		{
+			_hitAlpha = 1.0f;
+		}
+	}
 }
 
 //타일 충돌용

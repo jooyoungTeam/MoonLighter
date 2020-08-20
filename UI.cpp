@@ -116,6 +116,10 @@ void UI::update()
 	_frameCount++;
 	draw();	
 
+	setPlayerHpBar();
+	//setBossHpBar();
+	setMoneyBag();
+
 	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
 	//_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::LeftTop);
 
@@ -144,10 +148,6 @@ void UI::update()
 	{
 		_bossStage = BOSS_STAGE::STAGE_START;
 	}
-
-	setPlayerHpBar();
-	//setBossHpBar();
-	setMoneyBag();
 }
 
 void UI::release()
@@ -157,13 +157,13 @@ void UI::release()
 void UI::setPlayerHpBar()
 {
 	if (_player->getplayerCurrentHp() <= 0) _hpWidth = 0;
-	_hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _HpBar.GetWidth();
+	else _hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _HpBar.GetWidth();
 }
 
 void UI::setBossHpBar()
 {
 	if (_boss->getCurHP() <= 0) _bossHpWidth = 0;
-	_bossHpWidth = (_boss->getCurHP() / 100) * _bossHpWidth;
+	else _bossHpWidth = (_boss->getCurHP() / 100) * _bossHpWidth;
 }
 
 void UI::setMoneyBag()

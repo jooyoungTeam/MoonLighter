@@ -15,6 +15,10 @@ struct tagPotionInfo
 	Image* img;
 	wstring name;
 	wstring discription;
+
+	Image* needItem;
+	int needIndex;
+	int needCount;
 };
 
 class potionCreate : public gameNode
@@ -33,10 +37,14 @@ private:
 
 	int _makeCount;
 
+	int _effectIndex;
+	float _effectTimer;
+
 	bool _isSizeLeft;
 	bool _isSizeRight;
 	bool _isPotionCheck;
 	bool _isActive;
+	bool _isBuy;
 
 public:
 	potionCreate() {}
@@ -52,6 +60,7 @@ public:
 	void potionSet();
 	void reset();
 	void isSizeUpdate();
+	void isBuyUpdate();
 
 public:
 	void setIsActive(bool active) { _isActive = active; }

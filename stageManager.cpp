@@ -62,9 +62,6 @@ void stageManager::render()
 
 void stageManager::update()
 {
-	FloatRect _test;
-	_test = RectMakePivot(Vector2(_ptMouse.x, _ptMouse.y), Vector2(50, 50), Pivot::Center);
-
 	SCENEMANAGER->update();
 
 	KEYANIMANAGER->update();
@@ -94,13 +91,13 @@ void stageManager::update()
 			INVENTORY->setState(INVEN_STATE::SHOP);
 		}
 
-		if (KEYMANAGER->isOnceKeyDown('Z'))
+		if (_player->getDeadState())
 		{
 			if (INVENTORY->getInven()->item == nullptr) return;
 			INVENTORY->putType();
 			for (int i = 0; i < INVENTORY->getVType().size(); i++)
 			{
-				_itemMg->popItem(INVENTORY->getVType()[i], WINSIZEX / 2, WINSIZEY / 2);
+				_itemMg->popItem(INVENTORY->getVType()[i], _player->getX(), _player->getY());
 			}
 			INVENTORY->popInven();
 		}
@@ -110,17 +107,7 @@ void stageManager::update()
 
 		if (KEYMANAGER->isOnceKeyDown('Y'))
 		{
-			_itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, WINSIZEX / 2, WINSIZEY / 2);
-		}
-
-		if (KEYMANAGER->isOnceKeyDown('U'))
-		{
-			_itemMg->setItem(ITEMBUNDLE::GOLEM_POT, WINSIZEX / 2, WINSIZEY / 2);
-		}
-
-		if (KEYMANAGER->isOnceKeyDown('T'))
-		{
-			_itemMg->setItem(ITEMBUNDLE::GOLEM_KING, WINSIZEX / 2, WINSIZEY / 2);
+			_itemMg->setItem(ITEMBUNDLE::SLIME_RED, WINSIZEX / 2, WINSIZEY / 2);
 		}
 
 		RECT temp;
@@ -128,9 +115,9 @@ void stageManager::update()
 		for (int i = 0; i < _itemMg->getVItem().size(); ++i)
 		{
 			_itemMg->getVItem()[i]->update();
-			_itemMg->getVItem()[i]->follow(_test);
+			_itemMg->getVItem()[i]->follow(_player->getPlayerRc());
 
-			if (IntersectRect(&temp, &_test.GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
+			if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
 			{
 				if (INVENTORY->putItem(_itemMg->getVItem()[i]))
 				{

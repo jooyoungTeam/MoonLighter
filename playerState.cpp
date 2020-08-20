@@ -21,10 +21,11 @@ void playerIdleState::update(player & player)
 		player.setBedCount(player.getBedCount() == 0);
 	}
 
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
+	//죽은상태로 넘어가기~
+	if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
 	{
-		player.setCurrentState(player.getHitState());
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 
 	if (!player.getTransform())
@@ -93,10 +94,9 @@ void playerIdleState::update(player & player)
 
 	//플레이어 사망 <-- 임시
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	if (KEYMANAGER->isOnceKeyDown('0'))
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
-		player.setCurrentState(player.getDieState());
+		player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
@@ -176,6 +176,12 @@ void playerIdleState::update(player & player)
 	//활
 	if (player.getWeaponChange())
 	{
+		if (player.getplayerCurrentHp() <= 0)
+		{
+			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+			player.setCurrentState(player.getDieState());
+		}
+
 		//활 충전 카운트
 		if (player.getBowBool())
 		{
@@ -342,10 +348,10 @@ void playerWalkState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
+	if (player.getplayerCurrentHp() <= 0)
 	{
-		player.setCurrentState(player.getHitState());
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -802,6 +808,15 @@ void playerWalkState::update(player & player)
 	}
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	//죽은상태로 넘어가기~
+	if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 	//플레이어 구르기
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -1170,27 +1185,24 @@ void playerRollState::update(player & player)
 void playerDieState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
-	//아무키도 안누르면 Idle 상태로 전환
-	if (KEYMANAGER->isOnceKeyUp('0'))
+
+	if (!KEYANIMANAGER->findAnimation("playerDie")->isPlay())
 	{
-		if (KEYMANAGER->getKeyUp() == NULL)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
-			player.setCurrentState(player.getIdleState());
-		}
-		//아래키를 누르면 다시 이동
-		else if (GetAsyncKeyState('S') & 0x8000)
-		{
-			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownWalk"), ImageManager::GetInstance()->FindImage("playerDownWalk"));
-			player.setCurrentState(player.getWalkState());
-			player.setDirection(DIRECTION::DOWN);
-		}
+		cout << "디짐~" << endl; 
 	}
+
 }
 
 //shield 상태
 void playerShieldState::update(player & player)
 {
+	//HP가 0이하가 되면 Die 상태로 넘어가기
+	if (player.getplayerCurrentHp() <= 0)
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
+	}
+
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 	//플레이어 쉴드
 	if (KEYMANAGER->isStayKeyDown('K'));
@@ -1669,10 +1681,11 @@ void playerSwimState::update(player & player)
 //bow 상태
 void playerbowState::update(player & player)
 {
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
+	//HP가 0이하가 되면 Die 상태로 넘어가기
+	if (player.getplayerCurrentHp() <= 0)
 	{
-		player.setCurrentState(player.getHitState());
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
@@ -1746,10 +1759,11 @@ void playerbowState::update(player & player)
 //sword 상태
 void playerSwordState::update(player & player)
 {
-	//에너미한테 맞으면 히트상태로 넘어감
-	if (player.getEnemyCol())
+	//HP가 0이하가 되면 Die 상태로 넘어가기
+	if (player.getplayerCurrentHp() <= 0)
 	{
-		player.setCurrentState(player.getHitState());
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
@@ -1883,6 +1897,14 @@ void playerSwordState::update(player & player)
 void playerBroomState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
+
+	//HP가 0이하가 되면 Die 상태로 넘어가기
+	if (player.getplayerCurrentHp() <= 0)
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
+	}
+
 	//위
 	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
@@ -1933,8 +1955,11 @@ void playerTeleportState::update(player & player)
 	//애니메이션 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation("playerTeleport")->isPlay())
 	{
+		player.setPlayerPos(WINSIZEX + 1000, WINSIZEY / 2 + 200);
+		SCENEMANAGER->changeScene("마을씬");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleportOut"), ImageManager::GetInstance()->FindImage("playerTeleportOut"));
 		player.setCurrentState(player.getTeleportOutState());
+
 	}
 }
 
@@ -1984,5 +2009,12 @@ void playerHitState::update(player & player)
 	{
 		player.setHitAlpha(player.getHitAlpha() == 1.0f);
 		player.setCurrentState(player.getWalkState());
+	}
+
+	//HP가 0이하가 되면 Die 상태로 넘어가기
+	if (player.getplayerCurrentHp() <= 0)
+	{
+		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+		player.setCurrentState(player.getDieState());
 	}
 }

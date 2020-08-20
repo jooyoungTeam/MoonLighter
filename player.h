@@ -56,6 +56,7 @@ private:
 	bool				_enemyCol;							//에너미와 충돌상태
 	bool				_colVoid;							//충돌 회피상태
 	bool				_deadState;							//캐릭터 죽은상태
+	bool                _transForm;							//온천 변신상태
 	bool				_tileColLeft;						//타일 충돌 상태인지
 	bool				_tileColRight;						//타일 충돌 상태인지
 	bool				_tileColTop;						//타일 충돌 상태인지
@@ -64,7 +65,6 @@ private:
 	bool				_tileColRightTop;					//타일 충돌 상태인지
 	bool				_tileColLeftBottom;					//타일 충돌 상태인지
 	bool				_tileColRightBottom;				//타일 충돌 상태인지
-	bool                _transForm;
 	//플레이어 상태 정의
 	playerState*	    _idle;
 	playerState*	    _walk;
@@ -94,6 +94,7 @@ public:
 	void tileCollision(DWORD* attribute, tagTile* tile, int tileSizeX);
 	void arrowShoot();
 	void playerHp(float enemy);
+	void playerAlphaState();
 
 public:
 	int getIndex() { return _index; }
