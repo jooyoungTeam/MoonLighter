@@ -21,6 +21,7 @@ HRESULT enemyManager::init()
 	_bulletWait = 0;
 	_bulletTimer = 0;
 	_index = 0;
+	_bossHit = false;
 	_bullet = new bullet;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -48,6 +49,7 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
+	//cout << _bossHit << endl;
 	_x = _player->getX();
 	_y = _player->getY();
 	//EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
@@ -142,25 +144,27 @@ void enemyManager::setEnemy1()
 	enemy* gol1;
 	gol1 = new golem;
 	//gol1->playerCheck(_x, _y, _rc);
-	gol1->init(700, 500, 80, 100, ENEMY_GOLEM);
+	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
 	enemy* gol12;
 	gol12 = new golem;
 	//gol12->playerCheck(_x, _y, _rc);
-	gol12->init(800, 500, 80, 100, ENEMY_GOLEM);
+	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;
 	//pot1->playerCheck(_x, _y, _rc);
-	pot1->init(1200, 500, 50, 50, ENEMY_POT);
+	pot1->init(475, 600, 50, 50, ENEMY_POT);
+	pot1->setPotDirection(POT_BOTTOM);
 	_vEnemy.push_back(pot1);
 
 	enemy* pot22;
 	pot22 = new pot;
 	//pot22->playerCheck(_x, _y, _rc);
-	pot22->init(1200, 700, 50, 50, ENEMY_POT);
+	pot22->init(1070, 600, 50, 50, ENEMY_POT);
+	pot22->setPotDirection(POT_BOTTOM);
 	_vEnemy.push_back(pot22);
 
 
@@ -168,9 +172,16 @@ void enemyManager::setEnemy1()
 	enemy* pot2;
 	pot2 = new pot;
 	//pot2->playerCheck(_x, _y, _rc);
-	pot2->init(200, 300, 50, 50, ENEMY_POT);
-	pot2->setPotDirection(POT_RIGHT);
+	pot2->init(475, 280, 50, 50, ENEMY_POT);
+	pot2->setPotDirection(POT_TOP);
 	_vEnemy.push_back(pot2);
+
+	enemy* pot3;
+	pot3 = new pot;
+	//pot2->playerCheck(_x, _y, _rc);
+	pot3->init(1070, 280, 50, 50, ENEMY_POT);
+	pot3->setPotDirection(POT_TOP);
+	_vEnemy.push_back(pot3);
 
 	enemy* gost;
 	gost = new pot;
@@ -193,20 +204,51 @@ void enemyManager::setEnemy2()
 	redS1->init(200, 200, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS1);
 
+	enemy* redS2;
+	redS2 = new redSlime;
+	//redS1->playerCheck(_x, _y, _rc);
+	redS2->init(400, 400, 70, 70, ENEMY_RED_SLIME);
+	_vEnemy.push_back(redS2);
 
-	//enemy* yelS1;
-	//yelS1 = new anotherSlime;
-	////yelS1->playerCheck(_x, _y, _rc);
-	//yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	//_vEnemy.push_back(yelS1);
+
+	enemy* yelS1;
+	yelS1 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	_vEnemy.push_back(yelS1);
 
 
-	//enemy* bleS1;
-	//bleS1 = new anotherSlime;
-	////bleS1->playerCheck(_x, _y, _rc);
-	//bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	//_vEnemy.push_back(bleS1);
+	enemy* bleS1;
+	bleS1 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	_vEnemy.push_back(bleS1);
 
+	enemy* yelS2;
+	yelS2 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	yelS2->init(400, 600, 30, 30, ENEMY_YELLOW_SLIME);
+	_vEnemy.push_back(yelS2);
+
+
+	enemy* bleS3;
+	bleS3 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	bleS3->init(300, 700, 30, 30, ENEMY_BLUE_SLIME);
+	_vEnemy.push_back(bleS3);
+
+	enemy* yelS3;
+	yelS3 = new anotherSlime;
+	//yelS1->playerCheck(_x, _y, _rc);
+	yelS3->init(900, 200, 30, 30, ENEMY_YELLOW_SLIME);
+	_vEnemy.push_back(yelS3);
+
+
+	enemy* bleS2;
+	bleS2 = new anotherSlime;
+	//bleS1->playerCheck(_x, _y, _rc);
+	bleS2->init(1200, 450, 30, 30, ENEMY_BLUE_SLIME);
+	_vEnemy.push_back(bleS2);
 
 
 }
@@ -319,8 +361,14 @@ void enemyManager::playerCol()
 			if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS	)
 			{
 				SOUNDMANAGER->play("보스맞음", 1.0f);
+				_bossHit = true;
 			}
 		}
+		else
+		{
+			_bossHit = false;
+		}
+		
 		//활충돌
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
 		{
@@ -349,11 +397,16 @@ void enemyManager::playerCol()
 				}
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
 				{
+					_bossHit = true;
 					SOUNDMANAGER->play("보스맞음", 1.0f);
 				}
 				//CAMERAMANAGER->shakeCamera(5, 10);
 				//_player->se(0, 0, 0, 0);
 				break;
+			}
+			else
+			{
+				_bossHit = false;
 			}
 		}
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack()

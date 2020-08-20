@@ -541,6 +541,7 @@ void boss::attack1_1()
 		{
 			SOUNDMANAGER->play("¼Õ¶³¾îÁü", 1.0f);
 			_onceSound = true;
+			_attack1.x = _pX + _attack1.xRandom;
 		}
 		if (_pY > _attack1.y + _attack1.yRandom)
 		{

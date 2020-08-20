@@ -4,7 +4,7 @@
 
 void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
-	cout << "아이들" << endl;
+	//cout << "아이들" << endl;
 	enemy.setIsPlayerHit(false);
 	enemy.setAttackDelay(enemy.getAttackDelay() + 1);
 	if (enemyType == ENEMY_GOLEM)
@@ -63,7 +63,7 @@ void enemyMoveState::update(enemy & enemy, ENEMYTYPE enemyType)
 
 void enemyAttackState::update(enemy & enemy, ENEMYTYPE enemyType)
 {
-	cout << "어택" << endl;
+	//cout << "어택" << endl;
 	enemy.attack();
 	enemy.setAttackDelay(0);
 	//enemy.setAttackRect(RectMakePivot(Vector2(enemy.getX(), enemy.getY()), Vector2(enemy.getWidth(), enemy.getHeight()), Pivot::Center));

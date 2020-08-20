@@ -20,13 +20,17 @@ HRESULT UI::init()
 	_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2 - 534, 787), Vector2(1065, 27), Pivot::LeftTop);
 
 	_scene = CURRENT_SCENE::TEMP;
-	_bossStage = BOSS_STAGE::STAGE_START;
+	_bossStage = BOSS_STAGE::NOT_BOSS;
 
 	_frameCount = 0;
 	_frameY = 0;
 	_bossFrameY = 0;
+	_scrollFrameY = 0;
 	_moneyFrameY = 0;
+
 	_alpha = 1.f;
+	_bossHpWidth = 0;
+	_bossHp = 1000;
 
 	_isHit = false;
 	_bossHit = false;
@@ -70,19 +74,20 @@ void UI::render()
 	//UI°¡Àå ¾Õ
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
 
-	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À" && _bossStage == BOSS_STAGE::PLAYER_ENTER)
+	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
-		ImageManager::GetInstance()->FindImage("boss_scroll")->SetAlpha(_alpha);
-		_bossHpImg->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 100), 0, _bossFrameY);
-	}
-
-	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À" && (_bossStage == BOSS_STAGE::BOSS_APEEAR || _bossStage == BOSS_STAGE::STAGE_START))
-	{
+		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		{
+			ImageManager::GetInstance()->FindImage("boss_scroll")->SetAlpha(_alpha);
+			ImageManager::GetInstance()->FindImage("boss_scroll")->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 200), 0, _scrollFrameY);
+			//ImageManager::GetInstance()->FindImage("item_tag")->Render(Vector2(WINSIZEX / 2 - 350, WINSIZEY / 2 + 200));
+			//D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - 50, WINSIZEY / 2 + 210, L"°ñ·½¿Õ", 30, D2DRenderer::DefaultBrush::White);
+		}
 		//º¸½º hp¹Ù
 		//D2DRenderer::GetInstance()->DrawRectangle(_bossHpBar, D2DRenderer::DefaultBrush::White, 1.f);
 		ImageManager::GetInstance()->FindImage("boss_bar")->Render(Vector2(_bossBackBar.left, _bossBackBar.top));
 		_bossHpImg->FrameRender(Vector2(_bossBackBar.GetCenter().x + 14, _bossBackBar.GetCenter().y + 1), 0, _bossFrameY, _bossHpWidth, 26);
-	}	
+	}
 
 	//ÀåºñÃ¢ Æ÷¼Ç ÀÚ¸®°¡ ºñ¾îÀÖÁö ¾Ê´Ù¸é
 	if (INVENTORY->getPotion().item != nullptr)
@@ -129,23 +134,33 @@ void UI::update()
 
 	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
-		setBossHpBar();
-		_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2 - 534, 787), Vector2(_bossHpWidth, 27.f), Pivot::LeftTop);
+		_bossCount++;
 
-		if (_boss->getIsHit())
-		{
-			_bossHit = true;
-		}
+		if (_bossStage != BOSS_STAGE::STAGE_START && _bossCount > 70) _bossStage = BOSS_STAGE::PLAYER_ENTER;
+		_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2 - 534, 787), Vector2(_bossHpWidth, 27.f), Pivot::LeftTop);
 
 		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
 		{
-			_bossCount++;
+			_bossHpWidth += 5;
 		}
 
-		if (_bossCount > 500)
+		if (_bossHpWidth == 1000)
 		{
 			_bossStage = BOSS_STAGE::STAGE_START;
 		}
+
+		if (_bossStage == BOSS_STAGE::STAGE_START)
+		{
+			_bossCount = 0;
+			setBossHpBar();
+			if (_boss->getCurHP() != _bossHp)
+			{
+				_bossHit = true;
+				_bossHp = _boss->getCurHP();
+			}
+		} 
+
+		if (_alpha <= 0) _alpha = 0;
 	}	
 }
 
@@ -160,9 +175,9 @@ void UI::setPlayerHpBar()
 }
 
 void UI::setBossHpBar()
-{
+{	
 	if (_boss->getCurHP() <= 0) _bossHpWidth = 0;
-	else _bossHpWidth = ((float)_boss->getCurHP() / 1000.f) * 1065;
+	else _bossHpWidth = ((float)_boss->getCurHP() / 1000.f) * 1065;	
 }
 
 void UI::setMoneyBag()
@@ -189,10 +204,10 @@ void UI::draw()
 			}
 		}		
 
-		if (_bossHit)
+		if (_bossHit && _bossStage == BOSS_STAGE::STAGE_START)
 		{
 			_bossFrameY++;
-			if (_bossFrameY >= _bossHpImg->GetMaxFrameY())
+			if (_bossFrameY >= _bossHpImg->GetMaxFrameY() - 1)
 			{
 				_bossFrameY = 0;
 				_bossHit = false;
@@ -200,21 +215,15 @@ void UI::draw()
 		}	
 	}	
 
-	if (_frameCount % 5 == 0)
+	if (_frameCount % 8 == 0)
 	{
 		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
 		{
-			_bossFrameY++;
-			if (_bossFrameY >= 8)
+			_scrollFrameY++;
+			if (_scrollFrameY >= 8)
 			{
-				_bossFrameY = 8;
+				_scrollFrameY = 8;
 				_alpha -= 0.03;
-
-				if (_alpha <= 0)
-				{
-					_bossFrameY = 0;
-					_bossStage = BOSS_STAGE::BOSS_APEEAR;
-				}
 			}
 		}
 		_frameCount = 0;

@@ -2,7 +2,7 @@
 #include "gameNode.h"
 
 #define SAMPLETILEX 9
-#define SAMPLETILEY 6
+#define SAMPLETILEY 7
 
 class palette : public gameNode
 {

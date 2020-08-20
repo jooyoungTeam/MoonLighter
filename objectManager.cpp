@@ -76,38 +76,14 @@ void objectManager::currentObjectRender()
 
 void objectManager::sampleObjectPageRender()
 {
-	if (_currentSampleObject == OBJ_HOUSE)
+	for (int i = 0; i < OBJ_NONE; i++)
 	{
-		ImageManager::GetInstance()->FindImage("objectHouse")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+		if (_currentSampleObject == i)
+		{
+			ImageManager::GetInstance()->FindImage(str[i])->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
+		}
 	}
-	else if (_currentSampleObject == OBJ_ARCHITECTURE)
-	{
-		ImageManager::GetInstance()->FindImage("objectArchitecture")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_DOOR)
-	{
-		ImageManager::GetInstance()->FindImage("objectDoor")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_PLANT)
-	{
-		ImageManager::GetInstance()->FindImage("objectPlant")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_NPC)
-	{
-		ImageManager::GetInstance()->FindImage("objectNPC")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_SPA)
-	{
-		ImageManager::GetInstance()->FindImage("objectSpa")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_DUN1)
-	{
-		ImageManager::GetInstance()->FindImage("objectDungeon1")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
-	else if (_currentSampleObject == OBJ_DUN2)
-	{
-		ImageManager::GetInstance()->FindImage("objectDungeon2")->Render(Vector2(WINSIZEX - 505.0f, WINSIZEY * 0.5f - 70));
-	}
+
 }
 
 void objectManager::update()
@@ -371,6 +347,114 @@ void objectManager::selectObject()
 				}
 				break;
 			}
+
+			else if (_currentSampleObject == OBJ_ROCK1)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 0)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 3;
+				}
+				break;
+			}
+
+			else if (_currentSampleObject == OBJ_ROCK2)
+			{
+				_currentObject.isFrameRender = false;
+				if (i == 0)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 1)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 2)
+				{
+					_currentObject.scale = 3;
+				}
+				if (i == 3)
+				{
+					_currentObject.scale = 3;
+				}
+				break;
+			}
+
+			else if (_currentSampleObject == OBJ_TILE1)
+			{
+			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
+			break;
+			}
+			else if (_currentSampleObject == OBJ_TILE2)
+			{
+			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
+			break;
+			}
+			else if (_currentSampleObject == OBJ_TILE3)
+			{
+			_currentObject.isFrameRender = false;
+			if (i == 0)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 1)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 2)
+			{
+				_currentObject.scale = 2;
+			}
+			if (i == 3)
+			{
+				_currentObject.scale = 2;
+			}
+			break;
+			}
 		}
 
 	}
@@ -447,7 +531,44 @@ Image * objectManager::findImg(OBJECT type, int imgNum)
 		else if (imgNum == 2)	              img = ImageManager::GetInstance()->FindImage("object_smallRock");
 		else if (imgNum == 3)	              img = ImageManager::GetInstance()->FindImage("object_smallRock_slime");
 	}
+	else if (type == OBJ_ROCK1)
+	{
+		if (imgNum == 0)			img = ImageManager::GetInstance()->FindImage("rock1");
+		else if (imgNum == 1)		img = ImageManager::GetInstance()->FindImage("rock2");
+		else if (imgNum == 2)		img = ImageManager::GetInstance()->FindImage("rock3");
+		else if (imgNum == 3)		img = ImageManager::GetInstance()->FindImage("rock4");
+	}
+	else if (type == OBJ_ROCK2)
+	{
+		if (imgNum == 0)			img = ImageManager::GetInstance()->FindImage("rock4");
+		else if (imgNum == 1)		img = ImageManager::GetInstance()->FindImage("rock5");
+		else if (imgNum == 2)		img = ImageManager::GetInstance()->FindImage("root1");
+		else if (imgNum == 3)		img = ImageManager::GetInstance()->FindImage("root2");
+	}
 
+	else if (type == OBJ_TILE1)
+	{
+		if (imgNum == 0)			img = ImageManager::GetInstance()->FindImage("objectTile1");
+		else if (imgNum == 1)		img = ImageManager::GetInstance()->FindImage("objectTile2");
+		else if (imgNum == 2)		img = ImageManager::GetInstance()->FindImage("objectTile3");
+		else if (imgNum == 3)		img = ImageManager::GetInstance()->FindImage("objectTile4");
+	}
+
+	else if (type == OBJ_TILE2)
+	{
+		if (imgNum == 0)			img = ImageManager::GetInstance()->FindImage("objectTile5");
+		else if (imgNum == 1)		img = ImageManager::GetInstance()->FindImage("objectTile6");
+		else if (imgNum == 2)		img = ImageManager::GetInstance()->FindImage("objectTile7");
+		else if (imgNum == 3)		img = ImageManager::GetInstance()->FindImage("objectTile8");
+	}
+
+	else if (type == OBJ_TILE3)
+	{
+		if (imgNum == 0)			img = ImageManager::GetInstance()->FindImage("objectTile9");
+		else if (imgNum == 1)		img = ImageManager::GetInstance()->FindImage("objectTile10");
+		else if (imgNum == 2)		img = ImageManager::GetInstance()->FindImage("objectTile11");
+		else if (imgNum == 3)		img = ImageManager::GetInstance()->FindImage("objectTile12");
+	}
 	return img;
 }
 

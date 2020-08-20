@@ -115,7 +115,7 @@ void enemy::release()
 
 void enemy::update()
 {
-	//cout << _bossHitCount << endl;
+	cout << _saveHP << endl;
 	if (_type != ENEMY_BOSS && _type != ENEMY_POT)
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
@@ -170,61 +170,7 @@ void enemy::playerCheck(float x, float y, FloatRect rc, bool playerStop)
 void enemy::ani()
 {
 
-	//레드 슬라임
-	ImageManager::GetInstance()->AddFrameImage("redSlime", L"image/enemy/slimeIlde.png", 10, 1);
-	ImageManager::GetInstance()->AddFrameImage("redSlimeJump", L"image/enemy/slimeJump.png", 12, 1);
-	ImageManager::GetInstance()->AddFrameImage("redSlimeDead", L"image/enemy/slimeDead.png", 11, 1);
-	ImageManager::GetInstance()->AddFrameImage("slimeAttack", L"image/enemy/slimeAttack.png", 8, 1);
-
-	//블루 슬라임
-	ImageManager::GetInstance()->AddFrameImage("blueSlime", L"image/enemy/blueSlime.png", 8, 1);
-	ImageManager::GetInstance()->AddFrameImage("blueSlimeDead", L"image/enemy/blueSlimeDead.png", 11, 1);
-
-	//옐로 슬라임
-	ImageManager::GetInstance()->AddFrameImage("yellowSlime", L"image/enemy/yellowSlime.png", 8, 1);
-	ImageManager::GetInstance()->AddFrameImage("yellowSlimeDead", L"image/enemy/yellowSlimeDead.png", 11, 1);
-	ImageManager::GetInstance()->AddFrameImage("yellowSlimePang", L"image/enemy/yellowSlime_pang.png", 7, 1);
-
-	//팟
-	ImageManager::GetInstance()->AddFrameImage("bulletCollision", L"image/enemy/bullet_collision.png", 5, 1);
-	ImageManager::GetInstance()->AddFrameImage("bullet", L"image/enemy/enemy_bullet.png", 6, 1);
-	ImageManager::GetInstance()->AddFrameImage("pot", L"image/enemy/pot.png", 11, 4);
-	ImageManager::GetInstance()->AddFrameImage("potDead", L"image/enemy/potDead.png", 18, 1);
-	EFFECTMANAGER->addEffect("bulletCollision", "bulletCollision", 90, 18, 18, 18, 1.0f, 0.2f, 10.0f, 1.5f);
-
-	//골렘
-	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
-	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8, 4);
-	ImageManager::GetInstance()->AddFrameImage("golemAttackRed", L"image/enemy/GolemAttack_Red.png", 13, 4);
-	ImageManager::GetInstance()->AddFrameImage("golemAttackWhite", L"image/enemy/GolemAttack_White.png", 13, 4);
-	ImageManager::GetInstance()->AddFrameImage("golemRed", L"image/enemy/GolemMove_Red.png", 8, 4);
-	ImageManager::GetInstance()->AddFrameImage("golemWhite", L"image/enemy/GolemMove_White.png", 8, 4);
-
-
-	//보스
-	ImageManager::GetInstance()->AddFrameImage("BossUp", L"image/enemy/BossUp.png", 32, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossHit", L"image/enemy/dead1.png", 41, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossDead", L"image/enemy/dead2.png", 41, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossHandCome", L"image/enemy/Hand_Shoot_Last.png", 11, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossAttack", L"image/enemy/attack.png", 7, 1);
-	ImageManager::GetInstance()->AddFrameImage("boss", L"image/enemy/idleBoss.png", 2, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossAttackIdle", L"image/enemy/attackIdle.png", 2, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossHand", L"image/enemy/hand.png", 19, 1);
-	ImageManager::GetInstance()->AddFrameImage("bossHandFly", L"image/enemy/FistShoot.png", 22, 3);
-	ImageManager::GetInstance()->AddImage("Boss_Rock0", L"image/enemy/Boss_Rock0.png");
-	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
-	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
-	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
-	ImageManager::GetInstance()->AddFrameImage("bossLong", L"image/enemy/long.png", 6, 1);
-
-
-	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
-	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
-	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
-	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png", 16, 1);
-	//EFFECTMANAGER->addEffect("bossPullEffect", "bossPullEffect", 2750, 164, 250, 164, 1.0f, 0.2f, 10.0f, 1.0f);
-	//EFFECTMANAGER->addEffect("bossTornadoEffect", "bossTornadoEffect", 2112, 221, 132, 221, 1.0f, 0.2f, 10.0f, 1.0f);
-
+	
 	//레드 슬라임
 	int slimeIlde[] = { 0,1,2,3,4,5,6,7,8,9 };
 	KEYANIMANAGER->addArrayFrameAnimation("redSlime", "redSlime", slimeIlde, 10, 13, true);
@@ -543,5 +489,6 @@ void enemy::checkBoolCount()
 void enemy::setGauge(float curHP, float maxHP)
 {
 	_bar.width = (curHP / maxHP) * 80;
+	_saveHP = _curHP;
 }
 
