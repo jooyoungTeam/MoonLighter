@@ -102,23 +102,27 @@ void button::release()
 void button::setButton()
 {
 	_button[BUTTON_TERRAIN].rc = RectMakeCenter(WINSIZEX / 2 + 330, 100, 80, 30);
-	_button[BUTTON_TERRAIN].name = L"  TERRAIN";
+	_button[BUTTON_TERRAIN].name = L"TERRAIN";
 	_button[BUTTON_TERRAIN].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_OBJECT].rc = RectMakeCenter(WINSIZEX / 2 + 430, 100, 80, 30);
-	_button[BUTTON_OBJECT].name = L"   OBJECT";
+	_button[BUTTON_OBJECT].name = L" OBJECT";
 	_button[BUTTON_OBJECT].state = BUTTON_ALWAYS;
 
-	_button[BUTTON_COLLISION].rc = RectMakeCenter(WINSIZEX / 2 + 430, 50, 80, 30);
+	_button[BUTTON_COLLISION].rc = RectMakeCenter(WINSIZEX / 2 + 430, 50, 90, 30);
 	_button[BUTTON_COLLISION].name = L"COLLISION";
 	_button[BUTTON_COLLISION].state = BUTTON_ALWAYS;
+
+	_button[BUTTON_SELECTSIZE].rc = RectMakeCenter(WINSIZEX / 2 + 330, 250, 110, 30);
+	_button[BUTTON_SELECTSIZE].name = L"SELECT SIZE";
+	_button[BUTTON_SELECTSIZE].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_AUTO].rc = RectMakeCenter(WINSIZEX / 2 + 630, 50, 80, 30);
 	_button[BUTTON_AUTO].name = L"	  AUTO";
 	_button[BUTTON_AUTO].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_SAVE].rc = RectMakeCenter(WINSIZEX / 2 + 530, 100, 80, 30);
-	_button[BUTTON_SAVE].name = L"    SAVE";
+	_button[BUTTON_SAVE].name = L"  SAVE";
 	_button[BUTTON_SAVE].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_SAVE_DUNGEON].rc = RectMakeCenter(WINSIZEX / 2 + 330, 150, 80, 30);
@@ -139,7 +143,7 @@ void button::setButton()
 
 
 	_button[BUTTON_LOAD].rc = RectMakeCenter(WINSIZEX / 2 + 630, 100, 80, 30);
-	_button[BUTTON_LOAD].name = L"    LOAD";
+	_button[BUTTON_LOAD].name = L"  LOAD";
 	_button[BUTTON_LOAD].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_LOAD_DUNGEON].rc = RectMakeCenter(WINSIZEX / 2 + 330, 150, 80, 30);
@@ -160,7 +164,7 @@ void button::setButton()
 
 
 	_button[BUTTON_ERASE].rc = RectMakeCenter(WINSIZEX / 2 + 730, 100, 80, 30);
-	_button[BUTTON_ERASE].name = L"   ERASE";
+	_button[BUTTON_ERASE].name = L"  ERASE";
 	_button[BUTTON_ERASE].state = BUTTON_ALWAYS;
 
 	_button[BUTTON_ERASE_TERRAIN].rc = RectMakeCenter(WINSIZEX / 2 + 630, 150, 80, 30);
@@ -172,7 +176,7 @@ void button::setButton()
 
 
 	_button[BUTTON_EXIT].rc = RectMakeCenter(WINSIZEX / 2 + 530, 50, 50, 30);
-	_button[BUTTON_EXIT].name = L"  EXIT";
+	_button[BUTTON_EXIT].name = L" EXIT";
 	_button[BUTTON_EXIT].state = BUTTON_ALWAYS;
 
 }

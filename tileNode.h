@@ -50,3 +50,11 @@ struct tagDragRect
 	POINT startPos;
 	POINT endPos;
 };
+
+struct tagSelectSizeTileUI
+{
+	RECT    rc;
+	int     tileSizeX;
+	int     tileSizeY;
+	wstring str;
+};
