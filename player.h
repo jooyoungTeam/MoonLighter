@@ -3,6 +3,8 @@
 #include "playerState.h"
 
 class enemyManager;
+class townStage;
+class shopStage;
 
 enum class DIRECTION
 {
@@ -29,6 +31,9 @@ private:
 	DIRECTION			_playerDirection;					//플레이어 방향
 	arrow*				_arrow;
 	enemyManager*		_enemyLink;							//에너미 상호참조용
+	townStage*			_townStage;							//타운스테이지 상호참조 
+	shopStage*			_shopStage;							//샵스테이지 상호참조
+
 	int					_index;								//플레이어 인덱스 0
 	int					_arrowCount;						//화살한발만 쏘게
 	int					_bedCount;							//아이들상태 오래되면 침대상태로
@@ -59,6 +64,8 @@ private:
 	bool				_deadState;							//캐릭터 죽은상태
 	bool                _transForm;							//온천 변신상태
 	bool				_playerMoveTrap;					//플레이어가 레드슬라임한테 잡힌상태
+	bool				_AttackProhibition;					//상점렉트 범위안에 들어오면 공격 불가
+
 	//플레이어 상태 정의
 	playerState*	    _idle;
 	playerState*	    _walk;
@@ -89,6 +96,7 @@ public:
 	void arrowShoot();
 	void playerAlphaState();
 	void playerMoveTrapState();
+	void shopCollision();
 
 public:
 	int getIndex() { return _index; }
@@ -122,6 +130,8 @@ public:
 	bool getDeadState() { return _deadState; }
 	bool getPlayerMoveTrap() { return _playerMoveTrap; }
 	bool getTransform() { return _transForm; }
+	bool getAttackProhibition() { return _AttackProhibition; }
+
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
 	FloatRect getShadowRc() { return _playerShadowRc; }
@@ -157,6 +167,7 @@ public:
 	void setColVoid(bool colVoid) { _colVoid = colVoid; }
 	void setDeadState(bool deadState) { _deadState = deadState;}
 	void setPlayerMoveTrap(bool playerMoveTrap) { _playerMoveTrap = playerMoveTrap; }
+	void setAttackProhibition(bool attackProhibition) { _AttackProhibition = attackProhibition; }
 	void setPlayerMotion(animation* playerMotion, Image* img) { _playerMotion->stop(); _playerImg = img; _playerMotion = playerMotion; _playerMotion->start(); }
 	void setCurrentState(playerState* state) { _CurrentState = state; }
 	void setDirection(DIRECTION playerDirection) { _playerDirection = playerDirection; }
@@ -169,6 +180,8 @@ public:
 		_playerX = playerRcX, _playerY = playerRcY, _playerRcW = playerRcW, _playerRcH = playerRcH;
 	}
 	void setEnemyLink(enemyManager* enemyLink) { _enemyLink = enemyLink; }
+	void setTownLink(townStage* townStage) { _townStage = townStage; }
+	void setShopLink(shopStage* shopStage) { _shopStage = shopStage; }
 	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
 	void setTransform(bool trans) { _transForm = trans; }
 

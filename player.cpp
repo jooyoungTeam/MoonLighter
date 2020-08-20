@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "player.h"
 #include "enemyManager.h"
+#include "townStage.h"
+#include "shopStage.h"
 
 HRESULT player::init(float x, float y)
 {
@@ -23,6 +25,11 @@ HRESULT player::init(float x, float y)
 	_teleportOut = new playerTeleportOutState();
 	_arrow = new arrow;
 	_arrow->init();
+	_townStage = new townStage;
+	_townStage->init();
+	_shopStage = new shopStage;
+	_shopStage->init();
+
 	_index = 0;
 	_playerShadowX = x;
 	_playerShadowY = y;
@@ -39,6 +46,7 @@ HRESULT player::init(float x, float y)
 	_bowChargeState = false;
 	_hitCondition = false;
 	_deadState = false;
+	_AttackProhibition = false;
 
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 20), Pivot::Center);
 	_playerRc = RectMakePivot(Vector2(_playerX, _playerY), Vector2(_playerRcW, _playerRcH), Pivot::Center);
@@ -80,6 +88,7 @@ void player::render()
 		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowRc.bottom, _playerMotion, 1.3f);
 	}
 	_arrow->render();
+	
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		CAMERAMANAGER->rectangle(_playerRc, D2D1::ColorF::Red, 1.0f);
@@ -99,6 +108,7 @@ void player::update()
 	arrowShoot();
 	playerAlphaState();
 	playerMoveTrapState();
+	shopCollision();
 	_playerShadowRc = RectMakePivot(Vector2(_playerShadowX, _playerShadowY), Vector2(50, 50), Pivot::Center);
 	_playerX = _playerShadowX;
 	_playerY = _playerShadowY;
@@ -475,6 +485,38 @@ void player::playerMoveTrapState()
 				_playerMoveTrap = false;
 				_escapeCount = 0;
 			}
+		}
+	}
+}
+
+//상점하고 충돌했을때, 공격불가
+void player::shopCollision()
+{
+	if (SCENEMANAGER->getCurrentScene() == "마을씬")
+	{
+		RECT temp;
+
+		if (IntersectRect(&temp, &_playerRc.GetRect(), &_townStage->getPotionShopRc().GetRect()))
+		{
+			_AttackProhibition = true;
+		}
+		else
+		{
+			_AttackProhibition = false;
+		}
+	}
+
+	if (SCENEMANAGER->getCurrentScene() == "샵씬")
+	{
+		RECT temp;
+
+		if (IntersectRect(&temp, &_playerRc.GetRect(), &_shopStage->getInteractionRC().GetRect()))
+		{
+			_AttackProhibition = true;
+		}
+		else
+		{
+			_AttackProhibition = false;
 		}
 	}
 }
