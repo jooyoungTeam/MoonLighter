@@ -16,11 +16,10 @@ void redSlime::attack()
 	//	_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 	//}
 
-	RECT temp;
-	if (IntersectRect(&temp, &_rc.GetRect(), &_pRc.GetRect()) && !_isCol )
+	//RECT temp;
+
+	if (_isCol && !_isTie)
 	{
-		//_attackRc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
-		_isCol = true;
 		_attackCount = 0;
 		_scale = 2.0f;
 		_speed = 0;
@@ -31,26 +30,25 @@ void redSlime::attack()
 		_motion->start();
 		_x = _pX;
 		_y = _pY;
+		_isTie = true;
 	}
-	if (_isCol)
+
+	if (!_isCol && _isTie)
 	{
-		if (_playerStop)
-		{
-			cout << "e" << endl;
-			_img = ImageManager::GetInstance()->FindImage("redSlime");
-			_motion->stop();
-			_motion = KEYANIMANAGER->findAnimation(  "redSlime");
-			_motion->start();
-			_isAttack = false;
-			_state = _idle;
-			_attackCount = 0;
-			_attackDelay = 0;
-			_scale = 1.0f;
-			_attackCount = 0;
-			_bigSlimeCount = 0;
-			_isCol = false;
-			return;
-		}
+		_img = ImageManager::GetInstance()->FindImage("redSlime");
+		_motion->stop();
+		_motion = KEYANIMANAGER->findAnimation(  "redSlime");
+		_motion->start();
+		_isAttack = false;
+		_isTie = false;
+		_state = _idle;
+		_attackCount = 0;
+		_attackDelay = 0;
+		_scale = 1.0f;
+		_attackCount = 0;
+		_bigSlimeCount = 0;
+		return;
+	
 	}
 	if (!_isCol)
 	{

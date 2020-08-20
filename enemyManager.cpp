@@ -48,14 +48,6 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
-	if (_player->getPlayerMoveTrap())
-	{
-		cout << "플레이어 멈춰" << endl;
-	}
-	if (!_player->getPlayerMoveTrap())
-	{
-		cout << "플레이어 움직 움직" << endl;
-	}
 	_x = _player->getX();
 	_y = _player->getY();
 	//EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
@@ -71,17 +63,22 @@ void enemyManager::update()
 	{
 		_angle = getAngle(_player->getX(), _player->getY(), _vEnemy[i]->getX(), _vEnemy[i]->getY());
 		_bulletAngle = getAngle(_vEnemy[i]->getX(), _vEnemy[i]->getY(), _player->getX(), _player->getY());
-		if (_vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME)
+		RECT temp;
+		if (_vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME && _vEnemy[i]->getState() == _vEnemy[i]->getAttack() && _player->getCurrectState() != _player->getRollState())
 		{
+			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && !_vEnemy[i]->getIsCol())
+			{
+				_vEnemy[i]->setIsCol(true);
+				_player->setPlayerMoveTrap(true);
+			}
 			if (_vEnemy[i]->getIsCol())
 			{
-				_player->setPlayerMoveTrap(true);
-				//_player->getPlayerMoveTrap() = true;
+				if (!_player->getPlayerMoveTrap())
+				{
+					_vEnemy[i]->setIsCol(false);
+				}
 			}
-			/*if (!_vEnemy[i]->getIsCol())
-			{
-				_player->setPlayerMoveTrap(false);
-			}*/
+
 		}
 
 		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
@@ -197,18 +194,18 @@ void enemyManager::setEnemy2()
 	_vEnemy.push_back(redS1);
 
 
-	enemy* yelS1;
-	yelS1 = new anotherSlime;
-	//yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
-	_vEnemy.push_back(yelS1);
+	//enemy* yelS1;
+	//yelS1 = new anotherSlime;
+	////yelS1->playerCheck(_x, _y, _rc);
+	//yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	//_vEnemy.push_back(yelS1);
 
 
-	enemy* bleS1;
-	bleS1 = new anotherSlime;
-	//bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
-	_vEnemy.push_back(bleS1);
+	//enemy* bleS1;
+	//bleS1 = new anotherSlime;
+	////bleS1->playerCheck(_x, _y, _rc);
+	//bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	//_vEnemy.push_back(bleS1);
 
 
 

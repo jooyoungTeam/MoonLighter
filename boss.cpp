@@ -79,6 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
+	//_bossPattern = PLAYER_PULL;
 //	_bossPattern = ARM_LONG;
 	//_bossPattern = PLAYER_PULL;
 	//attack3();
