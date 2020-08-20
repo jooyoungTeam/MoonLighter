@@ -12,7 +12,7 @@ void anotherSlime::attack()
 		{
 			_attackRc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 		}
-		if (!_isAttack)
+		if (!_isAttack && _type == ENEMY_BLUE_SLIME)
 		{
 			SOUNDMANAGER->play("슬라임어텍", 0.3f);
 			_isAttack = true;
