@@ -10,8 +10,8 @@ HRESULT UI::init()
 	_playerHpImg = ImageManager::GetInstance()->FindImage("HPbar");
 	_bossHpImg = ImageManager::GetInstance()->FindImage("boss_HP");
 
-	_backBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
-	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, 35), Pivot::LeftTop);
+	_backBar = RectMakePivot(Vector2(223, 39), Vector2(193, 37), Pivot::LeftTop);
+	_HpBar = RectMakePivot(Vector2(223, 39), Vector2(193, 37), Pivot::LeftTop);
 
 	_weapon = RectMakePivot(Vector2(1456, 119), Vector2(98, 98), Pivot::LeftTop);
 	_portal = RectMakePivot(Vector2(1458, 778), Vector2(100, 100), Pivot::LeftTop);
@@ -37,13 +37,10 @@ HRESULT UI::init()
 
 void UI::render()
 {
-	//UI밑바탕
-	ImageManager::GetInstance()->FindImage("UI_base")->Render(Vector2(0, 0));
-
 	//HP바
 	//D2DRenderer::GetInstance()->DrawRectangle(_backBar, D2DRenderer::DefaultBrush::White, 1.f);
 	//D2DRenderer::GetInstance()->DrawRectangle(_HpBar, D2DRenderer::DefaultBrush::White, 1.f);
-	_playerHpImg->FrameRender(Vector2(_backBar.GetCenter().x, _backBar.GetCenter().y), 0, _frameY, _hpWidth, 35);
+	_playerHpImg->FrameRender(Vector2(_backBar.GetCenter().x - 1, _backBar.GetCenter().y), 0, _frameY, _hpWidth, 36);
 
 	//무기 자리 렉트
 	//D2DRenderer::GetInstance()->DrawRectangle(_weapon, D2DRenderer::DefaultBrush::White, 1.f);
@@ -51,14 +48,14 @@ void UI::render()
 	//플레이어 기본무기
 	if (!_player->getWeaponChange())
 	{
-		ImageManager::GetInstance()->FindImage("sword")->Render(Vector2(_weapon.left + 15, _weapon.top + 15));
+		ImageManager::GetInstance()->FindImage("sword")->Render(Vector2(_weapon.left + 17, _weapon.top + 15));
 		ImageManager::GetInstance()->FindImage("UI_weapon_1")->Render(Vector2(0, 0));
 	}
 
 	//플레이어 서브무기
 	if (_player->getWeaponChange())
 	{
-		ImageManager::GetInstance()->FindImage("bow")->Render(Vector2(_weapon.left + 15, _weapon.top + 10));
+		ImageManager::GetInstance()->FindImage("bow")->Render(Vector2(_weapon.left + 17, _weapon.top + 10));
 		ImageManager::GetInstance()->FindImage("UI_weapon_2")->Render(Vector2(0, 0));
 	}
 
@@ -120,7 +117,7 @@ void UI::update()
 	//setBossHpBar();
 	setMoneyBag();
 
-	_HpBar = RectMakePivot(Vector2(223, 40), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
+	_HpBar = RectMakePivot(Vector2(223, 39), Vector2(193, (int)_hpWidth), Pivot::LeftTop);
 	//_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2, 800), Vector2(1094, (int)_bossHpWidth), Pivot::LeftTop);
 
 	if (_player->getHitCondition())

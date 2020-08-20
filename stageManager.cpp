@@ -54,6 +54,10 @@ void stageManager::render()
 	
 	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÌÆ²¾À" && SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
 	{
+		//UI¹Ø¹ÙÅÁ
+		if (!_town->getIsPotionShop()) ImageManager::GetInstance()->FindImage("UI_base")->Render(Vector2(0, 0));
+		ImageManager::GetInstance()->FindImage("UI_gold")->Render(Vector2(0, 0));
+
 		_itemMg->render();
 		_ui->render();
 		if (INVENTORY->getIsInven()) INVENTORY->render(); 
@@ -117,7 +121,8 @@ void stageManager::update()
 			_itemMg->getVItem()[i]->update();
 			_itemMg->getVItem()[i]->follow(_player->getPlayerRc());
 
-			if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
+			if (!_player->getDeadState() && 
+				IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
 			{
 				if (INVENTORY->putItem(_itemMg->getVItem()[i]))
 				{

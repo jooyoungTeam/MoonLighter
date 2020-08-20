@@ -93,8 +93,6 @@ HRESULT inventory::init()
 	_mirrorImg = ImageManager::GetInstance()->FindImage("bagMirror");
 	_saleImg = ImageManager::GetInstance()->FindImage("mirror_ball");
 
-	ImageManager::GetInstance()->AddImage("item_tag", L"Image/UI/item_name.png");
-
 	//인벤 상태
 	_state = INVEN_STATE::TEMP;
 	//미러 상태
