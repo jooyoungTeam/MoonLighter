@@ -33,7 +33,7 @@ void townStage::update()
 		_player->tileCollision(_attribute, _tile, TOWNTILEX);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('J'))
+	if (KEYMANAGER->isOnceKeyDown('J') && !INVENTORY->getIsInven())
 	{
 		if (!_isPotionShop)
 		{

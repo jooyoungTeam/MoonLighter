@@ -29,7 +29,7 @@ HRESULT UI::init()
 
 	_alpha = 1.f;
 	_bossHpWidth = 0;
-	_bossHp = 1000;
+	_bossHp = 0;
 
 	_isHit = false;
 	_bossHit = false;
@@ -171,7 +171,7 @@ void UI::setBossHpBar(int curHp)
 	if (_bossStage == BOSS_STAGE::STAGE_START)
 	{
 		_bossCount = 0;
-		if (curHp != _bossHp)
+		if (_bossHp != curHp)
 		{
 			_bossHit = true;
 			_bossHp = curHp;

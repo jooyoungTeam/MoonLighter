@@ -54,19 +54,23 @@ void bossStage::update()
 {
 	_miniMap->update();
 
-	if (!INVENTORY->getIsInven())
+	for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
 	{
-		_player->update();
-		//_player->tileCollision(_attribute, _tile, BOSSTILEX);
-		_enemy->update();
-		for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
+		if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
 		{
-			if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
-			{
-				_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
-				break;
-			}
+			_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
+			break;
+		}
+	}
 
+	//if (_ui->getBossScene() == BOSS_STAGE::STAGE_START)
+	{
+		if (!INVENTORY->getIsInven())
+		{
+			_player->update();
+			//_player->tileCollision(_attribute, _tile, BOSSTILEX);
+			_enemy->update();
+			
 		}
 	}	
 	

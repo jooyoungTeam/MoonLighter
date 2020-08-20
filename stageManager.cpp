@@ -84,21 +84,21 @@ void stageManager::uiUpdate()
 	{
 		if (INVENTORY->getIsInven()) INVENTORY->update();
 
-		if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
+		if (!_town->getIsPotionShop() && !INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 		{
 			INVENTORY->setIsInven(true);
 			_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
 			INVENTORY->setState(INVEN_STATE::NOTE);
 		}
 
-		if (INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
+		if (!_town->getIsPotionShop() && INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 		{
 			INVENTORY->setIsInven(false);
 			_ui->setUIScene(CURRENT_SCENE::TEMP);
 			INVENTORY->closeInven();
 		}
 
-		if (!INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
+		if (SCENEMANAGER->getCurrentScene() == "¼¥¾À" && !INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
 		{
 			INVENTORY->setIsInven(true);
 			_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
