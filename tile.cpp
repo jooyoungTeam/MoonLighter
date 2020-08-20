@@ -5,13 +5,14 @@ HRESULT tile::init()
 {
 	_tileSize[0] = 100;
 	_tileSize[1] = 100;
+	selectTileSizeInit();
 
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 	_objectManager = new objectManager;
 	_objectManager->init();
 
 	_miniMap1 = new miniMap;
-	_miniMap1->init(_tileSize[0],_tileSize[1]);
+	_miniMap1->init(_tileSize[0], _tileSize[1]);
 
 	imageLoad();
 	_palette = new palette;
@@ -93,7 +94,7 @@ void tile::render()
 		{
 			_objectManager->sampleObjectPageRender();
 		}
-
+		selectTileSizeRender();
 
 		_button->render();
 
@@ -135,6 +136,63 @@ void tile::update()
 
 void tile::release()
 {
+	_vTile.clear();
+}
+
+void tile::selectTileSizeInit()
+{
+	_selectTileSize[0].rc = RectMakeCenter(WINSIZEX / 2 + 450, WINSIZEY / 2 + 100, 100, 100);
+	_selectTileSize[0].tileSizeX = 100;
+	_selectTileSize[0].tileSizeY = 100;
+	_selectTileSize[0].str = L"100 x 100";
+
+	_selectTileSize[1].rc = RectMakeCenter(WINSIZEX / 2 + 450 + 120, WINSIZEY / 2 + 100, 100, 100);
+	_selectTileSize[1].tileSizeX = 75;
+	_selectTileSize[1].tileSizeY = 75;
+	_selectTileSize[1].str = L"75 x 75";
+
+	_selectTileSize[2].rc = RectMakeCenter(WINSIZEX / 2 + 450, WINSIZEY / 2 + 220, 100, 100);
+	_selectTileSize[2].tileSizeX = 50;
+	_selectTileSize[2].tileSizeY = 50;
+	_selectTileSize[2].str = L"50 x 50";
+
+	_selectTileSize[3].rc = RectMakeCenter(WINSIZEX / 2 + 450 + 120, WINSIZEY / 2 + 220, 100, 100);
+	_selectTileSize[3].tileSizeX = 30;
+	_selectTileSize[3].tileSizeY = 30;
+	_selectTileSize[3].str = L"30 x 30";
+}
+
+void tile::selectTileSize()
+{
+	if (_button->getType() == BUTTON_SELECTSIZE)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (PtInRect(&_selectTileSize[i].rc, _ptMouse))
+			{
+				_tileSize[0] = _selectTileSize[i].tileSizeX;
+				_tileSize[1] = _selectTileSize[i].tileSizeY;
+				release();
+				setup();
+				_miniMap1->init(_tileSize[0], _tileSize[1]);
+
+				CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
+				break;
+			}
+		}
+	}
+}
+
+void tile::selectTileSizeRender()
+{
+	if (_button->getType() == BUTTON_SELECTSIZE)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			D2DRenderer::GetInstance()->DrawRectangle(_selectTileSize[i].rc, D2D1::ColorF::Black, 1.0f, 2);
+			D2DRenderer::GetInstance()->RenderText(_selectTileSize[i].rc.left + 5, _selectTileSize[i].rc.top + 40, _selectTileSize[i].str, 20);
+		}
+	}
 }
 
 void tile::drag()
@@ -219,7 +277,7 @@ void tile::drag()
 				{
 					_vTile[i].isColTile = false;
 					_vTile[i].terrain = TR_NONE;
-					_miniMap1->setIsDraw(i,false);
+					_miniMap1->setIsDraw(i, false);
 				}
 				else if (_button->getType() == BUTTON_COLLISION)
 				{
@@ -284,7 +342,7 @@ void tile::setMap()
 				_objectManager->selectObject();
 			}
 
-
+			selectTileSize();
 			_button->update();
 		}
 	}
@@ -347,7 +405,7 @@ void tile::setMap()
 						_vTile[index].terrainFrameY = _currentTile.y;
 						_vTile[index].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 						_vTile[index].pos = posSelect(_currentTile.x, _currentTile.y);
-						_miniMap1->setIsDraw(index,true);
+						_miniMap1->setIsDraw(index, true);
 					}
 					else if (_button->getType() == BUTTON_OBJECT)
 					{
@@ -356,8 +414,8 @@ void tile::setMap()
 					else if (_button->getType() == BUTTON_ERASE_TERRAIN)
 					{
 						_vTile[index].terrain = TR_NONE;
-						_vTile[index].isColTile = false; 
-						_miniMap1->setIsDraw(index,false);
+						_vTile[index].isColTile = false;
+						_miniMap1->setIsDraw(index, false);
 					}
 
 					break;
@@ -378,10 +436,10 @@ void tile::setMap()
 			int index = (i + cullY) * _tileSize[0] + (j + cullX);
 			if (index >= _tileSize[0] * _tileSize[1])
 				continue;
+
 			if (PtInRect(&_vTile[index].rc, pt))
 			{
 				_dragTile = RectMake(_vTile[index].rc.left, _vTile[index].rc.top, TILESIZE, TILESIZE);
-				_nowIndex = index;
 				break;
 			}
 		}
@@ -483,7 +541,7 @@ void tile::loadMap(int num)
 			fileName = "dungeonEnterence.map";
 		}
 		if (_vTile.size() > 0)
-			_vTile.clear();
+			release();
 
 		file = CreateFile(fileName, GENERIC_READ, NULL, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -501,7 +559,7 @@ void tile::loadMap(int num)
 
 		CloseHandle(file);
 
-		_objectManager->load(_button->getType(),num);
+		_objectManager->load(_button->getType(), num);
 
 		_miniMap1->release();
 		_miniMap1->init(_tileSize[0], _tileSize[1]);
@@ -612,7 +670,7 @@ void tile::saveMap(int num)
 		WriteFile(file, tempTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &write, NULL);
 
 		CloseHandle(file);
-		_objectManager->save(_button->getType(),num);
+		_objectManager->save(_button->getType(), num);
 
 		_saveTime = 0;
 		_button->setType(BUTTON_TERRAIN);
