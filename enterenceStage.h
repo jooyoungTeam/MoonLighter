@@ -23,7 +23,7 @@ public:
 	void update();
 	void release();
 
-	void setPlayerLink(player* player) { _player = player; };
+	void setPlayerLink(player* player) { _player = player; }
 	void loadMap();
 	void renderMap();
 };

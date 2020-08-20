@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "enemyState.h"
+#include "item.h"
 #include "aStar.h"
 
 struct tagBar
@@ -11,6 +12,7 @@ struct tagBar
 	FloatRect middle;
 	FloatRect front;
 };
+
 enum BOSS_ANI
 {
 	ONE,
@@ -36,7 +38,7 @@ protected:
 	enemyState* _hit;
 	enemyState* _dead;
 	aStar* _aStar;
-
+	item*  _item;
 	ENEMYTYPE _type;
 	GOLEMDIR _golemDir;
 	POTDIR _potDir;

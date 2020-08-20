@@ -17,7 +17,6 @@ enum class BOSS_STAGE
 };
 
 class player;
-class boss;
 
 class UI : public gameNode
 {
@@ -55,7 +54,7 @@ private:
 	bool _bossHit;							//보스 맞을 때
 
 	player* _player;
-	boss* _boss;
+
 
 public:
 	UI() {}
@@ -67,7 +66,7 @@ public:
 	void release();
 
 	void setPlayerHpBar();
-	void setBossHpBar();
+	void setBossHpBar(int curHp);
 	void draw();
 	void setMoneyBag();
 
@@ -86,6 +85,5 @@ public:
 	//플레이어 참조용
 	void getPlayerMemoryAddressLink(player* player) { _player = player; }
 	//보스 참조용
-	void getBossMemoryAddressLink(boss* boss) { _boss = boss; }
 };
 

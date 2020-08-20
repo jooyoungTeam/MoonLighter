@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "UI.h"
 #include "player.h"
-#include "boss.h"
 
 HRESULT UI::init()
 {
@@ -151,11 +150,11 @@ void UI::update()
 		if (_bossStage == BOSS_STAGE::STAGE_START)
 		{
 			_bossCount = 0;
-			setBossHpBar();
-			if (_boss->getCurHP() != _boss->getSaveHP())
-			{
-				_bossHit = true;
-			}
+			//if (_boss->getCurHP() != _bossHp)
+			//{
+			//	_bossHit = true;
+			//	_bossHp = _boss->getCurHP();
+			//}
 		} 
 
 		if (_alpha <= 0) _alpha = 0;
@@ -172,10 +171,10 @@ void UI::setPlayerHpBar()
 	else _hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _backBar.GetWidth();
 }
 
-void UI::setBossHpBar()
+void UI::setBossHpBar(int curHp)
 {	
-	if (_boss->getCurHP() <= 0) _bossHpWidth = 0;
-	else _bossHpWidth = ((float)_boss->getCurHP() / 1000.f) * 1065;	
+	if (curHp <= 0) _bossHpWidth = 0;
+	else _bossHpWidth = ((float)curHp / 1000.f) * 1065;
 }
 
 void UI::setMoneyBag()

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "bossStage.h"
 #include "player.h"
+#include "UI.h"
 
 HRESULT bossStage::init()
 {
@@ -11,10 +12,19 @@ HRESULT bossStage::init()
 
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
+	_enemy->setItemManagerLink(_itemManager);
 	_enemy->setBoss();
-
 	_enemy->init();
 
+	for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
+	{
+		if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
+		{
+			_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
+			break;
+		}
+
+	}
 	loadMap();
 
 	//SOUNDMANAGER->play("bgm2", 1.0f);
@@ -48,6 +58,15 @@ void bossStage::update()
 		_player->update();
 		//_player->tileCollision(_attribute, _tile, BOSSTILEX);
 		_enemy->update();
+		for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
+		{
+			if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
+			{
+				_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
+				break;
+			}
+
+		}
 	}	
 	
 	CAMERAMANAGER->setXY(_player->getX(), _player->getY());

@@ -2,7 +2,7 @@
 #include "enemyManager.h"
 #include "player.h"
 #include "boss.h"
-
+#include "itemManager.h"
 
 enemyManager::enemyManager()
 {
@@ -108,9 +108,10 @@ void enemyManager::update()
 	bulletCol();
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-
 		if (_vEnemy[i]->getRealDead())
 		{
+			_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+			cout << " ddddd " << endl;
 			enemyDead(i);
 			break;
 		}
@@ -336,7 +337,6 @@ void enemyManager::playerCol()
 	{
 		_player->setPlayerCurrentHp(0);
 	}
-
 	//검충돌
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
@@ -366,22 +366,30 @@ void enemyManager::playerCol()
 		}
 
 		//활충돌
+
+		int idx = 0;
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
 		{
+			if (idx != i)
+			{
+				_player->getArrow()->arrowIsActive(j, true);
+			}
+			if (!_player->getArrow()->getVArrow()[j].isActive) continue;
 			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()))
 			{
-				cout << "몇대 맞음?" << endl;
-				_bowChange = true;
+				idx = i;
 
 				if (_player->getArrow()->getVArrow()[j].isPowerShot)
 				{
-					cout << " 강공격" << endl;
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
+					_player->getArrow()->arrowIsActive(j, false);
+					break;
 				}
 				else
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_player->getArrow()->playerRemoveArrow(j);
+					break;
 				}
 
 				if (_vEnemy[i]->getEnemyType() == ENEMY_BLUE_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_RED_SLIME || _vEnemy[i]->getEnemyType() == ENEMY_YELLOW_SLIME)
@@ -410,7 +418,6 @@ void enemyManager::playerCol()
 				_bossHit = false;
 			}
 		}
-
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack()
 			&& _player->getCurrectState() != _player->getRollState())
 		{
