@@ -674,79 +674,184 @@ void tile::autoTileType(int idx, TERRAIN type)
 	int _autoCalc = 0;
 	if (_vTile[idx].terrain == type)
 	{
-		if (_vTile[idx - _tileSize[0]].terrain == type) // 위쪽이 잔디
+		if (_vTile[idx - _tileSize[0]].terrain == type)         // 위쪽
 		{
 			_autoCalc += 1;
 		}
-		if (_vTile[idx + 1].terrain == type)
+		if (_vTile[idx + 1 - _tileSize[0]].terrain == type)     // 오른 위
 		{
 			_autoCalc += 2;
 		}
-		if (_vTile[idx + _tileSize[0]].terrain == type)
+		if (_vTile[idx + 1].terrain == type)				    // 오른
 		{
 			_autoCalc += 4;
 		}
-		if (_vTile[idx - 1].terrain == type)
+		if (_vTile[idx + 1 + _tileSize[0]].terrain == type)     // 오른 아래
 		{
 			_autoCalc += 8;
 		}
+		if (_vTile[idx + _tileSize[0]].terrain == type)         // 아래
+		{
+			_autoCalc += 16;
+		}
+		if (_vTile[idx - 1 + _tileSize[0]].terrain == type)     // 왼 아래
+		{
+			_autoCalc += 32;
+		}
+		if (_vTile[idx - 1].terrain == type)                     // 왼
+		{
+			_autoCalc += 64;
+		}
+		if (_vTile[idx - 1 - _tileSize[0]].terrain == type)      // 왼 위
+		{
+			_autoCalc += 128;
+		}
 
-		if (_autoCalc == 0)
+		if (_autoCalc == 255)
 		{
 			_vTile[idx].terrainFrameX = 8;
 		}
-		else if (_autoCalc == 1)
-		{
-			_vTile[idx].terrainFrameX = 3;
-		}
-		else if (_autoCalc == 2)
-		{
-			_vTile[idx].terrainFrameX = 1;
-		}
-		else if (_autoCalc == 4)
+		if (_autoCalc == 124)
 		{
 			_vTile[idx].terrainFrameX = 7;
 		}
-		else if (_autoCalc == 8)
+		if (_autoCalc == 241)
 		{
 			_vTile[idx].terrainFrameX = 5;
 		}
-		else if (_autoCalc == 3)
+		if (_autoCalc == 199)
 		{
-			_vTile[idx].terrainFrameX = 2;
+			_vTile[idx].terrainFrameX = 3;
 		}
-		else if (_autoCalc == 6)
+		if (_autoCalc == 31)
+		{
+			_vTile[idx].terrainFrameX = 1;
+		}
+		if (_autoCalc == 28)
 		{
 			_vTile[idx].terrainFrameX = 0;
 		}
-		else if (_autoCalc == 12)
+		if (_autoCalc == 112)
 		{
 			_vTile[idx].terrainFrameX = 6;
 		}
-		else if (_autoCalc == 9)
+		if (_autoCalc == 193)
 		{
 			_vTile[idx].terrainFrameX = 4;
 		}
-		else if (_autoCalc == 7)
+		if (_autoCalc == 7)
+		{
+			_vTile[idx].terrainFrameX = 2;
+		}
+
+		if (_autoCalc == 253)
+		{
+			_vTile[idx].terrainFrameX = 3;
+			_vTile[idx].terrainFrameY = 3;
+		}
+		if (_autoCalc == 247)
+		{
+			_vTile[idx].terrainFrameX = 0;
+			_vTile[idx].terrainFrameY = 3;
+		}
+		if (_autoCalc == 223)
 		{
 			_vTile[idx].terrainFrameX = 1;
+			_vTile[idx].terrainFrameY = 3;
 		}
-		else if (_autoCalc == 14)
+		if (_autoCalc == 127)
+		{
+			_vTile[idx].terrainFrameX = 4;
+			_vTile[idx].terrainFrameY = 3;
+		}
+		if (_autoCalc == 240)
+		{
+			_vTile[idx].terrainFrameX = 6;
+		}
+		if (_autoCalc == 225)
+		{
+			_vTile[idx].terrainFrameX = 4;
+		}
+
+		if (_autoCalc == 195)
+		{
+			_vTile[idx].terrainFrameX = 4;
+		}
+		if (_autoCalc == 135)
+		{
+			_vTile[idx].terrainFrameX = 2;
+		}
+		if (_autoCalc == 15)
+		{
+			_vTile[idx].terrainFrameX = 2;
+		}
+		if (_autoCalc == 30)
+		{
+			_vTile[idx].terrainFrameX = 0;
+		}
+
+		if (_autoCalc == 60)
+		{
+			_vTile[idx].terrainFrameX = 0;
+		}
+
+		if (_autoCalc == 120)
+		{
+			_vTile[idx].terrainFrameX = 6;
+		}
+
+		if (_autoCalc == 252)
 		{
 			_vTile[idx].terrainFrameX = 7;
 		}
-		else if (_autoCalc == 13)
-		{
-			_vTile[idx].terrainFrameX = 5;
-		}
-		else if (_autoCalc == 11)
+		if (_autoCalc == 231)
 		{
 			_vTile[idx].terrainFrameX = 3;
 		}
-
-		else if (_autoCalc == 15)
+		if (_autoCalc == 243)
 		{
-			_vTile[idx].terrainFrameX = 8;
+			_vTile[idx].terrainFrameX = 5;
+		}
+		if (_autoCalc == 159)
+		{
+			_vTile[idx].terrainFrameX = 1;
+		}
+		if (_autoCalc == 207)
+		{
+			_vTile[idx].terrainFrameX = 3;
+		}
+		if (_autoCalc == 126)
+		{
+			_vTile[idx].terrainFrameX = 7;
+		}
+
+		if (_autoCalc == 63)
+		{
+			_vTile[idx].terrainFrameX = 1;
+		}
+
+		if (_autoCalc == 249)
+		{
+			_vTile[idx].terrainFrameX = 5;
+		}
+
+		if (_autoCalc == 248)
+		{
+			_vTile[idx].terrainFrameX = 6;
+		}
+
+		if (_autoCalc == 227)
+		{
+			_vTile[idx].terrainFrameX = 4;
+		}
+
+		if (_autoCalc == 143)
+		{
+			_vTile[idx].terrainFrameX = 2;
+		}
+		if (_autoCalc == 62)
+		{
+			_vTile[idx].terrainFrameX = 0;
 		}
 	}
 
