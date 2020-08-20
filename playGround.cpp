@@ -136,6 +136,65 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
 
 
+	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
+
+	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
+	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
+	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
+	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
+	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
+	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
+	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
+	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
+	ImageManager::GetInstance()->AddImage("object_rock1", L"Object/objectRock1.png");
+	ImageManager::GetInstance()->AddImage("object_rock2", L"Object/objectRock2.png");
+	ImageManager::GetInstance()->AddImage("object_tile1", L"Object/object_Tile1.png");
+	ImageManager::GetInstance()->AddImage("object_tile2", L"Object/object_Tile2.png");
+	ImageManager::GetInstance()->AddImage("object_tile3", L"Object/object_Tile3.png");
+
+
+
+	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 35, 1);
+	ImageManager::GetInstance()->AddFrameImage("plant_fountain1", L"Object/plant_fountain1.png", 9, 1);
+	ImageManager::GetInstance()->AddFrameImage("Object_build_Bottom1", L"Object/Object_build_Bottom1.png", 53, 1);
+
+	ImageManager::GetInstance()->AddFrameImage("npc_1", L"Object/npc_1.png", 17, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_2", L"Object/npc_2.png", 54, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_3", L"Object/npc_3.png", 24, 1);
+	ImageManager::GetInstance()->AddFrameImage("npc_4", L"Object/npc_4.png", 49, 1);
+
+	ImageManager::GetInstance()->AddImage("objectDungeon1", L"Object/objectDungeon1.png");
+	ImageManager::GetInstance()->AddImage("objectDungeon2", L"Object/objectDungeon2.png");
+	ImageManager::GetInstance()->AddImage("object_skull1", L"Object/skull1.png");
+	ImageManager::GetInstance()->AddImage("object_skull2", L"Object/skull2.png");
+	ImageManager::GetInstance()->AddImage("object_skull3", L"Object/skull3.png");
+	ImageManager::GetInstance()->AddImage("object_pot", L"Object/pot.png");
+	ImageManager::GetInstance()->AddImage("object_pot_slime", L"Object/pot_slime.png");
+	ImageManager::GetInstance()->AddImage("object_pillar", L"Object/pillar.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock", L"Object/smallRock.png");
+	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
+	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
+	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
+	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
+	ImageManager::GetInstance()->AddImage("objectTile4", L"Object/objectTile4.png");
+	ImageManager::GetInstance()->AddImage("objectTile5", L"Object/objectTile5.png");
+	ImageManager::GetInstance()->AddImage("objectTile6", L"Object/objectTile6.png");
+	ImageManager::GetInstance()->AddImage("objectTile7", L"Object/objectTile7.png");
+	ImageManager::GetInstance()->AddImage("objectTile8", L"Object/objectTile8.png");
+	ImageManager::GetInstance()->AddImage("objectTile9", L"Object/objectTile9.png");
+	ImageManager::GetInstance()->AddImage("objectTile10", L"Object/objectTile10.png");
+	ImageManager::GetInstance()->AddImage("objectTile11", L"Object/objectTile11.png");
+	ImageManager::GetInstance()->AddImage("objectTile12", L"Object/objectTile12.png");
+	ImageManager::GetInstance()->AddImage("rock1", L"Object/rock1.png");
+	ImageManager::GetInstance()->AddImage("rock2", L"Object/rock2.png");
+	ImageManager::GetInstance()->AddImage("rock3", L"Object/rock3.png");
+	ImageManager::GetInstance()->AddImage("rock4", L"Object/rock4.png");
+	ImageManager::GetInstance()->AddImage("rock5", L"Object/rock5.png");
+	ImageManager::GetInstance()->AddImage("root1", L"Object/root1.png");
+	ImageManager::GetInstance()->AddImage("root2", L"Object/root2.png");
+
+
 
 	//===========================================↓↓아이템↓↓===========================================//
 	ImageManager::GetInstance()->AddImage("slime_red", L"Image/Item/slime_jelly.png");
@@ -199,6 +258,60 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("price_cursor", L"Image/UI/select_price.png");
 	ImageManager::GetInstance()->AddImage("hit_screen", L"Image/UI/player_hit_screen.png");
 	ImageManager::GetInstance()->AddImage("UI_gold", L"Image/UI/UI_gold.png");
+
+	//=======================================에너미==============================
+	//레드 슬라임
+	ImageManager::GetInstance()->AddFrameImage("redSlime", L"image/enemy/slimeIlde.png", 10, 1);
+	ImageManager::GetInstance()->AddFrameImage("redSlimeJump", L"image/enemy/slimeJump.png", 12, 1);
+	ImageManager::GetInstance()->AddFrameImage("redSlimeDead", L"image/enemy/slimeDead.png", 11, 1);
+	ImageManager::GetInstance()->AddFrameImage("slimeAttack", L"image/enemy/slimeAttack.png", 8, 1);
+
+	//블루 슬라임
+	ImageManager::GetInstance()->AddFrameImage("blueSlime", L"image/enemy/blueSlime.png", 8, 1);
+	ImageManager::GetInstance()->AddFrameImage("blueSlimeDead", L"image/enemy/blueSlimeDead.png", 11, 1);
+
+	//옐로 슬라임
+	ImageManager::GetInstance()->AddFrameImage("yellowSlime", L"image/enemy/yellowSlime.png", 8, 1);
+	ImageManager::GetInstance()->AddFrameImage("yellowSlimeDead", L"image/enemy/yellowSlimeDead.png", 11, 1);
+	ImageManager::GetInstance()->AddFrameImage("yellowSlimePang", L"image/enemy/yellowSlime_pang.png", 7, 1);
+
+	//팟
+	ImageManager::GetInstance()->AddFrameImage("bulletCollision", L"image/enemy/bullet_collision.png", 5, 1);
+	ImageManager::GetInstance()->AddFrameImage("bullet", L"image/enemy/enemy_bullet.png", 6, 1);
+	ImageManager::GetInstance()->AddFrameImage("pot", L"image/enemy/pot.png", 11, 4);
+	ImageManager::GetInstance()->AddFrameImage("potDead", L"image/enemy/potDead.png", 18, 1);
+	EFFECTMANAGER->addEffect("bulletCollision", "bulletCollision", 90, 18, 18, 18, 1.0f, 0.2f, 10.0f, 1.5f);
+
+	//골렘
+	ImageManager::GetInstance()->AddFrameImage("golemAttack", L"image/enemy/GolemAttack.png", 13, 4);
+	ImageManager::GetInstance()->AddFrameImage("golem", L"image/enemy/GolemMove.png", 8, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemAttackRed", L"image/enemy/GolemAttack_Red.png", 13, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemAttackWhite", L"image/enemy/GolemAttack_White.png", 13, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemRed", L"image/enemy/GolemMove_Red.png", 8, 4);
+	ImageManager::GetInstance()->AddFrameImage("golemWhite", L"image/enemy/GolemMove_White.png", 8, 4);
+
+
+	//보스
+	ImageManager::GetInstance()->AddFrameImage("BossUp", L"image/enemy/BossUp.png", 32, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossHit", L"image/enemy/dead1.png", 41, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossDead", L"image/enemy/dead2.png", 41, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossHandCome", L"image/enemy/Hand_Shoot_Last.png", 11, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossAttack", L"image/enemy/attack.png", 7, 1);
+	ImageManager::GetInstance()->AddFrameImage("boss", L"image/enemy/idleBoss.png", 2, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossAttackIdle", L"image/enemy/attackIdle.png", 2, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossHand", L"image/enemy/hand.png", 19, 1);
+	ImageManager::GetInstance()->AddFrameImage("bossHandFly", L"image/enemy/FistShoot.png", 22, 3);
+	ImageManager::GetInstance()->AddImage("Boss_Rock0", L"image/enemy/Boss_Rock0.png");
+	ImageManager::GetInstance()->AddImage("Boss_Rock1", L"image/enemy/Boss_Rock1.png");
+	ImageManager::GetInstance()->AddImage("Boss_Rock2", L"image/enemy/Boss_Rock2.png");
+	ImageManager::GetInstance()->AddImage("Boss_Rock3", L"image/enemy/Boss_Rock3.png");
+	ImageManager::GetInstance()->AddFrameImage("bossLong", L"image/enemy/long.png", 6, 1);
+
+
+	ImageManager::GetInstance()->AddImage("shadow", L"image/enemy/Shadow.png");
+	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
+	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
+	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png", 16, 1);
 }
 
 void playGround::cursor()

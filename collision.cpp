@@ -229,6 +229,8 @@ namespace TTYONE_UTIL
 		return true;
 	}
 
+
+
 	
 	bool isCollisionReaction(const MYRECT& mrcHold, MYRECT& mrcMove)
 	{

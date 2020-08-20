@@ -29,6 +29,7 @@ private:
 	int _bowCount;
 	bool _bowChange;
 	bool _playerStop;
+	bool _bossHit;
 
 
 
@@ -53,6 +54,7 @@ public:
 	FloatRect getPlayerRc() { return _rc; }
 	void setPlayerLink(player* player) { _player = player; }
 	bool getPlayerStop() { return _playerStop; }
+	bool getBossHit() { return _bossHit; }
 
 	vector<enemy*> _getVEnemy() { return _vEnemy; }
 };

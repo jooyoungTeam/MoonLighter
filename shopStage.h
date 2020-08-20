@@ -26,6 +26,7 @@ private:
 	// =============== 기본 ===============f
 	Image* _backGround;				// 배경 이미지
 	Image* _celler;					// 판매원 이미지
+	FloatRect _interactionRC;		// 상호작용 렉트
 	class player* _player;			// 플레이어
 	float _cellerFrameTimer;
 	int	  _cellerIndex;
@@ -55,7 +56,7 @@ private:
 	bool  _isMaxNpc;
 
 	vector<POINT> _unMoveTile;
-
+	
 
 
 	DWORD             _attribute[SHOPTILEX * SHOPTILEY];
@@ -81,7 +82,7 @@ public:
 
 public:
 	//============================ Get ===========================
-
+	FloatRect getInteractionRC() { return _interactionRC; }
 public:
 	//============================ Set ===========================
 	void setPlayerLink(player* player) { _player = player; };

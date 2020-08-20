@@ -12,7 +12,7 @@ HRESULT dungeonStage2::init()
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
 
-	_enemy->setEnemy1();
+	_enemy->setEnemy2();
 	_enemy->init();
 
 

@@ -59,14 +59,6 @@ private:
 	bool				_deadState;							//캐릭터 죽은상태
 	bool                _transForm;							//온천 변신상태
 	bool				_playerMoveTrap;					//플레이어가 레드슬라임한테 잡힌상태
-	bool				_tileColLeft;						//타일 충돌 상태인지
-	bool				_tileColRight;						//타일 충돌 상태인지
-	bool				_tileColTop;						//타일 충돌 상태인지
-	bool				_tileColBottom;						//타일 충돌 상태인지
-	bool				_tileColLeftTop;					//타일 충돌 상태인지
-	bool				_tileColRightTop;					//타일 충돌 상태인지
-	bool				_tileColLeftBottom;					//타일 충돌 상태인지
-	bool				_tileColRightBottom;				//타일 충돌 상태인지
 	//플레이어 상태 정의
 	playerState*	    _idle;
 	playerState*	    _walk;
@@ -129,14 +121,6 @@ public:
 	bool getColVoid() { return _colVoid; }
 	bool getDeadState() { return _deadState; }
 	bool getPlayerMoveTrap() { return _playerMoveTrap; }
-	bool getTileColLeft() { return _tileColLeft; }
-	bool getTileColTop() { return _tileColTop; }
-	bool getTileColRight() { return _tileColRight; }
-	bool getTileColBottom() { return _tileColBottom; }
-	bool getTileColLeftTop() { return _tileColLeftTop; }
-	bool getTileColRightTop() { return _tileColRightTop; }
-	bool getTileColLeftBottom() { return _tileColLeftBottom; }
-	bool getTileColRightBottom() { return _tileColRightBottom; }
 	bool getTransform() { return _transForm; }
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
