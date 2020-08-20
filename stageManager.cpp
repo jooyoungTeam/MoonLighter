@@ -18,9 +18,9 @@ HRESULT stageManager::init()
 	_dungeon2 = new dungeonStage2;
 	_spa = new spaStage;
 	_enterence = new enterenceStage;
+	_b = new boss;
 
 	_ui->getPlayerMemoryAddressLink(_player);
-	//_ui->getBossMemoryAddressLink(_boss);
 	INVENTORY->getPlayerMemoryAddressLink(_player);
 
 	SCENEMANAGER->addScene("Å¸ÀÌÆ²¾À", new title);
@@ -54,12 +54,17 @@ void stageManager::render()
 	
 	if (SCENEMANAGER->getCurrentScene() != "Å¸ÀÌÆ²¾À" && SCENEMANAGER->getCurrentScene() != "Å¸ÀÏ¾À")
 	{
-		//UI¹Ø¹ÙÅÁ
-		if (!_town->getIsPotionShop()) ImageManager::GetInstance()->FindImage("UI_base")->Render(Vector2(0, 0));
+		if (!_town->getIsPotionShop()) 
+		{
+			_ui->render();
+		}
 		ImageManager::GetInstance()->FindImage("UI_gold")->Render(Vector2(0, 0));
+		//µ·ÁÖ¸Ó´Ï
+		ImageManager::GetInstance()->FindImage("moneyBag")->FrameRender(Vector2(90, 88), 0, _ui->getMonveBagFrame());
+		//¼ÒÁö±Ý
+		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
 
 		_itemMg->render();
-		_ui->render();
 		if (INVENTORY->getIsInven()) INVENTORY->render(); 
 	}
 }
@@ -93,6 +98,11 @@ void stageManager::update()
 			INVENTORY->setIsInven(true);
 			_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
 			INVENTORY->setState(INVEN_STATE::SHOP);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown('E'))
+		{
+			INVENTORY->usePotion();
 		}
 
 		if (_player->getDeadState())
@@ -155,6 +165,17 @@ void stageManager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		SCENEMANAGER->changeScene("º¸½º¾À");
+
+		for (int i = 0; i < _boss->getEnemyManager()->_getVEnemy().size(); ++i)
+		{
+			if (_boss->getEnemyManager()->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
+			{
+				_b = dynamic_cast<boss*>(_boss->getEnemyManager()->_getVEnemy()[i]);
+
+				_ui->getBossMemoryAddressLink(_b);
+				break;
+			}
+		}
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{

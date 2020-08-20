@@ -2,7 +2,9 @@
 #include "gameNode.h"
 enum OBJECT
 {
-	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT, OBJ_NPC, OBJ_SPA, OBJ_DUN1, OBJ_DUN2,
+	OBJ_HOUSE, OBJ_ARCHITECTURE, OBJ_DOOR, OBJ_PLANT, OBJ_NPC,
+	OBJ_SPA, OBJ_DUN1, OBJ_DUN2, OBJ_ROCK1, OBJ_ROCK2, OBJ_TILE1,
+	OBJ_TILE2, OBJ_TILE3,
 	OBJ_NONE,
 };
 
@@ -33,6 +35,10 @@ private:
 	bool               _isSelectObject;         //잡고있는지
 	RECT               _leftRightButton[2];
 	tagSampleObject    _sampleObject[4];		//팔레트에 보여지는 오브젝트
+
+	const char* str[OBJ_NONE] = { "objectHouse","objectArchitecture" ,"objectDoor","objectPlant","objectNPC",
+	"objectSpa","objectDungeon1","objectDungeon2","object_rock1", "object_rock2","object_tile1",
+	"object_tile2",	"object_tile3" };
 
 public:
 	objectManager() {}

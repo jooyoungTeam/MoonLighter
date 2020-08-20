@@ -102,7 +102,7 @@ HRESULT inventory::init()
 	_mirrorBallFrameX = 0;
 	_saleFrameX = 0;
 
-	_gold = 1000;
+	_gold = 0;
 	_select = 0;
 	_selectCount = 4;
 
@@ -877,3 +877,20 @@ void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, 
 	}
 }
 //===========================================↑↑포션 만들기↑↑===========================================//
+
+
+//===========================================↓↓포션 쓰기↓↓===========================================//
+void inventory::usePotion()
+{
+	if (_gear[4].item != nullptr)
+	{
+		_gear[4].count--;
+
+		_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + INVENTORY->getPotion().item->getFillHp());
+		if (_player->getplayerCurrentHp() + _gear[4].item->getFillHp() >= _player->getPlayerMaxHp())
+			_player->setPlayerCurrentHp(_player->getPlayerMaxHp());
+
+		if (_gear[4].count <= 0) _gear[4].item = nullptr;
+	}	
+}
+//===========================================↑↑포션 쓰기↑↑===========================================//

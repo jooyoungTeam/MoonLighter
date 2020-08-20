@@ -466,6 +466,13 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
 	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
 	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
+	ImageManager::GetInstance()->AddImage("object_rock1", L"Object/objectRock1.png");
+	ImageManager::GetInstance()->AddImage("object_rock2", L"Object/objectRock2.png");
+	ImageManager::GetInstance()->AddImage("object_tile1", L"Object/object_Tile1.png");
+	ImageManager::GetInstance()->AddImage("object_tile2", L"Object/object_Tile2.png");
+	ImageManager::GetInstance()->AddImage("object_tile3", L"Object/object_Tile3.png");
+
+
 
 	ImageManager::GetInstance()->AddFrameImage("plant_tree1", L"Object/plant_tree1.png", 35, 1);
 	ImageManager::GetInstance()->AddFrameImage("plant_tree2", L"Object/plant_tree2.png", 35, 1);
@@ -487,6 +494,25 @@ void tile::imageLoad()
 	ImageManager::GetInstance()->AddImage("object_pillar", L"Object/pillar.png");
 	ImageManager::GetInstance()->AddImage("object_smallRock", L"Object/smallRock.png");
 	ImageManager::GetInstance()->AddImage("object_smallRock_slime", L"Object/smallRock_slime.png");
+	ImageManager::GetInstance()->AddImage("objectTile1", L"Object/objectTile1.png");
+	ImageManager::GetInstance()->AddImage("objectTile2", L"Object/objectTile2.png");
+	ImageManager::GetInstance()->AddImage("objectTile3", L"Object/objectTile3.png");
+	ImageManager::GetInstance()->AddImage("objectTile4", L"Object/objectTile4.png");
+	ImageManager::GetInstance()->AddImage("objectTile5", L"Object/objectTile5.png");
+	ImageManager::GetInstance()->AddImage("objectTile6", L"Object/objectTile6.png");
+	ImageManager::GetInstance()->AddImage("objectTile7", L"Object/objectTile7.png");
+	ImageManager::GetInstance()->AddImage("objectTile8", L"Object/objectTile8.png");
+	ImageManager::GetInstance()->AddImage("objectTile9", L"Object/objectTile9.png");
+	ImageManager::GetInstance()->AddImage("objectTile10", L"Object/objectTile10.png");
+	ImageManager::GetInstance()->AddImage("objectTile11", L"Object/objectTile11.png");
+	ImageManager::GetInstance()->AddImage("objectTile12", L"Object/objectTile12.png");
+	ImageManager::GetInstance()->AddImage("rock1", L"Object/rock1.png");
+	ImageManager::GetInstance()->AddImage("rock2", L"Object/rock2.png");
+	ImageManager::GetInstance()->AddImage("rock3", L"Object/rock3.png");
+	ImageManager::GetInstance()->AddImage("rock4", L"Object/rock4.png");
+	ImageManager::GetInstance()->AddImage("rock5", L"Object/rock5.png");
+	ImageManager::GetInstance()->AddImage("root1", L"Object/root1.png");
+	ImageManager::GetInstance()->AddImage("root2", L"Object/root2.png");
 
 
 }
@@ -819,6 +845,7 @@ TERRAIN tile::terrainSelect(int frameX, int frameY)
 
 		// 여섯번째 줄
 		if (frameX == i && frameY == 5) return TR_POS;
+		if (frameX == i && frameY == 6) return TR_WALL;
 	}
 
 	return TR_NONE;
