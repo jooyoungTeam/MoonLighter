@@ -46,7 +46,6 @@ private:
 	int _bossFrameY;						//보스HP바 프레임Y
 	int _scrollFrameY;						//스크롤 프레임Y
 	int _moneyFrameY;						//돈주머니 프레임Y
-	int _bossHp;
 
 	float _hpWidth;							//플레이어 체력바 너비
 	float _bossHpWidth;						//보스 체력바 너비

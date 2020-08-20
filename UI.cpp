@@ -30,7 +30,6 @@ HRESULT UI::init()
 
 	_alpha = 1.f;
 	_bossHpWidth = 0;
-	_bossHp = 1000;
 
 	_isHit = false;
 	_bossHit = false;
@@ -153,10 +152,9 @@ void UI::update()
 		{
 			_bossCount = 0;
 			setBossHpBar();
-			if (_boss->getCurHP() != _bossHp)
+			if (_boss->getCurHP() != _boss->getSaveHP())
 			{
 				_bossHit = true;
-				_bossHp = _boss->getCurHP();
 			}
 		} 
 
