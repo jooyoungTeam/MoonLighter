@@ -338,7 +338,6 @@ void playerIdleState::update(player & player)
 		{
 			if (KEYMANAGER->isOnceKeyDown('J'))
 			{
-				if(!SOUNDMANAGER->isPlaySound("Sword"))
 				SOUNDMANAGER->play("Sword", 1.0f);
 				player.setSwordAttack(true);
 				player.setAttackRcbool(true);
@@ -1091,7 +1090,6 @@ void playerWalkState::update(player & player)
 		{
 			if (KEYMANAGER->isOnceKeyDown('J'))
 			{
-				if (!SOUNDMANAGER->isPlaySound("Sword"))
 				SOUNDMANAGER->play("Sword", 1.0f);
 				player.setSwordAttack(true);
 
@@ -1838,7 +1836,6 @@ void playerSwordState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
-			if (SOUNDMANAGER->isPlaySound("Sword"))
 			SOUNDMANAGER->play("Sword", 1.0f);
 			player.setSwrodAttackCombo(true);
 		}
