@@ -113,27 +113,8 @@ void stageManager::uiUpdate()
 			}
 			INVENTORY->popInven();
 		}
-
-		_itemMg->update();
-		_ui->update();
-
-		RECT temp;
-
-		for (int i = 0; i < _itemMg->getVItem().size(); ++i)
-		{
-			_itemMg->getVItem()[i]->update();
-			_itemMg->getVItem()[i]->follow(_player->getPlayerRc());
-
-			if (!_player->getDeadState() &&
-				IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_itemMg->getVItem()[i]->getRc().GetRect()))
-			{
-				if (INVENTORY->putItem(_itemMg->getVItem()[i]))
-				{
-					_itemMg->erase(i);
-				}
-				return;
-			}
-		}
+		_itemMg->update(_player);
+		_ui->update();		
 	}
 
 }

@@ -13,7 +13,7 @@ public:
 
 	HRESULT init();
 	void release();
-	void update();
+	void update(player* player);
 	void render();
 
 	void setItem(ITEMBUNDLE bundle, float x, float y);

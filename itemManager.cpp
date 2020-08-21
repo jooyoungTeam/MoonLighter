@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "itemManager.h"
+#include "player.h"
 
 HRESULT itemManager::init()
 {
@@ -14,11 +15,24 @@ void itemManager::render()
 	}
 }
 
-void itemManager::update()
+void itemManager::update(player* player)
 {
+	RECT temp;
+
 	for (int i = 0; i < _vItem.size(); ++i)
 	{
 		_vItem[i]->update();
+		_vItem[i]->follow(player->getPlayerRc());
+
+		if (!player->getDeadState() &&
+			IntersectRect(&temp, &player->getPlayerRc().GetRect(), &_vItem[i]->getRc().GetRect()))
+		{
+			if (INVENTORY->putItem(_vItem[i]))
+			{
+				erase(i);
+			}
+			return;
+		}
 	}
 }
 
