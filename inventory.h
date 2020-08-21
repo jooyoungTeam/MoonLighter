@@ -163,6 +163,15 @@ public:
 		_shop[index].originalPrice = 0;
 		_shop[index].price = 0;
 		_shop[index].totalPrice = 0;
+
+		//쇼케이스가 비게 되면 가격 초기화
+		for (int i = 0; i < PRICESPACE; i++)
+		{
+			if (index == 0) _firstPrice[i].count = 0;
+			if (index == 2) _secondPrice[i].count = 0;
+			if (index == 4) _thirdPrice[i].count = 0;
+			if (index == 6) _fourthPrice[i].count = 0;
+		}		
 	}					
 
 	int countOfItem(int index)										//포션 개수 세는 함수

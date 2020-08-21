@@ -15,6 +15,7 @@ private:
 	Image*             _mapImg;
 					   
 	DWORD              _attribute[DUNTILEX * DUNTILEY];
+	int                _doorIndex[2];
 	tagTile			   _tile[DUNTILEX * DUNTILEY];
 	objectManager*     _objectManager;
 	class itemManager* _itemManager;

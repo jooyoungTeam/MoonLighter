@@ -8,6 +8,7 @@ HRESULT spaStage::init()
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
 
 	_objectManager = new objectManager;
+	_objectManager->setIsDoorOpen(true);
 	loadMap();
 
 	_maxHp = 100;
