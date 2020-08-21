@@ -451,7 +451,7 @@ void enemy::checkBoolCount()
 			_saveHP--;
 		}
 	}
-	if (_isHitCount > 30)
+	if (_isHitCount > 20)
 	{
 		_isHit = false;
 		_isHitCount = 0;

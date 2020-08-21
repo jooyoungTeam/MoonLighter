@@ -5,7 +5,7 @@
 void golem::render()
 {
 	_aStar->render();
-	CAMERAMANAGER->render(_shadow, _shadowRc.left, _shadowRc.top, 0.4f);
+	CAMERAMANAGER->zOrderRender(_shadow, _shadowRc.left, _shadowRc.top,_z - 100, 0.4f,1.0f);
 	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 1.5f);
 	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, _barAlpha);
 	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, _barAlpha);
@@ -176,6 +176,7 @@ void golem::dead()
 
 void golem::enemyHit()
 {
+	cout << _hitCount << endl;
 	if (_state == _idle && _isHit)
 	{
 		_img = ImageManager::GetInstance()->FindImage("golemRed");

@@ -79,6 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
+	_bossPattern = ARM_LONG;
 	if (_isPlayerHit)
 	{
 		_hitTimer++;
@@ -628,8 +629,8 @@ void boss::attack2_1()
 	if (!_attack2.isAttack)
 	{
 		_attack2.angle = 360 - getAngle((_leftTop.x + _rightTop.x) / 2, (_leftTop.y + _rightTop.y) / 2, (_leftBottom.x + _rightBottom.x) / 2, (_leftBottom.y + _rightBottom.y) / 2) * 180 / PI - 90;
-		_leftBottom.x += 14.5;
-		_rightBottom.x += 14.5;
+		_leftBottom.x += 25.f;
+		_rightBottom.x += 25.f;
 
 
 		if (_leftBottom.x > 3000)
@@ -640,8 +641,8 @@ void boss::attack2_1()
 	if (_attack2.isAttack)
 	{
 		_attack2.angle = 360 - getAngle((_leftTop.x + _rightTop.x) / 2, (_leftTop.y + _rightTop.y) / 2, (_leftBottom.x + _rightBottom.x) / 2, (_leftBottom.y + _rightBottom.y) / 2) * 180 / PI - 90;
-		_leftBottom.x -= 14.5;
-		_rightBottom.x -= 14.5;
+		_leftBottom.x -= 25.f;
+		_rightBottom.x -= 25.f;
 
 		if (_leftBottom.x < 300)
 		{
