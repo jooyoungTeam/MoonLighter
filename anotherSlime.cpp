@@ -34,9 +34,9 @@ void anotherSlime::attack()
 
 
 
-		if (((getDistance(_x, _y, _pX, _pY)) < 200) && _type == ENEMY_YELLOW_SLIME && !_once)
+		if (((getDistance(_x, _y, _pX, _pY)) < 50) && _type == ENEMY_YELLOW_SLIME && !_once)
 		{
-			_yRandom = RND->getFromIntTo(0, 30);
+			_yRandom = RND->getFromIntTo(0, 10);
 			if (_yRandom == 4)
 			{
 				_img = ImageManager::GetInstance()->FindImage("yellowSlimePang");
@@ -45,7 +45,7 @@ void anotherSlime::attack()
 				_motion->start();
 				_once = true;
 				_pang = true;
-				//SOUNDMANAGER->play("½½¶óÀÓÆã", 1.0f);
+				SOUNDMANAGER->play("½½¶óÀÓÆã", 1.0f);
 
 				if (!_isPlayerHit)
 				{
@@ -58,7 +58,7 @@ void anotherSlime::attack()
 	}
 	else
 	{
-		if (!KEYANIMANAGER->findAnimation("yellowSlimePang")->isPlay())
+		if (!_motion->isPlay())
 		{
 			_realDead = true;
 		}

@@ -165,17 +165,17 @@ void enemyManager::render()
 
 void enemyManager::setEnemy1()
 {
-	enemy* gol1;
-	gol1 = new golem;
-	//gol1->playerCheck(_x, _y, _rc);
-	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol1);
+	//enemy* gol1;
+	//gol1 = new golem;
+	////gol1->playerCheck(_x, _y, _rc);
+	//gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol1);
 
-	enemy* gol12;
-	gol12 = new golem;
-	//gol12->playerCheck(_x, _y, _rc);
-	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol12);
+	//enemy* gol12;
+	//gol12 = new golem;
+	////gol12->playerCheck(_x, _y, _rc);
+	//gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;
@@ -207,12 +207,12 @@ void enemyManager::setEnemy1()
 	pot3->setPotDirection(POT_TOP);
 	_vEnemy.push_back(pot3);
 
-	enemy* gost;
-	gost = new pot;
-	//gost->playerCheck(_x, _y, _rc);
-	gost->init(-300, -300, 50, 50, ENEMY_POT);
-	gost->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(gost);
+	//enemy* gost;
+	//gost = new pot;
+	////gost->playerCheck(_x, _y, _rc);
+	//gost->init(-300, -300, 50, 50, ENEMY_POT);
+	//gost->setPotDirection(POT_RIGHT);
+	//_vEnemy.push_back(gost);
 
 
 }
@@ -291,7 +291,7 @@ void enemyManager::potBullet()
 	_bulletDelay = 0;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+		if (_vEnemy[i]->getEnemyType() == ENEMY_POT && _vEnemy[i]->getState() != _vEnemy[i]->getDead())
 		{
 			if (_vEnemy[i]->getPotDirection() == POT_LEFT)
 			{
@@ -490,7 +490,9 @@ void enemyManager::playerCol()
 			_player->setEnemyCol(true);
 		}
 		RECT tempRc = _player->getShadowRc().GetRect();
-		if (b->playerStop(tempRc))
+
+		//cout<< _vEnemy[i]->getIsRockBottom() << endl;
+		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom())
 		{
 			float x = (tempRc.right + tempRc.left) * 0.5f;
 			float y = (tempRc.bottom + tempRc.top) * 0.5f;
@@ -510,7 +512,7 @@ void enemyManager::bulletCol()
 	{
 		for (int j = 0; j < _vEnemy.size(); ++j)
 		{
-			if (_vEnemy[j]->getEnemyType() == ENEMY_POT)
+			if ((_vEnemy[j]->getEnemyType() == ENEMY_POT))
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
 					&& _player->getCurrectState() != _player->getRollState())
@@ -531,13 +533,6 @@ void enemyManager::bulletCol()
 
 					_bullet->remove(i);
 				}
-
-
-				/*if (((attribute[tileIndex[i]] & ATTR_UNMOVE) == ATTR_UNMOVE) && isCollisionReaction(tile[tileIndex[i]].rc, rc))
-				{
-					_playerShadowX = (rc.left + rc.right) / 2;
-					_playerShadowY = (rc.top + rc.bottom) / 2;
-				}*/
 			}
 
 			if (_vEnemy[j]->getEnemyType() == ENEMY_BOSS)
@@ -568,5 +563,4 @@ void enemyManager::enemyDead(int arr)
 {
 	_vEnemy[arr]->release();
 	_vEnemy.erase(_vEnemy.begin() + arr);
-
 }
