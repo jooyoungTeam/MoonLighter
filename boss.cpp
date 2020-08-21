@@ -42,43 +42,44 @@ void boss::render()
 {
 	CAMERAMANAGER->zOrderAniRender(_img, _x, _y, _z, _motion, 2.5f);
 
-	//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
-	for (int i = 0; i < 17; ++i)
+	if (_state == _attack)
 	{
-		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock0"), _attack3Rc[i].rc.left, _attack3Rc[i].rc.top, _attack3Rc[i].rc.bottom, _attack3Rc[i].alpha, 1.5f);
-		CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock1"), _attack3Rc2[i].rc.left, _attack3Rc2[i].rc.top, _attack3Rc2[i].rc.bottom, _attack3Rc2[i].rockAlpha, 1.5f);
-
-		if (_attack3Rc2[i].rackFall)
+		//CAMERAMANAGER->fillRectangle(_rc, D2D1::ColorF::Tomato, 0.7f);
+		for (int i = 0; i < 17; ++i)
 		{
-			CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
+			CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock0"), _attack3Rc[i].rc.left, _attack3Rc[i].rc.top, _attack3Rc[i].rc.bottom, _attack3Rc[i].alpha, 1.5f);
+			CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock1"), _attack3Rc2[i].rc.left, _attack3Rc2[i].rc.top, _attack3Rc2[i].rc.bottom, _attack3Rc2[i].rockAlpha, 1.5f);
+
+			if (_attack3Rc2[i].rackFall)
+			{
+				CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
+			}
+			//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
+			CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
 		}
-		//CAMERAMANAGER->fillRectangle(_attack3Rc2[i].attackRc, D2D1::ColorF::Tomato, 1.0f);
-		CAMERAMANAGER->fillRectangle(_attack3Rc[i].rc, D2D1::ColorF::Tomato, 1.0f);
+		//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
+		//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
+		CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
+		_attack1.img->SetScale(2.5f);
+		CAMERAMANAGER->frameRender(_effectImage, _eX, _eY - 80, _index, 0);
+		//CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
+
+		CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index, 0, 2.5f, 1.0f);
+		_attack2.img->SetAngle(_attack2.angle);
+		//CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
+		//CAMERAMANAGER->line(_leftTop, _rightTop, D2D1::ColorF::Black, 2.0f);
+		//CAMERAMANAGER->line(_rightTop, _rightBottom, D2D1::ColorF::Black, 2.0f);
+		//CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
+		//CAMERAMANAGER->line(_leftBottom, _leftTop, D2D1::ColorF::Black, 2.0f);
+
+
 	}
-	//CAMERAMANAGER->fillRectangle(_attackRc,  D2D1::ColorF::Tomato, 1.0f);
-	//CAMERAMANAGER->fillRectangle(_attack1.attackRc, D2D1::ColorF::Tomato, 1.0f);
-	CAMERAMANAGER->frameRender(_attack1.img, _attack1.x, _attack1.y, _attack1.index, 0);
-	_attack1.img->SetScale(2.5f);
-	CAMERAMANAGER->frameRender(_effectImage, _eX, _eY - 80, _index, 0);
-	//CAMERAMANAGER->zOrderFrameRender(_effectImage, _eX, _eY - 80, _eY - 120, _index, 0, 1.0f, 1.0f);
-
-	CAMERAMANAGER->zOrderFrameRender(_attack2.img, _attack2.x, _attack2.y, _leftBottom.y + 300, _attack2.index, 0, 2.5f, 1.0f);
-	_attack2.img->SetAngle(_attack2.angle);
-	//CAMERAMANAGER->fillRectangle(_attackRc, D2D1::ColorF::Tomato,0.4f);
-	//CAMERAMANAGER->line(_leftTop, _rightTop, D2D1::ColorF::Black, 2.0f);
-	//CAMERAMANAGER->line(_rightTop, _rightBottom, D2D1::ColorF::Black, 2.0f);
-	//CAMERAMANAGER->line(_rightBottom, _leftBottom, D2D1::ColorF::Black, 2.0f);
-	//CAMERAMANAGER->line(_leftBottom, _leftTop, D2D1::ColorF::Black, 2.0f);
-
-	CAMERAMANAGER->fillRectangle(_bar.back, D2D1::ColorF::DimGray, 1.0f);
-	CAMERAMANAGER->fillRectangle(_bar.middle, D2D1::ColorF::LightSalmon, 1.0f);
-	CAMERAMANAGER->fillRectangle(_bar.front, D2D1::ColorF::Tomato, 1.0f);
-
 	EFFECTMANAGER->render();
 }
 
 void boss::attack()
 {
+	_bossPattern = ARM_LONG;
 	//_bossPattern = PLAYER_PULL;
 //	_bossPattern = ARM_LONG;
 	//_bossPattern = PLAYER_PULL;
@@ -671,6 +672,7 @@ void boss::attack2_1()
 
 void boss::attack3_1()
 {
+	//cout << _isRockBottom << endl;
 	for (int i = 0; i < 17; ++i)
 	{
 		if (!_attack3Rc[i].rackFall)
@@ -688,10 +690,10 @@ void boss::attack3_1()
 			if (_attack3Rc[i].mY >= _attack3Rc[i].y)
 			{
 				_attackTimer++;
-				if (_attackTimer < 100)
+				if (_attackTimer < 130)
 				{
-					if (_attack3Rc[6].mY >= _attack3Rc[6].y)
-						_isRockBottom = true;
+					//cout << "ต้" << endl;
+					_isRockBottom = true;
 				}
 				else
 				{
@@ -765,7 +767,7 @@ void boss::attack3_2()
 				_attackTimer++;
 				if (_attackTimer < 100)
 				{
-					if (_attack3Rc[0].mY >= _attack3Rc[i].y)
+					if (_attack3Rc[0].mY >= _attack3Rc[0].y)
 					{
 						_isRockBottom = true;
 
@@ -920,7 +922,7 @@ bool boss::playerCol()
 	RECT temp;
 	for (int i = 0; i < 17; i++)
 	{
-		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
+		if (IntersectRect(&temp, &_attack3Rc[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom && (abs(_attack3Rc[i].mY - _attack3Rc[i].y) < 100))
 		{
 			_isPlayerHit = true;
 			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);

@@ -69,13 +69,14 @@ void UI::render()
 	//D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);
 
 	//Ææ´øÆ®
+	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À" || SCENEMANAGER->getCurrentScene() == "¼¥¾À") _pendant->SetAlpha(0.4);
 	_pendant->Render(Vector2(_portal.left - 30, _portal.top - 15));
 	//UI°¡Àå ¾Õ
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
 
 	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			ImageManager::GetInstance()->FindImage("boss_scroll")->SetAlpha(_alpha);
 			ImageManager::GetInstance()->FindImage("boss_scroll")->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 200), 0, _scrollFrameY);
@@ -100,6 +101,10 @@ void UI::render()
 	if (_scene == CURRENT_SCENE::INVENTORY_OPEN)
 	{
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
+		D2DRenderer::GetInstance()->RenderText(1320, 335, to_wstring((int)_player->getplayerCurrentHp()), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 405, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 480, to_wstring(0), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 555, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
 	}
 
 	//ÇÃ·¹ÀÌ¾î ¸ÂÀ» ¶§ È­¸é ±ô¹ÚÀÓ
@@ -134,11 +139,14 @@ void UI::update()
 	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
 		_bossCount++;
-
-		if (_bossStage != BOSS_STAGE::STAGE_START && _bossCount > 70) _bossStage = BOSS_STAGE::PLAYER_ENTER;
 		_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2 - 534, 787), Vector2(_bossHpWidth, 27.f), Pivot::LeftTop);
 
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage != BOSS_STAGE::STAGE_START && _bossStage != BOSS_STAGE::BOSS_APEEAR)
+		{
+			_bossStage = BOSS_STAGE::PLAYER_ENTER;
+		}
+
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			_bossHpWidth += 5;
 		}
@@ -160,7 +168,6 @@ void UI::setPlayerHpBar()
 {
 	if (_player->getplayerCurrentHp() <= 0) _hpWidth = 0;
 	else _hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _backBar.GetWidth();
-
 }
 
 void UI::setBossHpBar(int curHp)
@@ -216,7 +223,7 @@ void UI::draw()
 
 	if (_frameCount % 8 == 0)
 	{
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			_scrollFrameY++;
 			if (_scrollFrameY >= 8)

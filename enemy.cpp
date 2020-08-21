@@ -441,6 +441,7 @@ void enemy::checkBoolCount()
 	{
 		_isHit = false;
 		_isHitCount = 0;
+		_isPowerShot = false;
 	}
 	if (!_isHit)
 	{

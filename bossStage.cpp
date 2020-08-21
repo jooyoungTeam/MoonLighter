@@ -17,15 +17,6 @@ HRESULT bossStage::init()
 	_enemy->setBoss();
 	_enemy->init();
 
-	for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
-	{
-		if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
-		{
-			_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
-			break;
-		}
-
-	}
 	loadMap();
 
 	//SOUNDMANAGER->play("bgm2", 1.0f);
@@ -33,6 +24,9 @@ HRESULT bossStage::init()
 	_miniMap = new miniMap;
 	_miniMap->init(BOSSTILEX, BOSSTILEY);
 	_miniMap->setImage(_mapImg);
+
+	_cameraY = 1800;
+
 	return S_OK;
 }
 
@@ -54,27 +48,37 @@ void bossStage::update()
 {
 	_miniMap->update();
 
-	for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
+	if (!INVENTORY->getIsInven())
 	{
-		if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
-		{
-			_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
-			break;
-		}
+		_player->update();
 	}
 
-	//if (_ui->getBossScene() == BOSS_STAGE::STAGE_START)
+	if (_ui->getBossScene() == BOSS_STAGE::PLAYER_ENTER)
 	{
-		if (!INVENTORY->getIsInven())
+		_cameraY -= 7;
+		if (_cameraY <= 700) _ui->setBossScene(BOSS_STAGE::BOSS_APEEAR);
+		_player->setCurrentState(_player->getTrapState());
+		_cameraX = 1500;
+	}
+
+	if (_ui->getBossScene() == BOSS_STAGE::STAGE_START)
+	{
+		for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
 		{
-			_player->update();
-			//_player->tileCollision(_attribute, _tile, BOSSTILEX);
-			_enemy->update();
-			
+			if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
+			{
+				_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
+				break;
+			}
 		}
-	}	
-	
-	CAMERAMANAGER->setXY(_player->getX(), _player->getY());
+		if (!INVENTORY->getIsInven()) _enemy->update();
+		//_player->tileCollision(_attribute, _tile, BOSSTILEX);		
+
+		CAMERAMANAGER->setXY(_player->getX(), _player->getY());
+	}
+
+	else if (_ui->getBossScene() != BOSS_STAGE::STAGE_START) CAMERAMANAGER->setXY(_cameraX, _cameraY);
+
 }
 
 void bossStage::release()
@@ -107,7 +111,7 @@ void bossStage::loadMap()
 
 	CloseHandle(file);
 
-	_objectManager->load(BUTTON_LOAD_BOSS,0);
+	_objectManager->load(BUTTON_LOAD_BOSS, 0);
 }
 
 void bossStage::renderMap()

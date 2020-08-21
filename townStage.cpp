@@ -74,8 +74,13 @@ void townStage::render()
 	{
 		_potionShop->render();
 	}
+
+	if (isCollision(_potionShopRc.GetRect(), _player->getPlayerRc().GetRect()))
+	{
+		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("J"), _player->getX() - 32, _player->getY() - 100, 1.f);
+	}
 	
-	CAMERAMANAGER->rectangle(_potionShopRc, D2D1::ColorF::AliceBlue, 1.f, 2.f);
+	//CAMERAMANAGER->rectangle(_potionShopRc, D2D1::ColorF::AliceBlue, 1.f, 2.f);
 }
 
 void townStage::release()

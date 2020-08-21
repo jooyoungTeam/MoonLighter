@@ -20,6 +20,12 @@ private:
 	tagTile			  _tile[BOSSTILEX * BOSSTILEY];
 	class UI*         _ui;
 	class itemManager* _itemManager;
+	float			  _cameraX;
+	float			  _cameraY;
+
+
+	// 임시변수
+	bool isActive;
 public:
 	bossStage() {}
 	~bossStage() {}

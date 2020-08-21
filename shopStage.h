@@ -26,12 +26,12 @@ private:
 	// =============== 기본 ===============f
 	Image* _backGround;				// 배경 이미지
 	Image* _celler;					// 판매원 이미지
-	FloatRect _interactionRC;		// 상호작용 렉트
 	class player* _player;			// 플레이어
 	float _cellerFrameTimer;
 	int	  _cellerIndex;
 
 	bool  _isCeller;
+	FloatRect _interactionRC;		// 상호작용 렉트
 
 	// =========== 아이템 & 인벤 ===========
 	inventory* _inventory;			// 아이템 매니저
