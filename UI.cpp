@@ -69,7 +69,7 @@ void UI::render()
 	//D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);
 
 	//Ææ´øÆ®
-	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À" || SCENEMANAGER->getCurrentScene() == "¼¥¾À") _pendant->SetAlpha(0.4);
+	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À" || SCENEMANAGER->getCurrentScene() == "¼¥¾À" || INVENTORY->getGold() < 200) _pendant->SetAlpha(0.4);
 	_pendant->Render(Vector2(_portal.left - 30, _portal.top - 15));
 	//UI°¡Àå ¾Õ
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
@@ -94,7 +94,7 @@ void UI::render()
 	{
 		//Æ÷¼Ç°ú °³¼ö ·»´õ
 		INVENTORY->getPotion().item->getImg()->Render(Vector2(1550, 60));
-		D2DRenderer::GetInstance()->RenderText(1567, 67, to_wstring(INVENTORY->getPotion().count), 20);
+		D2DRenderer::GetInstance()->RenderText(1570, 67, to_wstring(INVENTORY->getPotion().count), 20, D2DRenderer::DefaultBrush::White);
 	}
 
 	//ÀÎº¥Åä¸® ¿­¸é ¼öÃ¸ ·»´õ

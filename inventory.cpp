@@ -124,8 +124,9 @@ void inventory::render()
 	renderInven();
 
 	//Ææ´øÆ®
-	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À" || SCENEMANAGER->getCurrentScene() == "¼¥¾À") ImageManager::GetInstance()->FindImage("pendant")->SetAlpha(0.4);
+	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À" || SCENEMANAGER->getCurrentScene() == "¼¥¾À" || _gold < 200) ImageManager::GetInstance()->FindImage("pendant")->SetAlpha(0.4);
 	ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
+	D2DRenderer::GetInstance()->RenderText(495, 677, to_wstring(200), 20, D2DRenderer::DefaultBrush::White);
 
 	//¾ÆÀÌÅÛÀ» ÆÈ°Ú´Ù¸é
 	if (_isSale)
@@ -884,12 +885,14 @@ void inventory::usePotion()
 {
 	if (_gear[4].item != nullptr)
 	{
-		//SOUNDMANAGER->play("potion", 1.0f);
+		SOUNDMANAGER->play("potion", 1.0f);
 		_gear[4].count--;
 
-		_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + INVENTORY->getPotion().item->getFillHp());
-		if (_player->getplayerCurrentHp() + _gear[4].item->getFillHp() >= _player->getPlayerMaxHp())
+		_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + _gear[4].item->getFillHp());
+		if (_player->getplayerCurrentHp() >= _player->getPlayerMaxHp())
+		{
 			_player->setPlayerCurrentHp(_player->getPlayerMaxHp());
+		}		
 
 		if (_gear[4].count <= 0) _gear[4].item = nullptr;
 	}	

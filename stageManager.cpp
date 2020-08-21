@@ -117,14 +117,14 @@ void stageManager::uiUpdate()
 		_itemMg->update(_player);
 		_ui->update();		
 
-		/*if (KEYMANAGER->isOnceKeyDown('Y'))
+		if (KEYMANAGER->isOnceKeyDown('Y'))
 		{
 			int count = RND->getInt(3);
 			if (count == 0) _itemMg->setItem(ITEMBUNDLE::SLIME_RED, _player->getX(), _player->getY());
 			if (count == 1) _itemMg->setItem(ITEMBUNDLE::SLIME_BLUE, _player->getX(), _player->getY());
 			if (count == 2) _itemMg->setItem(ITEMBUNDLE::SLIME_YELLOW, _player->getX(), _player->getY());
 
-		}*/
+		}
 	}
 
 }
