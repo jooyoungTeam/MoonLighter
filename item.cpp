@@ -363,10 +363,10 @@ void item::setBundle(int count)
 		break;
 
 	case ITEMBUNDLE::GOLEM_KING:
-		if (count >= 0 && count < 2) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
-		if (count >= 2 && count < 3) _type = ITEMTYPE::GOLEMKING_RECORD;
-		if (count >= 3 && count < 5) _type = ITEMTYPE::FABRIC;
-		if (count >= 5 && count < 6) _type = ITEMTYPE::SLIME_RED;
+		if (count >= 0 && count < 4) _type = ITEMTYPE::GOLEMKING_CRYSTAL;
+		if (count >= 4 && count < 5) _type = ITEMTYPE::GOLEMKING_RECORD;
+		if (count >= 5 && count < 8) _type = ITEMTYPE::FABRIC;
+		if (count >= 8 && count < 10) _type = ITEMTYPE::SLIME_RED;
 		break;
 	}
 }

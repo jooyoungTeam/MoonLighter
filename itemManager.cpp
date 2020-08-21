@@ -48,10 +48,12 @@ void itemManager::release()
 void itemManager::setItem(ITEMBUNDLE bundle, float x, float y)
 {
 	int count = RND->getFromIntTo(2, 3);
+	if (bundle == ITEMBUNDLE::GOLEM_KING) count = 8;
+
 	for (int i = 0; i < count; i++)
 	{
 		int rnd = RND->getInt(10);
-		if (rnd >= 6) continue;
+		if (rnd >= 6 && bundle != ITEMBUNDLE::GOLEM_KING) continue;
 
 		item* material;
 		material = new item;
