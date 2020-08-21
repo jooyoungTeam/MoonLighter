@@ -108,14 +108,14 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("build_Well", L"Object/build_Well.png");
 	ImageManager::GetInstance()->AddImage("buildBoard", L"Object/buildBoard.png");
 	ImageManager::GetInstance()->AddImage("build_fountain", L"Object/build_fountain.png");
-	ImageManager::GetInstance()->AddImage("bench", L"Object/bench.png");	
+	ImageManager::GetInstance()->AddImage("bench", L"Object/bench.png");
 	ImageManager::GetInstance()->AddImage("objectPlant", L"Object/objectPlant.png");
 
 	ImageManager::GetInstance()->AddImage("objectNPC", L"Object/objectNPC.png");
-	ImageManager::GetInstance()->AddImage("object_door1", L"Object/object_door1.png");
-	ImageManager::GetInstance()->AddImage("object_door2", L"Object/object_door2.png");
-	ImageManager::GetInstance()->AddImage("object_door3", L"Object/object_door3.png");
-	ImageManager::GetInstance()->AddImage("object_door4", L"Object/object_door4.png");
+	ImageManager::GetInstance()->AddFrameImage("object_door1", L"Object/object_door1.png", 5, 1);
+	ImageManager::GetInstance()->AddFrameImage("object_door2", L"Object/object_door2.png", 5, 1);
+	ImageManager::GetInstance()->AddFrameImage("object_door3", L"Object/object_door3.png", 5, 1);
+	ImageManager::GetInstance()->AddFrameImage("object_door4", L"Object/object_door4.png", 5, 1);
 	ImageManager::GetInstance()->AddImage("objectSpa", L"Object/objectSpa.png");
 	ImageManager::GetInstance()->AddImage("plant_flower", L"Object/plant_flower.png");
 	ImageManager::GetInstance()->AddImage("spa", L"Object/spa.png");
@@ -347,6 +347,7 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("healing", "sound/playerSound/È¸º¹_»ù.wav", false, false);
 	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
 	SOUNDMANAGER->addSound("Moon", "sound/MoonLighter_Full.mp3", true, false);
+	SOUNDMANAGER->addSound("roll", "sound/playerSound/roll.wav", false, false);
 
 	//____________________________________________
 	//ÆÌ
