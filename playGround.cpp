@@ -347,6 +347,7 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("healing", "sound/playerSound/È¸º¹_»ù.wav", false, false);
 	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
 	SOUNDMANAGER->addSound("Moon", "sound/MoonLighter_Full.mp3", true, false);
+	SOUNDMANAGER->addSound("roll", "sound/playerSound/roll.wav", false, false);
 
 	//____________________________________________
 	//ÆÌ
