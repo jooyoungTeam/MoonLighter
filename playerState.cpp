@@ -375,13 +375,16 @@ void playerIdleState::update(player & player)
 	//天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天天
 
 	//Ы溯檜橫 蘿溯んお
-	if (KEYMANAGER->isOnceKeyDown('L'))
+	if (SCENEMANAGER->getCurrentScene() != "葆擊壁" && SCENEMANAGER->getCurrentScene() != "憧壁" && INVENTORY->getGold() >= 200)
 	{
-		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleport"), ImageManager::GetInstance()->FindImage("playerTeleport"));
-		player.setCurrentState(player.getTeleportState());
-		player.setBedCount(player.getBedCount() == 0);
+		if (KEYMANAGER->isOnceKeyDown('L'))
+		{
+			INVENTORY->setGold(-200);
+			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleport"), ImageManager::GetInstance()->FindImage("playerTeleport"));
+			player.setCurrentState(player.getTeleportState());
+			player.setBedCount(player.getBedCount() == 0);
+		}
 	}
-
 }
 
 //walk 鼻鷓

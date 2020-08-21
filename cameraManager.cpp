@@ -268,8 +268,16 @@ void cameraManager::ellipse(float x, float y, const float radius, const D2D1::Co
 {
 	float relativeX = getRelativeLeft(x);
 	float relativeY = getRelativeTop(y);
-	D2DRenderer::GetInstance()->DrawEllipse(Vector2(relativeX, relativeY), radius, color, strokeWidth);
+	D2DRenderer::GetInstance()->DrawEllipse(Vector2(relativeX, relativeY), radius, color, alpha, strokeWidth);
 }
+
+void cameraManager::fillEllipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha)
+{
+	float relativeX = getRelativeLeft(x);
+	float relativeY = getRelativeTop(y);
+	D2DRenderer::GetInstance()->FiilEllipse(Vector2(relativeX, relativeY), radius, color, alpha);
+}
+
 
 void cameraManager::line(Vector2 start, Vector2 end, const D2D1::ColorF::Enum & color, const float strokeWidth)
 {

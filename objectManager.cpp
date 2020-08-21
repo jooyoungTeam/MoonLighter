@@ -582,9 +582,9 @@ Image * objectManager::findImg(OBJECT type, int imgNum)
 
 bool objectManager::isPlayerSpaIn(POINT playerPos)
 {
-	float x = WINSIZEX / 2;
+	float x = WINSIZEX / 2 - 10;
 	float y = WINSIZEY / 2;
-	float r = 200;
+	float r = 180;
 	if (checkPointInCircle(x, y, r, playerPos))
 	{
 		return true;

@@ -96,6 +96,7 @@ public:
 	void rectangle(const FloatRect rect, const D2D1::ColorF::Enum& color, float alpha, float strokeWidth = 1.f);
 	void fillRectangle(const RECT rect, const D2D1::ColorF::Enum& color, float alpha);
 	void fillRectangle(const FloatRect rect, const D2D1::ColorF::Enum& color, float alpha);
+	void fillEllipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha);
 	void ellipse(float x, float y, const float radius, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
 	void line(Vector2 start, Vector2 end, const D2D1::ColorF::Enum& color, const float strokeWidth = 1.f);
 	void render(Image* img, float destX, float destY, float alpha);

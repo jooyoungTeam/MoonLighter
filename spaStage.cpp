@@ -11,9 +11,6 @@ HRESULT spaStage::init()
 	_objectManager->setIsDoorOpen(true);
 	loadMap();
 
-	_maxHp = 100;
-	_curHp = 0;
-
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
 
@@ -46,10 +43,9 @@ void spaStage::update()
 		SOUNDMANAGER->play("healing", 1.0f);
 		_player->setTransform(true);
 		_spaCount++;
-		if (_spaCount > 1 && _curHp < _maxHp)
+		if (_spaCount > 1)
 		{
 			_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + 1);
-			_curHp += 1;
 			_spaCount = 0;
 			if (_player->getPlayerMaxHp() <= _player->getplayerCurrentHp())
 			{
@@ -130,4 +126,12 @@ void spaStage::renderMap()
 
 
 	_objectManager->objectRender();
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+
+		float x = WINSIZEX / 2 -10;
+		float y = WINSIZEY / 2;
+		float r = 180;
+		CAMERAMANAGER->fillEllipse(x, y, r, D2D1::ColorF::Red, 0.5f);
+	}
 }
