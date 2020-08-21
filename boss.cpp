@@ -79,7 +79,6 @@ void boss::render()
 
 void boss::attack()
 {
-	_bossPattern = ARM_LONG;
 	if (_isPlayerHit)
 	{
 		_hitTimer++;
@@ -633,7 +632,7 @@ void boss::attack2_1()
 		_rightBottom.x += 14.5;
 
 
-		if (_leftBottom.x > 2000)
+		if (_leftBottom.x > 3000)
 		{
 			_attack2.isAttack = true;
 		}
@@ -644,7 +643,7 @@ void boss::attack2_1()
 		_leftBottom.x -= 14.5;
 		_rightBottom.x -= 14.5;
 
-		if (_leftBottom.x < 846)
+		if (_leftBottom.x < 300)
 		{
 			_attack2.isAttack = false;
 			_attack2.count++;
