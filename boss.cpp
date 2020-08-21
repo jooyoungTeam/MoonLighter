@@ -25,7 +25,7 @@ void boss::set()
 	_rightBottom.y = 1185;
 	_saveRandom = -1;
 	_bossAni = ONE;
-	_maxHP = _curHP = 1000;
+	_maxHP = _curHP = 600;
 	_index = 0;
 	_aniCount = 0;
 	for (int i = 0; i < 13; ++i)
@@ -210,6 +210,14 @@ void boss::dead()
 			_motion = KEYANIMANAGER->findAnimation("bossDead");
 			_motion->start();
 			_bossAni = THREE;
+		}
+	}
+	if (_bossAni == THREE)
+	{
+		if (!_motion->isPlay())
+		{
+			_realDead = true;
+			_bossAni = FOUR;
 		}
 	}
 }

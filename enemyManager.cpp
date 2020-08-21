@@ -114,25 +114,28 @@ void enemyManager::update()
 			{
 			case ENEMY_RED_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_BLUE_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_BLUE, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_YELLOW_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_YELLOW, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_GOLEM:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_KNIGHT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_POT:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_POT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_BOSS:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_KING, _vEnemy[i]->getX(), _vEnemy[i]->getY());
 				break;
 			}
-			
-			enemyDead(i);
 			break;
 		}
 	}
@@ -168,48 +171,48 @@ void enemyManager::setEnemy1()
 	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
 	_vEnemy.push_back(gol1);
 
-	enemy* gol12;
-	gol12 = new golem;
-	//gol12->playerCheck(_x, _y, _rc);
-	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol12);
+	//enemy* gol12;
+	//gol12 = new golem;
+	////gol12->playerCheck(_x, _y, _rc);
+	//gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol12);
 
-	enemy* pot1;
-	pot1 = new pot;
-	//pot1->playerCheck(_x, _y, _rc);
-	pot1->init(475, 600, 50, 50, ENEMY_POT);
-	pot1->setPotDirection(POT_BOTTOM);
-	_vEnemy.push_back(pot1);
+	//enemy* pot1;
+	//pot1 = new pot;
+	////pot1->playerCheck(_x, _y, _rc);
+	//pot1->init(475, 600, 50, 50, ENEMY_POT);
+	//pot1->setPotDirection(POT_BOTTOM);
+	//_vEnemy.push_back(pot1);
 
-	enemy* pot22;
-	pot22 = new pot;
-	//pot22->playerCheck(_x, _y, _rc);
-	pot22->init(1070, 600, 50, 50, ENEMY_POT);
-	pot22->setPotDirection(POT_BOTTOM);
-	_vEnemy.push_back(pot22);
+	//enemy* pot22;
+	//pot22 = new pot;
+	////pot22->playerCheck(_x, _y, _rc);
+	//pot22->init(1070, 600, 50, 50, ENEMY_POT);
+	//pot22->setPotDirection(POT_BOTTOM);
+	//_vEnemy.push_back(pot22);
 
 
 
-	enemy* pot2;
-	pot2 = new pot;
-	//pot2->playerCheck(_x, _y, _rc);
-	pot2->init(475, 280, 50, 50, ENEMY_POT);
-	pot2->setPotDirection(POT_TOP);
-	_vEnemy.push_back(pot2);
+	//enemy* pot2;
+	//pot2 = new pot;
+	////pot2->playerCheck(_x, _y, _rc);
+	//pot2->init(475, 280, 50, 50, ENEMY_POT);
+	//pot2->setPotDirection(POT_TOP);
+	//_vEnemy.push_back(pot2);
 
-	enemy* pot3;
-	pot3 = new pot;
-	//pot2->playerCheck(_x, _y, _rc);
-	pot3->init(1070, 280, 50, 50, ENEMY_POT);
-	pot3->setPotDirection(POT_TOP);
-	_vEnemy.push_back(pot3);
+	//enemy* pot3;
+	//pot3 = new pot;
+	////pot2->playerCheck(_x, _y, _rc);
+	//pot3->init(1070, 280, 50, 50, ENEMY_POT);
+	//pot3->setPotDirection(POT_TOP);
+	//_vEnemy.push_back(pot3);
 
-	enemy* gost;
-	gost = new pot;
-	//gost->playerCheck(_x, _y, _rc);
-	gost->init(-300, -300, 50, 50, ENEMY_POT);
-	gost->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(gost);
+	//enemy* gost;
+	//gost = new pot;
+	////gost->playerCheck(_x, _y, _rc);
+	//gost->init(-300, -300, 50, 50, ENEMY_POT);
+	//gost->setPotDirection(POT_RIGHT);
+	//_vEnemy.push_back(gost);
 
 
 }

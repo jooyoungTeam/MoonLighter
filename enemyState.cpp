@@ -28,7 +28,7 @@ void enemyIdleState::update(enemy & enemy, ENEMYTYPE enemyType)
 	if (enemyType == ENEMY_RED_SLIME)
 	{
 		_attackDistance = 200;
-		_attackDelayCount = 120;
+		_attackDelayCount = 200;
 	}
 	if (enemyType == ENEMY_BLUE_SLIME)
 	{
