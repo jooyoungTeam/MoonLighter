@@ -50,7 +50,7 @@ void boss::render()
 			CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock0"), _attack3Rc[i].rc.left, _attack3Rc[i].rc.top, _attack3Rc[i].rc.bottom, _attack3Rc[i].alpha, 1.5f);
 			CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("Boss_Rock1"), _attack3Rc2[i].rc.left, _attack3Rc2[i].rc.top, _attack3Rc2[i].rc.bottom, _attack3Rc2[i].rockAlpha, 1.5f);
 
-			if (_attack3Rc2[i].rackFall)
+			if (_attack3Rc2[i].rockFall)
 			{
 				CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("shadow"), _attack3Rc2[i].x - 65, _attack3Rc2[i].y, _attack3Rc2[i].scale, _attack3Rc2[i].alpha);
 			}
@@ -675,16 +675,16 @@ void boss::attack3_1()
 	//cout << _isRockBottom << endl;
 	for (int i = 0; i < 17; ++i)
 	{
-		if (!_attack3Rc[i].rackFall)
+		if (!_attack3Rc[i].rockFall)
 		{
 			setRock();
-			_attack3Rc[i].rackFall = true;
+			_attack3Rc[i].rockFall = true;
 			_isRockBottom = false;
 		}
 	}
 	for (int i = 0; i < 17; ++i)
 	{
-		if (_attack3Rc[i].rackFall)
+		if (_attack3Rc[i].rockFall)
 		{
 			_attack3Rc[i].mY += 25;
 			if (_attack3Rc[i].mY >= _attack3Rc[i].y)
@@ -721,7 +721,7 @@ void boss::attack3_2()
 {
 	for (int i = 0; i < 13; ++i)
 	{
-		if (!_attack3Rc2[i].rackFall)
+		if (!_attack3Rc2[i].rockFall)
 		{
 			_attack3Rc2[i].width = 150;
 			_attack3Rc2[i].x = RND->getFromIntTo(600, 2500);
@@ -732,13 +732,13 @@ void boss::attack3_2()
 			_attack3Rc2[i].mY = 0 - _attack3Rc2[i].y;
 			_attack3Rc2[i].alpha = 0.5f;
 			_attack3Rc2[i].rockAlpha = 1.0f;
-			_attack3Rc2[i].rackFall = true;
+			_attack3Rc2[i].rockFall = true;
 			_isRockBottom = false;
 			_attack3Rc2[i].scale = 0.5f;
-			_attack3Rc2[i].rackCount = 0;
+			_attack3Rc2[i].rockCount = 0;
 			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 		}
-		if (_attack3Rc2[i].rackFall)
+		if (_attack3Rc2[i].rockFall)
 		{
 			_attack3Rc2[i].scale += 0.015f;
 			_attack3Rc2[i].alpha + 0.1f;
@@ -757,7 +757,7 @@ void boss::attack3_2()
 			_attack3Rc2[i].mY += 30;
 
 
-			_attack3Rc2[i].rackCount++;
+			_attack3Rc2[i].rockCount++;
 			if (!_isPlayerHit)
 			{
 				_attack3Rc2[i].attackRc = RectMakePivot(Vector2(_attack3Rc2[i].x, _attack3Rc2[i].y), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
@@ -781,7 +781,7 @@ void boss::attack3_2()
 
 				CAMERAMANAGER->shakeCamera(3, 2);
 				_attack3Rc2[i].mY = _attack3Rc2[i].y;
-				if (_attack3Rc2[i].rackCount > 150)
+				if (_attack3Rc2[i].rockCount > 150)
 				{
 					_attack3Rc2[i].alpha -= 0.05f;
 					_attack3Rc2[i].rockAlpha -= 0.5f;
@@ -796,12 +796,12 @@ void boss::attack3_2()
 						_state = _idle;
 						_bossAni = ONE;
 						_attackDelay = 0;
-						_attack3Rc2[i].rackCount = 0;
+						_attack3Rc2[i].rockCount = 0;
 						_patternCheck = false;
 						_isRockBottom = false;
 						_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(_attack3Rc2[i].width, _attack3Rc2[i].width), Pivot::Center);
 
-						_attack3Rc2[i].rackFall = false;
+						_attack3Rc2[i].rockFall = false;
 
 					}
 				}
