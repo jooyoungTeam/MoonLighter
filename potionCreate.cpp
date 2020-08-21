@@ -403,7 +403,7 @@ void potionCreate::isSizeUpdate()
 		_isSizeLeft = true;
 	}
 
-	if ((INVENTORY->getGold() >= _selectPotion.price * _makeCount) && (INVENTORY->countOfItem(_selectPotion.needIndex) >= _selectPotion.needCount * (_makeCount+1)))
+	if ((INVENTORY->getGold() >= _selectPotion.price * (_makeCount+1)) && (INVENTORY->countOfItem(_selectPotion.needIndex) >= _selectPotion.needCount * (_makeCount+1)))
 	{
 		_isSizeRight = true;
 	}

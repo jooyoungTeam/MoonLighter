@@ -49,7 +49,7 @@ void shopStage::render()
 
 	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0,2.f,1.f);
 
-	if (isCollision(_interactionRC.GetRect(), _player->getPlayerRc().GetRect()))
+	if (isCollision(_interactionRC.GetRect(), _player->getPlayerRc().GetRect()) && !INVENTORY->getIsInven())
 	{
 		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("J"), _player->getX() - 32, _player->getY() - 100, 1.f);
 	}
