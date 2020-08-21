@@ -21,5 +21,6 @@ public:
 
 	void imageLoad();
 	void cursor();
+	void soundLoad();
 };
 

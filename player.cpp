@@ -495,7 +495,6 @@ void player::shopCollision()
 	if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À")
 	{
 		RECT temp;
-		RECT tem;
 		if (IntersectRect(&temp, &_playerRc.GetRect(), &_townStage->getPotionShopRc().GetRect()))
 		{
 			_AttackProhibition = true;

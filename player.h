@@ -58,6 +58,7 @@ private:
 	bool				_bowBool;							//활 충전 값
 	bool				_bowChargeAlpha;					//활 충전 알파
 	bool				_bowChargeState;					//활 충전상태인지.
+	bool                _isBowChargeSound;
 	bool				_hitCondition;						//히트 상태인지
 	bool				_enemyCol;							//에너미와 충돌상태
 	bool				_colVoid;							//충돌 회피상태
@@ -131,6 +132,7 @@ public:
 	bool getPlayerMoveTrap() { return _playerMoveTrap; }
 	bool getTransform() { return _transForm; }
 	bool getAttackProhibition() { return _AttackProhibition; }
+	bool getIsBowChargeSound() { return _isBowChargeSound; }
 
 	FloatRect getPlayerRc() { return _playerRc; }
 	FloatRect getPlayerAttackRc() { return _playerAttackRc; }
@@ -184,6 +186,7 @@ public:
 	void setShopLink(shopStage* shopStage) { _shopStage = shopStage; }
 	void setPlayerPos(float x, float y) { _playerShadowX = x, _playerShadowY = y; }
 	void setTransform(bool trans) { _transForm = trans; }
+	void setIsBowChargeSound(bool isBowChargeSound) { _isBowChargeSound = isBowChargeSound; }
 
 public:
 	playerState* getIdleState()			{ return _idle; }

@@ -395,12 +395,11 @@ void enemyManager::playerCol()
 	
 			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()) && !_vEnemy[i]->getIsPowerShot())
 			{
-
+				SOUNDMANAGER->play("bow_Attack", 1.0f);
 				if (_player->getArrow()->getVArrow()[j].isPowerShot)
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
 					_vEnemy[i]->setIsPowerShot(true);
-					//cout << "วัน๘" << endl;
 					break;
 				}
 				else
