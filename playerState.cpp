@@ -92,13 +92,13 @@ void playerIdleState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
-	////플레이어 사망 <-- 임시
-	////ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	//{
-	//	player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
-	//}
-	////ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	//플레이어 사망 <-- 임시
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
+	}
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 	//플레이어 쉴드
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -179,11 +179,6 @@ void playerIdleState::update(player & player)
 	{
 		if (!player.getAttackProhibition())
 		{
-			if (player.getplayerCurrentHp() <= 0)
-			{
-				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
-				player.setCurrentState(player.getDieState());
-			}
 
 			//활 충전 카운트
 			if (player.getBowBool())
@@ -234,6 +229,13 @@ void playerIdleState::update(player & player)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowUpCharge"), ImageManager::GetInstance()->FindImage("bowUpCharge"));
 						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
+						}
 					}
 					if (player.getDirection() == DIRECTION::DOWN)
 					{
@@ -244,6 +246,13 @@ void playerIdleState::update(player & player)
 						if (player.getBowAlphaCount() >= 11)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowDownCharge"), ImageManager::GetInstance()->FindImage("bowDownCharge"));
+						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
 						}
 					}
 					if (player.getDirection() == DIRECTION::LEFT)
@@ -256,6 +265,13 @@ void playerIdleState::update(player & player)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowLeftCharge"), ImageManager::GetInstance()->FindImage("bowLeftCharge"));
 						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
+						}
 					}
 					if (player.getDirection() == DIRECTION::RIGHT)
 					{
@@ -267,6 +283,14 @@ void playerIdleState::update(player & player)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowRightCharge"), ImageManager::GetInstance()->FindImage("bowRightCharge"));
 						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
+						}
+
 					}
 					player.setBedCount(player.getBedCount() == 0);
 				}
@@ -878,7 +902,7 @@ void playerWalkState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	//활
 	if (player.getWeaponChange())
-	{
+	{	
 		if (!player.getAttackProhibition())
 		{
 			//활 충전 카운트
@@ -928,6 +952,13 @@ void playerWalkState::update(player & player)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowUpCharge"), ImageManager::GetInstance()->FindImage("bowUpCharge"));
 						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
+						}
 					}
 					if (player.getDirection() == DIRECTION::DOWN)
 					{
@@ -938,6 +969,13 @@ void playerWalkState::update(player & player)
 						if (player.getBowAlphaCount() >= 11)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowDownCharge"), ImageManager::GetInstance()->FindImage("bowDownCharge"));
+						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
 						}
 					}
 					if (player.getDirection() == DIRECTION::LEFT)
@@ -950,6 +988,13 @@ void playerWalkState::update(player & player)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowLeftCharge"), ImageManager::GetInstance()->FindImage("bowLeftCharge"));
 						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
+						}
 					}
 					if (player.getDirection() == DIRECTION::RIGHT)
 					{
@@ -960,6 +1005,13 @@ void playerWalkState::update(player & player)
 						if (player.getBowAlphaCount() >= 11)
 						{
 							player.setPlayerMotion(KEYANIMANAGER->findAnimation("bowRightCharge"), ImageManager::GetInstance()->FindImage("bowRightCharge"));
+						}
+
+						//HP가 0이하가 되면 Die 상태로 넘어가기
+						if (player.getDeadState() || player.getplayerCurrentHp() <= 0)
+						{
+							player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDie"), ImageManager::GetInstance()->FindImage("playerDie"));
+							player.setCurrentState(player.getDieState());
 						}
 					}
 					player.setBedCount(player.getBedCount() == 0);
