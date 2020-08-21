@@ -16,7 +16,7 @@ HRESULT playGround::init()
 	gameNode::init(true);
 
 	ShowCursor(false);
-
+	soundLoad();
 	imageLoad();
 
 
@@ -36,7 +36,13 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	
+
+
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		SOUNDMANAGER->play("bed", 1.0f);
+	}
+
 	if (KEYMANAGER->isOnceKeyDown(VK_F9))
 	{
 		CAMERAMANAGER->shakeCamera(5, 50);
@@ -327,4 +333,46 @@ void playGround::cursor()
 			_cursorFrameX = 0;
 		}
 	}
+}
+
+//사운드 집합
+void playGround::soundLoad()
+{
+	//플레이어
+	SOUNDMANAGER->addSound("bed", "sound/playerSound/침대.wav", false, false);
+	SOUNDMANAGER->addSound("Sword", "sound/playerSound/Sword.wav", false, false);
+	SOUNDMANAGER->addSound("bow", "sound/playerSound/bow.wav", false, false);
+	SOUNDMANAGER->addSound("bow_Attack", "sound/playerSound/bow_Attack.wav", false, false);
+	SOUNDMANAGER->addSound("bow_Charge", "sound/playerSound/bow_Charge.wav", false, false);
+	SOUNDMANAGER->addSound("healing", "sound/playerSound/회복_샘.wav", false, false);
+	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
+
+	//____________________________________________
+	//팟
+	SOUNDMANAGER->addSound("총알쏘기", "sound/enemySound/에너미/폿/총알쏘기.wav", false, false);
+	SOUNDMANAGER->addSound("총알장전", "sound/enemySound/에너미/폿/총알장전.wav", false, false);
+	SOUNDMANAGER->addSound("총알터짐", "sound/enemySound/에너미/폿/총알터짐.wav", false, false);
+
+	//슬라임
+	SOUNDMANAGER->addSound("슬라임맞음", "sound/enemySound/에너미/슬라임/슬라임맞음.wav", false, false);
+	SOUNDMANAGER->addSound("슬라임어텍", "sound/enemySound/에너미/슬라임/슬라임어텍.wav", false, false);
+	SOUNDMANAGER->addSound("슬라임죽음", "sound/enemySound/에너미/슬라임/슬라임죽음.wav", false, false);
+	SOUNDMANAGER->addSound("슬라임펑", "sound/enemySound/에너미/슬라임/슬라임터트리는공격.wav", false, false);
+	SOUNDMANAGER->addSound("레드슬라임공격", "sound/enemySound/에너미/슬라임/레드슬라임공격.wav", false, false);
+
+	//골렘
+	SOUNDMANAGER->addSound("골렘공격", "sound/enemySound/에너미/골렘/골렘공격.wav", false, false);
+	SOUNDMANAGER->addSound("골렘맞음", "sound/enemySound/에너미/골렘/골렘맞음.wav", false, false);
+
+	//보스
+	SOUNDMANAGER->addSound("끌어당김", "sound/enemySound/에너미/보스/끌어당김.wav", false, false);
+	SOUNDMANAGER->addSound("돌떨어짐", "sound/enemySound/에너미/보스/돌떨어짐.wav", false, false);
+	SOUNDMANAGER->addSound("돌떨어짐2", "sound/enemySound/에너미/보스/돌떨어짐2.wav", false, false);
+	SOUNDMANAGER->addSound("보스처음등장", "sound/enemySound/에너미/보스/보스처음등장.wav", false, false);
+	SOUNDMANAGER->addSound("보스맞음", "sound/enemySound/에너미/보스/보스맞음.wav", false, false);
+	SOUNDMANAGER->addSound("보스죽음", "sound/enemySound/에너미/보스/보스죽음.wav", false, false);
+	SOUNDMANAGER->addSound("손떨어짐", "sound/enemySound/에너미/보스/손떨어짐.wav", false, false);
+	SOUNDMANAGER->addSound("손빧음", "sound/enemySound/에너미/보스/손빧음.wav", false, false);
+	SOUNDMANAGER->addSound("폭발", "sound/enemySound/에너미/보스/폭발.wav", false, false);
+	SOUNDMANAGER->addSound("돌사라짐", "sound/enemySound/에너미/보스/돌사라짐.wav", false, false);
 }

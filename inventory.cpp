@@ -880,6 +880,7 @@ void inventory::usePotion()
 {
 	if (_gear[4].item != nullptr)
 	{
+		//SOUNDMANAGER->play("potion", 1.0f);
 		_gear[4].count--;
 
 		_player->setPlayerCurrentHp(_player->getplayerCurrentHp() + INVENTORY->getPotion().item->getFillHp());

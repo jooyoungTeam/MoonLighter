@@ -27,12 +27,12 @@ struct tagAttackRect
 	float mX, mY;
 	float width;
 	float speed;
-	bool rackFall;
+	bool rockFall;
 	float alpha;
 	float rockAlpha;
 	float scale;
 	int attackCount;
-	int rackCount;
+	int rockCount;
 	int random;
 };
 class boss : public enemy

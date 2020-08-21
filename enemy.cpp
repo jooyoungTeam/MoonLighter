@@ -285,36 +285,6 @@ void enemy::ani()
 	KEYANIMANAGER->addArrayFrameAnimation("bossAttack11", "bossHandFly", attack3_1, 9, 7, false);
 	int attack3_2[]{ 8,7,6,5,4,3,2,1,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossAttack22", "bossHandFly", attack3_2, 9, 7, false);
-
-
-	//____________________________________________
-	//팟
-	SOUNDMANAGER->addSound("총알쏘기", "enemySound/에너미/폿/총알쏘기.wav", true, false);
-	SOUNDMANAGER->addSound("총알장전", "enemySound/에너미/폿/총알장전.wav", true, false);
-	SOUNDMANAGER->addSound("총알터짐", "enemySound/에너미/폿/총알터짐.wav", true, false);
-
-	//슬라임
-	SOUNDMANAGER->addSound("슬라임맞음", "enemySound/에너미/슬라임/슬라임맞음.wav", true, false);
-	SOUNDMANAGER->addSound("슬라임어텍", "enemySound/에너미/슬라임/슬라임어텍.wav", true, false);
-	SOUNDMANAGER->addSound("슬라임죽음", "enemySound/에너미/슬라임/슬라임죽음.wav", true, false);
-	SOUNDMANAGER->addSound("슬라임펑", "enemySound/에너미/슬라임/슬라임터트리는공격.wav", true, false);
-	SOUNDMANAGER->addSound("레드슬라임공격", "enemySound/에너미/슬라임/레드슬라임공격.wav", true, false);
-
-	//골렘
-	SOUNDMANAGER->addSound("골렘공격", "enemySound/에너미/골렘/골렘공격.wav", true, false);
-	SOUNDMANAGER->addSound("골렘맞음", "enemySound/에너미/골렘/골렘맞음.wav", true, false);
-
-	//보스
-	SOUNDMANAGER->addSound("끌어당김", "enemySound/에너미/보스/끌어당김.wav", true, false);
-	SOUNDMANAGER->addSound("돌떨어짐", "enemySound/에너미/보스/돌떨어짐.wav", true, false);
-	SOUNDMANAGER->addSound("돌떨어짐2", "enemySound/에너미/보스/돌떨어짐2.wav", true, false);
-	SOUNDMANAGER->addSound("보스처음등장", "enemySound/에너미/보스/보스처음등장.wav", true, false);
-	SOUNDMANAGER->addSound("보스맞음", "enemySound/에너미/보스/보스맞음.wav", true, false);
-	SOUNDMANAGER->addSound("보스죽음", "enemySound/에너미/보스/보스죽음.wav", true, false);
-	SOUNDMANAGER->addSound("손떨어짐", "enemySound/에너미/보스/손떨어짐.wav", true, false);
-	SOUNDMANAGER->addSound("손빧음", "enemySound/에너미/보스/손빧음.wav", true, false);
-	SOUNDMANAGER->addSound("폭발", "enemySound/에너미/보스/폭발.wav", true, false);
-	SOUNDMANAGER->addSound("돌사라짐", "enemySound/에너미/보스/돌사라짐.wav", true, false);
 }
 
 
