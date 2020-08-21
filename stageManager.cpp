@@ -86,6 +86,7 @@ void stageManager::uiUpdate()
 
 		if (!_town->getIsPotionShop() && !INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('I'))
 		{
+			SOUNDMANAGER->play("openInven");
 			INVENTORY->setIsInven(true);
 			_ui->setUIScene(CURRENT_SCENE::INVENTORY_OPEN);
 			INVENTORY->setState(INVEN_STATE::NOTE);

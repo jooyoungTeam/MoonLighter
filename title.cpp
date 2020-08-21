@@ -34,6 +34,7 @@ void title::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
+		SOUNDMANAGER->play("click");
 		_select++;
 		if (_select > 2) _select = 0;
 		_selectImg = ImageManager::GetInstance()->FindImage("bagMirror");
@@ -43,6 +44,7 @@ void title::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
+		SOUNDMANAGER->play("click");
 		_select--;
 		if (_select < 0) _select = 2;
 		_selectImg = ImageManager::GetInstance()->FindImage("bagMirror");
@@ -52,6 +54,7 @@ void title::update()
 
 	if (KEYMANAGER->isOnceKeyUp(VK_UP) || KEYMANAGER->isOnceKeyUp(VK_DOWN))
 	{
+		SOUNDMANAGER->play("click");
 		_menuSelect = SELECT::STOP;
 	}
 
@@ -69,6 +72,7 @@ void title::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 	{
+		SOUNDMANAGER->play("gameStart");
 		_count = 0;
 
 		if (_select == 0) SCENEMANAGER->changeScene("¼¥¾À");
