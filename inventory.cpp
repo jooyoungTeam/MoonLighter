@@ -150,6 +150,20 @@ void inventory::render()
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
 
+	if (_state == INVEN_STATE::NOTE)
+	{
+		//장비 변경
+		if (!_player->getWeaponChange())
+		{
+			ImageManager::GetInstance()->FindImage("inven_weapon_1")->Render(Vector2(960, 205));
+		}
+
+		if (_player->getWeaponChange())
+		{
+			ImageManager::GetInstance()->FindImage("inven_weapon_2")->Render(Vector2(960, 205));
+		}
+	}	
+
 	//미러
 	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
 	if (_mirror == MIRROR_STATE::STAY || _mirror == MIRROR_STATE::ACTIVE) _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);

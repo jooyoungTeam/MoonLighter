@@ -16,7 +16,7 @@ HRESULT playGround::init()
 	gameNode::init(true);
 
 	ShowCursor(false);
-
+	soundLoad();
 	imageLoad();
 
 
@@ -36,7 +36,7 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	soundLoad();
+
 
 	if (KEYMANAGER->isOnceKeyDown('T'))
 	{
