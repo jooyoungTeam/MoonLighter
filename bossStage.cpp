@@ -51,6 +51,7 @@ void bossStage::update()
 	if (!INVENTORY->getIsInven())
 	{
 		_player->update();
+		_player->tileCollision(_attribute, _tile, BOSSTILEX);
 	}
 
 	if (_ui->getBossScene() == BOSS_STAGE::PLAYER_ENTER)
@@ -63,20 +64,11 @@ void bossStage::update()
 
 	if (_ui->getBossScene() == BOSS_STAGE::STAGE_START)
 	{
-		for (int i = 0; i < _enemy->_getVEnemy().size(); i++)
-		{
-			if (_enemy->_getVEnemy()[i]->getEnemyType() == ENEMY_BOSS)
-			{
-				_ui->setBossHpBar(_enemy->_getVEnemy()[i]->getCurHP());
-				break;
-			}
-		}
+		_ui->setBossHpBar(_enemy->_getVEnemy()[0]->getCurHP());
 		if (!INVENTORY->getIsInven()) _enemy->update();
-		//_player->tileCollision(_attribute, _tile, BOSSTILEX);		
 
 		CAMERAMANAGER->setXY(_player->getX(), _player->getY());
 	}
-
 	else if (_ui->getBossScene() != BOSS_STAGE::STAGE_START) CAMERAMANAGER->setXY(_cameraX, _cameraY);
 
 }

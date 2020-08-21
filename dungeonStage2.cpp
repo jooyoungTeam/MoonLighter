@@ -42,12 +42,6 @@ void dungeonStage2::update()
 			_attribute[_doorIndex[0]] = TP_ENTERENCE;
 			_attribute[_doorIndex[1]] = TP_ENTERENCE;
 		}
-		else
-		{
-			_objectManager->setIsDoorOpen(false);
-			_attribute[_doorIndex[0]] = ATTR_UNMOVE;
-			_attribute[_doorIndex[1]] = ATTR_UNMOVE;
-		}
 	}
 
 }
@@ -81,7 +75,7 @@ void dungeonStage2::loadMap()
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
 		if (_tile[i].pos == POS_ENTERENCE)
 		{
-			_attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+			_attribute[i] |= ATTR_UNMOVE;	 // 씬 변경해줄 타일
 			_doorIndex[index++] = i;
 		}
 
