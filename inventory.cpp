@@ -222,6 +222,8 @@ void inventory::selectItem()
 {
 	if (!_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
+		SOUNDMANAGER->play("selectItem");
+
 		_selectItem.count = 0;
 
 		if (!_isSwap)
@@ -335,6 +337,8 @@ void inventory::moveItem()
 {
 	if (_isSelect && KEYMANAGER->isOnceKeyDown('J'))
 	{
+		SOUNDMANAGER->play("putItem");
+
 		if (!_isSwap)
 		{
 			if (_select == 21) return;

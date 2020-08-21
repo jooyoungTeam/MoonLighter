@@ -7,6 +7,8 @@ void inventory::moveInven()
 {
 	if (KEYMANAGER->isOnceKeyDown('D'))
 	{
+		SOUNDMANAGER->play("errorItem");
+
 		if (!_isSwap)
 		{
 			_select++;
@@ -69,6 +71,8 @@ void inventory::moveInven()
 
 	if (KEYMANAGER->isOnceKeyDown('A'))
 	{
+		SOUNDMANAGER->play("errorItem");
+
 		if (!_isSwap)
 		{
 			_select--;
@@ -131,6 +135,8 @@ void inventory::moveInven()
 
 	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
+		SOUNDMANAGER->play("errorItem");
+
 		if (!_isSwap)
 		{
 			if (_select < 5)
@@ -176,6 +182,8 @@ void inventory::moveInven()
 
 	if (KEYMANAGER->isOnceKeyDown('S'))
 	{
+		SOUNDMANAGER->play("errorItem");
+
 		if (!_isSwap)
 		{
 			if (_select < 20)
