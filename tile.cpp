@@ -454,8 +454,7 @@ void tile::saveLoad()
 
 void tile::imageLoad()
 {
-	//ImageManager::GetInstance()
-
+	
 }
 
 void tile::loadMap(int num)
