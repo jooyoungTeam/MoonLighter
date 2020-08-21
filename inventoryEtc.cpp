@@ -32,14 +32,13 @@ void inventory::moveInven()
 		{
 			if (_state == INVEN_STATE::NOTE)
 			{
-				_select++;
-
-				if (_select == 0) _select = 5;
+				if (_select == 0) _select += 5;
 				else
 				{
+					_select++;
 					_isSwap = false;
-					if (_select >= 5) _select = 0;
-					else _select *= 5;
+					if (_select <= 5) _select = (_select - 1 )* 5;
+					if (_select == 6) _select = 0;
 				}
 			}
 

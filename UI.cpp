@@ -102,9 +102,9 @@ void UI::render()
 	{
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
 		D2DRenderer::GetInstance()->RenderText(1320, 335, to_wstring((int)_player->getplayerCurrentHp()), 30, D2DRenderer::DefaultBrush::White);
-		D2DRenderer::GetInstance()->RenderText(1320, 405, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 407, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
 		D2DRenderer::GetInstance()->RenderText(1320, 480, to_wstring(0), 30, D2DRenderer::DefaultBrush::White);
-		D2DRenderer::GetInstance()->RenderText(1320, 555, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 552, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
 	}
 
 	//플레이어 맞을 때 화면 깜박임
