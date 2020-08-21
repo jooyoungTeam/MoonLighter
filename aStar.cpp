@@ -307,19 +307,14 @@ void aStar::update(int playerTileX, int playerTileY, int enemyTileX, int enemyTi
 void aStar::render()
 {
 	// 최단 경로 랜더
-	for (int i = 0; i < _vShortestList.size(); ++i)
+	if (KEYMANAGER->isToggleKey('V'))
 	{
-		RECT temp;
-		temp = RectMakeCenter(_vShortestList[i]->center.x, _vShortestList[i]->center.y, 50, 50);
+		for (int i = 0; i < _vShortestList.size(); ++i)
+		{
+			RECT temp;
+			temp = RectMakeCenter(_vShortestList[i]->center.x, _vShortestList[i]->center.y, 50, 50);
 
-		CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Red, 5.f);
+			CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Red, 5.f);
+		}
 	}
-
-	/*for (int i = 0; i < _vTotalList.size(); ++i)
-	{
-		RECT temp;
-		temp = RectMakeCenter(_vTotalList[i]->center.x, _vTotalList[i]->center.y, 50, 50);
-
-		CAMERAMANAGER->rectangle(temp, D2D1::ColorF::Blue, 5.f);
-	}*/
 }

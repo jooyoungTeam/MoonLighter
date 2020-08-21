@@ -55,7 +55,10 @@ void display::render()
 	if (_it != NULL)
 		_it->cameraRender();
 
-	CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Black, 1.f, 2.f);
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		CAMERAMANAGER->rectangle(_rc, D2D1::ColorF::Black, 1.f, 2.f);
+	}
 }
 
 void display::release()

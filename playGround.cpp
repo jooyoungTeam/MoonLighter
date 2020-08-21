@@ -319,6 +319,35 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddFrameImage("bossPullEffect", L"image/enemy/bossPullEffect.png", 11, 1);
 	ImageManager::GetInstance()->AddImage("bossBullet", L"image/enemy/bossBullet.png");
 	ImageManager::GetInstance()->AddFrameImage("bossTornadoEffect", L"image/enemy/bossTornadoEffect.png", 16, 1);
+
+
+	// ==============================================º• & NPC & ∆˜º« º•==========================================
+	ImageManager::GetInstance()->AddFrameImage("npc1", L"Image/Shop/Guy.png", 8, 4);
+	ImageManager::GetInstance()->AddFrameImage("npc2", L"Image/Shop/Hero.png", 8, 4);
+	ImageManager::GetInstance()->AddFrameImage("npc3", L"Image/Shop/Girl.png", 8, 4);
+	ImageManager::GetInstance()->AddImage("thinkBox", L"Image/Shop/thinkBox.png");
+	ImageManager::GetInstance()->AddFrameImage("thinking", L"Image/Shop/think.png", 3, 1);
+	ImageManager::GetInstance()->AddFrameImage("TooCheap", L"Image/Shop/tooCheap.png", 13, 1);
+	ImageManager::GetInstance()->AddFrameImage("Cheap", L"Image/Shop/Cheap.png", 4, 1);
+	ImageManager::GetInstance()->AddFrameImage("TooExpensive", L"Image/Shop/tooExpensive.png", 9, 1);
+	ImageManager::GetInstance()->AddFrameImage("Expensive", L"Image/Shop/expensive.png", 5, 1);
+	ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
+	ImageManager::GetInstance()->AddImage("shop_mid", L"Image/Shop/shop_mid.png");
+	ImageManager::GetInstance()->AddImage("shop_first", L"Image/Shop/shop_first.png");
+	ImageManager::GetInstance()->AddFrameImage("shop_door", L"Image/Shop/shop_door.png", 5, 1);
+	ImageManager::GetInstance()->AddFrameImage("shop_cellere", L"Image/Shop/celler.png", 66, 1);
+	ImageManager::GetInstance()->AddImage("potion_shop_bg", L"Image/potionShop/potion_shop_background.png");
+	ImageManager::GetInstance()->AddImage("alphaBlack", L"Image/UI/alphaBlack.png");
+	ImageManager::GetInstance()->AddImage("select_potion", L"Image/potionShop/select_potion.png");
+	ImageManager::GetInstance()->AddImage("potion_size", L"Image/potionShop/potion_size.png");
+	ImageManager::GetInstance()->AddImage("potion_size_left", L"Image/potionShop/size_select_left.png");
+	ImageManager::GetInstance()->AddImage("potion_size_right", L"Image/potionShop/size_select_right.png");
+	ImageManager::GetInstance()->AddImage("potion_check_yes", L"Image/potionShop/potion_check_yes.png");
+	ImageManager::GetInstance()->AddImage("potion_check_no", L"Image/potionShop/potion_check_no.png");
+	ImageManager::GetInstance()->AddImage("buy_false", L"Image/potionShop/buy_false.png");
+	ImageManager::GetInstance()->AddImage("buy_true", L"Image/potionShop/buy_true.png");
+	ImageManager::GetInstance()->AddFrameImage("potion_make_effect", L"Image/potionShop/potion_make_effect.png", 30, 1);
+	ImageManager::GetInstance()->AddFrameImage("potion_complete_effect", L"Image/potionShop/potion_complete_effect.png", 18, 1);
 }
 
 void playGround::cursor()
@@ -385,4 +414,16 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("openInven", "sound/UI&inventorySound/openInven.wav", false, false);
 	SOUNDMANAGER->addSound("putItem", "sound/UI&inventorySound/putItem.wav", false, false);
 	SOUNDMANAGER->addSound("selectItem", "sound/UI&inventorySound/selectItem.wav", false, false);
+
+
+	// ==============================================º• & NPC & ∆˜º« º•==========================================
+	SOUNDMANAGER->addSound("shop_door_open1", "sound/shopSound/πÆø≠∏≤.wav", false, false);
+	SOUNDMANAGER->addSound("shop_door_open2", "sound/shopSound/πÆø≠∏≤2.wav", false, false);
+	SOUNDMANAGER->addSound("shop_door_close", "sound/shopSound/πÆ¥›»˚.wav", false, false);
+	SOUNDMANAGER->addSound("shop_too_cheap", "sound/shopSound/æˆ√ªΩŒ¥Ÿ.wav", false, false);
+	SOUNDMANAGER->addSound("shop_cheap", "sound/shopSound/ΩŒ¥Ÿ.wav", false, false);
+	SOUNDMANAGER->addSound("shop_too_expensive", "sound/shopSound/æˆ√ª∫ÒΩŒ¥Ÿ.wav", false, false);
+	SOUNDMANAGER->addSound("shop_expensive", "sound/shopSound/∫ÒΩŒ¥Ÿ.wav", false, false);
+	SOUNDMANAGER->addSound("shop_sell", "sound/shopSound/æ∆¿Ã≈€∆»∏≤.wav", false, false);
+
 }

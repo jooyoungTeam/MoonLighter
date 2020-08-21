@@ -40,6 +40,7 @@ void townStage::update()
 		{
 			if (KEYMANAGER->isOnceKeyDown('J') && !INVENTORY->getIsInven())
 			{
+				SOUNDMANAGER->play("openInven");
 				_isPotionShop = true;
 				_potionShop->setIsActive(true);
 			}
@@ -75,7 +76,7 @@ void townStage::render()
 		_potionShop->render();
 	}
 
-	if (isCollision(_potionShopRc.GetRect(), _player->getPlayerRc().GetRect()))
+	if (isCollision(_potionShopRc.GetRect(), _player->getPlayerRc().GetRect()) && !_isPotionShop)
 	{
 		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("J"), _player->getX() - 32, _player->getY() - 100, 1.f);
 	}

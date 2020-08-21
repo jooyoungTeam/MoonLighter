@@ -4,18 +4,8 @@
 
 HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 {
-	// ÀÌ¹ÌÁö
-	{
-		ImageManager::GetInstance()->AddFrameImage("npc1", L"Image/Shop/Guy.png", 8, 4);
-		ImageManager::GetInstance()->AddFrameImage("npc2", L"Image/Shop/Hero.png", 8, 4);
-		ImageManager::GetInstance()->AddFrameImage("npc3", L"Image/Shop/Girl.png", 8, 4);
-		ImageManager::GetInstance()->AddImage("thinkBox", L"Image/Shop/thinkBox.png");
-		_emotionImg = ImageManager::GetInstance()->AddFrameImage("thinking", L"Image/Shop/think.png", 3, 1);
-		ImageManager::GetInstance()->AddFrameImage("TooCheap", L"Image/Shop/tooCheap.png", 13, 1);
-		ImageManager::GetInstance()->AddFrameImage("Cheap", L"Image/Shop/Cheap.png", 4, 1);
-		ImageManager::GetInstance()->AddFrameImage("TooExpensive", L"Image/Shop/tooExpensive.png", 9, 1);
-		ImageManager::GetInstance()->AddFrameImage("Expensive", L"Image/Shop/expensive.png", 5, 1);
-	}
+
+	_emotionImg = ImageManager::GetInstance()->FindImage("thinking");
 
 	switch (type)
 	{
@@ -227,7 +217,8 @@ void shopNPC::updadte()
 		if (_delayTimer > 199 && _delayTimer <= 200)
 		{
 			_itemImg = INVENTORY->getShowCase()[_oldRndChoiceItem * 2].item->getImg();
-			INVENTORY->getShowCase()[_oldRndChoiceItem * 2].item = NULL;
+			INVENTORY->resetShowCase(_oldRndChoiceItem * 2);
+			
 		}
 		if (_delayTimer > 200)
 		{
@@ -313,11 +304,61 @@ void shopNPC::emotionFrameUpdate()
 		}
 		break;
 	case NPC_TOO_EXPENSIVE:
+		if (_emotionFrameTimer > 5)
+		{
+			if (_emotionIndexX == 0)
+			{
+				SOUNDMANAGER->play("shop_too_expensive", 1.f);
+			}
+
+			if (_emotionIndexX < _emotionImg->GetMaxFrameX() - 1)
+			{
+				_emotionIndexX++;
+			}
+
+			_emotionFrameTimer = 0;
+		}
+		break;
 	case NPC_EXPENSIVE:
+		if (_emotionFrameTimer > 5)
+		{
+			if (_emotionIndexX == 0)
+			{
+				SOUNDMANAGER->play("shop_expensive", 1.f);
+			}
+
+			if (_emotionIndexX < _emotionImg->GetMaxFrameX() - 1)
+			{
+				_emotionIndexX++;
+			}
+
+			_emotionFrameTimer = 0;
+		}
+		break;
 	case NPC_CHEAP:
+		if (_emotionFrameTimer > 5)
+		{
+			if (_emotionIndexX == 0)
+			{
+				SOUNDMANAGER->play("shop_cheap", 1.f);
+			}
+
+			if (_emotionIndexX < _emotionImg->GetMaxFrameX() - 1)
+			{
+				_emotionIndexX++;
+			}
+
+			_emotionFrameTimer = 0;
+		}
+		break;
 	case NPC_TOO_CHEAP:
 		if (_emotionFrameTimer > 5)
 		{
+			if (_emotionIndexX == 0)
+			{
+				SOUNDMANAGER->play("shop_too_cheap", 1.f);
+			}
+
 			if (_emotionIndexX < _emotionImg->GetMaxFrameX() - 1)
 			{
 				_emotionIndexX++;

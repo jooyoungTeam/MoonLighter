@@ -4,11 +4,8 @@
 
 HRESULT shopStage::init()
 {
-	_backGround = ImageManager::GetInstance()->AddImage("shop_background", L"Image/Shop/shop_background.png");
-	ImageManager::GetInstance()->AddImage("shop_mid", L"Image/Shop/shop_mid.png");
-	ImageManager::GetInstance()->AddImage("shop_first", L"Image/Shop/shop_first.png");
-	ImageManager::GetInstance()->AddFrameImage("shop_door", L"Image/Shop/shop_door.png",5,1);
-	_celler = ImageManager::GetInstance()->AddFrameImage("shop_cellere", L"Image/Shop/celler.png", 66, 1);
+	_backGround = ImageManager::GetInstance()->FindImage("shop_background");
+	_celler = ImageManager::GetInstance()->FindImage("shop_cellere");
 
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 1400 - WINSIZEY);
 	loadMap();
@@ -48,7 +45,7 @@ void shopStage::render()
 	//CAMERAMANAGER->rectangle(_interactionRC, D2D1::ColorF::AliceBlue, 1.f, 2.f);
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 8, 605,800, 1.f, 1.3f);    
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 2, 1158,1300, 1.f, 1.3f);
-	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);
+	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.4f,1.f);
 
 	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0,2.f,1.f);
 
@@ -71,6 +68,7 @@ void shopStage::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
+			SOUNDMANAGER->play("openInven");
 			INVENTORY->setIsInven(true);
 			INVENTORY->setState(INVEN_STATE::SHOP);
 		}
@@ -245,12 +243,18 @@ void shopStage::doorUpdate()
 		{
 			if (IntersectRect(&temp, &_doorRC.GetRect(), &_npcM->getVnpc()[i]->getNPCRect().GetRect()))
 			{
+				SOUNDMANAGER->play("shop_door_open1", 1.f);
+				SOUNDMANAGER->play("shop_door_open2", 1.f);
 				_doorState = DOOR_OPENING;
 			}
 		}
 		break;
 	case DOOR_OPEN:
-		if(_npcM->getVnpc().size() == 0) _doorState = DOOR_CLOSING;
+		if (_npcM->getVnpc().size() == 0)
+		{
+			SOUNDMANAGER->play("shop_door_close", 1.f);
+			_doorState = DOOR_CLOSING;
+		}
 
 		for (int i = 0; i < _npcM->getVnpc().size(); ++i)
 		{
@@ -260,7 +264,10 @@ void shopStage::doorUpdate()
 			}
 
 			if (i == _npcM->getVnpc().size() - 1)
+			{
+				SOUNDMANAGER->play("shop_door_close", 1.f);
 				_doorState = DOOR_CLOSING;
+			}
 		}
 		break;
 	case DOOR_OPENING:
@@ -298,6 +305,7 @@ void shopStage::npcProcess()
 		// 카운터에 도착하면
 		if (_npcM->getVnpc()[i]->getIsCount() && !_isCeller)
 		{
+			SOUNDMANAGER->play("shop_sell", 1.f);
 			// 팔았다는 카운터 애니메이션재생
 			_cellerIndex = 0;
 			_npcM->getVnpc()[i]->setIsCount(false);

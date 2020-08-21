@@ -3,21 +3,7 @@
 
 HRESULT potionCreate::init()
 {
-	ImageManager::GetInstance()->AddImage("potion_shop_bg", L"Image/potionShop/potion_shop_background.png");
-	ImageManager::GetInstance()->AddImage("alphaBlack", L"Image/UI/alphaBlack.png");
-	_select = ImageManager::GetInstance()->AddImage("select_potion", L"Image/potionShop/select_potion.png");
-
-	ImageManager::GetInstance()->AddImage("potion_size", L"Image/potionShop/potion_size.png");
-	ImageManager::GetInstance()->AddImage("potion_size_left", L"Image/potionShop/size_select_left.png");
-	ImageManager::GetInstance()->AddImage("potion_size_right", L"Image/potionShop/size_select_right.png");
-	ImageManager::GetInstance()->AddImage("potion_check_yes", L"Image/potionShop/potion_check_yes.png");
-	ImageManager::GetInstance()->AddImage("potion_check_no", L"Image/potionShop/potion_check_no.png");
-	ImageManager::GetInstance()->AddImage("buy_false", L"Image/potionShop/buy_false.png");
-	ImageManager::GetInstance()->AddImage("buy_true", L"Image/potionShop/buy_true.png");
-
-	ImageManager::GetInstance()->AddFrameImage("potion_make_effect", L"Image/potionShop/potion_make_effect.png", 30, 1);
-	ImageManager::GetInstance()->AddFrameImage("potion_complete_effect", L"Image/potionShop/potion_complete_effect.png", 18, 1);
-
+	_select = ImageManager::GetInstance()->FindImage("select_potion");
 	_effectImg = ImageManager::GetInstance()->FindImage("potion_make_effect");
 
 	_selectIndex = 0;
@@ -60,11 +46,13 @@ void potionCreate::update()
 					case POTION_E_START:
 						_effectIndex = 0;
 						_effectState = POTION_E_MID;
-						_effectImg = ImageManager::GetInstance()->FindImage("potion_complete_effect");
+						_effectImg = ImageManager::GetInstance()->FindImage("potion_complete_effect"); 
+						SOUNDMANAGER->play("슬라임펑");
 						break;
 					case POTION_E_MID:
 						_effectIndex = 0;
 						_effectState = POTION_E_END;
+						SOUNDMANAGER->play("gameStart");
 						break;
 					}
 				}
@@ -112,6 +100,7 @@ void potionCreate::update()
 		{
 			if (KEYMANAGER->isOnceKeyDown('A'))
 			{
+				SOUNDMANAGER->play("errorItem");
 				_selectIndex--;
 				if (_selectIndex == -1)
 					_selectIndex = 3;
@@ -119,6 +108,7 @@ void potionCreate::update()
 
 			if (KEYMANAGER->isOnceKeyDown('D'))
 			{
+				SOUNDMANAGER->play("errorItem");
 				_selectIndex++;
 				if (_selectIndex == 4)
 					_selectIndex = 0;
@@ -128,20 +118,27 @@ void potionCreate::update()
 	case POTION_SIZE:
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
-			if(_isSizeLeft)
+			if (_isSizeLeft)
+			{
+				SOUNDMANAGER->play("errorItem");
 				_makeCount--;
+			}
 			// 포션 개수 마이너스
 		}
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
 			if (_isSizeRight)
+			{
+				SOUNDMANAGER->play("errorItem");
 				_makeCount++;
+			}
 			// 포션 개수 플러스	
 		}
 		break;
 	case POTION_CHECK:
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("errorItem");
 			if (_isPotionCheck)
 			{
 				_isPotionCheck = false;
@@ -153,6 +150,7 @@ void potionCreate::update()
 		}
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
+			SOUNDMANAGER->play("errorItem");
 			if (_isPotionCheck)
 			{
 				_isPotionCheck = false;
@@ -168,6 +166,7 @@ void potionCreate::update()
 
 	if (KEYMANAGER->isOnceKeyDown('J'))
 	{
+		SOUNDMANAGER->play("putItem");
 		switch (_state)
 		{
 		case POTION_INIT:
