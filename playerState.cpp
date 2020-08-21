@@ -155,6 +155,7 @@ void playerIdleState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('Z'))
 		{
+			SOUNDMANAGER->play("WeaponChange", 1.0f);
 			//화살로 변경
 			player.setWeaponChange(false);
 			player.setCurrentState(player.getBowState());
@@ -166,6 +167,7 @@ void playerIdleState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('Z'))
 		{
+			SOUNDMANAGER->play("WeaponChange", 1.0f);
 			//검으로 변경
 			player.setWeaponChange(true);
 			player.setCurrentState(player.getSwordState());
@@ -404,6 +406,8 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isStayKeyDown('W'))
 		{
+			if (!SOUNDMANAGER->isPlaySound("walk"))
+				SOUNDMANAGER->play("walk", 1.0f);
 			//만약 아래키 누르면 위쪽Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('S'))
 			{
@@ -412,6 +416,7 @@ void playerWalkState::update(player & player)
 			//위쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('S'))
 			{
+				SOUNDMANAGER->stop("walk");
 				return;
 			}
 			//아래키를 떼면 위로 다시 움직임
@@ -452,6 +457,8 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isStayKeyDown('S'))
 		{
+			if (!SOUNDMANAGER->isPlaySound("walk"))
+				SOUNDMANAGER->play("walk", 1.0f);
 			//만약 위쪽키 누르면 아래 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('W'))
 			{
@@ -460,6 +467,7 @@ void playerWalkState::update(player & player)
 			//아래Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('W'))
 			{
+				SOUNDMANAGER->stop("walk");
 				return;
 			}
 			//위쪽키를 떼면 아래로 다시 움직임
@@ -501,6 +509,8 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isStayKeyDown('A'))
 		{
+			if (!SOUNDMANAGER->isPlaySound("walk"))
+				SOUNDMANAGER->play("walk", 1.0f);
 			//만약 오른쪽키 누르면 왼쪽 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('D'))
 			{
@@ -509,6 +519,7 @@ void playerWalkState::update(player & player)
 			//왼쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('D'))
 			{
+				SOUNDMANAGER->stop("walk");
 				return;
 			}
 			//오른쪽키를 떼면 왼쪽으로 다시 움직임
@@ -550,6 +561,8 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isStayKeyDown('D'))
 		{
+			if (!SOUNDMANAGER->isPlaySound("walk"))
+				SOUNDMANAGER->play("walk", 1.0f);
 			//만약 왼쪽키 누르면 오른쪽 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('A'))
 			{
@@ -558,6 +571,7 @@ void playerWalkState::update(player & player)
 			//오른쪽Idle 모습으로 멈추기
 			else if (KEYMANAGER->isStayKeyDown('A'))
 			{
+				SOUNDMANAGER->stop("walk");
 				return;
 			}
 			//왼쪽키를 떼면 오른쪽으로 다시 움직임
@@ -597,7 +611,8 @@ void playerWalkState::update(player & player)
 	//오른쪽위 이동
 	if (player.getDirection() == DIRECTION::RIGHTTOP)
 	{
-
+		if (!SOUNDMANAGER->isPlaySound("walk"))
+			SOUNDMANAGER->play("walk", 1.0f);
 		x = 1;
 		y = -1;
 
@@ -617,7 +632,8 @@ void playerWalkState::update(player & player)
 	//왼쪽위 이동
 	if (player.getDirection() == DIRECTION::LEFTTOP)
 	{
-
+		if (!SOUNDMANAGER->isPlaySound("walk"))
+			SOUNDMANAGER->play("walk", 1.0f);
 		x = -1;
 		y = -1;
 
@@ -637,7 +653,8 @@ void playerWalkState::update(player & player)
 	//왼쪽아래 이동
 	if (player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
-
+		if (!SOUNDMANAGER->isPlaySound("walk"))
+			SOUNDMANAGER->play("walk", 1.0f);
 		x = -1;
 		y = 1;
 
@@ -658,7 +675,8 @@ void playerWalkState::update(player & player)
 	//오른쪽아래 이동
 	if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
-
+		if (!SOUNDMANAGER->isPlaySound("walk"))
+			SOUNDMANAGER->play("walk", 1.0f);
 		x = 1;
 		y = 1;
 
@@ -692,6 +710,7 @@ void playerWalkState::update(player & player)
 	//위쪽키 떼면
 	if (KEYMANAGER->isOnceKeyUp('W'))
 	{
+		SOUNDMANAGER->stop("walk");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpIdle"), ImageManager::GetInstance()->FindImage("playerUpIdle"));
 		player.setCurrentState(player.getIdleState());
 
@@ -722,6 +741,7 @@ void playerWalkState::update(player & player)
 	//아래키 떼면
 	if (KEYMANAGER->isOnceKeyUp('S'))
 	{
+		SOUNDMANAGER->stop("walk");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 
@@ -752,6 +772,7 @@ void playerWalkState::update(player & player)
 	//왼쪽키 떼면
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
+		SOUNDMANAGER->stop("walk");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftIdle"), ImageManager::GetInstance()->FindImage("playerLeftIdle"));
 		player.setCurrentState(player.getIdleState());
 
@@ -782,6 +803,7 @@ void playerWalkState::update(player & player)
 	//오른쪽키 떼면
 	if (KEYMANAGER->isOnceKeyUp('D'))
 	{
+		SOUNDMANAGER->stop("walk");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightIdle"), ImageManager::GetInstance()->FindImage("playerRightIdle"));
 		player.setCurrentState(player.getIdleState());
 
@@ -892,6 +914,7 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('Z'))
 		{
+			SOUNDMANAGER->play("WeaponChange", 1.0f);
 			//화살로 변경
 			player.setWeaponChange(false);
 			player.setCurrentState(player.getBowState());
@@ -903,6 +926,7 @@ void playerWalkState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('Z'))
 		{
+			SOUNDMANAGER->play("WeaponChange", 1.0f);
 			//검으로 변경
 			player.setWeaponChange(true);
 			player.setCurrentState(player.getSwordState());

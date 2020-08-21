@@ -348,6 +348,9 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
 	SOUNDMANAGER->addSound("Moon", "sound/MoonLighter_Full.mp3", true, false);
 	SOUNDMANAGER->addSound("roll", "sound/playerSound/roll.wav", false, false);
+	SOUNDMANAGER->addSound("walk", "sound/playerSound/walk.wav", false, false);
+	SOUNDMANAGER->addSound("WeaponChange", "sound/playerSound/WeaponChange.wav", false, false);
+
 
 	//____________________________________________
 	//ÆÌ

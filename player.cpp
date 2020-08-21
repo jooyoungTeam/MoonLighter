@@ -622,7 +622,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX, 2000);
+		setPlayerPos(WINSIZEX, 1800);
 		SCENEMANAGER->changeScene("º¸½º¾À");
 		return true;
 	}
