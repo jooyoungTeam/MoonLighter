@@ -62,55 +62,58 @@ void shopStage::render()
 void shopStage::update()
 {
 	RECT rc;
-	if (IntersectRect(&rc, &_interactionRC.GetRect(), &_player->getPlayerRc().GetRect()))
+	if (IntersectRect(&rc, &_interactionRC.GetRect(), &_player->getPlayerRc().GetRect()) && !INVENTORY->getIsInven())
 	{
-		INVENTORY->setIsInven(true);
-		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
-		INVENTORY->setState(INVEN_STATE::SHOP);
-	}
-
-	if (_npcM->getVnpc().size() > 2)
-	{
-		_isMaxNpc = true;
-	}
-	else
-	{
-		_isMaxNpc = false;
-	}
-
-	if (!_isMaxNpc)
-	{
-		_npcAddCount++;
-
-		if (_npcAddCount > 400)
+		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
-			int rendType = RND->getInt(3);
-
-			switch (rendType)
-			{
-			case 0:
-				_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
-				break;
-
-			case 1:
-				_npcM->npcAdd(NPC_HERO, _unMoveTile);
-				break;
-
-			case 2:
-				_npcM->npcAdd(NPC_RICH, _unMoveTile);
-				break;
-			}
-
-			_npcAddCount = 0;
+			INVENTORY->setIsInven(true);
+			INVENTORY->setState(INVEN_STATE::SHOP);
 		}
 	}
 
 	if (!INVENTORY->getIsInven())
 	{
+		if (_npcM->getVnpc().size() > 2)
+		{
+			_isMaxNpc = true;
+		}
+		else
+		{
+			_isMaxNpc = false;
+		}
+
+		if (!_isMaxNpc)
+		{
+			_npcAddCount++;
+
+			if (_npcAddCount > 400)
+			{
+				int rendType = RND->getInt(3);
+
+				switch (rendType)
+				{
+				case 0:
+					_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
+					break;
+
+				case 1:
+					_npcM->npcAdd(NPC_HERO, _unMoveTile);
+					break;
+
+				case 2:
+					_npcM->npcAdd(NPC_RICH, _unMoveTile);
+					break;
+				}
+
+				_npcAddCount = 0;
+			}
+		}
+
 		_player->update();
 		_player->tileCollision(_attribute, _tile, SHOPTILEX);
 		_npcM->update();
-
+		npcProcess();
+		doorUpdate();
 		disPlayUpdate();
 
 		_cellerFrameTimer++;
@@ -128,13 +131,11 @@ void shopStage::update()
 			_cellerFrameTimer = 0;
 		}
 	}
-	
-	npcProcess();
+
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
 	
-	doorUpdate();
 }
 
 void shopStage::release()

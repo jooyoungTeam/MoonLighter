@@ -98,13 +98,6 @@ void stageManager::uiUpdate()
 			INVENTORY->closeInven();
 		}
 
-		if (SCENEMANAGER->getCurrentScene() == "¼¥¾À" && !INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
-		{
-			INVENTORY->setIsInven(true);
-			_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
-			INVENTORY->setState(INVEN_STATE::SHOP);
-		}
-
 		if (KEYMANAGER->isOnceKeyDown('E'))
 		{
 			INVENTORY->usePotion();
