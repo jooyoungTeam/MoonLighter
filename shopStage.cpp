@@ -45,12 +45,17 @@ void shopStage::render()
 	_display4->render();
 
 	// ================================ 이 사이에 NPC, 플레이어 넣을것 ===================================
-	CAMERAMANAGER->rectangle(_interactionRC, D2D1::ColorF::AliceBlue, 1.f, 2.f);
+	//CAMERAMANAGER->rectangle(_interactionRC, D2D1::ColorF::AliceBlue, 1.f, 2.f);
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_mid"), WINSIZEX / 2 + 8, 605,800, 1.f, 1.3f);    
 	CAMERAMANAGER->zOrderRender(ImageManager::GetInstance()->FindImage("shop_first"), WINSIZEX / 2 - 2, 1158,1300, 1.f, 1.3f);
 	CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("shop_door"), WINSIZEX / 2 + 80, 1109, _doorIndex, 0 ,1.2f,1.f);
 
 	CAMERAMANAGER->zOrderFrameRender(_celler, WINSIZEX / 2 + 160, 830,830, _cellerIndex, 0,2.f,1.f);
+
+	if (isCollision(_interactionRC.GetRect(), _player->getPlayerRc().GetRect()))
+	{
+		CAMERAMANAGER->render(ImageManager::GetInstance()->FindImage("J"), _player->getX() - 32, _player->getY() - 100, 1.f);
+	}
 
 	CAMERAMANAGER->zOrderALLRender();
 	//CAMERAMANAGER->frameRender(_celler, WINSIZEX / 2 + 160, 830, _cellerIndex,0,1.5,1.f);
@@ -61,48 +66,59 @@ void shopStage::render()
 
 void shopStage::update()
 {
-	if (_npcM->getVnpc().size() > 2)
+	RECT rc;
+	if (IntersectRect(&rc, &_interactionRC.GetRect(), &_player->getPlayerRc().GetRect()) && !INVENTORY->getIsInven())
 	{
-		_isMaxNpc = true;
-	}
-	else
-	{
-		_isMaxNpc = false;
-	}
-
-	if (!_isMaxNpc)
-	{
-		_npcAddCount++;
-
-		if (_npcAddCount > 400)
+		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
-			int rendType = RND->getInt(3);
-
-			switch (rendType)
-			{
-			case 0:
-				_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
-				break;
-
-			case 1:
-				_npcM->npcAdd(NPC_HERO, _unMoveTile);
-				break;
-
-			case 2:
-				_npcM->npcAdd(NPC_RICH, _unMoveTile);
-				break;
-			}
-
-			_npcAddCount = 0;
+			INVENTORY->setIsInven(true);
+			INVENTORY->setState(INVEN_STATE::SHOP);
 		}
 	}
 
 	if (!INVENTORY->getIsInven())
 	{
+		if (_npcM->getVnpc().size() > 2)
+		{
+			_isMaxNpc = true;
+		}
+		else
+		{
+			_isMaxNpc = false;
+		}
+
+		if (!_isMaxNpc)
+		{
+			_npcAddCount++;
+
+			if (_npcAddCount > 400)
+			{
+				int rendType = RND->getInt(3);
+
+				switch (rendType)
+				{
+				case 0:
+					_npcM->npcAdd(NPC_NOMAL, _unMoveTile);
+					break;
+
+				case 1:
+					_npcM->npcAdd(NPC_HERO, _unMoveTile);
+					break;
+
+				case 2:
+					_npcM->npcAdd(NPC_RICH, _unMoveTile);
+					break;
+				}
+
+				_npcAddCount = 0;
+			}
+		}
+
 		_player->update();
 		_player->tileCollision(_attribute, _tile, SHOPTILEX);
 		_npcM->update();
-
+		npcProcess();
+		doorUpdate();
 		disPlayUpdate();
 
 		_cellerFrameTimer++;
@@ -120,13 +136,11 @@ void shopStage::update()
 			_cellerFrameTimer = 0;
 		}
 	}
-	
-	npcProcess();
+
 	
 	CAMERAMANAGER->setX(_player->getX());
 	CAMERAMANAGER->setY(_player->getY());
 	
-	doorUpdate();
 }
 
 void shopStage::release()

@@ -92,13 +92,13 @@ void playerIdleState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 
-	//플레이어 사망 <-- 임시
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	{
-		player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
-	}
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	////플레이어 사망 <-- 임시
+	////ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	//{
+	//	player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
+	//}
+	////ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 	//플레이어 쉴드
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -174,7 +174,7 @@ void playerIdleState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 	//활
-	
+
 	if (player.getWeaponChange())
 	{
 		if (!player.getAttackProhibition())
@@ -214,8 +214,12 @@ void playerIdleState::update(player & player)
 
 			if (player.getBowChargeCount() >= 30)
 			{
+				if (!SOUNDMANAGER->isPlaySound("bow_Charge") && !player.getIsBowChargeSound())
+					SOUNDMANAGER->play("bow_Charge", 1.0f);
 				player.setBowChargeAlpha(true);
 				player.setBowChargeState(true);
+				player.setIsBowChargeSound(true);
+
 				if (KEYMANAGER->isStayKeyDown('J'))
 				{
 					if (player.getDirection() == DIRECTION::UP)
@@ -270,6 +274,7 @@ void playerIdleState::update(player & player)
 
 			if (KEYMANAGER->isOnceKeyUp('J'))
 			{
+				SOUNDMANAGER->play("bow", 1.0f);
 				if (player.getDirection() == DIRECTION::UP)
 				{
 					player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpBow"), ImageManager::GetInstance()->FindImage("playerUpBow"));
@@ -293,6 +298,7 @@ void playerIdleState::update(player & player)
 				player.setBedCount(player.getBedCount() == 0);
 				player.setBowBool(false);
 				player.setBowChargeAlpha(false);
+				player.setIsBowChargeSound(false);
 			}
 		}
 	}
@@ -305,6 +311,8 @@ void playerIdleState::update(player & player)
 		{
 			if (KEYMANAGER->isOnceKeyDown('J'))
 			{
+				if(!SOUNDMANAGER->isPlaySound("Sword"))
+				SOUNDMANAGER->play("Sword", 1.0f);
 				player.setSwordAttack(true);
 				player.setAttackRcbool(true);
 				if (player.getDirection() == DIRECTION::UP)
@@ -902,7 +910,10 @@ void playerWalkState::update(player & player)
 
 			if (player.getBowChargeCount() >= 30)
 			{
+				if (!SOUNDMANAGER->isPlaySound("bow_Charge") && !player.getIsBowChargeSound())
+					SOUNDMANAGER->play("bow_Charge", 1.0f);
 				player.setBowChargeAlpha(true);
+				player.setIsBowChargeSound(true);
 
 				if (KEYMANAGER->isStayKeyDown('J'))
 				{
@@ -957,6 +968,7 @@ void playerWalkState::update(player & player)
 
 			if (KEYMANAGER->isOnceKeyUp('J'))
 			{
+				SOUNDMANAGER->play("bow", 1.0f);
 				if (player.getDirection() == DIRECTION::UP)
 				{
 					player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpBow"), ImageManager::GetInstance()->FindImage("playerUpBow"));
@@ -980,6 +992,7 @@ void playerWalkState::update(player & player)
 				player.setBedCount(player.getBedCount() == 0);
 				player.setBowBool(false);
 				player.setBowChargeAlpha(false);
+				player.setIsBowChargeSound(false);
 			}
 		}
 	}
@@ -992,6 +1005,8 @@ void playerWalkState::update(player & player)
 		{
 			if (KEYMANAGER->isOnceKeyDown('J'))
 			{
+				if (!SOUNDMANAGER->isPlaySound("Sword"))
+				SOUNDMANAGER->play("Sword", 1.0f);
 				player.setSwordAttack(true);
 
 				if (player.getDirection() == DIRECTION::UP)
@@ -1149,7 +1164,7 @@ void playerDieState::update(player & player)
 
 	if (!KEYANIMANAGER->findAnimation("playerDie")->isPlay())
 	{
-		cout << "디짐~" << endl; 
+		cout << "디짐~" << endl;
 	}
 
 }
@@ -1733,6 +1748,8 @@ void playerSwordState::update(player & player)
 	{
 		if (KEYMANAGER->isOnceKeyDown('J'))
 		{
+			if (SOUNDMANAGER->isPlaySound("Sword"))
+			SOUNDMANAGER->play("Sword", 1.0f);
 			player.setSwrodAttackCombo(true);
 		}
 	}
@@ -1895,6 +1912,8 @@ void playerBroomState::update(player & player)
 //침대 상태
 void playerBedState::update(player & player)
 {
+	if(!SOUNDMANAGER->isPlaySound("bed"))
+	SOUNDMANAGER->play("bed", 1.0f);
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 	//애니메이션이 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation("playerBed")->isPlay())

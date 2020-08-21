@@ -84,7 +84,7 @@ void soundManager::play(string keyName, float volume)
 	{
 		if (keyName == iter->first)
 		{
-			_system->playSound(FMOD_CHANNEL_FREE, *iter->second, false, &_channel[count]);
+			_system->playSound(FMOD_CHANNEL_REUSE, *iter->second, false, &_channel[count]);
 
 			_channel[count]->setVolume(volume);
 			break;

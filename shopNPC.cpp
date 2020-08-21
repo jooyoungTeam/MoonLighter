@@ -361,6 +361,7 @@ void shopNPC::move()
 			}
 			else if (_npcActionState == NPC_BUY)
 			{
+				INVENTORY->setGold(_settingPrice);
 				_isCount = true;
 				_npcActionState = NPC_AWAY;
 				_goToPoint = _eixtPoint;

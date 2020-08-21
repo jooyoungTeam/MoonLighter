@@ -41,6 +41,8 @@ void spaStage::update()
 	p.y = _player->getY();
 	if (_objectManager->isPlayerSpaIn(p))
 	{
+		if (!SOUNDMANAGER->isPlaySound("healing"))
+		SOUNDMANAGER->play("healing", 1.0f);
 		_player->setTransform(true);
 		_spaCount++;
 		if (_spaCount > 1 && _curHp < _maxHp)

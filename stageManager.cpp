@@ -71,7 +71,7 @@ void stageManager::uiRender()
 		//µ·ÁÖ¸Ó´Ï
 		ImageManager::GetInstance()->FindImage("moneyBag")->FrameRender(Vector2(90, 88), 0, _ui->getMonveBagFrame());
 		//¼ÒÁö±Ý
-		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
+		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::White);
 
 		_itemMg->render();
 		if (INVENTORY->getIsInven()) INVENTORY->render();
@@ -96,13 +96,6 @@ void stageManager::uiUpdate()
 			INVENTORY->setIsInven(false);
 			_ui->setUIScene(CURRENT_SCENE::TEMP);
 			INVENTORY->closeInven();
-		}
-
-		if (SCENEMANAGER->getCurrentScene() == "¼¥¾À" && !INVENTORY->getIsInven() && KEYMANAGER->isOnceKeyDown('O'))
-		{
-			INVENTORY->setIsInven(true);
-			_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
-			INVENTORY->setState(INVEN_STATE::SHOP);
 		}
 
 		if (KEYMANAGER->isOnceKeyDown('E'))

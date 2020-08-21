@@ -152,6 +152,7 @@ public:
 	vector<ITEMTYPE> getVType() { return _vType; }
 
 public:
+	void setGold(int gold) { _gold += gold; }
 	void setState(INVEN_STATE state) { _state = state; }	//어떤 인벤 열었는지 설정하기
 	void setIsInven(bool arg) { _isInven = arg; }			//인벤 열지 말지 정하기
 	void resetShowCase(int index)							//아이템 팔린 후 쇼케이스 리셋
