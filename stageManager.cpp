@@ -71,7 +71,7 @@ void stageManager::uiRender()
 		//돈주머니
 		ImageManager::GetInstance()->FindImage("moneyBag")->FrameRender(Vector2(90, 88), 0, _ui->getMonveBagFrame());
 		//소지금
-		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::Black);
+		D2DRenderer::GetInstance()->RenderText(100, 150, to_wstring(INVENTORY->getGold()), 20, D2DRenderer::DefaultBrush::White);
 
 		_itemMg->render();
 		if (INVENTORY->getIsInven()) INVENTORY->render();

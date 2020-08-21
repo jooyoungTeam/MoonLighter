@@ -69,6 +69,7 @@ void UI::render()
 	//D2DRenderer::GetInstance()->DrawRectangle(_portal, D2DRenderer::DefaultBrush::White, 1.f);
 
 	//펜던트
+	if (SCENEMANAGER->getCurrentScene() == "마을씬" || SCENEMANAGER->getCurrentScene() == "샵씬") _pendant->SetAlpha(0.4);
 	_pendant->Render(Vector2(_portal.left - 30, _portal.top - 15));
 	//UI가장 앞
 	ImageManager::GetInstance()->FindImage("UI_front")->Render(Vector2(0, 0));	
@@ -100,6 +101,10 @@ void UI::render()
 	if (_scene == CURRENT_SCENE::INVENTORY_OPEN)
 	{
 		ImageManager::GetInstance()->FindImage("note")->Render(Vector2(WINSIZEX / 2 - 600, WINSIZEY / 2 - 350));
+		D2DRenderer::GetInstance()->RenderText(1320, 335, to_wstring((int)_player->getplayerCurrentHp()), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 405, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 480, to_wstring(0), 30, D2DRenderer::DefaultBrush::White);
+		D2DRenderer::GetInstance()->RenderText(1320, 555, to_wstring(100), 30, D2DRenderer::DefaultBrush::White);
 	}
 
 	//플레이어 맞을 때 화면 깜박임

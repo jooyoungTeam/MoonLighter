@@ -258,6 +258,7 @@ void playGround::imageLoad()
 	ImageManager::GetInstance()->AddImage("price_cursor", L"Image/UI/select_price.png");
 	ImageManager::GetInstance()->AddImage("hit_screen", L"Image/UI/player_hit_screen.png");
 	ImageManager::GetInstance()->AddImage("UI_gold", L"Image/UI/UI_gold.png");
+	ImageManager::GetInstance()->AddImage("J", L"Image/UI/J_key.png");
 
 	//=======================================에너미==============================
 	//레드 슬라임

@@ -102,7 +102,7 @@ HRESULT inventory::init()
 	_mirrorBallFrameX = 0;
 	_saleFrameX = 0;
 
-	_gold = 0;
+	_gold = 1000;
 	_select = 0;
 	_selectCount = 4;
 
@@ -124,15 +124,12 @@ void inventory::render()
 	renderInven();
 
 	//펜던트
+	if (SCENEMANAGER->getCurrentScene() == "마을씬" || SCENEMANAGER->getCurrentScene() == "샵씬") ImageManager::GetInstance()->FindImage("pendant")->SetAlpha(0.4);
 	ImageManager::GetInstance()->FindImage("pendant")->Render(Vector2(459, 565));
-
-	//미러
-	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
-	else _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
 
 	//아이템을 팔겠다면
 	if (_isSale)
-	{	
+	{
 		if (_isSelect)
 		{
 			//인벤에서 팔기
@@ -147,21 +144,16 @@ void inventory::render()
 		}
 	}
 
-	//내가 선택한 아이템
-	if (_selectItem.item != nullptr)
-	{
-		//D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
-		ImageManager::GetInstance()->FindImage("inven_select")->Render(Vector2(_selectItem.rc.left, _selectItem.rc.top));
-		_selectItem.item->getImg()->Render(Vector2(_selectItem.rc.GetCenter().x - _selectItem.item->getImg()->GetWidth() / 2, _selectItem.rc.GetCenter().y - _selectItem.item->getImg()->GetHeight() / 2));
-		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
-	}
-
 	//선택테두리
 	if (!_isSwap)
 	{
 		ImageManager::GetInstance()->FindImage("select")->Render(Vector2(_inven[_select].rc.left - 7, _inven[_select].rc.top - 7));
 	}
-	
+
+	//미러
+	if (_mirror == MIRROR_STATE::STOP) _mirrorImg->Render(Vector2(_inven[20].rc.left - 130, _inven[20].rc.top - 65));
+	if (_mirror == MIRROR_STATE::STAY || _mirror == MIRROR_STATE::ACTIVE) _mirrorImg->FrameRender(Vector2(_inven[20].rc.left - 5, _inven[20].rc.top + 70), _mirrorFrameX, 0);
+
 	//아이템 이름 띄우기
 	if (_inven[_select].item != nullptr && !_isSwap)
 	{
@@ -171,8 +163,17 @@ void inventory::render()
 		D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - name.length() * 13, 760, name, 30);
 	}
 
+	//내가 선택한 아이템
+	if (_selectItem.item != nullptr)
+	{
+		//D2DRenderer::GetInstance()->DrawRectangle(_selectItem.rc, D2DRenderer::DefaultBrush::Black, 2.f);
+		ImageManager::GetInstance()->FindImage("inven_select")->Render(Vector2(_selectItem.rc.left, _selectItem.rc.top));
+		_selectItem.item->getImg()->Render(Vector2(_selectItem.rc.GetCenter().x - _selectItem.item->getImg()->GetWidth() / 2, _selectItem.rc.GetCenter().y - _selectItem.item->getImg()->GetHeight() / 2));
+		D2DRenderer::GetInstance()->RenderText(_selectItem.rc.right - _selectItem.number.length() * 20, _selectItem.rc.bottom - 20, to_wstring(_selectItem.count), 20, D2DRenderer::DefaultBrush::Black);
+	}
+
 	if (fullInven() >= 19)
-	D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - 50, WINSIZEY / 2, L"아이템 창이 가득 찼습니다.", 40, D2DRenderer::DefaultBrush::Red);
+		D2DRenderer::GetInstance()->RenderText(WINSIZEX / 2 - 50, WINSIZEY / 2, L"아이템 창이 가득 찼습니다.", 40, D2DRenderer::DefaultBrush::Red);
 }
 
 void inventory::update()
