@@ -79,6 +79,7 @@ void boss::render()
 
 void boss::attack()
 {
+	_bossPattern = ARM_LONG;
 	if (_isPlayerHit)
 	{
 		_hitTimer++;
@@ -216,6 +217,7 @@ void boss::dead()
 			_bossAni = FOUR;
 		}
 	}
+	
 }
 
 void boss::enemyHit()
@@ -247,7 +249,7 @@ void boss::enemyHit()
 			_motion = KEYANIMANAGER->findAnimation("boss");
 			_img = ImageManager::GetInstance()->FindImage("boss");
 			_motion->start();
-			_state = _idle;
+			_state = _attack;
 			_isHit = false;
 			_bossAni = ONE;
 		}

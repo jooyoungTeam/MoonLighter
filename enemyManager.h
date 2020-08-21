@@ -30,6 +30,7 @@ private:
 	int _bulletTimer;	//얼마나 쏠지
 	int _index;
 	int _bowCount;
+	int _test;
 	bool _bowChange;
 	bool _playerStop;
 	bool _bossHit;

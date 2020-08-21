@@ -32,6 +32,9 @@ void bullet::update(int distance)
 
 		if ((getDistance(_viBullet->x, _viBullet->y, _viBullet->sX, _viBullet->sY) > distance))
 		{
+			ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
+			EFFECTMANAGER->play("bulletCollision", _viBullet->rc.left, _viBullet->rc.top);
+			SOUNDMANAGER->play("รัพหลอมü", 1.0f);
 			_viBullet = _vBullet.erase(_viBullet);
 		}
 		else

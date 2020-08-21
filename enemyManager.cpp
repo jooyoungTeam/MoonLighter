@@ -135,7 +135,8 @@ void enemyManager::update()
 				enemyDead(i);
 				break;
 			case ENEMY_BOSS:
-				_itemManager->setItem(ITEMBUNDLE::GOLEM_KING, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				_itemManager->setItem(ITEMBUNDLE::GOLEM_KING, _vEnemy[i]->getX(), _vEnemy[i]->getY() + 200);
+				_vEnemy[i]->setRealDead(false);
 				break;
 			}
 			break;
@@ -493,7 +494,7 @@ void enemyManager::playerCol()
 		RECT tempRc = _player->getShadowRc().GetRect();
 
 		//cout<< _vEnemy[i]->getIsRockBottom() << endl;
-		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom())
+		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom() && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			float x = (tempRc.right + tempRc.left) * 0.5f;
 			float y = (tempRc.bottom + tempRc.top) * 0.5f;

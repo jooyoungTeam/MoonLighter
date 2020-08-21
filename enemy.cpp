@@ -95,6 +95,7 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_middleBarCut = 0;
 	_barAlpha = 0;
 	_isHitCount = 0;
+	_bowTimer = 0;
 
 	vector<POINT> tempV;
 	_aStar->init(38, 18, _x / 50, _y / 50, _pX / 50, _pY / 50, tempV, false);
@@ -134,6 +135,19 @@ void enemy::update()
 
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(_width, _height), Pivot::Center);
 	setShadow();
+
+	if (_isPowerShot)
+	{
+		_bowTimer++;
+
+		if (_bowTimer > 100)
+		{
+
+			_isPowerShot = false;
+			_bowTimer = 0;
+		}
+	}
+
 
 	EFFECTMANAGER->update();
 }

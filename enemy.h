@@ -78,6 +78,7 @@ protected:
 	float _scale;		//에너미 그림마다 스케일 주랴구
 	float _speed;		//에너미 움직이는 스피드
 	float _barAlpha;	//맞을때만 잠깐 나오려구
+	float _bowTimer;
 
 
 	bool _isAttack;		//공격하는지?
@@ -155,16 +156,14 @@ public:
 		{
 			return;
 		}
-		if (_state != _dead)
+		if (_state != _dead && _state != _hit)
 		{
-			if (_state != _hit)
+			if (_type != ENEMY_BOSS)
 			{
-				if (_type != ENEMY_BOSS)
-				{
-					_isHit = true;
-					_barAlpha = 1.0f;
-				}
+				_isHit = true;
+				_barAlpha = 1.0f;
 			}
+
 			_saveHP = _bar.width;
 			if (_type == ENEMY_BOSS)
 			{
