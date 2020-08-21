@@ -61,6 +61,14 @@ void shopStage::render()
 
 void shopStage::update()
 {
+	RECT rc;
+	if (IntersectRect(&rc, &_interactionRC.GetRect(), &_player->getPlayerRc().GetRect()))
+	{
+		INVENTORY->setIsInven(true);
+		_ui->setUIScene(CURRENT_SCENE::SHOP_SALE);
+		INVENTORY->setState(INVEN_STATE::SHOP);
+	}
+
 	if (_npcM->getVnpc().size() > 2)
 	{
 		_isMaxNpc = true;

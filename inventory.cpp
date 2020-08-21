@@ -856,25 +856,6 @@ void inventory::makePotion(int selectPotionIndex, int makeCount, int itemIndex, 
 			_inven[i].item = nullptr;
 		}
 	}
-
-
-	for (int i = 0; i < INVENSPACE; i++)
-	{
-		if (_inven[i].item == NULL) continue;
-		for (int j = 0; j < INVENSPACE; j++)
-		{
-			if (_inven[j].item == NULL)
-			{
-				_inven[j].item = _inven[i].item;
-				_inven[j].isFull = _inven[i].isFull;
-				_inven[j].count = _inven[i].count;
-
-				_inven[i].isFull = false;
-				_inven[i].item = nullptr;
-				break;
-			}
-		}
-	}
 }
 //===========================================↑↑포션 만들기↑↑===========================================//
 

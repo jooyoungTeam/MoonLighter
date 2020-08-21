@@ -105,8 +105,6 @@ void potionCreate::update()
 	isSizeUpdate();
 	isBuyUpdate();
 
-	cout << _selectPotion.index << endl;
-
 	switch (_state)
 	{
 	case POTION_INIT:
@@ -182,7 +180,7 @@ void potionCreate::update()
 		case POTION_CHECK:
 			if (_isPotionCheck)
 			{
-				INVENTORY->makePotion(_selectPotion.index, _makeCount, 101, _selectPotion.needCount * _makeCount, _selectPotion.price * _makeCount);
+				INVENTORY->makePotion(_selectPotion.index, _makeCount, _selectPotion.needIndex, _selectPotion.needCount * _makeCount, _selectPotion.price * _makeCount);
 				// 포션 만들기 함수
 				_makeMaterial = _selectPotion.needItem;
 				_makeItem = _selectPotion.img;
@@ -241,7 +239,7 @@ void potionCreate::render()
 		break;
 	case POTION_E_END:
 		// 아이템 떠오르기
-		_makeItem->Render(Vector2(WINSIZEX / 2 - 20, _makeItemY),2.f);
+		_makeItem->Render(Vector2(WINSIZEX / 2 - 30, _makeItemY),2.f);
 		break;
 
 	}
@@ -406,8 +404,7 @@ void potionCreate::isSizeUpdate()
 		_isSizeLeft = true;
 	}
 
-
-	if ((INVENTORY->getGold() > _selectPotion.price * _makeCount) && INVENTORY->countOfItem(_selectPotion.needIndex) > _selectPotion.needCount * _makeCount)
+	if ((INVENTORY->getGold() >= _selectPotion.price * _makeCount) && (INVENTORY->countOfItem(_selectPotion.needIndex) >= _selectPotion.needCount * (_makeCount+1)))
 	{
 		_isSizeRight = true;
 	}
@@ -419,7 +416,7 @@ void potionCreate::isSizeUpdate()
 
 void potionCreate::isBuyUpdate()
 {
-	if (_selectPotion.needCount <= INVENTORY->countOfItem(_selectPotion.needIndex))
+	if ((_selectPotion.needCount <= INVENTORY->countOfItem(_selectPotion.needIndex)) && (INVENTORY->getGold() >= _selectPotion.price))
 	{
 		_isBuy = true;
 	}
