@@ -18,7 +18,7 @@ HRESULT playGround::init()
 	ShowCursor(false);
 	soundLoad();
 	imageLoad();
-
+	SOUNDMANAGER->play("Moon", 0.1f);
 
 	_stageManager = new stageManager;
 	_stageManager->init();
@@ -346,6 +346,7 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("bow_Charge", "sound/playerSound/bow_Charge.wav", false, false);
 	SOUNDMANAGER->addSound("healing", "sound/playerSound/È¸º¹_»ù.wav", false, false);
 	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
+	SOUNDMANAGER->addSound("Moon", "sound/MoonLighter_Full.mp3", true, false);
 
 	//____________________________________________
 	//ÆÌ
