@@ -89,9 +89,17 @@ void dungeonStage2::renderMap()
 			if (index >= 32 * 18)
 				continue;
 
+			if (_tile[index].terrain != TR_NONE && _tile[index].pos == POS_NONE)
+			{
+				Vector2 vec((_tile[index].rc.left + _tile[index].rc.right) * 0.5f, (_tile[index].rc.top + _tile[index].rc.bottom) * 0.5f);
+				CAMERAMANAGER->frameRender(ImageManager::GetInstance()->FindImage("mapTiles"), vec.x, vec.y,
+					_tile[index].terrainFrameX, _tile[index].terrainFrameY);
+			}
+
 			if (KEYMANAGER->isToggleKey('V'))
 			{
 				CAMERAMANAGER->rectangle(_tile[index].rc, D2D1::ColorF::Black, 1);
+				
 				if (_tile[index].isColTile)
 				{
 					CAMERAMANAGER->fillRectangle(_tile[index].rc, D2D1::ColorF::Red, 0.5f);

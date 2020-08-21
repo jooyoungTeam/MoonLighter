@@ -75,7 +75,7 @@ void UI::render()
 
 	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			ImageManager::GetInstance()->FindImage("boss_scroll")->SetAlpha(_alpha);
 			ImageManager::GetInstance()->FindImage("boss_scroll")->FrameRender(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 200), 0, _scrollFrameY);
@@ -134,11 +134,14 @@ void UI::update()
 	if (SCENEMANAGER->getCurrentScene() == "º¸½º¾À")
 	{
 		_bossCount++;
-
-		if (_bossStage != BOSS_STAGE::STAGE_START && _bossCount > 70) _bossStage = BOSS_STAGE::PLAYER_ENTER;
 		_bossHpBar = RectMakePivot(Vector2(WINSIZEX / 2 - 534, 787), Vector2(_bossHpWidth, 27.f), Pivot::LeftTop);
 
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage != BOSS_STAGE::STAGE_START && _bossStage != BOSS_STAGE::BOSS_APEEAR)
+		{
+			_bossStage = BOSS_STAGE::PLAYER_ENTER;
+		}
+
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			_bossHpWidth += 5;
 		}
@@ -160,7 +163,6 @@ void UI::setPlayerHpBar()
 {
 	if (_player->getplayerCurrentHp() <= 0) _hpWidth = 0;
 	else _hpWidth = (_player->getplayerCurrentHp() / _player->getPlayerMaxHp()) * _backBar.GetWidth();
-
 }
 
 void UI::setBossHpBar(int curHp)
@@ -216,7 +218,7 @@ void UI::draw()
 
 	if (_frameCount % 8 == 0)
 	{
-		if (_bossStage == BOSS_STAGE::PLAYER_ENTER)
+		if (_bossStage == BOSS_STAGE::BOSS_APEEAR)
 		{
 			_scrollFrameY++;
 			if (_scrollFrameY >= 8)
