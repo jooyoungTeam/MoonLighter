@@ -509,11 +509,12 @@ void enemyManager::bulletCol()
 {
 	RECT temp;
 
-	for (int i = 0; i < _bullet->getVBullet().size(); ++i)
+
+	for (int j = 0; j < _vEnemy.size(); ++j)
 	{
-		for (int j = 0; j < _vEnemy.size(); ++j)
+		if ((_vEnemy[j]->getEnemyType() == ENEMY_POT))
 		{
-			if ((_vEnemy[j]->getEnemyType() == ENEMY_POT))
+			for (int i = 0; i < _bullet->getVBullet().size(); ++i)
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
 					&& _player->getCurrectState() != _player->getRollState())
@@ -533,10 +534,14 @@ void enemyManager::bulletCol()
 					}
 
 					_bullet->remove(i);
+					break;
 				}
 			}
+		}
 
-			if (_vEnemy[j]->getEnemyType() == ENEMY_BOSS)
+		if (_vEnemy[j]->getEnemyType() == ENEMY_BOSS)
+		{
+			for (int i = 0; i < _bullet->getVBullet().size(); ++i)
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
 					&& _player->getCurrectState() != _player->getRollState())
@@ -554,10 +559,13 @@ void enemyManager::bulletCol()
 
 					_player->setEnemyCol(true);
 					_bullet->remove(i);
+					break;
 				}
 			}
 		}
+
 	}
+
 }
 
 void enemyManager::enemyDead(int arr)

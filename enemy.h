@@ -155,14 +155,17 @@ public:
 		{
 			return;
 		}
-		if (_state != _hit && _state != _dead)
+		if (_state != _dead)
 		{
-			_saveHP = _bar.width;
-			if (_type != ENEMY_BOSS)
+			if (_state != _hit)
 			{
-				_isHit = true;
-				_barAlpha = 1.0f;
+				if (_type != ENEMY_BOSS)
+				{
+					_isHit = true;
+					_barAlpha = 1.0f;
+				}
 			}
+			_saveHP = _bar.width;
 			if (_type == ENEMY_BOSS)
 			{
 				if (_state == _idle)
