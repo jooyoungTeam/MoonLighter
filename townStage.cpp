@@ -33,17 +33,16 @@ void townStage::update()
 		_player->tileCollision(_attribute, _tile, TOWNTILEX);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('J') && !INVENTORY->getIsInven())
+	RECT rc;
+	if (IntersectRect(&rc, &_potionShopRc.GetRect(), &_player->getPlayerRc().GetRect()))
 	{
 		if (!_isPotionShop)
 		{
-			_isPotionShop = true;
-			_potionShop->setIsActive(true);
-		}
-		else
-		{
-			_isPotionShop = false;
-			_potionShop->setIsActive(false);
+			if (KEYMANAGER->isOnceKeyDown('J') && !INVENTORY->getIsInven())
+			{
+				_isPotionShop = true;
+				_potionShop->setIsActive(true);
+			}
 		}
 	}
 
