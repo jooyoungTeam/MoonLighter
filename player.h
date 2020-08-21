@@ -58,7 +58,7 @@ private:
 	bool				_bowBool;							//활 충전 값
 	bool				_bowChargeAlpha;					//활 충전 알파
 	bool				_bowChargeState;					//활 충전상태인지.
-	bool                _isBowChargeSound;
+	bool                _isBowChargeSound;					//화살충전상태 사운드
 	bool				_hitCondition;						//히트 상태인지
 	bool				_enemyCol;							//에너미와 충돌상태
 	bool				_colVoid;							//충돌 회피상태

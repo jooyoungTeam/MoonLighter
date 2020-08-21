@@ -35,7 +35,7 @@ private:
 	bool               _isSelectObject;         //잡고있는지
 	RECT               _leftRightButton[2];
 	tagSampleObject    _sampleObject[4];		//팔레트에 보여지는 오브젝트
-
+	bool               _isDoorOpen;
 	const char* str[OBJ_NONE] = { "objectHouse","objectArchitecture" ,"objectDoor","objectPlant","objectNPC",
 	"objectSpa","objectDungeon1","objectDungeon2","object_rock1", "object_rock2","object_tile1",
 	"object_tile2",	"object_tile3" };
@@ -65,5 +65,7 @@ public:
 
 public:
 	vector<tagObject> getVObject() { return _vObject; }
+	void setIsDoorOpen(bool open) { _isDoorOpen = open; }
+	bool GetIsDoorOpen() { return _isDoorOpen; }
 };
 

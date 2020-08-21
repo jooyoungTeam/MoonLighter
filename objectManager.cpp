@@ -37,7 +37,15 @@ void objectManager::objectRender()
 				if (findImg(_vObject[i].type, _vObject[i].imgNumber)->GetMaxFrameX() <= _vObject[i].frameX)
 				{
 					_vObject[i].frameX = 0;
+					if (_vObject[i].type == OBJ_DOOR)
+					{
+						_vObject[i].frameX = findImg(_vObject[i].type, _vObject[i].imgNumber)->GetMaxFrameX() - 1;
+					}
 				}
+			}
+			if (_vObject[i].type == OBJ_DOOR && !_isDoorOpen)
+			{
+				_vObject[i].frameX = 0;
 			}
 
 		}
@@ -281,7 +289,7 @@ void objectManager::selectObject()
 			}
 			else if (_currentSampleObject == OBJ_DOOR)
 			{
-				_currentObject.isFrameRender = false;
+				_currentObject.isFrameRender = true;
 				break;
 			}
 			else if (_currentSampleObject == OBJ_PLANT)

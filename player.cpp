@@ -88,7 +88,7 @@ void player::render()
 		CAMERAMANAGER->zOrderAniRender(_playerImg, _playerX, _playerY, _playerShadowRc.bottom, _playerMotion, 1.3f);
 	}
 	_arrow->render();
-	
+
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		CAMERAMANAGER->rectangle(_playerRc, D2D1::ColorF::Red, 1.0f);
@@ -103,7 +103,7 @@ void player::render()
 void player::update()
 {
 	_CurrentState->update(*this);
-	
+
 	_arrow->update();
 	arrowShoot();
 	playerAlphaState();
@@ -310,7 +310,7 @@ void player::animationLoad()
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerDownSwim", L"image/player/swimState.png", 10, 4);
 	int playerDownSwim[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	KEYANIMANAGER->addArrayFrameAnimation( "playerDownSwim", "playerDownSwim", playerDownSwim, 9, 13, true);
+	KEYANIMANAGER->addArrayFrameAnimation("playerDownSwim", "playerDownSwim", playerDownSwim, 9, 13, true);
 
 	_playerImg = ImageManager::GetInstance()->AddFrameImage("playerLeftSwim", L"image/player/swimState.png", 10, 4);
 	int playerLeftSwim[] = { 11, 12, 13, 14, 15, 16, 17, 18, 19 };
@@ -329,7 +329,7 @@ void player::animationLoad()
 	int playerBroom[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
 	31, 32, 33, 34, 35, 36, 37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,
 	74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,
-	114,115,116,117,118};
+	114,115,116,117,118 };
 	KEYANIMANAGER->addArrayFrameAnimation("playerBroom", "playerBroom", playerBroom, 119, 13, true);
 
 	//Ä§´ë ½Ï¼ö
@@ -390,12 +390,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80,true);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40,false);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::DOWN, 40, false);
 			}
 		}
 	}
@@ -411,7 +411,7 @@ void player::arrowShoot()
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40,false);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::LEFT, 40, false);
 			}
 		}
 	}
@@ -422,12 +422,12 @@ void player::arrowShoot()
 			_arrowCount++;
 			if (_bowChargeState)
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80,true);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 80, true);
 				_bowChargeState = false;
 			}
 			else
 			{
-				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40,false);
+				_arrow->IsArrowShot(_playerX, _playerY, ARROWDIRECTION::RIGHT, 40, false);
 			}
 		}
 	}
@@ -622,7 +622,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_BOSS) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(WINSIZEX, 2000);
+		setPlayerPos(WINSIZEX, 1800);
 		SCENEMANAGER->changeScene("º¸½º¾À");
 		return true;
 	}
@@ -631,22 +631,32 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	{
 		if (SCENEMANAGER->getCurrentScene() == "¸¶À»¾À")
 		{
-			setPlayerPos(WINSIZEX / 2, 840);
+			if (!KEYANIMANAGER->findAnimation("playerTeleportIn")->isPlay())
+			{
+				setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleportIn"), ImageManager::GetInstance()->FindImage("playerTeleportIn"));
+				_CurrentState = _teleportIn;
+			}
 		}
 		else if (SCENEMANAGER->getCurrentScene() == "´øÀü¾À")
 		{
 			setPlayerPos(80, WINSIZEY / 2);
+
+			SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		}
 		else if (SCENEMANAGER->getCurrentScene() == "´øÀü¾À2")
 		{
 			setPlayerPos(WINSIZEX - 80, WINSIZEY / 2);
+
+			SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		}
 		else if (SCENEMANAGER->getCurrentScene() == "½ºÆÄ¾À")
 		{
 			setPlayerPos(WINSIZEX / 2, 80);
+
+			SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
 		}
 
-		SCENEMANAGER->changeScene("´øÀüÀÔ±¸¾À");
+
 		return true;
 	}
 	if ((attribute[tileIndex[0]] == TP_DUN1) &&
@@ -660,7 +670,7 @@ bool player::tileSceneChange(DWORD * attribute, tagTile * tile, RECT rcCol)
 	if ((attribute[tileIndex[0]] == TP_DUN2) &&
 		IntersectRect(&rc, &tile[tileIndex[0]].rc, &rcCol))
 	{
-		setPlayerPos(80, WINSIZEY/2);
+		setPlayerPos(80, WINSIZEY / 2);
 		SCENEMANAGER->changeScene("´øÀü¾À2");
 		return true;
 	}

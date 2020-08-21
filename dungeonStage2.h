@@ -15,6 +15,7 @@ class dungeonStage2 : public gameNode
 
 	DWORD             _attribute[DUNTILEX * DUNTILEY];
 	tagTile			  _tile[DUNTILEX * DUNTILEY];
+	int               _doorIndex[2];
 	objectManager*    _objectManager;
 	class itemManager* _itemManager;
 public:
