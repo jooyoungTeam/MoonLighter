@@ -13,6 +13,7 @@ void pot::dead()
 {
 	if (_onceAni)
 	{
+		//SOUNDMANAGER->stop("ÃÑ¾Ë½î±â");
 		_img = ImageManager::GetInstance()->FindImage("potDead");
 		_motion->stop();
 		_motion = KEYANIMANAGER->findAnimation( "potDead");

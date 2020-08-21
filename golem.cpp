@@ -176,7 +176,7 @@ void golem::dead()
 
 void golem::enemyHit()
 {
-	if (_state == _idle)
+	if (_state == _idle && _isHit)
 	{
 		_img = ImageManager::GetInstance()->FindImage("golemRed");
 		_hitCount++;
@@ -186,8 +186,8 @@ void golem::enemyHit()
 		}
 		if (_hitCount > 20 && _hitCount <= 30)
 		{
-			_isHit = false;
 			_img = ImageManager::GetInstance()->FindImage("golem");
+			_hitCount = 0;
 		}
 
 	}
@@ -195,15 +195,15 @@ void golem::enemyHit()
 	{
 		_img = ImageManager::GetInstance()->FindImage("golemAttackRed");
 		_hitCount++;
-		if (_hitCount > 5 && _hitCount <= 10)
+		if (_hitCount > 10 && _hitCount <= 20)
 		{
 			_img = ImageManager::GetInstance()->FindImage("golemAttackWhite");
 		}
-		if (_hitCount > 10 && _hitCount <= 15)
+		if (_hitCount > 20 && _hitCount <= 30)
 		{
 			_img = ImageManager::GetInstance()->FindImage("golemAttackRed");
-			_isHit = false;
 			_img = ImageManager::GetInstance()->FindImage("golemAttack");
+			_hitCount = 0;
 		}
 
 	}

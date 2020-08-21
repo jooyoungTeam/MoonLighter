@@ -21,7 +21,7 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_height = height;
 
 	_type = type;
-	_maxHP = _curHP = 100;
+	_maxHP = _curHP = 200;
 	_speed = 0;
 	_bossHitCount = 0;
 	_bar.width = 80;
@@ -77,9 +77,9 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 		break;
 	}
 
-	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
-	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
-	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(80, 5), Pivot::LeftTop));
+	_bar.back = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_bar.width, 5.f), Pivot::LeftTop));
+	_bar.middle = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_bar.width, 5.f), Pivot::LeftTop));
+	_bar.front = (RectMakePivot(Vector2(_bar.x, _bar.y), Vector2(_bar.width, 5.f), Pivot::LeftTop));
 	_shadow = ImageManager::GetInstance()->FindImage("shadow");
 
 	_state = _idle;
@@ -115,7 +115,7 @@ void enemy::release()
 
 void enemy::update()
 {
-	cout << _saveHP << endl;
+	//cout << _isHitCount << endl;
 	if (_type != ENEMY_BOSS && _type != ENEMY_POT)
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
@@ -450,7 +450,7 @@ void enemy::checkBoolCount()
 	if (_type == ENEMY_BOSS && _isHit)
 	{
 		_state = _hit;
-		_isHit = false;
+		//_isHit = false;
 	}
 	/*	if (_curHP <= 0)
 		{
@@ -461,16 +461,17 @@ void enemy::checkBoolCount()
 	{
 		_isHitCount++;
 		enemyHit();
-		_barAlpha -= 0.02;
+		_barAlpha -= 0.04;
 		if (_saveHP >= _bar.width)
 		{
 			_saveHP--;
 		}
 	}
-	if (_isHitCount > 20)
+	if (_isHitCount > 30)
 	{
 		_isHit = false;
 		_isHitCount = 0;
+		_isPowerShot = false;
 	}
 	if (!_isHit)
 	{
@@ -489,6 +490,6 @@ void enemy::checkBoolCount()
 void enemy::setGauge(float curHP, float maxHP)
 {
 	_bar.width = (curHP / maxHP) * 80;
-	_saveHP = _curHP;
+	//_saveHP = _curHP;
 }
 

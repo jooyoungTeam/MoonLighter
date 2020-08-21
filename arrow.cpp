@@ -61,7 +61,6 @@ void arrow::IsArrowShot(float x, float y, ARROWDIRECTION arrowDirection, float d
 	arrow.y = arrow.shootY = y;
 
 	arrow.arrowDirection = arrowDirection;
-	arrow.isActive = true;
 	arrow.isPowerShot = isPower;
 	if (arrow.isPowerShot)
 		arrow.arrowDamage = RND->getFromIntTo(60, 80);
@@ -115,9 +114,4 @@ void arrow::arrowMove()
 void arrow::playerRemoveArrow(int index)
 {
 	_vArrow.erase(_vArrow.begin() + index);
-}
-
-void arrow::arrowIsActive(int index, bool active)
-{
-	_vArrow[index].isActive = active;
 }

@@ -89,7 +89,7 @@ void redSlime::dead()
 	}
 	if (!_motion->isPlay() && !_realDead)
 	{
-		cout << " µé¾î¿È " << endl;
+		//cout << " µé¾î¿È " << endl;
 		_realDead = true;
 	}
 }

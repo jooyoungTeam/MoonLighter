@@ -22,7 +22,7 @@ HRESULT shopStage::init()
 
 	_doorFrameTimer = 0;
 	_doorIndex = 0;
-
+	_doorState = DOOR_CLOSE;
 	_cellerFrameTimer = 0;
 	_cellerIndex = _celler->GetMaxFrameX() - 1;
 

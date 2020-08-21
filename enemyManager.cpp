@@ -114,25 +114,28 @@ void enemyManager::update()
 			{
 			case ENEMY_RED_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_RED, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_BLUE_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_BLUE, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_YELLOW_SLIME:
 				_itemManager->setItem(ITEMBUNDLE::SLIME_YELLOW, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_GOLEM:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_KNIGHT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_POT:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_POT, _vEnemy[i]->getX(), _vEnemy[i]->getY());
+				enemyDead(i);
 				break;
 			case ENEMY_BOSS:
 				_itemManager->setItem(ITEMBUNDLE::GOLEM_KING, _vEnemy[i]->getX(), _vEnemy[i]->getY());
 				break;
 			}
-			
-			enemyDead(i);
 			break;
 		}
 	}
@@ -162,17 +165,17 @@ void enemyManager::render()
 
 void enemyManager::setEnemy1()
 {
-	enemy* gol1;
-	gol1 = new golem;
-	//gol1->playerCheck(_x, _y, _rc);
-	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol1);
+	//enemy* gol1;
+	//gol1 = new golem;
+	////gol1->playerCheck(_x, _y, _rc);
+	//gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol1);
 
-	enemy* gol12;
-	gol12 = new golem;
-	//gol12->playerCheck(_x, _y, _rc);
-	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
-	_vEnemy.push_back(gol12);
+	//enemy* gol12;
+	//gol12 = new golem;
+	////gol12->playerCheck(_x, _y, _rc);
+	//gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
+	//_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;
@@ -204,12 +207,12 @@ void enemyManager::setEnemy1()
 	pot3->setPotDirection(POT_TOP);
 	_vEnemy.push_back(pot3);
 
-	enemy* gost;
-	gost = new pot;
-	//gost->playerCheck(_x, _y, _rc);
-	gost->init(-300, -300, 50, 50, ENEMY_POT);
-	gost->setPotDirection(POT_RIGHT);
-	_vEnemy.push_back(gost);
+	//enemy* gost;
+	//gost = new pot;
+	////gost->playerCheck(_x, _y, _rc);
+	//gost->init(-300, -300, 50, 50, ENEMY_POT);
+	//gost->setPotDirection(POT_RIGHT);
+	//_vEnemy.push_back(gost);
 
 
 }
@@ -288,7 +291,7 @@ void enemyManager::potBullet()
 	_bulletDelay = 0;
 	for (int i = 0; i < _vEnemy.size(); ++i)
 	{
-		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
+		if (_vEnemy[i]->getEnemyType() == ENEMY_POT && _vEnemy[i]->getState() != _vEnemy[i]->getDead())
 		{
 			if (_vEnemy[i]->getPotDirection() == POT_LEFT)
 			{
@@ -387,22 +390,17 @@ void enemyManager::playerCol()
 
 		//활충돌
 
-		int idx = 0;
 		for (int j = 0; j < _player->getArrow()->getVArrow().size(); ++j)
 		{
-			if (idx != i)
+	
+			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()) && !_vEnemy[i]->getIsPowerShot())
 			{
-				_player->getArrow()->arrowIsActive(j, true);
-			}
-			if (!_player->getArrow()->getVArrow()[j].isActive) continue;
-			if (IntersectRect(&temp, &_vEnemy[i]->getEnemyRect().GetRect(), &_player->getArrow()->getVArrow()[j].rc.GetRect()))
-			{
-				idx = i;
 
 				if (_player->getArrow()->getVArrow()[j].isPowerShot)
 				{
 					_vEnemy[i]->setEnemyAttack(_player->getArrow()->getVArrow()[j].arrowDamage);
-					_player->getArrow()->arrowIsActive(j, false);
+					_vEnemy[i]->setIsPowerShot(true);
+					//cout << "한번" << endl;
 					break;
 				}
 				else
@@ -429,8 +427,6 @@ void enemyManager::playerCol()
 					_bossHit = true;
 					SOUNDMANAGER->play("보스맞음", 1.0f);
 				}
-				//CAMERAMANAGER->shakeCamera(5, 10);
-				//_player->se(0, 0, 0, 0);
 				break;
 			}
 			else
@@ -442,7 +438,6 @@ void enemyManager::playerCol()
 			&& _player->getCurrectState() != _player->getRollState())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
-			//_player->setCurrentState(_());
 
 			if (_player->getCurrectState() == _player->getShieldState())
 			{
@@ -460,12 +455,7 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPull())
 		{
-			/*	if (_vEnemy[i]->getOnceEffect())
-				{
-					EFFECTMANAGER->play("bossTornadoEffect", _player->getX(), _player->getY());
-					_vEnemy[i]->setOnceEffect(false);
-					cout << "ㄷㄹ" << endl;
-				}*/
+
 			_player->setX(_player->getX() + cosf(_angle) * 10);
 			_player->setY(_player->getY() - sinf(_angle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_angle) * 10);
@@ -473,12 +463,7 @@ void enemyManager::playerCol()
 		}
 		if (_vEnemy[i]->getIsPush())
 		{
-			/*if (_vEnemy[i]->getOnceEffect())
-			{
-				EFFECTMANAGER->play("bossPullEffect", _player->getX(), _player->getY());
-				_vEnemy[i]->setOnceEffect(false);
-				cout << "왜.." << endl;
-			}*/
+
 			_player->setX(_player->getX() + cosf(_bulletAngle) * 10);
 			_player->setY(_player->getY() - sinf(_bulletAngle) * 10);
 			_player->setShadowX(_player->getShadowX() + cosf(_bulletAngle) * 10);
@@ -505,7 +490,9 @@ void enemyManager::playerCol()
 			_player->setEnemyCol(true);
 		}
 		RECT tempRc = _player->getShadowRc().GetRect();
-		if (b->playerStop(tempRc))
+
+		//cout<< _vEnemy[i]->getIsRockBottom() << endl;
+		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom())
 		{
 			float x = (tempRc.right + tempRc.left) * 0.5f;
 			float y = (tempRc.bottom + tempRc.top) * 0.5f;
@@ -525,7 +512,7 @@ void enemyManager::bulletCol()
 	{
 		for (int j = 0; j < _vEnemy.size(); ++j)
 		{
-			if (_vEnemy[j]->getEnemyType() == ENEMY_POT)
+			if ((_vEnemy[j]->getEnemyType() == ENEMY_POT))
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
 					&& _player->getCurrectState() != _player->getRollState())
@@ -576,5 +563,4 @@ void enemyManager::enemyDead(int arr)
 {
 	_vEnemy[arr]->release();
 	_vEnemy.erase(_vEnemy.begin() + arr);
-
 }

@@ -448,14 +448,13 @@ void tile::setMap()
 
 void tile::saveLoad()
 {
-	saveMap(1);
-	loadMap(1);
+	saveMap(2);
+	loadMap(2);
 }
 
 void tile::imageLoad()
 {
-	//ImageManager::GetInstance()
-
+	
 }
 
 void tile::loadMap(int num)
