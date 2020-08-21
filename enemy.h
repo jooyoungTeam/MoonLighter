@@ -88,10 +88,10 @@ protected:
 	bool _isHit;		//맞음
 	bool _isBossPull;	//보스 끌어당김
 	bool _isBossPush;	//보스 밈
-	bool _isRockBottom;
-	bool _patternCheck;
-	bool _isStart;
-	bool _playerStop;
+	bool _isRockBottom;	//보스 돌 바닥에 닿았는지
+	bool _patternCheck;	//보스 패턴 바꾸기 용
+	bool _playerStop;	//플레이어 멈추기용
+	bool _isPowerShot;	//활 강공격 한번맞게
 		
 
 
@@ -147,6 +147,7 @@ public:
 	void setIsRockBottom(bool bottom) { _isRockBottom = bottom; }
 	void setPatternCheck(bool pattern) { _patternCheck = pattern; }
 	void setIsPlayerHit(bool hit) { _isPlayerHit = hit; }
+	void setIsPowerShot(bool shot) { _isPowerShot = shot; }
 
 	void setEnemyAttack(int hp = 30)
 	{
@@ -217,6 +218,7 @@ public:
 	bool getOnceAni() { return _onceAni; }
 	bool getIsPlayerHit() { return _isPlayerHit; }
 	bool getPlayerStop() { return _playerStop; }
+	bool getIsPowerShot() { return _isPowerShot; }
 
 	tagBar getBar() { return _bar; }
 	FloatRect getEnemyAttackRect() { return _attackRc; }

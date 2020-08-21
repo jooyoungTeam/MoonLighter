@@ -80,7 +80,7 @@ void anotherSlime::dead()
 {
 	if (_onceAni)
 	{
-		cout << "ต้" << endl;
+		//cout << "ต้" << endl;
 		if (_type == ENEMY_YELLOW_SLIME)
 		{
 			_img = ImageManager::GetInstance()->FindImage("yellowSlimeDead");

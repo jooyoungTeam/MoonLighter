@@ -924,14 +924,14 @@ bool boss::playerCol()
 		{
 			_isPlayerHit = true;
 			_attack3Rc[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
-			cout << "µ¹ 1ÀÌ¶û ¸ÂÀ½" << endl;
+			//cout << "µ¹ 1ÀÌ¶û ¸ÂÀ½" << endl;
 			return true;
 		}
 		if (IntersectRect(&temp, &_attack3Rc2[i].attackRc.GetRect(), &_pRc.GetRect()) && _isRockBottom)
 		{
 			_isPlayerHit = true;
 			_attack3Rc2[i].attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
-			cout << "µ¹ 2ÀÌ¶û ¸ÂÀ½" << endl;
+			//cout << "µ¹ 2ÀÌ¶û ¸ÂÀ½" << endl;
 			return true;
 		}
 	}
@@ -941,7 +941,7 @@ bool boss::playerCol()
 		_isHandCol)
 	{
 		_isPlayerHit = true;
-		cout << "¼ÕÀÌ¶û ¸ÂÀ½" << endl;
+		//cout << "¼ÕÀÌ¶û ¸ÂÀ½" << endl;
 		_attack1.rc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		_attackRc = RectMakePivot(Vector2(-100, -100), Vector2(0, 0), Pivot::Center);
 		return true;

@@ -115,7 +115,7 @@ void enemy::release()
 
 void enemy::update()
 {
-	cout << _isHitCount << endl;
+	//cout << _isHitCount << endl;
 	if (_type != ENEMY_BOSS && _type != ENEMY_POT)
 	{
 		_aStar->update(_x / 50, _y / 50, _pX / 50, _pY / 50);
