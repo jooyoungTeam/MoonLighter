@@ -41,7 +41,18 @@ void dungeonStage::update()
 		_player->update();
 		_enemy->update();
 		_player->tileCollision(_attribute, _tile, DUNTILEX);
-		_enemy->update();
+		if (_enemy->_getVEnemy().size() <= 0)
+		{
+			_objectManager->setIsDoorOpen(true);
+			_attribute[_doorIndex[0]] = TP_ENTERENCE;
+			_attribute[_doorIndex[1]] = TP_ENTERENCE;
+		}
+		else
+		{
+			_objectManager->setIsDoorOpen(false);
+			_attribute[_doorIndex[0]] = ATTR_UNMOVE;
+			_attribute[_doorIndex[1]] = ATTR_UNMOVE;
+		}
 	}
 
 }
@@ -68,11 +79,16 @@ void dungeonStage::loadDungeonMap()
 
 	ReadFile(file, _tile, sizeof(tagTile) * DUNTILEX * DUNTILEY, &read, NULL);
 
+	int index = 0;
 	memset(_attribute, 0, sizeof(DWORD) * DUNTILEX * DUNTILEY);
 	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
-		if (_tile[i].pos == POS_ENTERENCE) _attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+		if (_tile[i].pos == POS_ENTERENCE)
+		{
+			_attribute[i] |= TP_ENTERENCE;	 // 씬 변경해줄 타일
+			_doorIndex[index++] = i;
+		}
 
 	}
 
