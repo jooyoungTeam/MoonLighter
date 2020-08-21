@@ -14,14 +14,7 @@ class spaStage : public gameNode
 	tagTile			  _tile[DUNTILEX * DUNTILEY];
 	objectManager*    _objectManager;
 
-	
-
-
-
-
-	int                _curHp;       // 지금까지 받았던 회복량
-	int                _maxHp;       // 최대 회복량 hp
-	int                _spaCount;    // 회복 카운트
+	int               _spaCount;    // 회복 카운트
 
 public:
 	spaStage() {}
