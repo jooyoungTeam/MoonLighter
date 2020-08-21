@@ -67,6 +67,7 @@ void playerIdleState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
+		SOUNDMANAGER->play("roll", 1.0f);
 		if (player.getDirection() == DIRECTION::RIGHT)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
@@ -436,6 +437,7 @@ void playerWalkState::update(player & player)
 			//만약 이동중 구르기 누르면
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -484,6 +486,7 @@ void playerWalkState::update(player & player)
 			//만약 이동중 구르기 누르면
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -532,6 +535,7 @@ void playerWalkState::update(player & player)
 			//만약 이동중 구르기 누르면
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftRoll"), ImageManager::GetInstance()->FindImage("playerLeftRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -581,6 +585,7 @@ void playerWalkState::update(player & player)
 			//만약 이동중 구르기 누르면
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -599,6 +604,7 @@ void playerWalkState::update(player & player)
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("roll", 1.0f);
 			if (KEYMANAGER->isStayKeyDown('D'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
@@ -618,6 +624,7 @@ void playerWalkState::update(player & player)
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("roll", 1.0f);
 			if (KEYMANAGER->isStayKeyDown('A'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
@@ -638,6 +645,7 @@ void playerWalkState::update(player & player)
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("roll", 1.0f);
 			if (KEYMANAGER->isStayKeyDown('A'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
@@ -657,6 +665,7 @@ void playerWalkState::update(player & player)
 		//만약 이동중 구르기 누르면
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("roll", 1.0f);
 			if (KEYMANAGER->isStayKeyDown('D'))
 			{
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
@@ -824,6 +833,7 @@ void playerWalkState::update(player & player)
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
+		SOUNDMANAGER->play("roll", 1.0f);
 		if (player.getDirection() == DIRECTION::RIGHT)
 		{
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
@@ -1240,6 +1250,7 @@ void playerShieldState::update(player & player)
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightShield"), ImageManager::GetInstance()->FindImage("playerRightShield"));
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerRightRoll"), ImageManager::GetInstance()->FindImage("playerRightRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -1269,6 +1280,7 @@ void playerShieldState::update(player & player)
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftShield"), ImageManager::GetInstance()->FindImage("playerLeftShield"));
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerLeftRoll"), ImageManager::GetInstance()->FindImage("playerLeftRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -1298,6 +1310,7 @@ void playerShieldState::update(player & player)
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownShield"), ImageManager::GetInstance()->FindImage("playerDownShield"));
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownRoll"), ImageManager::GetInstance()->FindImage("playerDownRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -1327,6 +1340,7 @@ void playerShieldState::update(player & player)
 			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpShield"), ImageManager::GetInstance()->FindImage("playerUpShield"));
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
+				SOUNDMANAGER->play("roll", 1.0f);
 				player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerUpRoll"), ImageManager::GetInstance()->FindImage("playerUpRoll"));
 				player.setCurrentState(player.getRollState());
 			}
@@ -1999,9 +2013,14 @@ void playerTeleportState::update(player & player)
 void playerTeleportInState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
+	//player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleportIn"), ImageManager::GetInstance()->FindImage("playerTeleportIn"));
+
+
 	//애니메이션 끝나고 진행
 	if (!KEYANIMANAGER->findAnimation("playerTeleportIn")->isPlay())
 	{
+		player.setPlayerPos(800, 770);
+		SCENEMANAGER->changeScene("던전입구씬");
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 	}

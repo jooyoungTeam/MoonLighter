@@ -168,17 +168,17 @@ void enemyManager::render()
 
 void enemyManager::setEnemy1()
 {
-	//enemy* gol1;
-	//gol1 = new golem;
-	////gol1->playerCheck(_x, _y, _rc);
-	//gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
-	//_vEnemy.push_back(gol1);
+	enemy* gol1;
+	gol1 = new golem;
+	//gol1->playerCheck(_x, _y, _rc);
+	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
+	_vEnemy.push_back(gol1);
 
-	//enemy* gol12;
-	//gol12 = new golem;
-	////gol12->playerCheck(_x, _y, _rc);
-	//gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
-	//_vEnemy.push_back(gol12);
+	enemy* gol12;
+	gol12 = new golem;
+	//gol12->playerCheck(_x, _y, _rc);
+	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
+	_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;

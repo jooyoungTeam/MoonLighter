@@ -347,6 +347,7 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("healing", "sound/playerSound/회복_샘.wav", false, false);
 	SOUNDMANAGER->addSound("potion", "sound/playerSound/potion.wav", false, false);
 	SOUNDMANAGER->addSound("Moon", "sound/MoonLighter_Full.mp3", true, false);
+	SOUNDMANAGER->addSound("roll", "sound/playerSound/roll.wav", false, false);
 
 	//____________________________________________
 	//팟
@@ -376,4 +377,13 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("손빧음", "sound/enemySound/에너미/보스/손빧음.wav", false, false);
 	SOUNDMANAGER->addSound("폭발", "sound/enemySound/에너미/보스/폭발.wav", false, false);
 	SOUNDMANAGER->addSound("돌사라짐", "sound/enemySound/에너미/보스/돌사라짐.wav", false, false);
+
+	//===========================================↓↓인벤토리↓↓===========================================//
+
+	SOUNDMANAGER->addSound("click", "sound/UI&inventorySound/click.wav", false, false);
+	SOUNDMANAGER->addSound("errorItem", "sound/UI&inventorySound/errorItem.wav", false, false);
+	SOUNDMANAGER->addSound("gameStart", "sound/UI&inventorySound/gameStart.wav", false, false);
+	SOUNDMANAGER->addSound("openInven", "sound/UI&inventorySound/openInven.wav", false, false);
+	SOUNDMANAGER->addSound("putItem", "sound/UI&inventorySound/putItem.wav", false, false);
+	SOUNDMANAGER->addSound("selectItem", "sound/UI&inventorySound/selectItem.wav", false, false);
 }
