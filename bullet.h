@@ -30,7 +30,7 @@ private:
 public:
 	virtual HRESULT init(const char* imageName);
 	virtual void release();
-	virtual void update();
+	virtual void update(int distance);
 	virtual void potRender();
 	virtual void bossRender();
 

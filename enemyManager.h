@@ -24,6 +24,7 @@ private:
 	float _x, _y;
 	float _angle;
 	float _bulletAngle;
+	int _bulletDis;
 	int _bulletDelay;
 	int _bulletWait;
 	int _bulletTimer;	//얼마나 쏠지

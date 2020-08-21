@@ -21,7 +21,7 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_height = height;
 
 	_type = type;
-	_maxHP = _curHP = 200;
+	_maxHP = _curHP = 150;
 	_speed = 0;
 	_bossHitCount = 0;
 	_bar.width = 80;

@@ -25,7 +25,7 @@ void boss::set()
 	_rightBottom.y = 1185;
 	_saveRandom = -1;
 	_bossAni = ONE;
-	_maxHP = _curHP = 600;
+	_maxHP = _curHP = 1000;
 	_index = 0;
 	_aniCount = 0;
 	for (int i = 0; i < 13; ++i)
@@ -79,11 +79,6 @@ void boss::render()
 
 void boss::attack()
 {
-	_bossPattern = ARM_LONG;
-	//_bossPattern = PLAYER_PULL;
-//	_bossPattern = ARM_LONG;
-	//_bossPattern = PLAYER_PULL;
-	//attack3();
 	if (_isPlayerHit)
 	{
 		_hitTimer++;

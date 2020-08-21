@@ -27,10 +27,12 @@ HRESULT enemyManager::init()
 	{
 		if (_vEnemy[i]->getEnemyType() == ENEMY_POT)
 		{
+			_bulletDis = 260;
 			_bullet->init("bullet");
 		}
 		if (_vEnemy[i]->getEnemyType() == ENEMY_BOSS)
 		{
+			_bulletDis = 1500;
 			_bullet->init("bossBullet");
 		}
 	}
@@ -99,7 +101,7 @@ void enemyManager::update()
 			}
 		}
 	}
-	_bullet->update();
+	_bullet->update(_bulletDis);
 	if (_bulletDelay > _bulletWait)
 	{
 		potBullet();
@@ -225,40 +227,40 @@ void enemyManager::setEnemy2()
 	enemy* redS1;
 	redS1 = new redSlime;
 	//redS1->playerCheck(_x, _y, _rc);
-	redS1->init(200, 200, 70, 70, ENEMY_RED_SLIME);
+	redS1->init(800, 200, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS1);
 
 	enemy* redS2;
 	redS2 = new redSlime;
 	//redS1->playerCheck(_x, _y, _rc);
-	redS2->init(400, 400, 70, 70, ENEMY_RED_SLIME);
+	redS2->init(800, 600, 70, 70, ENEMY_RED_SLIME);
 	_vEnemy.push_back(redS2);
 
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
 	//yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(200, 100, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS1->init(500, 500, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS1);
 
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(400, 100, 30, 30, ENEMY_BLUE_SLIME);
+	bleS1->init(500, 700, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS1);
 
 	enemy* yelS2;
 	yelS2 = new anotherSlime;
 	//yelS1->playerCheck(_x, _y, _rc);
-	yelS2->init(400, 600, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS2->init(1500, 600, 30, 30, ENEMY_YELLOW_SLIME);
 	_vEnemy.push_back(yelS2);
 
 
 	enemy* bleS3;
 	bleS3 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS3->init(300, 700, 30, 30, ENEMY_BLUE_SLIME);
+	bleS3->init(1000, 700, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS3);
 
 	enemy* yelS3;
@@ -271,7 +273,7 @@ void enemyManager::setEnemy2()
 	enemy* bleS2;
 	bleS2 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS2->init(1200, 450, 30, 30, ENEMY_BLUE_SLIME);
+	bleS2->init(1500, 450, 30, 30, ENEMY_BLUE_SLIME);
 	_vEnemy.push_back(bleS2);
 
 

@@ -11,7 +11,7 @@ void bullet::release()
 {
 }
 
-void bullet::update()
+void bullet::update(int distance)
 {
 	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end();)
 	{
@@ -30,7 +30,7 @@ void bullet::update()
 
 		_viBullet->rc = RectMakePivot(Vector2(_viBullet->x, _viBullet->y), Vector2(10, 20), Pivot::Center);
 
-		if ((getDistance(_viBullet->x, _viBullet->y, _viBullet->sX, _viBullet->sY) > 1500))
+		if ((getDistance(_viBullet->x, _viBullet->y, _viBullet->sX, _viBullet->sY) > distance))
 		{
 			_viBullet = _vBullet.erase(_viBullet);
 		}
