@@ -79,7 +79,6 @@ void boss::render()
 
 void boss::attack()
 {
-	_bossPattern = ARM_LONG;
 	if (_isPlayerHit)
 	{
 		_hitTimer++;

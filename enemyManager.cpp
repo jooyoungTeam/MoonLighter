@@ -436,7 +436,8 @@ void enemyManager::playerCol()
 				_bossHit = false;
 			}
 		}
-		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && _vEnemy[i]->getState() == _vEnemy[i]->getAttack()
+		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && 
+			_vEnemy[i]->getState() == _vEnemy[i]->getAttack()
 			&& _player->getCurrectState() != _player->getRollState())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
@@ -494,7 +495,8 @@ void enemyManager::playerCol()
 		RECT tempRc = _player->getShadowRc().GetRect();
 
 		//cout<< _vEnemy[i]->getIsRockBottom() << endl;
-		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom() && _vEnemy[i]->getState() == _vEnemy[i]->getAttack())
+		if (b->playerStop(tempRc) && !_vEnemy[i]->getIsRockBottom() && 
+			_vEnemy[i]->getState() == _vEnemy[i]->getAttack())
 		{
 			float x = (tempRc.right + tempRc.left) * 0.5f;
 			float y = (tempRc.bottom + tempRc.top) * 0.5f;
