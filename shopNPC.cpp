@@ -19,7 +19,7 @@ HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 		_img = ImageManager::GetInstance()->FindImage("npc3");
 		break;
 	}
-
+	// 테스트
 
 	// 동적 할당
 	{
