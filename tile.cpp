@@ -6,6 +6,7 @@ HRESULT tile::init()
 	_tileSize[0] = 100;
 	_tileSize[1] = 100;
 	selectTileSizeInit();
+	_mapImg = NULL;
 
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 	_objectManager = new objectManager;
@@ -174,6 +175,7 @@ void tile::selectTileSize()
 				_tileSize[1] = _selectTileSize[i].tileSizeY;
 				release();
 				setup();
+				_miniMap1->release();
 				_miniMap1->init(_tileSize[0], _tileSize[1]);
 
 				CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
@@ -454,13 +456,14 @@ void tile::saveLoad()
 
 void tile::imageLoad()
 {
-	
+
 }
 
 void tile::loadMap(int num)
 {
 	if (_button->getType() == BUTTON_LOAD_TOWN || _button->getType() == BUTTON_LOAD_BOSS
-		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON || _button->getType() == BUTTON_LOAD_ENTERENCE)
+		|| _button->getType() == BUTTON_LOAD_SHOP || _button->getType() == BUTTON_LOAD_DUNGEON || _button->getType() == BUTTON_LOAD_ENTERENCE
+		|| _button->getType() == BUTTON_LOAD_TEST)
 	{
 		HANDLE file;
 		DWORD read;
@@ -506,6 +509,13 @@ void tile::loadMap(int num)
 			_miniMap1->setImage(_mapImg);
 			fileName = "dungeonEnterence.map";
 		}
+		else if (_button->getType() == BUTTON_LOAD_TEST)
+		{
+			_currentLoadType = 6;
+			_mapImg = NULL;
+			_miniMap1->setImage(_mapImg);
+			fileName = "test.map";
+		}
 		if (_vTile.size() > 0)
 			release();
 
@@ -522,15 +532,25 @@ void tile::loadMap(int num)
 			_vTile.push_back(temTile[i]);
 		}
 
-
-		CloseHandle(file);
-
 		_objectManager->load(_button->getType(), num);
 
 		_miniMap1->release();
 		_miniMap1->init(_tileSize[0], _tileSize[1]);
 
+		if (_button->getType() == BUTTON_LOAD_TEST)
+		{
+			bool* getDrawIndex = new bool[_tileSize[0] * _tileSize[1]];
+			ReadFile(file, getDrawIndex, sizeof(bool) * _tileSize[0] * _tileSize[1], &read, NULL);
+			for (int i = 0; i < _tileSize[0] * _tileSize[1]; i++)
+			{
+				if (getDrawIndex[i] == true)
+				{
+					_miniMap1->setIsDraw(i, true);
+				}
+			}
+		}
 
+		CloseHandle(file);
 		CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, _tileSize[0] * TILESIZE - WINSIZEX, _tileSize[1] * TILESIZE - WINSIZEY);
 		_button->setType(BUTTON_TERRAIN);
 
@@ -539,9 +559,9 @@ void tile::loadMap(int num)
 
 void tile::saveMap(int num)
 {
-	if (_currentLoadType == 0) return;
 	if (_button->getType() == BUTTON_SAVE_TOWN || _button->getType() == BUTTON_SAVE_BOSS
-		|| _button->getType() == BUTTON_SAVE_SHOP || _button->getType() == BUTTON_SAVE_DUNGEON || _button->getType() == BUTTON_SAVE_ENTERENCE)
+		|| _button->getType() == BUTTON_SAVE_SHOP || _button->getType() == BUTTON_SAVE_DUNGEON || _button->getType() == BUTTON_SAVE_ENTERENCE
+		|| _button->getType() == BUTTON_SAVE_TEST)
 	{
 		_saveTime++;
 	}
@@ -621,6 +641,11 @@ void tile::saveMap(int num)
 
 			fileName = "dungeonEnterence.map";
 		}
+		else if (_button->getType() == BUTTON_SAVE_TEST)
+		{
+			fileName = "test.map";
+		}
+	
 		// ----------------- 타일 ----------------- //
 		tagTile* tempTile = new tagTile[_tileSize[0] * _tileSize[1]];
 		for (int i = 0; i < _vTile.size(); i++)
@@ -633,7 +658,21 @@ void tile::saveMap(int num)
 
 
 		WriteFile(file, _tileSize, sizeof(int) * 2, &write, NULL);
-		WriteFile(file, tempTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &write, NULL);
+		WriteFile(file, tempTile, sizeof(tagTile) * _tileSize[0] * _tileSize[1], &write, NULL); 
+
+		if (_button->getType() == BUTTON_SAVE_TEST)  // 테스트에서 미니맵에 그려진것 가져오기
+		{
+			bool* getDrawIndex = new bool[_tileSize[0] * _tileSize[1]];
+			for (int i = 0; i < _miniMap1->getVMiniMap().size(); i++)
+			{
+				if (_miniMap1->getVMiniMap()[i]->isDraw)
+					getDrawIndex[i] = true;
+			}
+
+			WriteFile(file, getDrawIndex, sizeof(bool) * _tileSize[0] * _tileSize[1], &write, NULL);
+		}
+
+
 
 		CloseHandle(file);
 		_objectManager->save(_button->getType(), num);
@@ -851,6 +890,10 @@ void tile::autoTileType(int idx, TERRAIN type)
 		if (_autoCalc == 62)
 		{
 			_vTile[idx].terrainFrameX = 0;
+		}
+		if (_autoCalc == 239)
+		{
+			_vTile[idx].terrainFrameX = 3;
 		}
 	}
 

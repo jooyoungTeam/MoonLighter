@@ -29,6 +29,7 @@ public:
 	void    release();
 	void    setImage(Image* img) { _miniMapImg = img; }
 	void    setIsDraw(int arrNum, bool isDraw) { _vMiniMap[arrNum]->isDraw = isDraw; }
-	
+public:
+	vector<tagMiniMap*> getVMiniMap() { return _vMiniMap; }
 };
 

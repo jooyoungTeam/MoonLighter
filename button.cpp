@@ -56,6 +56,7 @@ void button::update()
 		_button[BUTTON_SAVE_BOSS].state = BUTTON_TEMP;
 		_button[BUTTON_SAVE_SHOP].state = BUTTON_TEMP;
 		_button[BUTTON_SAVE_ENTERENCE].state = BUTTON_TEMP;
+		_button[BUTTON_SAVE_TEST].state = BUTTON_TEMP;
 	}
 	else if (_currentType == BUTTON_LOAD)
 	{
@@ -70,6 +71,7 @@ void button::update()
 		_button[BUTTON_LOAD_BOSS].state = BUTTON_TEMP;
 		_button[BUTTON_LOAD_SHOP].state = BUTTON_TEMP;
 		_button[BUTTON_LOAD_ENTERENCE].state = BUTTON_TEMP;
+		_button[BUTTON_LOAD_TEST].state = BUTTON_TEMP;
 	}
 	else if (_currentType == BUTTON_ERASE)
 	{
@@ -140,6 +142,9 @@ void button::setButton()
 	_button[BUTTON_SAVE_ENTERENCE].rc = RectMakeCenter(WINSIZEX / 2 + 730, 150, 90, 30);
 	_button[BUTTON_SAVE_ENTERENCE].name = L"ENTERENCE";
 	_button[BUTTON_SAVE_ENTERENCE].state = BUTTON_OFF;
+	_button[BUTTON_SAVE_TEST].rc = RectMakeCenter(WINSIZEX / 2 + 330, 200, 80, 30);
+	_button[BUTTON_SAVE_TEST].name = L"TEST";
+	_button[BUTTON_SAVE_TEST].state = BUTTON_OFF;
 
 
 	_button[BUTTON_LOAD].rc = RectMakeCenter(WINSIZEX / 2 + 630, 100, 80, 30);
@@ -161,6 +166,9 @@ void button::setButton()
 	_button[BUTTON_LOAD_ENTERENCE].rc = RectMakeCenter(WINSIZEX / 2 + 730, 150, 90, 30);
 	_button[BUTTON_LOAD_ENTERENCE].name = L"ENTERENCE";
 	_button[BUTTON_LOAD_ENTERENCE].state = BUTTON_OFF;
+	_button[BUTTON_LOAD_TEST].rc = RectMakeCenter(WINSIZEX / 2 + 330, 200, 80, 30);
+	_button[BUTTON_LOAD_TEST].name = L"TEST";
+	_button[BUTTON_LOAD_TEST].state = BUTTON_OFF;
 
 
 	_button[BUTTON_ERASE].rc = RectMakeCenter(WINSIZEX / 2 + 730, 100, 80, 30);

@@ -7,7 +7,7 @@ HRESULT miniMap::init(int x, int y)
 	_tileSize = _scale * 50;
 	_mapY = WINSIZEY - (_tileSize * y) - 10;
 
-	_miniMap = RectMakePivot(Vector2(10, _mapY), Vector2(x * TILESIZE * _scale, y * TILESIZE * _scale), Pivot::LeftTop);
+	_miniMap = RectMakePivot(Vector2(10, _mapY), Vector2(x * _tileSize, y * _tileSize), Pivot::LeftTop);
 	_miniMapMove = RectMakePivot(Vector2(10, _mapY), Vector2(WINSIZEX * _scale, WINSIZEY * _scale), Pivot::LeftTop);
 
 	for (int i = 0; i < x * y; i++)
@@ -74,8 +74,10 @@ void miniMap::render(objectManager* obj, POINT playerPos)
 		}
 
 		D2DRenderer::GetInstance()->DrawRectangle(_miniMapMove, D2D1::ColorF::White, 1, 2);
-
-		ImageManager::GetInstance()->FindImage("playerDownIdle")->FrameRender(Vector2(10 + playerPos.x * _scale, _mapY + playerPos.y * _scale), 0, 11,_scale * 5);
+		if (_miniMapImg != NULL)
+		{
+			ImageManager::GetInstance()->FindImage("playerDownIdle")->FrameRender(Vector2(10 + playerPos.x * _scale, _mapY + playerPos.y * _scale), 0, 11, _scale * 5);
+		}
 	}
 }
 

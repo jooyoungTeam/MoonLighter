@@ -152,6 +152,8 @@ void objectManager::save(BUTTONTYPE type,int num)
 	}
 	else if (type == BUTTON_SAVE_ENTERENCE)
 		fileName = "dungeonEnterence.object";
+	else if (type == BUTTON_SAVE_TEST)
+		fileName = "test.object";
 
 	// ----------------- 오브젝트 ----------------- //
 	int size[2] = { 1,_vObject.size() };
@@ -200,7 +202,8 @@ void objectManager::load(BUTTONTYPE type, int num)
 	}
 	else if (type == BUTTON_LOAD_ENTERENCE)
 		fileName = "dungeonEnterence.object";
-
+	else if (type == BUTTON_LOAD_TEST)
+		fileName = "test.object";
 	if (_vObject.size() > 0)
 		_vObject.clear();
 
