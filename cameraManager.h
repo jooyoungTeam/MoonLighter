@@ -116,6 +116,6 @@ public:
 public:
 	float getRelativeLeft(float left) { float relativeLeft; return relativeLeft = left - _left; }
 	float getRelativeTop(float top) { float relativeTop;  return relativeTop = top - _top; }
-
+	bool  getIsFadeStart() { return _fade.fadeStart; }
 };
 
