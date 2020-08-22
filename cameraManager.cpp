@@ -195,7 +195,7 @@ void cameraManager::cameraUpdate()
 			_fade.fadeTime = 0;
 			if (_fade.fadeType == FADETYPE::FADEIN)
 			{
-				_fade.fadeAlpha += 0.03f;
+				_fade.fadeAlpha += 0.005f;
 				//if (_fade.fadeAlpha >= 1)
 				//	_fade.fadeStart = false;
 			}

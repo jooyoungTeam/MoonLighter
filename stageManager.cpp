@@ -5,7 +5,7 @@
 HRESULT stageManager::init()
 {
 	_player = new player;
-	_player->init(981, 442);
+	_player->init(984, 395);
 	INVENTORY->init();
 	_ui = new UI;
 	_ui->init();
