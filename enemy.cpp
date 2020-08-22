@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "enemy.h"
 
-HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
+HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type, vector<POINT> unMoveTile)
 {
 	_idle = new enemyIdleState;
 	_move = new enemyMoveState;
@@ -97,8 +97,8 @@ HRESULT enemy::init(float x, float y, float width, float height, ENEMYTYPE type)
 	_isHitCount = 0;
 	_bowTimer = 0;
 
-	vector<POINT> tempV;
-	_aStar->init(38, 18, _x / 50, _y / 50, _pX / 50, _pY / 50, tempV, false);
+	cout << unMoveTile.size() << endl;
+	_aStar->init(WINSIZEX/ 50 , WINSIZEY/50, _x / 50, _y / 50, _pX / 50, _pY / 50, unMoveTile, false);
 
 	return S_OK;
 }

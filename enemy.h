@@ -98,7 +98,7 @@ protected:
 
 public:
 
-	virtual HRESULT init(float x, float y, float width, float height, ENEMYTYPE type);
+	virtual HRESULT init(float x, float y, float width, float height, ENEMYTYPE type, vector<POINT> unMoveTile);
 	virtual void release();
 	virtual void update();
 	virtual void render();

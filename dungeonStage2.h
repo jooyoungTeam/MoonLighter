@@ -18,6 +18,9 @@ class dungeonStage2 : public gameNode
 	int               _doorIndex[2];
 	objectManager*    _objectManager;
 	class itemManager* _itemManager;
+
+	vector<POINT> _unMoveTile;
+
 public:
 	dungeonStage2() {}
 	~dungeonStage2() {}

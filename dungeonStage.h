@@ -19,6 +19,8 @@ private:
 	tagTile			   _tile[DUNTILEX * DUNTILEY];
 	objectManager*     _objectManager;
 	class itemManager* _itemManager;
+
+	vector<POINT> _unMoveTile;
 public:
 	dungeonStage() {}
 	~dungeonStage() {}

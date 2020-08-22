@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "shopNPC.h"
-#include "display.h"
 
 HRESULT shopNPC::init(npcType type, vector<POINT> vUnMove)
 {

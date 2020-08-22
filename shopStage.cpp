@@ -165,6 +165,7 @@ void shopStage::loadMap()
 	ReadFile(file, _tile, sizeof(tagTile) * SHOPTILEX * SHOPTILEY, &read, NULL);
 
 	memset(_attribute, 0, sizeof(DWORD) * SHOPTILEX * SHOPTILEY);
+	
 	for (int i = 0; i < SHOPTILEX * SHOPTILEY; ++i)
 	{
 		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile)

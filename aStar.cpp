@@ -73,11 +73,13 @@ void aStar::setTiles()
 		}
 	}
 
+	//cout << _vUnMoveTile.size() << endl;
 	// 못가는 타일 셋팅
 	for (int i = 0; i < _vUnMoveTile.size(); ++i)
 	{
 		_vTotalList[_vUnMoveTile[i].y * _totalTileX + _vUnMoveTile[i].x]->attribute = "wall";
 		_vTotalList[_vUnMoveTile[i].y * _totalTileX + _vUnMoveTile[i].x]->isOpen = false;
+
 	}
 }
 
@@ -141,7 +143,7 @@ void aStar::pathFinder(astarTile * currentTile)
 	if (!_isNPC)
 	{
 		// 탐색이 4이상 넘어가면 return (성능 향상위해)
-		if (_vCloseList.size() > 4)
+		if (_vCloseList.size() > 6)
 		{
 			// 최단경로 벡터 초기화 후
 			if (!_end)
