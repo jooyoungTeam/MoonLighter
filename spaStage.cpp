@@ -6,15 +6,10 @@ HRESULT spaStage::init()
 {
 	_mapImg = ImageManager::GetInstance()->AddImage("dungeon_background", L"Image/Map/dungeon_background.png");
 	CAMERAMANAGER->settingCamera(0, 0, WINSIZEX, WINSIZEY, 0, 0, 1600 - WINSIZEX, 900 - WINSIZEY);
-
 	_objectManager = new objectManager;
 	_objectManager->setIsDoorOpen(true);
 	loadMap();
-
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
-
-
-
 	return S_OK;
 }
 
@@ -22,7 +17,6 @@ void spaStage::render()
 {
 	renderMap();
 	_player->render();
-
 }
 
 void spaStage::update()
@@ -128,10 +122,9 @@ void spaStage::renderMap()
 	_objectManager->objectRender();
 	if (KEYMANAGER->isToggleKey('V'))
 	{
-
 		float x = WINSIZEX / 2 -10;
 		float y = WINSIZEY / 2;
 		float r = 180;
-		CAMERAMANAGER->fillEllipse(x, y, r, D2D1::ColorF::Red, 0.5f);
+		CAMERAMANAGER->fillEllipse(x, y, r, D2D1::ColorF::Blue, 0.5f);
 	}
 }
