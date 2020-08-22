@@ -15,6 +15,7 @@ class enterenceStage : public gameNode
 	tagTile			  _tile[DUNTILEX * DUNTILEY];
 	objectManager*    _objectManager;
 
+
 public:
 	enterenceStage() {}
 	~enterenceStage() {}

@@ -12,8 +12,9 @@ enemyManager::~enemyManager()
 {
 }
 
-HRESULT enemyManager::init()
+HRESULT enemyManager::init(vector<POINT> unMoveTile)
 {
+	_unMoveTile = unMoveTile;
 	_x = _player->getX();
 	_y = _player->getY();
 	_rc = _player->getPlayerRc();
@@ -36,7 +37,6 @@ HRESULT enemyManager::init()
 			_bullet->init("bossBullet");
 		}
 	}
-
 	_playerStop = false;
 
 
@@ -166,31 +166,31 @@ void enemyManager::render()
 	EFFECTMANAGER->render();
 }
 
-void enemyManager::setEnemy1()
+void enemyManager::setEnemy1(vector<POINT> unMoveTile)
 {
 	enemy* gol1;
 	gol1 = new golem;
 	//gol1->playerCheck(_x, _y, _rc);
-	gol1->init(100, 100, 80, 100, ENEMY_GOLEM);
+	gol1->init(100, 100, 80, 100, ENEMY_GOLEM, unMoveTile);
 	_vEnemy.push_back(gol1);
 
 	enemy* gol12;
 	gol12 = new golem;
 	//gol12->playerCheck(_x, _y, _rc);
-	gol12->init(100, 700, 80, 100, ENEMY_GOLEM);
+	gol12->init(100, 700, 80, 100, ENEMY_GOLEM, unMoveTile);
 	_vEnemy.push_back(gol12);
 
 	enemy* pot1;
 	pot1 = new pot;
 	//pot1->playerCheck(_x, _y, _rc);
-	pot1->init(475, 600, 50, 50, ENEMY_POT);
+	pot1->init(475, 600, 50, 50, ENEMY_POT, unMoveTile);
 	pot1->setPotDirection(POT_BOTTOM);
 	_vEnemy.push_back(pot1);
 
 	enemy* pot22;
 	pot22 = new pot;
 	//pot22->playerCheck(_x, _y, _rc);
-	pot22->init(1070, 600, 50, 50, ENEMY_POT);
+	pot22->init(1070, 600, 50, 50, ENEMY_POT, unMoveTile);
 	pot22->setPotDirection(POT_BOTTOM);
 	_vEnemy.push_back(pot22);
 
@@ -199,14 +199,14 @@ void enemyManager::setEnemy1()
 	enemy* pot2;
 	pot2 = new pot;
 	//pot2->playerCheck(_x, _y, _rc);
-	pot2->init(475, 280, 50, 50, ENEMY_POT);
+	pot2->init(475, 280, 50, 50, ENEMY_POT, unMoveTile);
 	pot2->setPotDirection(POT_TOP);
 	_vEnemy.push_back(pot2);
 
 	enemy* pot3;
 	pot3 = new pot;
 	//pot2->playerCheck(_x, _y, _rc);
-	pot3->init(1070, 280, 50, 50, ENEMY_POT);
+	pot3->init(1070, 280, 50, 50, ENEMY_POT, unMoveTile);
 	pot3->setPotDirection(POT_TOP);
 	_vEnemy.push_back(pot3);
 
@@ -220,7 +220,7 @@ void enemyManager::setEnemy1()
 
 }
 
-void enemyManager::setEnemy2()
+void enemyManager::setEnemy2(vector<POINT> unMoveTile)
 {
 
 
@@ -228,53 +228,53 @@ void enemyManager::setEnemy2()
 	enemy* redS1;
 	redS1 = new redSlime;
 	//redS1->playerCheck(_x, _y, _rc);
-	redS1->init(800, 200, 70, 70, ENEMY_RED_SLIME);
+	redS1->init(800, 200, 70, 70, ENEMY_RED_SLIME, unMoveTile);
 	_vEnemy.push_back(redS1);
 
 	enemy* redS2;
 	redS2 = new redSlime;
 	//redS1->playerCheck(_x, _y, _rc);
-	redS2->init(800, 600, 70, 70, ENEMY_RED_SLIME);
+	redS2->init(800, 600, 70, 70, ENEMY_RED_SLIME, unMoveTile);
 	_vEnemy.push_back(redS2);
 
 
 	enemy* yelS1;
 	yelS1 = new anotherSlime;
 	//yelS1->playerCheck(_x, _y, _rc);
-	yelS1->init(500, 500, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS1->init(500, 500, 30, 30, ENEMY_YELLOW_SLIME, unMoveTile);
 	_vEnemy.push_back(yelS1);
 
 
 	enemy* bleS1;
 	bleS1 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS1->init(500, 700, 30, 30, ENEMY_BLUE_SLIME);
+	bleS1->init(500, 700, 30, 30, ENEMY_BLUE_SLIME, unMoveTile);
 	_vEnemy.push_back(bleS1);
 
 	enemy* yelS2;
 	yelS2 = new anotherSlime;
 	//yelS1->playerCheck(_x, _y, _rc);
-	yelS2->init(1500, 600, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS2->init(1500, 600, 30, 30, ENEMY_YELLOW_SLIME, unMoveTile);
 	_vEnemy.push_back(yelS2);
 
 
 	enemy* bleS3;
 	bleS3 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS3->init(1000, 700, 30, 30, ENEMY_BLUE_SLIME);
+	bleS3->init(1000, 700, 30, 30, ENEMY_BLUE_SLIME, unMoveTile);
 	_vEnemy.push_back(bleS3);
 
 	enemy* yelS3;
 	yelS3 = new anotherSlime;
 	//yelS1->playerCheck(_x, _y, _rc);
-	yelS3->init(900, 200, 30, 30, ENEMY_YELLOW_SLIME);
+	yelS3->init(900, 200, 30, 30, ENEMY_YELLOW_SLIME, unMoveTile);
 	_vEnemy.push_back(yelS3);
 
 
 	enemy* bleS2;
 	bleS2 = new anotherSlime;
 	//bleS1->playerCheck(_x, _y, _rc);
-	bleS2->init(1500, 450, 30, 30, ENEMY_BLUE_SLIME);
+	bleS2->init(1500, 450, 30, 30, ENEMY_BLUE_SLIME, unMoveTile);
 	_vEnemy.push_back(bleS2);
 
 
@@ -285,7 +285,7 @@ void enemyManager::setBoss()
 	enemy* boss1;
 	boss1 = new boss;
 	//boss1->playerCheck(_x, _y, _rc);
-	boss1->init(1360, 300, 590, 650, ENEMY_BOSS);
+	boss1->init(1360, 300, 590, 650, ENEMY_BOSS, _unMoveTile);
 	_vEnemy.push_back(boss1);
 }
 

@@ -3,13 +3,11 @@
 #include "aStar.h"
 #include "item.h"
 
-class display;
-
 enum npcType			// NPC 종류 ENUM
 {
-	NPC_NOMAL,			// 일반 NPC - 아무거나 구매
-	NPC_HERO,			// 용사 NPC - 장비류만 구매
-	NPC_RICH			// 부자 NPC - 너무 비싸지 않는 이상 구매
+	NPC_NOMAL,			// 일반 NPC
+	NPC_HERO,			// 용사 NPC 
+	NPC_RICH			// 부자 NPC 
 };
 
 enum npcActionState		// NPC 행동 ENUM

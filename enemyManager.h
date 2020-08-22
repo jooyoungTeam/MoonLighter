@@ -35,20 +35,20 @@ private:
 	bool _playerStop;
 	bool _bossHit;
 
-
+	vector<POINT> _unMoveTile;
 
 
 public:
 	enemyManager();
 	~enemyManager();
 
-	virtual HRESULT init();
+	virtual HRESULT init(vector<POINT> unMoveTile);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
-	void setEnemy1();
-	void setEnemy2();
+	void setEnemy1(vector<POINT> unMoveTile);
+	void setEnemy2(vector<POINT> unMoveTile);
 	void setBoss();
 	void potBullet();
 	void playerCol();

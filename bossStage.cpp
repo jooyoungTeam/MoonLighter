@@ -11,12 +11,14 @@ HRESULT bossStage::init()
 
 	_objectManager = new objectManager;
 
+	vector<POINT> unMoveTile;
+
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
 	_enemy->setItemManagerLink(_itemManager);
 	_enemy->setBoss();
-	_enemy->init();
-
+	_enemy->init(unMoveTile);
+	
 	loadMap();
 
 	//SOUNDMANAGER->play("bgm2", 1.0f);

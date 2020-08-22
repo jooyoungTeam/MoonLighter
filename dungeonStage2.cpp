@@ -12,8 +12,9 @@ HRESULT dungeonStage2::init()
 	_enemy = new enemyManager;
 	_enemy->setPlayerLink(_player);
 	_enemy->setItemManagerLink(_itemManager);
-	_enemy->setEnemy2();
-	_enemy->init();
+	_enemy->setEnemy2(_unMoveTile);
+
+	_enemy->init(_unMoveTile);
 
 	CAMERAMANAGER->setXY(WINSIZEX / 2, WINSIZEY / 2);
 
@@ -72,10 +73,15 @@ void dungeonStage2::loadMap()
 	int index = 0;
 	for (int i = 0; i < DUNTILEX * DUNTILEY; ++i)
 	{
-		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile) _attribute[i] |= ATTR_UNMOVE;
+		if (_tile[i].terrain == TR_WALL || _tile[i].isColTile)
+		{
+			_attribute[i] |= ATTR_UNMOVE;
+			_unMoveTile.push_back(PointMake(_tile[i].idX, _tile[i].idY));
+		}
 		if (_tile[i].pos == POS_ENTERENCE)
 		{
 			_attribute[i] |= ATTR_UNMOVE;	 // 씬 변경해줄 타일
+			_unMoveTile.push_back(PointMake(_tile[i].idX, _tile[i].idY));
 			_doorIndex[index++] = i;
 		}
 
