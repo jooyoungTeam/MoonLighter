@@ -438,7 +438,8 @@ void enemyManager::playerCol()
 		}
 		if (IntersectRect(&temp, &_vEnemy[i]->getEnemyAttackRect().GetRect(), &_player->getPlayerRc().GetRect()) && 
 			_vEnemy[i]->getState() == _vEnemy[i]->getAttack()
-			&& _player->getCurrectState() != _player->getRollState())
+			&& _player->getCurrectState() != _player->getRollState()
+			&& _player->getCurrectState() != _player->getDieState())
 		{
 			_vEnemy[i]->setIsPlayerHit(true);
 
@@ -478,7 +479,8 @@ void enemyManager::playerCol()
 		if (b == NULL) continue;
 		//cout << b->playerCol() << endl;
 		if (b->playerCol() && _vEnemy[i]->getState() == _vEnemy[i]->getAttack()
-			&& _player->getCurrectState() != _player->getRollState())
+			&& _player->getCurrectState() != _player->getRollState()
+			&& _player->getCurrectState() != _player->getDieState())
 		{
 			if (_player->getCurrectState() == _player->getShieldState())
 			{
@@ -520,7 +522,8 @@ void enemyManager::bulletCol()
 			for (int i = 0; i < _bullet->getVBullet().size(); ++i)
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
-					&& _player->getCurrectState() != _player->getRollState())
+					&& _player->getCurrectState() != _player->getRollState()
+					&& _player->getCurrectState() != _player->getDieState())
 				{
 					ImageManager::GetInstance()->FindImage("bulletCollision")->SetScale(1.5f);
 					EFFECTMANAGER->play("bulletCollision", (temp.left + temp.right) / 2, ((temp.top + temp.bottom) / 2) + 10);
@@ -547,7 +550,8 @@ void enemyManager::bulletCol()
 			for (int i = 0; i < _bullet->getVBullet().size(); ++i)
 			{
 				if (IntersectRect(&temp, &_player->getPlayerRc().GetRect(), &_bullet->getVBullet()[i].rc.GetRect())
-					&& _player->getCurrectState() != _player->getRollState())
+					&& _player->getCurrectState() != _player->getRollState()
+					&& _player->getCurrectState() != _player->getDieState())
 				{
 					SOUNDMANAGER->play("ÃÑ¾ËÅÍÁü", 1.0f);
 					if (_player->getCurrectState() == _player->getShieldState())

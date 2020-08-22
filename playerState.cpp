@@ -409,7 +409,7 @@ void playerWalkState::update(player & player)
 		if (KEYMANAGER->isStayKeyDown('W'))
 		{
 			if (!SOUNDMANAGER->isPlaySound("walk"))
-				SOUNDMANAGER->play("walk", 1.0f);
+				SOUNDMANAGER->play("walk", WALKSOUND);
 			//만약 아래키 누르면 위쪽Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('S'))
 			{
@@ -460,7 +460,7 @@ void playerWalkState::update(player & player)
 		if (KEYMANAGER->isStayKeyDown('S'))
 		{
 			if (!SOUNDMANAGER->isPlaySound("walk"))
-				SOUNDMANAGER->play("walk", 1.0f);
+				SOUNDMANAGER->play("walk", WALKSOUND);
 			//만약 위쪽키 누르면 아래 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('W'))
 			{
@@ -512,7 +512,7 @@ void playerWalkState::update(player & player)
 		if (KEYMANAGER->isStayKeyDown('A'))
 		{
 			if (!SOUNDMANAGER->isPlaySound("walk"))
-				SOUNDMANAGER->play("walk", 1.0f);
+				SOUNDMANAGER->play("walk", WALKSOUND);
 			//만약 오른쪽키 누르면 왼쪽 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('D'))
 			{
@@ -564,7 +564,7 @@ void playerWalkState::update(player & player)
 		if (KEYMANAGER->isStayKeyDown('D'))
 		{
 			if (!SOUNDMANAGER->isPlaySound("walk"))
-				SOUNDMANAGER->play("walk", 1.0f);
+				SOUNDMANAGER->play("walk", WALKSOUND);
 			//만약 왼쪽키 누르면 오른쪽 Idle 모습으로 변함
 			if (KEYMANAGER->isOnceKeyDown('A'))
 			{
@@ -614,7 +614,7 @@ void playerWalkState::update(player & player)
 	if (player.getDirection() == DIRECTION::RIGHTTOP)
 	{
 		if (!SOUNDMANAGER->isPlaySound("walk"))
-			SOUNDMANAGER->play("walk", 1.0f);
+			SOUNDMANAGER->play("walk", WALKSOUND);
 		x = 1;
 		y = -1;
 
@@ -635,7 +635,7 @@ void playerWalkState::update(player & player)
 	if (player.getDirection() == DIRECTION::LEFTTOP)
 	{
 		if (!SOUNDMANAGER->isPlaySound("walk"))
-			SOUNDMANAGER->play("walk", 1.0f);
+			SOUNDMANAGER->play("walk", WALKSOUND);
 		x = -1;
 		y = -1;
 
@@ -656,7 +656,7 @@ void playerWalkState::update(player & player)
 	if (player.getDirection() == DIRECTION::LEFTBOTTOM)
 	{
 		if (!SOUNDMANAGER->isPlaySound("walk"))
-			SOUNDMANAGER->play("walk", 1.0f);
+			SOUNDMANAGER->play("walk", WALKSOUND);
 		x = -1;
 		y = 1;
 
@@ -678,7 +678,7 @@ void playerWalkState::update(player & player)
 	if (player.getDirection() == DIRECTION::RIGHTBOTTOM)
 	{
 		if (!SOUNDMANAGER->isPlaySound("walk"))
-			SOUNDMANAGER->play("walk", 1.0f);
+			SOUNDMANAGER->play("walk", WALKSOUND);
 		x = 1;
 		y = 1;
 
@@ -1251,9 +1251,28 @@ void playerDieState::update(player & player)
 
 	if (!KEYANIMANAGER->findAnimation("playerDie")->isPlay())
 	{
-		cout << "디짐~" << endl;
+		dieCount++;
+
+		if (!CAMERAMANAGER->getIsFadeStart())
+		{
+			CAMERAMANAGER->fadeInOut(FADETYPE::FADEIN);
+		}
+
+		if (dieCount >= 300)
+		{
+			player.setPlayerPos(WINSIZEX + 1000, WINSIZEY / 2 + 200);
+			SCENEMANAGER->changeScene("마을씬");
+			player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerTeleportOut"), ImageManager::GetInstance()->FindImage("playerTeleportOut"));
+			player.setCurrentState(player.getTeleportOutState());
+			dieCount = 0;
+		}
 	}
 
+	//if (player.getplayerCurrentHp() > 0)
+	//{
+	//	player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
+	//	player.setCurrentState(player.getIdleState());
+	//}
 }
 
 //shield 상태
@@ -2055,8 +2074,10 @@ void playerTeleportOutState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
 	//애니메이션 끝나고 진행
+
 	if (!KEYANIMANAGER->findAnimation("playerTeleportOut")->isPlay())
 	{
+		player.setPlayerCurrentHp(150);
 		player.setPlayerMotion(KEYANIMANAGER->findAnimation("playerDownIdle"), ImageManager::GetInstance()->FindImage("playerDownIdle"));
 		player.setCurrentState(player.getIdleState());
 	}

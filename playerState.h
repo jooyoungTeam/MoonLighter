@@ -1,6 +1,7 @@
 #pragma once
 #include "arrow.h"
 #define MOVESPPED 5
+#define WALKSOUND 0.5
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 class player;
@@ -72,6 +73,9 @@ public:
 
 class playerDieState : public playerState
 {
+private:
+	int dieCount;
+
 public:
 	virtual void update(player& player) override;
 };
