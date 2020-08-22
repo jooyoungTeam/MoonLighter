@@ -50,6 +50,7 @@ void spaStage::update()
 	}
 	else
 	{
+		SOUNDMANAGER->stop("healing");
 		_player->setTransform(false);
 	}
 }

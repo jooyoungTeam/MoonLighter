@@ -95,10 +95,10 @@ void playerIdleState::update(player & player)
 
 	//ÇÃ·¹ÀÌ¾î »ç¸Á <-- ÀÓ½Ã
 	//¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	{
-		player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
-	}
+	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	//{
+	//	player.setPlayerCurrentHp(player.getplayerCurrentHp() - 30);
+	//}
 	//¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
 
 	//ÇÃ·¹ÀÌ¾î ½¯µå
@@ -1248,6 +1248,21 @@ void playerRollState::update(player & player)
 void playerDieState::update(player & player)
 {
 	player.setPlayerRc(player.getX(), player.getY(), player.getPlayerRcW(), player.getPlayerRcH());
+
+	SOUNDMANAGER->stop("ÃÑ¾Ë½î±â");
+	SOUNDMANAGER->stop("ÃÑ¾ËÀåÀü");
+	SOUNDMANAGER->stop("ÃÑ¾ËÅÍÁü");
+	SOUNDMANAGER->stop("ÃÑ¾Ë¾îÅØ");
+	SOUNDMANAGER->stop("·¹µå½½¶óÀÓ°ø°Ý");
+	SOUNDMANAGER->stop("½½¶óÀÓÆã");
+	SOUNDMANAGER->stop("°ñ·½°ø°Ý");
+	SOUNDMANAGER->stop("²ø¾î´ç±è");
+	SOUNDMANAGER->stop("µ¹¶³¾îÁü");
+	SOUNDMANAGER->stop("µ¹¶³¾îÁü2");
+	SOUNDMANAGER->stop("¼Õ¶³¾îÁü");
+	SOUNDMANAGER->stop("¼Õ•ÂÀ½");
+	SOUNDMANAGER->stop("Æø¹ß");
+	SOUNDMANAGER->stop("µ¹»ç¶óÁü");
 
 	if (!KEYANIMANAGER->findAnimation("playerDie")->isPlay())
 	{

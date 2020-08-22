@@ -380,7 +380,6 @@ void playGround::soundLoad()
 	SOUNDMANAGER->addSound("walk", "sound/playerSound/walk.wav", false, false);
 	SOUNDMANAGER->addSound("WeaponChange", "sound/playerSound/WeaponChange.wav", false, false);
 
-
 	//____________________________________________
 	//ÆÌ
 	SOUNDMANAGER->addSound("ÃÑ¾Ë½î±â", "sound/enemySound/¿¡³Ê¹Ì/Æý/ÃÑ¾Ë½î±â.wav", false, false);
