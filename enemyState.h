@@ -52,12 +52,6 @@ class enemyState
 public:
 	virtual ~enemyState() {}
 	virtual void update(enemy& enemy, ENEMYTYPE enemyType) = 0;
-
-	static enemyIdleState enemyIdle;
-	static enemyMoveState enemyMove;
-	static enemyAttackState enemyAttack;
-	static enemyHitState enemyHit;
-	static enemyDeadState enemyDead;
 };
 
 class enemyIdleState : public enemyState
